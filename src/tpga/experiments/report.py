@@ -346,6 +346,10 @@ def comparison_tests(df: pd.DataFrame) -> pd.DataFrame:
     out = pd.DataFrame(rows)
     if len(out):
         out["p_holm"] = holm(out["p"].tolist())
+        # second family definition: the comparisons within one (set, size) group
+        out["p_holm_within_size"] = np.nan
+        for _, idx in out.groupby(["suite", "size"]).groups.items():
+            out.loc[idx, "p_holm_within_size"] = holm(out.loc[idx, "p"].tolist())
     return out
 
 
@@ -1096,7 +1100,11 @@ are medians of {cfg.lp_repeats} solver calls in the same phase.
 ## Statistics
 
 * Method comparison: Wilcoxon signed-rank test on per-instance median gaps (pairs listed in T5),
-  Holm correction over all rows of T5, effect sizes: matched-pairs rank-biserial r and Cliff's delta.
+  effect sizes: matched-pairs rank-biserial r and Cliff's delta. Two Holm corrections are reported:
+  `p_holm` over all rows of T5 and `p_holm_within_size` over the comparisons of one (set, size) group.
+  With 10 instances per size the exact two-sided Wilcoxon p-value cannot be below 2/1024 = 0.00195,
+  so under the first correction no per-size comparison can fall below 0.05 even when all 10
+  differences have the same sign; the pooled rows (80 instances) do not have this floor.
 * RQ4: Friedman test over the 16 (population, mutation) cells with instances as blocks, and over
   each factor separately; post-hoc pairwise Wilcoxon tests with Holm correction within each
   (size, start) group; random vs cost-aware start by a Wilcoxon test over matched cells.
@@ -1147,6 +1155,13 @@ def limitations_md(cfg: Config, df: pd.DataFrame, env: dict, reach: dict | None)
         "no savings can be computed and it is not part of the paper.",
         "**No textbook examples with page references** are stored in the repository; the classical methods "
         "are tested on hand-worked small cases and on random instances against HiGHS.",
+        "**Statistical power per size.** Each size has 10 instances. The exact Wilcoxon p-value then has a "
+        "floor of 0.00195, and after Holm over all rows of T5 no per-size comparison is significant at 0.05 "
+        "even with the same sign on all 10 instances (r = ±1). T5 therefore also gives Holm within each "
+        "(set, size) group, and pooled rows over all 80 synthetic instances.",
+        "**Stopping rule matters.** The stagnation limit of 200 generations ends many large runs long before "
+        "the budget (T2b); results of the base configuration describe the GA with this rule, not the GA's "
+        "best attainable quality at the budget.",
         "**Single machine.** All runs on one laptop; times are not comparable across machines.",
         "**Wheat source links.** The dataset manifest stores the BNS and Comtrade URLs and table positions; "
         "the downloaded source files themselves are not archived in the repository.",
