@@ -1,0 +1,8 @@
+[2026-11-16 01:02:04] pilot/LP: 7 tasks, 0 already done, 7 to run on 24 CPUs
+[2026-11-16 01:02:06] pilot/LP: 7/7 done, 0 errors, ETA 0.0 min
+[2026-11-16 01:02:06] pilot/classical: 21 tasks, 0 already done, 21 to run on 24 CPUs
+[2026-11-16 01:02:08] pilot/classical: 21/21 done, 0 errors, ETA 0.0 min
+[2026-11-16 01:02:09] pilot: 63 tasks, 0 already done, 63 to run on 24 CPUs
+[2026-11-16 01:03:40] pilot: 58/63 done, 0 errors, ETA 0.1 min
+[2026-11-16 01:04:34] pilot: 63/63 done, 0 errors, ETA 0.0 min
+[2026-11-16 01:04:34] pilot estimate: 1.54 h; {"main": 2683.271031666603, "factorial": 585.8066600000408, "applied": 2007.0994911354255, "timing": 285.09272916665697}
