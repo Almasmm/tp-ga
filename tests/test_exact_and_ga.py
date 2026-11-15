@@ -52,7 +52,14 @@ def test_ga_default_config_and_zero_generations(small):
 
 @pytest.mark.parametrize(
     "kwargs",
-    [{"population": 1}, {"generations": -1}, {"crossover_rate": 1.5}, {"tournament": 0}, {"elite": 60}],
+    [
+        {"population": 1},
+        {"generations": -1},
+        {"crossover_rate": 1.5},
+        {"tournament": 0},
+        {"elite": 60},
+        {"initialization": "unknown"},
+    ],
 )
 def test_invalid_config(kwargs):
     with pytest.raises(ValueError):
@@ -67,3 +74,19 @@ def test_operators_preserve_permutations():
         assert sorted(swap_mutation(p1, rng)) == list(range(12))
     one = np.array([0])
     assert order_crossover(one, one, rng).tolist() == [0] and swap_mutation(one, rng).tolist() == [0]
+
+
+def test_cost_aware_start_finds_a_cheaper_feasible_plan_at_the_same_budget():
+    p = TransportProblem.random(9, 30, seed=17)
+    before = run_ga(p, GAConfig(population=12, generations=4, seed=42))
+    after = run_ga(p, GAConfig(population=12, generations=4, seed=42, initialization="cost-aware"))
+    assert p.is_feasible(after.x)
+    assert after.evaluations == before.evaluations
+    assert after.cost < before.cost
+
+
+def test_ga_retains_best_solution_without_elitism():
+    p = TransportProblem.random(4, 4, seed=9)
+    result = run_ga(p, GAConfig(population=4, generations=5, tournament=1, mutation_rate=1, elite=0, seed=2))
+    assert p.is_feasible(result.x)
+    assert result.cost == result.history[-1] == min(result.history)

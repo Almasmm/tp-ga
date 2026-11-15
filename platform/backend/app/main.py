@@ -1,7 +1,4 @@
-"""tp-ga platform API (skeleton).
-
-Exposes the core library over HTTP.  Long GA runs will move to a job queue (Redis + RQ) in a
-later milestone; for now /solve runs synchronously and is limited to small instances."""
+"""tp-ga API for custom problems and the packaged Astana benchmark."""
 
 from typing import Literal
 
@@ -10,9 +7,12 @@ from pydantic import BaseModel, Field
 
 from tpga import GAConfig, TransportProblem, run_ga, solve_lp
 
-MAX_ARCS = 400  # synchronous limit until the job queue exists
+from .scenarios import router as scenarios_router
+
+MAX_ARCS = 400  # limit for arbitrary matrices submitted to /solve
 
 app = FastAPI(title="tp-ga", version="0.1.0")
+app.include_router(scenarios_router)
 
 
 class SolveRequest(BaseModel):

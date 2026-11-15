@@ -78,8 +78,7 @@ examples/        JSON instances
 
 ## Web platform
 
-The [`platform`](platform) folder holds the FastAPI backend: `POST /solve` runs LP or GA on an instance and a GA
-response always includes the LP optimum and the gap. See [platform/README.md](platform/README.md).
+The [web application](platform/README.md) plans shipments for the Kazakhstan wheat case and the full Astana benchmark. It compares random and cost-aware GA starts with the LP optimum. The platform includes a Next.js interface and a FastAPI backend.
 
 ## Technology choices
 
