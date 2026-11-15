@@ -230,6 +230,7 @@ def run_random_search(
     seed: int | None = None,
     engine: str = "numba",
     batch_floats: int = 1 << 20,
+    callback: ProgressCallback | None = None,
 ) -> GAResult:
     """Random search control: decode ``evaluations`` uniformly random permutations, keep the cheapest.
 
@@ -249,6 +250,7 @@ def run_random_search(
     done, best_cost, best_evaluation = 0, np.inf, 0
     best_uniforms = np.empty(max(0, length - 1))
     improvements: list[tuple[int, float]] = []
+    batches, stop_reason = 0, "budget"
     while done < evaluations:
         k = min(rows, evaluations - done)
         uniforms = rng.random((k, max(0, length - 1)))
@@ -263,6 +265,10 @@ def run_random_search(
                 best_uniforms = uniforms[r].copy()
                 improvements.append((best_evaluation, best_cost))
         done += k
+        batches += 1
+        if callback is not None and callback(batches, done, best_cost) and done < evaluations:
+            stop_reason = "cancelled"
+            break
     perm = np.arange(length, dtype=np.int64)
     kernels.shuffle(perm, best_uniforms)
     x = kernels.decode_plan(perm, supply, demand, n_cols).reshape(m, n)
@@ -275,7 +281,7 @@ def run_random_search(
         best_evaluation=best_evaluation,
         best_generation=0,
         generations=0,
-        stop_reason="budget",
+        stop_reason=stop_reason,
         improvements=improvements,
         permutation=perm,
     )
