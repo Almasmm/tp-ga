@@ -117,10 +117,13 @@ def default_budget(m: int, n: int) -> int:
     return int(min(2_000_000, max(20_000, 200 * m * n)))
 
 
-def plan_cells(x: np.ndarray, m: int, n: int) -> list[dict]:
+def plan_cells(x: np.ndarray, m: int, n: int, cost: np.ndarray | None = None) -> list[dict]:
     """Positive cells of the real part of a plan (the dummy row or column is reported separately)."""
     real = x[:m, :n]
-    return [
-        {"row": int(i), "col": int(j), "quantity": float(real[i, j])}
-        for i, j in zip(*np.nonzero(real > 1e-9), strict=True)
-    ]
+    cells = []
+    for i, j in zip(*np.nonzero(real > 1e-9), strict=True):
+        cell = {"row": int(i), "col": int(j), "quantity": float(real[i, j])}
+        if cost is not None:
+            cell["unit_cost"] = float(cost[i, j])
+        cells.append(cell)
+    return cells

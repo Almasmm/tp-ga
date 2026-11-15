@@ -35,7 +35,9 @@ def run_job(job_id: str, request: dict[str, Any], events: Any, cancel: Any) -> d
         emit("method_started", method=method)
         last_emit = last_check = 0.0
 
-        def progress(generation: int, evaluations: int, best: float, method: str = method) -> bool:
+        def progress(
+            generation: int, evaluations: int, best: float, method: str = method, z_star: float | None = z_star
+        ) -> bool:
             nonlocal last_emit, last_check
             now = time.monotonic()
             if now - last_emit >= PROGRESS_INTERVAL_S or generation == 0:

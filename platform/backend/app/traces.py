@@ -161,4 +161,5 @@ def plans(req: PlansRequest) -> dict[str, Any]:
     for method in req.methods:
         if method != "LP":
             out[method] = solve_method(problem, method, params, lp["cost"])
+    meta = {**meta, "supply": problem.supply.tolist(), "demand": problem.demand.tolist()}
     return {"problem": meta, "params": params, "results": out, "lp_optimum": lp["cost"]}
