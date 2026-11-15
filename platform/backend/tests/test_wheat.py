@@ -22,7 +22,8 @@ def test_wheat_case_preserves_trade_volumes_and_comparison_budget():
         assert data[key]["deficit_kg"] == pytest.approx(0)
     assert data["ga_before"]["initialization"] == "random"
     assert data["ga"]["initialization"] == "cost-aware"
-    assert data["ga"]["evaluations"] == data["ga_before"]["evaluations"] == 48
+    # 8 initial decoder calls, then 5 generations of 8 - 2 elite offspring
+    assert data["ga"]["evaluations"] == data["ga_before"]["evaluations"] == 8 + 5 * 6
 
 
 @pytest.mark.parametrize(("dataset", "scenarios", "runs"), [("astana-potato", 33, 198), ("kazakh-wheat", 5, 30)])
