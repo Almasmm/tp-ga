@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,19 +7,18 @@ name = "tpga"
 version = "0.2.0"
 description = "Transportation problem solved by a permutation-encoded genetic algorithm with a greedy decoder and an exact LP baseline."
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Almas Murat" }]
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24", "scipy>=1.11", "matplotlib>=3.7"]
+dependencies = ["numpy>=1.24", "scipy>=1.11", "matplotlib>=3.7", "numba>=0.60"]
 keywords = ["transportation problem", "genetic algorithm", "operations research", "optimization"]
 classifiers = [
   "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
   "Topic :: Scientific/Engineering :: Mathematics",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "pytest-cov>=5", "ruff>=0.5", "mypy>=1.8", "build>=1.0"]
+dev = ["pytest>=7", "pytest-cov>=5", "hypothesis>=6.100", "ruff>=0.5", "mypy>=1.8", "build>=1.0"]
 
 [project.scripts]
 tpga = "tpga.cli:main"
@@ -36,6 +35,7 @@ tpga = ["py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra"
 
 [tool.coverage.run]
