@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
+from typing import Literal
 
 import numpy as np
 
-from tpga.decoder import decode_permutation
+from tpga.decoder import _decode_valid_permutation
+from tpga.initialization import cost_aware_population
 from tpga.model import FloatArray, TransportProblem
 
 IntArray = np.ndarray
@@ -24,8 +26,11 @@ class GAConfig:
     tournament: int = 3
     elite: int = 2
     seed: int | None = None
+    initialization: Literal["random", "cost-aware"] = "random"
 
     def __post_init__(self) -> None:
+        if self.initialization not in ("random", "cost-aware"):
+            raise ValueError("initialization must be random or cost-aware")
         if self.population < 2:
             raise ValueError("population must be at least 2")
         if self.generations < 0:
@@ -82,11 +87,16 @@ def run_ga(problem: TransportProblem, config: GAConfig | None = None) -> GAResul
     rng = np.random.default_rng(cfg.seed)
 
     def fitness(ind: IntArray) -> float:
-        return p.total_cost(decode_permutation(p, ind))
+        return p.total_cost(_decode_valid_permutation(p, ind))
 
-    pop = [rng.permutation(length) for _ in range(cfg.population)]
+    pop = (
+        cost_aware_population(p, cfg.population, rng)
+        if cfg.initialization == "cost-aware"
+        else [rng.permutation(length) for _ in range(cfg.population)]
+    )
     fit = np.array([fitness(ind) for ind in pop])
     evaluations = len(pop)
+    best = pop[int(np.argmin(fit))]
     history = [float(fit.min())]
 
     def tournament() -> IntArray:
@@ -105,10 +115,12 @@ def run_ga(problem: TransportProblem, config: GAConfig | None = None) -> GAResul
         pop = new
         fit = np.array([fitness(ind) for ind in pop])
         evaluations += len(pop)
-        history.append(float(min(fit.min(), history[-1])))
+        winner = int(np.argmin(fit))
+        if fit[winner] < history[-1]:
+            best = pop[winner]
+        history.append(float(min(fit[winner], history[-1])))
 
-    best = pop[int(np.argmin(fit))]
-    x = decode_permutation(p, best)
+    x = _decode_valid_permutation(p, best)
     return GAResult(
         x=x, cost=p.total_cost(x), history=history, evaluations=evaluations, runtime_s=time.perf_counter() - t0
     )

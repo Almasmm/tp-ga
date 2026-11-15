@@ -1,0 +1,15 @@
+{
+  "cohort": {
+    "from": "",
+    "to": "",
+    "hs4": "1001",
+    "equipment": "",
+    "currency": "KZT",
+    "vat": "excluded",
+    "charge_scope": "",
+    "actual_source": ""
+  },
+  "shipments": [],
+  "lanes": [],
+  "gateways": []
+}

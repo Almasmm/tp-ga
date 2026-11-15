@@ -1,19 +1,44 @@
-# Web platform
+# Веб-приложение tp-ga
 
-Backend: FastAPI over the `tpga` library.
+Панель планирования поставок. По умолчанию открыт [экспорт пшеницы и меслина из Казахстана](../datasets/kazakh-wheat/README.md) с картой реальной географии и пятью задачами. В переключателе доступна [модельная сеть Астаны](../datasets/astana-potato/README.md) с 33 полноразмерными задачами и одной пилотной. Полная городская матрица включает 24 склада, 324 точки и 7 776 направлений. В разделе «Эксперимент» доступны сохранённые серии и новый расчёт обоих вариантов ГА.
 
-| Endpoint | Purpose |
+## Локальный запуск в Windows
+
+Запустите API в первом терминале. Команды выполняются из корня проекта:
+
+~~~powershell
+cd platform/backend
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8765
+~~~
+
+Во втором терминале из корня проекта запустите интерфейс:
+
+~~~powershell
+cd platform/web
+npm ci
+npm run dev -- --hostname 127.0.0.1 --port 3086
+~~~
+
+Откройте [локальное приложение](http://127.0.0.1:3086). Для проверки сборки используйте npm run build, затем npm run start с теми же параметрами. Интерфейс по умолчанию обращается к API на 127.0.0.1:8765. Другой адрес можно задать переменной TPGA_API_ORIGIN перед запуском dev или перед сборкой.
+
+## API
+
+| Метод | Назначение |
 |---|---|
-| `GET /health` | liveness check |
-| `POST /solve` | solve an instance with `lp` or `ga`; a GA response always includes the LP optimum and the percentage gap |
+| GET /health | Проверка доступности. |
+| GET /scenarios | Список задач, происхождение данных и схема сети. |
+| GET /scenarios/benchmark | Сохранённая серия по всем полноразмерным сценариям выбранного набора. |
+| POST /scenarios/{id}/plan | Точный расчёт выбранной задачи. Параметр compare включает прежний и улучшенный ГА, а population, generations и seed управляют экспериментом. |
+| POST /solve | Расчёт произвольной матрицы до 400 направлений через прежний API. |
 
-Runs are synchronous and limited to 400 arcs until the job queue exists (see the *Platform MVP* milestone).
+Для выбора набора укажите query-параметр dataset_id=kazakh-wheat или dataset_id=astana-potato. Сравнение выполняется на одной матрице при одинаковом бюджете обоих вариантов ГА. В ведомость попадают только реальные направления модели. Служебный поток при нехватке товара отображается в столбце «Дефицит», при избытке — в остатках по складам. В эксперименте показываются время работы решателей, стоимость, объёмы поставок, отклонение от оптимума и кривая сходимости. Один эксперимент за раз на процесс API.
 
-```bash
-pip install -e . -r platform/backend/requirements.txt   # from the repository root
-cd platform/backend && uvicorn app.main:app --reload      # http://127.0.0.1:8000/docs
-pytest platform/backend/tests                             # from the root, with PYTHONPATH=platform/backend
+Контейнер API включает датасет. Запуск из корня проекта:
+
+~~~powershell
 docker compose -f platform/docker-compose.yml up --build
-```
+~~~
 
-The frontend is not started yet.
+Для запуска веб-интерфейса с этим API задайте TPGA_API_ORIGIN=http://127.0.0.1:8000 перед запуском.
+

@@ -1,0 +1,278 @@
+{
+  "coordinate_system": "WGS84",
+  "districts": [
+    {
+      "id": "UZB",
+      "name": "Узбекистан"
+    },
+    {
+      "id": "TJK",
+      "name": "Таджикистан"
+    },
+    {
+      "id": "CHN",
+      "name": "Китай"
+    },
+    {
+      "id": "AFG",
+      "name": "Афганистан"
+    },
+    {
+      "id": "AZE",
+      "name": "Азербайджан"
+    },
+    {
+      "id": "KGZ",
+      "name": "Кыргызстан"
+    },
+    {
+      "id": "TKM",
+      "name": "Туркменистан"
+    }
+  ],
+  "warehouses": [
+    {
+      "id": "ABY",
+      "district": "ABY",
+      "name": "Абайская обл.",
+      "harvest_kg": 367409700,
+      "bns_row_label": "Абай",
+      "city": "Семей",
+      "lat": 50.434995,
+      "lon": 80.275038
+    },
+    {
+      "id": "AKM",
+      "district": "AKM",
+      "name": "Акмолинская обл.",
+      "harvest_kg": 4847261170,
+      "bns_row_label": "Акмолинская",
+      "city": "Кокшетау",
+      "lat": 53.299988,
+      "lon": 69.41999
+    },
+    {
+      "id": "AKT",
+      "district": "AKT",
+      "name": "Актюбинская обл.",
+      "harvest_kg": 368710000,
+      "bns_row_label": "Актюбинская",
+      "city": "Актобе",
+      "lat": 50.280017,
+      "lon": 57.169988
+    },
+    {
+      "id": "ALA",
+      "district": "ALA",
+      "name": "Алматинская обл.",
+      "harvest_kg": 73578820,
+      "bns_row_label": "Алматинская",
+      "city": "Конаев",
+      "lat": 43.884387,
+      "lon": 77.068722
+    },
+    {
+      "id": "WKO",
+      "district": "WKO",
+      "name": "Западно-Казахстанская обл.",
+      "harvest_kg": 178554360,
+      "bns_row_label": "Западно-Казахстанская",
+      "city": "Уральск",
+      "lat": 51.27112,
+      "lon": 51.334995
+    },
+    {
+      "id": "ZHA",
+      "district": "ZHA",
+      "name": "Жамбылская обл.",
+      "harvest_kg": 303444510,
+      "bns_row_label": "Жамбылская",
+      "city": "Тараз",
+      "lat": 42.899977,
+      "lon": 71.364987
+    },
+    {
+      "id": "ZHE",
+      "district": "ZHE",
+      "name": "Область Жетісу",
+      "harvest_kg": 191124380,
+      "bns_row_label": "Жетісу",
+      "city": "Талдыкорган",
+      "lat": 45.000004,
+      "lon": 78.40001
+    },
+    {
+      "id": "KAR",
+      "district": "KAR",
+      "name": "Карагандинская обл.",
+      "harvest_kg": 1101559990,
+      "bns_row_label": "Карагандинская",
+      "city": "Караганда",
+      "lat": 49.884977,
+      "lon": 73.11501
+    },
+    {
+      "id": "KOS",
+      "district": "KOS",
+      "name": "Костанайская обл.",
+      "harvest_kg": 4755489970,
+      "bns_row_label": "Костанайская",
+      "city": "Костанай",
+      "lat": 53.220897,
+      "lon": 63.628302
+    },
+    {
+      "id": "KYZ",
+      "district": "KYZ",
+      "name": "Кызылординская обл.",
+      "harvest_kg": 11515240,
+      "bns_row_label": "Кызылординская",
+      "city": "Кызылорда",
+      "lat": 44.800016,
+      "lon": 65.464986
+    },
+    {
+      "id": "PAV",
+      "district": "PAV",
+      "name": "Павлодарская обл.",
+      "harvest_kg": 743212480,
+      "bns_row_label": "Павлодарская",
+      "city": "Павлодар",
+      "lat": 52.299998,
+      "lon": 76.950021
+    },
+    {
+      "id": "NKO",
+      "district": "NKO",
+      "name": "Северо-Казахстанская обл.",
+      "harvest_kg": 4726227150,
+      "bns_row_label": "Северо-Казахстанская",
+      "city": "Петропавловск",
+      "lat": 54.879995,
+      "lon": 69.220002
+    },
+    {
+      "id": "TUR",
+      "district": "TUR",
+      "name": "Туркестанская обл.",
+      "harvest_kg": 474676600,
+      "bns_row_label": "Түркестанская",
+      "city": "Туркестан",
+      "lat": 43.301555,
+      "lon": 68.254893
+    },
+    {
+      "id": "ULY",
+      "district": "ULY",
+      "name": "Область Ұлытау",
+      "harvest_kg": 19259000,
+      "bns_row_label": "Ұлытау",
+      "city": "Жезказган",
+      "lat": 47.779989,
+      "lon": 67.770013
+    },
+    {
+      "id": "EKO",
+      "district": "EKO",
+      "name": "Восточно-Казахстанская обл.",
+      "harvest_kg": 401599290,
+      "bns_row_label": "Восточно-Казахстанская",
+      "city": "Усть-Каменогорск",
+      "lat": 49.990035,
+      "lon": 82.614947
+    }
+  ],
+  "stores": [
+    {
+      "id": "UZB",
+      "name": "Узбекистан",
+      "partner_code": 860,
+      "export_2024_kg": 3362710000,
+      "export_202402_kg": 296109000,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 2.1,
+      "city": "Ташкент",
+      "lat": 41.303828,
+      "lon": 69.268823,
+      "district": "UZB"
+    },
+    {
+      "id": "TJK",
+      "name": "Таджикистан",
+      "partner_code": 762,
+      "export_2024_kg": 1141610000,
+      "export_202402_kg": 100050000,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 4.2,
+      "city": "Душанбе",
+      "lat": 38.560035,
+      "lon": 68.773879,
+      "district": "TJK"
+    },
+    {
+      "id": "CHN",
+      "name": "Китай",
+      "partner_code": 156,
+      "export_2024_kg": 579245000,
+      "export_202402_kg": 60423800,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 6.5,
+      "city": "Урумчи",
+      "lat": 43.806958,
+      "lon": 87.57306,
+      "district": "CHN"
+    },
+    {
+      "id": "AFG",
+      "name": "Афганистан",
+      "partner_code": 4,
+      "export_2024_kg": 251583000,
+      "export_202402_kg": 20074700,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 7.8,
+      "city": "Мазари-Шариф",
+      "lat": 36.699994,
+      "lon": 67.100028,
+      "district": "AFG"
+    },
+    {
+      "id": "AZE",
+      "name": "Азербайджан",
+      "partner_code": 31,
+      "export_2024_kg": 170333000,
+      "export_202402_kg": 0,
+      "observed_in_february": false,
+      "handling_proxy_kzt_per_kg": 9.5,
+      "city": "Баку",
+      "lat": 40.397218,
+      "lon": 49.860271,
+      "district": "AZE"
+    },
+    {
+      "id": "KGZ",
+      "name": "Кыргызстан",
+      "partner_code": 417,
+      "export_2024_kg": 60146800,
+      "export_202402_kg": 700000,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 3.1,
+      "city": "Бишкек",
+      "lat": 42.875025,
+      "lon": 74.583258,
+      "district": "KGZ"
+    },
+    {
+      "id": "TKM",
+      "name": "Туркменистан",
+      "partner_code": 795,
+      "export_2024_kg": 42353600,
+      "export_202402_kg": 4150000,
+      "observed_in_february": true,
+      "handling_proxy_kzt_per_kg": 5.2,
+      "city": "Ашхабад",
+      "lat": 37.949995,
+      "lon": 58.383299,
+      "district": "TKM"
+    }
+  ]
+}
