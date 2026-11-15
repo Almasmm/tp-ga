@@ -82,6 +82,6 @@ def solve_method(
         cost=float(cost),
         gap_percent=None if not z_star else 100.0 * (cost - z_star) / abs(z_star),
         dummy_volume=dummy_volume(problem, x),
-        plan=plan_cells(x, m, n),
+        plan=plan_cells(x, m, n, problem.cost),
     )
     return out

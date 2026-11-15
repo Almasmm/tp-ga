@@ -1,11 +1,13 @@
 {
   "name": "tpga-web",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint .",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "leaflet": "1.9.4",
@@ -13,5 +15,10 @@
     "next": "16.4.5",
     "react": "19.2.7",
     "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.5"
   }
 }
