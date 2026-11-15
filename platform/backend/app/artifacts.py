@@ -114,6 +114,8 @@ def _curves(path: str, mtime: float) -> dict[tuple[str, str], dict[str, list]]:
     for (suite, size, method), g in cv.groupby(["suite", "size", "method"]):
         grid = sorted(g["evals"].unique())
         wide = g.pivot_table(index="evals", columns=["instance", "seed"], values="gap").reindex(grid).ffill()
+        complete = wide.notna().all(axis=1)  # start where every run has a value
+        wide = wide.loc[complete.idxmax() :] if complete.any() else wide
         q = wide.quantile([0.25, 0.5, 0.75], axis=1).T
         out[(f"{suite}/{size}", method)] = {
             "evals": [int(v) for v in q.index],

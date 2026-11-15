@@ -35,7 +35,7 @@ STYLE: dict[str, dict[str, Any]] = {
     "NWC": {"color": "#8c8c8c", "marker": "v", "ls": ":", "hatch": "xx"},
     "LCM": {"color": "#5e5e5e", "marker": "^", "ls": "-.", "hatch": "\\\\"},
     "VAM": {"color": "#b5b5b5", "marker": "D", "ls": (0, (5, 1)), "hatch": ".."},
-    "RS": {"color": "#d9d9d9", "marker": "x", "ls": (0, (1, 1)), "hatch": "--"},
+    "RS": {"color": "#a3a3a3", "marker": "x", "ls": (0, (4, 1, 1, 1, 1, 1)), "hatch": "--"},
     "GA-rand": {"color": "#262626", "marker": "o", "ls": "-", "hatch": ""},
     "GA-cost": {"color": "#737373", "marker": "P", "ls": "--", "hatch": "//"},
 }
@@ -59,6 +59,10 @@ LABELS = {
         "cost-aware": "cost-aware start",
         "step": "Step",
         "perm": "Permutation of arcs",
+        "perm_key": (
+            "dark: positive allocation; grey: visited, nothing left to allocate; white: not visited; "
+            "a′, b′: remaining supply and demand"
+        ),
         "supply": "a",
         "demand": "b",
         "region": "Region (supply)",
@@ -84,6 +88,10 @@ LABELS = {
         "cost-aware": "старт с учётом стоимости",
         "step": "Шаг",
         "perm": "Перестановка дуг",
+        "perm_key": (
+            "тёмные: положительное назначение; серые: пройдены без назначения; белые: не пройдены; "
+            "a′, b′: остатки запасов и потребностей"
+        ),
         "supply": "a",
         "demand": "b",
         "region": "Область (запас)",
@@ -577,6 +585,7 @@ def fig_decoder(cfg: Config, out: Path, lang: str) -> dict[str, Any]:
             k + 0.5, 0.5, f"({i + 1},{j + 1})", ha="center", va="center", fontsize=7, color="white" if used else "black"
         )
     ax0.text(0, 1.15, L["perm"], fontsize=8, transform=ax0.transData)
+    ax0.text(12, 1.15, L["perm_key"], fontsize=6.5, ha="right", transform=ax0.transData)
     grid = plt.matplotlib.gridspec.GridSpec(
         2, 3, left=0.04, right=0.98, bottom=0.03, top=0.76, wspace=0.18, hspace=0.25
     )
@@ -596,6 +605,8 @@ def fig_decoder(cfg: Config, out: Path, lang: str) -> dict[str, Any]:
                 if plan[i, j] > 0:
                     ax.text(j + 0.55, i + 0.68, f"{plan[i, j]:g}", fontsize=7.5, ha="center", fontweight="bold")
             ax.text(4.5, i + 0.6, f"{s['supply_left'][i]:g}", fontsize=7, ha="center")
+        ax.text(4.5, -0.1, "a′", fontsize=7, ha="center", style="italic")
+        ax.text(-0.1, 3.6, "b′", fontsize=7, ha="right", style="italic")
         for j in range(4):
             ax.text(j + 0.5, 3.6, f"{s['demand_left'][j]:g}", fontsize=7, ha="center")
         ax.text(
@@ -640,6 +651,10 @@ def fig_convergence(cfg: Config, out: Path, lang: str, df: pd.DataFrame) -> None
                 continue
             # carry the last value of each run forward onto the common grid (runs may stop early)
             wide = runs.pivot_table(index="evals", columns=["instance", "seed"], values="gap").reindex(grid).ffill()
+            # start where every run has a value (after its initial population); earlier medians would
+            # cover only the runs whose first individuals happened to be the best ones
+            complete = wide.notna().all(axis=1)
+            wide = wide.loc[complete.idxmax() :] if complete.any() else wide
             q = wide.quantile([0.25, 0.5, 0.75], axis=1).T
             st = STYLE[method]
             ax.plot(q.index, q[0.5], color=st["color"], ls=st["ls"], lw=1.2, label=method)
@@ -650,6 +665,7 @@ def fig_convergence(cfg: Config, out: Path, lang: str, df: pd.DataFrame) -> None
                 ax.axhline(g.median(), color=STYLE[method]["color"], ls=STYLE[method]["ls"], lw=0.9, label=method)
         ax.set_xscale("log")
         ax.set_yscale("symlog", linthresh=1.0)
+        ax.set_ylim(bottom=0)
         ax.set_title(size.replace("x", "×"))
         ax.set_xlabel(L["evals"])
         ax.set_ylabel(L["median_gap"])
@@ -679,6 +695,7 @@ def fig_boxplot(out: Path, lang: str, base: pd.DataFrame) -> None:
             med.set_color("black")
         ax.set_xticks(range(1, len(methods) + 1), methods, rotation=45, ha="right")
         ax.set_yscale("symlog", linthresh=1.0)
+        ax.set_ylim(bottom=0)
         ax.set_title(size.replace("x", "×"))
         ax.set_ylabel(L["gap"])
     for ax in list(axes.flat)[len(sizes) :]:
