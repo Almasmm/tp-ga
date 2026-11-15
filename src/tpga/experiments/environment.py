@@ -53,9 +53,11 @@ def pin_to_cpu(cpu: int) -> bool:
     return False  # pragma: no cover
 
 
-def _run(cmd: list[str]) -> str:
+def _run(cmd: list[str], encoding: str | None = None) -> str:
     try:
-        return subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=False).stdout.strip()
+        out = subprocess.run(cmd, capture_output=True, timeout=30, check=False).stdout
+        # console tools such as powercfg write in the OEM code page, PowerShell and git in the ANSI/UTF-8 one
+        return out.decode(encoding or "utf-8", errors="replace").strip()
     except (OSError, subprocess.SubprocessError):  # pragma: no cover
         return ""
 
@@ -104,7 +106,7 @@ def describe(root: Path) -> dict[str, Any]:
         info["physical_cores"] = _run([*ps.split(), "(Get-CimInstance Win32_Processor).NumberOfCores"])
         ram = _run([*ps.split(), "(Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory"])
         info["ram_gb"] = round(int(ram) / 2**30, 1) if ram.isdigit() else None
-        info["power_scheme"] = _run(["powercfg", "/getactivescheme"])
+        info["power_scheme"] = _run(["powercfg", "/getactivescheme"], encoding="oem")
         battery = _run([*ps.split(), "(Get-CimInstance Win32_Battery).BatteryStatus"])
         # Win32_Battery.BatteryStatus 2 means the system has access to AC power
         info["on_ac_power"] = None if not battery else battery.strip() == "2"
