@@ -461,6 +461,46 @@ def factorial_tables(cfg: Config, df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
     return t4, t4s
 
 
+def stopping_table(cfg: Config, df: pd.DataFrame) -> pd.DataFrame:
+    """Base GA configuration with and without the stagnation limit (phase ``stopping``)."""
+    if "stopping" not in cfg.raw["phases"]:
+        return pd.DataFrame()
+    spec = cfg.phase("stopping")
+    sizes = {f"{m}x{n}" for m, n in spec["sizes"]}
+    with_id = cfg.ga_base.config_id(cfg.budget, cfg.stagnation)
+    without_id = cfg.ga_base.config_id(cfg.budget, None)
+    rows = []
+    sub = df[(df["suite"] == spec["suite"]) & df["size"].isin(sizes) & df["method"].isin(spec["methods"])]
+    for (size, method), g in sub.groupby(["size", "method"]):
+        a, b = g[g["config"] == with_id], g[g["config"] == without_id]
+        if not len(a) or not len(b):
+            continue
+        ma, mb = a.groupby("instance")["gap"].median(), b.groupby("instance")["gap"].median()
+        common = ma.index.intersection(mb.index)
+        test = paired_test(ma[common].values, mb[common].values) if len(common) >= 2 else {}
+        for label, part in (("stagnation " + str(cfg.stagnation), a), ("budget only", b)):
+            rows.append(
+                {
+                    "size": size,
+                    "method": method,
+                    "stopping": label,
+                    "runs": len(part),
+                    "gap_mean": part["gap"].mean(),
+                    "gap_median": part["gap"].median(),
+                    "share_optimal": part["optimal"].mean(),
+                    "evals_median": part["evals"].median(),
+                    "time_median_s": part["time_s"].median(),
+                    "wilcoxon_p": test.get("p") if label == "budget only" else math.nan,
+                    "rank_biserial_r": test.get("rank_biserial_r") if label == "budget only" else math.nan,
+                }
+            )
+    out = pd.DataFrame(rows)
+    if len(out):
+        out["_k"] = out["size"].map(size_key)
+        out = out.sort_values(["_k", "method", "stopping"], ascending=[True, True, False]).drop(columns="_k")
+    return out
+
+
 def applied_table(df: pd.DataFrame) -> pd.DataFrame:
     a = df[df["suite"] == "applied"]
     rows = []
@@ -796,6 +836,7 @@ def numbers(
     t4: pd.DataFrame,
     reach: dict | None,
     env: dict,
+    t2b: pd.DataFrame | None = None,
 ) -> str:
     lines = [
         "# Numbers for the paper",
@@ -880,6 +921,14 @@ def numbers(
                 r["gap_mean"],
                 "mean gap over 10 instances x runs, %",
                 "tables/T4_factorial.csv",
+            )
+    if t2b is not None and len(t2b):
+        for _, r in t2b.iterrows():
+            add(
+                f"Stopping {r['stopping']} {r['method']} {r['size']}: mean gap",
+                r["gap_mean"],
+                f"mean gap over runs, %; median decoder calls {_fmt(r['evals_median'])}",
+                "tables/T2b_stopping.csv",
             )
     if reach:
         add(
@@ -1004,6 +1053,20 @@ stagnation, so RS receives at least as many decoder calls as the GA.
 Sizes {fac["sizes"]} (uniform set, 10 instances each), population {fac["population"]} x mutation
 probability {fac["mutation_rate"]} x start {fac["initialization"]}, {cfg.runs} runs per cell, the same
 budget rule and stagnation limit; other parameters as in the base configuration.
+
+## Stopping-rule check
+
+The pilot showed that on large instances the stagnation limit often ends a run long before the
+budget is used. As a sensitivity check (not a research question), the base configuration was also
+run on the uniform 50×50 and 100×100 instances with the stagnation limit removed (budget only),
+with the same seeds; table T2b compares the two stopping rules.
+
+## Timing (RQ3)
+
+The quality phases run one process per logical processor, pinned to it; the processor has
+performance and efficiency cores, and each row records the core class. The run times used for RQ3
+come from a separate timing phase on performance cores only, with no other phase running; LP times
+are medians of {cfg.lp_repeats} solver calls in the same phase.
 
 ## Metrics and checks
 
@@ -1165,6 +1228,15 @@ def generate(cfg: Config) -> dict[str, Any]:
     )
     t6 = applied_table(base)
     write_table(t6, tables / "T6_applied", "T6. Applied cases (illustration)")
+    t2b = stopping_table(cfg, df)
+    if len(t2b):
+        write_table(
+            t2b,
+            tables / "T2b_stopping",
+            "T2b. Sensitivity to the stopping rule: stagnation limit vs. budget only",
+            "Same instances, seeds and parameters; the only difference is the stagnation limit. "
+            "Wilcoxon on per-instance median gaps (with limit vs. without).",
+        )
     family = setup_fonts()
     figs = out / "figures"
     f1: dict[str, Any] = {}
@@ -1177,7 +1249,7 @@ def generate(cfg: Config) -> dict[str, Any]:
         fig_wheat_map(cfg, figs, lang)
     for csv_path in (out / "raw" / "convergence").glob("*.csv"):
         pd.read_csv(csv_path).to_parquet(csv_path.with_suffix(".parquet"), index=False)
-    (out / "NUMBERS.md").write_text(numbers(cfg, df, t2, t3, fits, t5, t4, reach, env), encoding="utf-8")
+    (out / "NUMBERS.md").write_text(numbers(cfg, df, t2, t3, fits, t5, t4, reach, env, t2b), encoding="utf-8")
     (out / "METHODS.md").write_text(methods_md(cfg, f1), encoding="utf-8")
     (out / "LIMITATIONS.md").write_text(limitations_md(cfg, df, env, reach), encoding="utf-8")
     (out / "README.md").write_text(readme_md(cfg, env, df), encoding="utf-8")

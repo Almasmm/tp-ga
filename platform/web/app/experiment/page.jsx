@@ -11,6 +11,7 @@ import { LineChart } from "../components/charts";
 const TABLE_TITLE = {
   T1_instances: ["T1. Наборы задач", "T1. Instance sets"],
   T2_gap: ["T2. Отклонение от оптимума", "T2. Gap to the optimum"],
+  T2b_stopping: ["T2b. Правило остановки", "T2b. Stopping rule"],
   T3_time: ["T3. Время", "T3. Time"],
   T3_time_fit: ["T3b. Степенная аппроксимация времени", "T3b. Power-law time fit"],
   T4_factorial: ["T4. Факторный план", "T4. Factorial plan"],
