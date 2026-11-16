@@ -2,7 +2,8 @@ name: Release
 
 on:
   push:
-    tags: ["v*.*.*"]
+    # vX.Y.Z builds a release; tags with a suffix (e.g. v0.3.0-paper, the code and data of the article) do not
+    tags: ["v*.*.*", "!v*.*.*-*"]
 
 permissions:
   contents: write
