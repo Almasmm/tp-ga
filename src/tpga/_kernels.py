@@ -31,13 +31,17 @@ def uniforms_per_child(tournament: int) -> int:
     return 2 * tournament + UNIFORMS_PER_CHILD_EXTRA
 
 
-def _decode_cost_py(perm, supply, demand, cost, n):
-    """Cost of the plan the greedy decoder builds from ``perm`` (arc ``k`` is ``(k // n, k % n)``)."""
+def _decode_cost_py(perm, supply, demand, cost, n, eps):
+    """Cost of the plan the greedy decoder builds from ``perm`` (arc ``k`` is ``(k // n, k % n)``).
+
+    A remaining supply or demand counts as zero when it is ``<= eps`` (``eps = 0`` is the exact rule of
+    v0.3.0; with integer data any ``eps < 1`` gives the same result).
+    """
     a = supply.copy()
     b = demand.copy()
     active = 0
     for i in range(a.size):
-        if a[i] > 0:
+        if a[i] > eps:
             active += 1
     total = 0.0
     for t in range(perm.size):
@@ -47,23 +51,23 @@ def _decode_cost_py(perm, supply, demand, cost, n):
         i = k // n
         j = k - i * n
         q = min(a[i], b[j])
-        if q > 0:
+        if q > eps:
             total += cost[k] * q
             a[i] -= q
             b[j] -= q
-            if a[i] == 0:
+            if a[i] <= eps:
                 active -= 1
     return total
 
 
-def _decode_plan_py(perm, supply, demand, n):
-    """Flat plan (length ``m * n``) built by the greedy decoder from ``perm``."""
+def _decode_plan_py(perm, supply, demand, n, eps):
+    """Flat plan (length ``m * n``) built by the greedy decoder from ``perm``; ``eps`` as in ``_decode_cost``."""
     a = supply.copy()
     b = demand.copy()
     plan = np.zeros(a.size * n)
     active = 0
     for i in range(a.size):
-        if a[i] > 0:
+        if a[i] > eps:
             active += 1
     for t in range(perm.size):
         if active == 0:
@@ -72,11 +76,11 @@ def _decode_plan_py(perm, supply, demand, n):
         i = k // n
         j = k - i * n
         q = min(a[i], b[j])
-        if q > 0:
+        if q > eps:
             plan[k] = q
             a[i] -= q
             b[j] -= q
-            if a[i] == 0:
+            if a[i] <= eps:
                 active -= 1
     return plan
 
@@ -151,14 +155,22 @@ def _next_generation_py(
     demand,
     cost,
     n,
+    eps,
     new_pop,
     new_fit,
     scratch,
     kept,
+    mutation_mode,
+    swap_counts,
+    swap_offsets,
+    swap_uniforms,
 ):
     """Fill ``new_pop``/``new_fit``: ``elite`` best individuals keep their fitness, the rest are offspring.
 
-    Returns the number of decoder calls (the offspring count).
+    ``mutation_mode`` 0 (``swap_fixed``) swaps two positions with probability ``mutation_rate`` using the
+    uniform columns of the offspring, exactly as in v0.3.0. Other modes ignore ``mutation_rate`` and apply
+    ``swap_counts[c]`` swaps to offspring ``c``; swap ``s`` uses ``swap_uniforms[swap_offsets[c] + 2s]`` and
+    the next number. Returns the number of decoder calls (the offspring count).
     """
     size, length = pop.shape
     for e in range(elite):
@@ -176,12 +188,20 @@ def _next_generation_py(
             _order_crossover(pop[a], pop[b], i, j, child, kept)
         else:
             child[:] = pop[a, :]
-        if u[base + 3] < mutation_rate and length >= 2:
-            i, j = _two_positions(u[base + 4], u[base + 5], length)
-            tmp = child[i]
-            child[i] = child[j]
-            child[j] = tmp
-        new_fit[elite + c] = _decode_cost(child, supply, demand, cost, n)
+        if mutation_mode == 0:
+            if u[base + 3] < mutation_rate and length >= 2:
+                i, j = _two_positions(u[base + 4], u[base + 5], length)
+                tmp = child[i]
+                child[i] = child[j]
+                child[j] = tmp
+        elif length >= 2:
+            off = swap_offsets[c]
+            for s in range(swap_counts[c]):
+                i, j = _two_positions(swap_uniforms[off + 2 * s], swap_uniforms[off + 2 * s + 1], length)
+                tmp = child[i]
+                child[i] = child[j]
+                child[j] = tmp
+        new_fit[elite + c] = _decode_cost(child, supply, demand, cost, n, eps)
     return size - elite
 
 
@@ -195,7 +215,7 @@ def _shuffle_py(perm, uniforms):
         perm[r] = tmp
 
 
-def _random_batch_cost_py(uniforms, supply, demand, cost, n, out):
+def _random_batch_cost_py(uniforms, supply, demand, cost, n, eps, out):
     """Decode ``len(out)`` random permutations; return the row index of the cheapest one.
 
     Row ``r`` of ``uniforms`` drives a Fisher-Yates shuffle of the identity; ``out[r]`` gets its cost.
@@ -207,7 +227,7 @@ def _random_batch_cost_py(uniforms, supply, demand, cost, n, out):
         for t in range(length):
             perm[t] = t
         _shuffle(perm, uniforms[r])
-        out[r] = _decode_cost(perm, supply, demand, cost, n)
+        out[r] = _decode_cost(perm, supply, demand, cost, n, eps)
         if best < 0 or out[r] < out[best]:
             best = r
     return best
@@ -266,11 +286,11 @@ class Kernels:
         globals().update(table)
         return table
 
-    def decode_cost(self, perm, supply, demand, cost, n):
-        return self._table()["_decode_cost"](perm, supply, demand, cost, n)
+    def decode_cost(self, perm, supply, demand, cost, n, eps=0.0):
+        return self._table()["_decode_cost"](perm, supply, demand, cost, n, eps)
 
-    def decode_plan(self, perm, supply, demand, n):
-        return self._table()["_decode_plan"](perm, supply, demand, n)
+    def decode_plan(self, perm, supply, demand, n, eps=0.0):
+        return self._table()["_decode_plan"](perm, supply, demand, n, eps)
 
     def order_crossover(self, p1, p2, i, j):
         child = np.empty_like(p1)
@@ -284,8 +304,8 @@ class Kernels:
     def next_generation(self, *args):
         return self._table()["_next_generation"](*args)
 
-    def random_batch_cost(self, uniforms, supply, demand, cost, n, out):
-        return self._table()["_random_batch_cost"](uniforms, supply, demand, cost, n, out)
+    def random_batch_cost(self, uniforms, supply, demand, cost, n, out, eps=0.0):
+        return self._table()["_random_batch_cost"](uniforms, supply, demand, cost, n, eps, out)
 
     def shuffle(self, perm, uniforms):
         self._table()["_shuffle"](perm, uniforms)

@@ -10,6 +10,7 @@ from typing import Literal
 import numpy as np
 
 from tpga._kernels import Kernels, uniforms_per_child
+from tpga.decoder import DECODER_TOL, decoder_eps
 from tpga.initialization import cost_aware_population
 from tpga.model import FloatArray, TransportProblem
 
@@ -18,16 +19,28 @@ IntArray = np.ndarray
 #: ``callback(generation, evaluations, best_cost) -> stop``; returning True stops the run.
 ProgressCallback = Callable[[int, int, float], bool | None]
 
+MutationMode = Literal["swap_fixed", "swap_count", "swap_per_position", "swap_scaled"]
+MUTATION_MODES: dict[str, int] = {"swap_fixed": 0, "swap_count": 1, "swap_per_position": 2, "swap_scaled": 3}
+
 
 @dataclass(frozen=True)
 class GAConfig:
     """Parameters of the genetic algorithm.
 
-    ``mutation_rate`` is the probability that an offspring receives one swap of two positions.
+    Mutation (``mutation_mode``):
+
+    * ``swap_fixed`` (default, v0.3.0): with probability ``mutation_rate`` one swap of two positions;
+    * ``swap_count``: every offspring gets ``k = round(mutation_strength)`` swaps;
+    * ``swap_per_position``: every position takes part with probability ``q = mutation_strength``; the
+      number of participating positions is Binomial(m n, q) and they form ``floor(s / 2)`` swaps of
+      uniformly drawn position pairs (expected about ``q m n / 2`` swaps);
+    * ``swap_scaled``: ``k = max(1, round(mutation_strength * (m + n)))`` swaps per offspring.
+
     The run stops at the first of: ``generations`` generations (``None`` for no limit),
     ``max_evaluations`` decoder calls (``None`` for no limit; a generation is only started if all
     its offspring fit in the budget), ``stagnation`` generations without improvement of the best
-    cost (``None`` to disable). At least one limit must be set.
+    cost, ``stagnation_evaluations`` decoder calls without improvement (``None`` to disable either).
+    At least one limit must be set. ``decoder_tol`` is the relative tolerance of the decoder's zero test.
     """
 
     population: int = 60
@@ -40,8 +53,24 @@ class GAConfig:
     initialization: Literal["random", "cost-aware"] = "random"
     max_evaluations: int | None = None
     stagnation: int | None = None
+    mutation_mode: MutationMode = "swap_fixed"
+    mutation_strength: float = 1.0
+    stagnation_evaluations: int | None = None
+    decoder_tol: float = DECODER_TOL
 
     def __post_init__(self) -> None:
+        if self.mutation_mode not in MUTATION_MODES:
+            raise ValueError(f"mutation_mode must be one of {sorted(MUTATION_MODES)}")
+        if self.mutation_mode == "swap_count" and round(self.mutation_strength) < 1:
+            raise ValueError("swap_count needs mutation_strength >= 1 (swaps per offspring)")
+        if self.mutation_mode == "swap_per_position" and not (0.0 < self.mutation_strength <= 1.0):
+            raise ValueError("swap_per_position needs mutation_strength in (0, 1]")
+        if self.mutation_mode == "swap_scaled" and self.mutation_strength <= 0:
+            raise ValueError("swap_scaled needs a positive mutation_strength")
+        if self.stagnation_evaluations is not None and self.stagnation_evaluations < 1:
+            raise ValueError("stagnation_evaluations must be positive")
+        if not (0.0 <= self.decoder_tol < 1e-3):
+            raise ValueError("decoder_tol must lie in [0, 1e-3)")
         if self.initialization not in ("random", "cost-aware"):
             raise ValueError("initialization must be random or cost-aware")
         if self.population < 2:
@@ -58,8 +87,13 @@ class GAConfig:
             raise ValueError("max_evaluations must be at least the population size")
         if self.stagnation is not None and self.stagnation < 1:
             raise ValueError("stagnation must be positive")
-        if self.generations is None and self.max_evaluations is None and self.stagnation is None:
-            raise ValueError("set at least one of generations, max_evaluations, stagnation")
+        if (
+            self.generations is None
+            and self.max_evaluations is None
+            and self.stagnation is None
+            and self.stagnation_evaluations is None
+        ):
+            raise ValueError("set at least one of generations, max_evaluations, stagnation, stagnation_evaluations")
 
 
 @dataclass
@@ -82,6 +116,8 @@ class GAResult:
     stop_reason: str = ""
     improvements: list[tuple[int, float]] = field(default_factory=list)
     permutation: IntArray | None = None
+    generations_since_improvement: int = 0
+    evaluations_since_improvement: int = 0
 
 
 def order_crossover(p1: IntArray, p2: IntArray, rng: np.random.Generator) -> IntArray:
@@ -131,6 +167,7 @@ def run_ga(
     m, n = p.shape
     length = m * n
     supply, demand, cost, n_cols = _arrays(p)
+    eps = decoder_eps(p, cfg.decoder_tol)
     rng = np.random.default_rng(cfg.seed)
     size = cfg.population
 
@@ -140,7 +177,7 @@ def run_ga(
         else [rng.permutation(length) for _ in range(size)]
     )
     pop = np.ascontiguousarray(np.vstack(starts), dtype=np.int64)
-    fit = np.array([kernels.decode_cost(pop[r], supply, demand, cost, n_cols) for r in range(size)])
+    fit = np.array([kernels.decode_cost(pop[r], supply, demand, cost, n_cols, eps) for r in range(size)])
     evaluations = size
     winner = int(np.argmin(fit))
     best = pop[winner].copy()
@@ -155,6 +192,15 @@ def run_ga(
     kept = np.zeros(length, dtype=np.bool_)
     offspring = size - cfg.elite
     width = uniforms_per_child(cfg.tournament)
+    mode = MUTATION_MODES[cfg.mutation_mode]
+    if mode == 1:
+        fixed_swaps = int(round(cfg.mutation_strength))
+    elif mode == 3:
+        fixed_swaps = max(1, int(round(cfg.mutation_strength * (m + n))))
+    else:
+        fixed_swaps = 0
+    no_counts = np.zeros(max(offspring, 1), dtype=np.int64)
+    no_uniforms = np.empty(0)
     generation, since_improvement, stop_reason = 0, 0, "generations"
     if callback is not None and callback(0, evaluations, best_cost):
         stop_reason = "cancelled"
@@ -169,8 +215,22 @@ def run_ga(
             if cfg.stagnation is not None and since_improvement >= cfg.stagnation:
                 stop_reason = "stagnation"
                 break
+            if cfg.stagnation_evaluations is not None and evaluations - best_evaluation >= cfg.stagnation_evaluations:
+                stop_reason = "stagnation_evaluations"
+                break
             order = np.argsort(fit, kind="stable").astype(np.int64)
             uniforms = rng.random((offspring, width))
+            # extra random numbers only for the new mutation modes, drawn after the generation's block,
+            # so that swap_fixed consumes the generator exactly as v0.3.0 did
+            if mode == 0:
+                counts, offsets, swap_u = no_counts, no_counts, no_uniforms
+            else:
+                if mode == 2:
+                    counts = rng.binomial(length, cfg.mutation_strength, size=offspring).astype(np.int64) // 2
+                else:
+                    counts = np.full(offspring, fixed_swaps, dtype=np.int64)
+                offsets = np.concatenate(([0], np.cumsum(2 * counts)[:-1])).astype(np.int64)
+                swap_u = rng.random(int(2 * counts.sum()))
             kernels.next_generation(
                 pop,
                 fit,
@@ -184,10 +244,15 @@ def run_ga(
                 demand,
                 cost,
                 n_cols,
+                eps,
                 new_pop,
                 new_fit,
                 scratch,
                 kept,
+                mode,
+                counts,
+                offsets,
+                swap_u,
             )
             pop, new_pop = new_pop, pop
             fit, new_fit = new_fit, fit
@@ -208,7 +273,7 @@ def run_ga(
                 stop_reason = "cancelled"
                 break
 
-    x = kernels.decode_plan(best, supply, demand, n_cols).reshape(m, n)
+    x = kernels.decode_plan(best, supply, demand, n_cols, eps).reshape(m, n)
     return GAResult(
         x=x,
         cost=p.total_cost(x),
@@ -221,6 +286,8 @@ def run_ga(
         stop_reason=stop_reason,
         improvements=improvements,
         permutation=best,
+        generations_since_improvement=generation - best_generation,
+        evaluations_since_improvement=evaluations - best_evaluation,
     )
 
 
@@ -231,6 +298,7 @@ def run_random_search(
     engine: str = "numba",
     batch_floats: int = 1 << 20,
     callback: ProgressCallback | None = None,
+    decoder_tol: float = DECODER_TOL,
 ) -> GAResult:
     """Random search control: decode ``evaluations`` uniformly random permutations, keep the cheapest.
 
@@ -245,6 +313,7 @@ def run_random_search(
     m, n = p.shape
     length = m * n
     supply, demand, cost, n_cols = _arrays(p)
+    eps = decoder_eps(p, decoder_tol)
     rng = np.random.default_rng(seed)
     rows = max(1, batch_floats // max(1, length - 1))
     done, best_cost, best_evaluation = 0, np.inf, 0
@@ -255,7 +324,7 @@ def run_random_search(
         k = min(rows, evaluations - done)
         uniforms = rng.random((k, max(0, length - 1)))
         out = np.empty(k)
-        kernels.random_batch_cost(uniforms, supply, demand, cost, n_cols, out)
+        kernels.random_batch_cost(uniforms, supply, demand, cost, n_cols, out, eps)
         running = np.minimum.accumulate(out)
         better = np.flatnonzero(running < np.concatenate(([best_cost], running[:-1])))
         for r in better:
@@ -271,7 +340,7 @@ def run_random_search(
             break
     perm = np.arange(length, dtype=np.int64)
     kernels.shuffle(perm, best_uniforms)
-    x = kernels.decode_plan(perm, supply, demand, n_cols).reshape(m, n)
+    x = kernels.decode_plan(perm, supply, demand, n_cols, eps).reshape(m, n)
     return GAResult(
         x=x,
         cost=p.total_cost(x),
@@ -284,4 +353,5 @@ def run_random_search(
         stop_reason=stop_reason,
         improvements=improvements,
         permutation=perm,
+        evaluations_since_improvement=done - best_evaluation,
     )
