@@ -1,0 +1,49 @@
+# Pilot estimate of the v0.4 run
+
+| Phase | Runs | Estimated wall time, h | Share |
+|---|---|---|---|
+| reference | 560 | 0.00 | 0.0 % |
+| main | 29,400 | 35.28 | 81.4 % |
+| stagnation | 5,400 | 1.98 | 4.6 % |
+| legacy | 1,800 | 0.77 | 1.8 % |
+| factorial | 72,000 | 3.85 | 8.9 % |
+| timing | 425 | 1.45 | 3.3 % |
+| **total** | 109,585 | **43.33** | 100 % |
+
+* E/P speed ratio (same GA task): 1.46; quality phases use 19.0 performance-core equivalents, the timing phase 8 performance cores.
+* Monitor overhead (1 Hz status through a queue): 5.89 % (0.588 s without, 0.623 s with).
+* Phases with a stagnation stop are estimated with the full budget (upper bound).
+
+## Largest items
+
+| Phase | Item | h |
+|---|---|---|
+| main | uniform 200x200 RS | 6.01 |
+| main | uniform 200x200 GA-rand-base | 5.53 |
+| main | uniform 200x200 GA-cost-base | 4.48 |
+| main | uniform 200x200 GA-cost-tuned | 4.39 |
+| main | uniform 200x200 GA-rand-tuned | 4.37 |
+| main | uniform 200x200 SA-cost-tuned | 2.44 |
+| main | uniform 200x200 SA-rand-tuned | 2.33 |
+| factorial | uniform 50x50 GA-rand | 1.64 |
+| factorial | uniform 50x50 GA-cost | 1.64 |
+| main | structured 100x100 RS | 0.73 |
+| main | uniform 100x100 RS | 0.51 |
+| main | structured 100x100 GA-cost-tuned | 0.46 |
+
+## Possible reductions (choose; not applied)
+
+| Option | Saves, h |
+|---|---|
+| budget cap 1,000,000 decoder calls (affects 200x200 only) | 25.84 |
+| budget cap 2,000,000 decoder calls (affects 200x200 only) | 22.15 |
+| 200x200 in the main phase with 10 runs instead of 30 | 19.69 |
+| budget cap 4,000,000 decoder calls (affects 200x200 only) | 14.77 |
+| drop the base GA configurations at 200x200 | 10.01 |
+| timing phase without 200x200 for GA and SA | 1.31 |
+| factorial plan without population 400 | 0.89 |
+
+
+real	1m15.604s
+user	0m0.000s
+sys	0m0.015s
