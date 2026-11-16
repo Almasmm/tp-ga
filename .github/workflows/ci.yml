@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "work/**"]
   pull_request:
   workflow_dispatch:
 
@@ -53,6 +53,20 @@ jobs:
           name: coverage-xml
           path: coverage.xml
 
+  slow:
+    name: Slow tests (v0.3.0 regression, interrupt and resume)
+    needs: lint
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          cache: pip
+      - run: pip install -e .[dev]
+      - run: pytest -m slow -q
+
   platform:
     name: Platform API tests
     needs: lint
@@ -94,7 +108,7 @@ jobs:
         env:
           TPGA_API_ORIGIN: http://127.0.0.1:8000
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test e2e/smoke.spec.js
+      - run: npx playwright test e2e/smoke.spec.js e2e/v04.spec.js
         env:
           E2E_START: "1"
           TPGA_DB_PATH: ${{ runner.temp }}/runs.db
@@ -106,7 +120,7 @@ jobs:
 
   build:
     name: Build package
-    needs: [test, platform, web]
+    needs: [test, slow, platform, web]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
