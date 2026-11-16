@@ -154,3 +154,27 @@ def test_gpu_module_reports_unavailable_cuda_cleanly() -> None:
         pytest.skip("CUDA available here; the GPU path is checked by experiments/gpu_bench.py")
     with pytest.raises(RuntimeError, match="CUDA is not available"):
         gpu.GPUDecoder(np.ones(2), np.ones(2), np.ones((2, 2)), batch=1)
+
+
+@pytest.mark.parametrize("init", ["random", "cost-aware"])
+def test_ga_trace_reproduces_run_ga(init: str) -> None:
+    """The teaching trace runs the same GA: same final cost as run_ga with the same seed."""
+    from tpga.ga_trace import trace_ga
+
+    p = random_balanced(4, 5, 5, zeros=False)
+    cfg = GAConfig(population=12, generations=25, seed=3, initialization=init)
+    tr = trace_ga(p, cfg)
+    assert len(tr["generations"]) >= 25
+    assert tr["final_cost"] == pytest.approx(run_ga(p, cfg).cost)
+
+
+def test_ga_trace_limits() -> None:
+    from tpga.ga_trace import trace_ga
+
+    p = random_balanced(3, 3, 1, zeros=False)
+    with pytest.raises(ValueError, match="arcs"):
+        trace_ga(random_balanced(11, 11, 1), GAConfig(population=10, generations=5, seed=0))
+    with pytest.raises(ValueError, match="population"):
+        trace_ga(p, GAConfig(population=61, generations=5, seed=0))
+    with pytest.raises(ValueError, match="swap_fixed"):
+        trace_ga(p, GAConfig(population=10, generations=5, seed=0, mutation_mode="swap_count", mutation_strength=2))

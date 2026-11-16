@@ -260,7 +260,8 @@ def test_doctor_reads_only(tmp_path):
     cfg = ConfigV2.load(make_config(tmp_path))
     checks = doctor.run(cfg, expected_bytes=1e6)
     names = {c.name for c in checks}
-    assert {"Питание от сети", "Схема питания", "Свободная ОЗУ", "Ядра Numba"} <= names | {"Питание"}
+    assert {"Свободная ОЗУ", "Ядра Numba"} <= names
+    assert names & {"Питание от сети", "Питание"}  # without a battery (CI, desktop) the check is "Питание"
     assert all(c.line().startswith(("OK", "ВНИМАНИЕ")) for c in checks)
 
 

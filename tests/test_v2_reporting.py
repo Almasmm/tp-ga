@@ -246,3 +246,67 @@ def test_generate_on_partial_and_full_records(tmp_path: Path) -> None:
     assert res["phases"] == {"main": 8, "reference": 4}
     assert any(f.endswith("boxplot_gap.pdf") for f in res["figures"])
     assert json.loads((tmp_path / "out" / "report.json").read_text(encoding="utf-8"))["runs"] == 12
+
+
+def test_generate_builds_every_figure(tmp_path: Path) -> None:
+    """Timing, factorial and convergence records produce the time, heatmap and convergence figures."""
+    rows: list[dict[str, object]] = []
+    for side in (20, 50, 100):
+        size = f"{side}x{side}"
+        for i in range(3):
+            inst = f"u{size}-{i}"
+            rows.append(rec("reference", "uniform", size, inst, "VAM", 10.0 + i, seed=None))
+            rows.append(
+                rec(
+                    "timing",
+                    "uniform",
+                    size,
+                    inst,
+                    "LP",
+                    0.0,
+                    seed=None,
+                    time_s=1e-6 * side**3,
+                    presolve_s=0.01,
+                    build_s=0.02,
+                    wrapper_s=0.03,
+                )
+            )
+            for s in range(2):
+                rows.append(rec("main", "uniform", size, inst, "GA-rand-tuned", 2.0 + i, seed=s))
+                rows.append(rec("timing", "uniform", size, inst, "GA-rand-tuned", 1.0, seed=s, time_s=1e-5 * side**2))
+    for i in range(3):
+        for pop in (20, 50):
+            for mut in ("swap_count:1", "swap_count:3"):
+                for init in ("random", "cost-aware"):
+                    rows.append(
+                        rec(
+                            "factorial",
+                            "uniform",
+                            "20x20",
+                            f"f{i}",
+                            "GA",
+                            1.0 + i + pop / 100,
+                            config=f"P{pop}-pc0.9-t3-e2-{mut}-{init}-budget",
+                        )
+                    )
+    for r in rows:
+        r["key"] = key_of(r)
+    curves = [
+        {"key": r["key"], "evals": e, "best_cost": 100.0, "gap": 10.0 / e}
+        for r in rows
+        if r["phase"] == "main"
+        for e in (1, 10, 100)
+    ]
+    out = tmp_path / "out"
+    w = PartWriter(out / "raw" / "runs", "runs")
+    w.add(rows)
+    w.flush()
+    c = PartWriter(out / "raw" / "curves", "curves")
+    c.add(curves)
+    c.flush()
+    res = build.generate(ConfigV2({"output": str(out)}, tmp_path / "cfg.yaml"))
+    names = {Path(f).stem for f in res["figures"]}
+    assert {"boxplot_gap", "boxplot_gap_norm", "convergence", "time_scaling", "factorial_heatmap"} <= names
+    assert res["tables"]["T3_fits"] >= 2 and res["tables"]["T4_tests"] > 0
+    t3 = (out / "tables" / "T3_time.csv").read_text(encoding="utf-8")
+    assert "presolve_median_s" in t3 and "\r" not in t3
