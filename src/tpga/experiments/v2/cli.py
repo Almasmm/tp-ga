@@ -145,7 +145,7 @@ def cmd_report(args: argparse.Namespace) -> int:
     from tpga.experiments.reporting import build as build_report
 
     summary = build_report.generate(_cfg(args.config))
-    print(summary)
+    print(build_report.summary_text(summary))
     return 0
 
 
