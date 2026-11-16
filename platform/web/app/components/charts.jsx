@@ -21,9 +21,10 @@ function ticks(min, max, log) {
 
 const fmtTick = (v) => {
   const a = Math.abs(v);
-  if (a >= 1e6) return (v / 1e6).toPrecision(3).replace(/\.?0+$/, "") + "M";
-  if (a >= 1e3) return (v / 1e3).toPrecision(3).replace(/\.?0+$/, "") + "k";
-  return String(+v.toPrecision(3));
+  // Number() drops trailing zeros of the fraction only: 100 stays 100, 2.50 becomes 2.5
+  if (a >= 1e6) return Number((v / 1e6).toPrecision(3)) + "M";
+  if (a >= 1e3) return Number((v / 1e3).toPrecision(3)) + "k";
+  return String(Number(v.toPrecision(3)));
 };
 
 /**
@@ -48,6 +49,10 @@ export function LineChart({ series, refs = [], xLog = false, yLog = false, xLabe
   }
   const fx = (v) => pad.l + ((xLog ? Math.log10(v) - Math.log10(x0) : v - x0) / (xLog ? Math.log10(x1) - Math.log10(x0) : x1 - x0)) * (W - pad.l - pad.r);
   const fy = (v) => height - pad.b - ((yLog ? Math.log10(v) - Math.log10(y0) : v - y0) / (yLog ? Math.log10(y1) - Math.log10(y0) : y1 - y0)) * (height - pad.t - pad.b);
+  const yTicks = ticks(y0, y1, yLog);
+  const yStep = yTicks.length > 1 ? Math.abs(yTicks[1] - yTicks[0]) : 1;
+  // linear axis: as many decimals as the tick step needs, so neighbouring labels never look equal
+  const formatY = (v) => (yLog || Math.abs(v) >= 1e3 ? fmtTick(v) : v.toFixed(Math.max(0, Math.min(6, -Math.floor(Math.log10(yStep))))));
   const path = (p) => p.filter(([x, y]) => Number.isFinite(y) && (!xLog || x > 0) && (!yLog || y > 0)).map(([x, y], i) => `${i ? "L" : "M"}${fx(x).toFixed(1)},${fy(y).toFixed(1)}`).join("");
   return (
     <figure style={{ margin: 0 }}>
@@ -56,10 +61,10 @@ export function LineChart({ series, refs = [], xLog = false, yLog = false, xLabe
         <defs>
           <clipPath id={id + "c"}><rect x={pad.l} y={pad.t} width={W - pad.l - pad.r} height={height - pad.t - pad.b} /></clipPath>
         </defs>
-        {ticks(y0, y1, yLog).map((v) => (
+        {yTicks.map((v) => (
           <g key={"y" + v}>
             <line className="grid-line" x1={pad.l} x2={W - pad.r} y1={fy(v)} y2={fy(v)} />
-            <text x={pad.l - 6} y={fy(v) + 4} textAnchor="end">{fmtTick(v)}</text>
+            <text x={pad.l - 6} y={fy(v) + 4} textAnchor="end">{formatY(v)}</text>
           </g>
         ))}
         {ticks(x0, x1, xLog).map((v) => (
@@ -105,7 +110,7 @@ export function Bars({ rows, format = (v) => v, height = 22, max: forcedMax }) {
   return (
     <div className="stack" style={{ gap: 6 }}>
       {rows.map((r) => (
-        <div key={r.key} style={{ display: "grid", gridTemplateColumns: "minmax(90px, 160px) 1fr minmax(64px, auto)", gap: 8, alignItems: "center" }}>
+        <div key={r.key} className="bar-row">
           <span className="meta" style={{ color: "var(--text-secondary)" }}>{r.label}</span>
           <span style={{ height, background: "var(--surface-2)", borderRadius: 6, border: "1px solid var(--border)", overflow: "hidden" }}>
             <span style={{ display: "block", height: "100%", width: `${Math.max(1, (100 * r.value) / max)}%`, background: r.color ?? "var(--accent)", opacity: r.dim ? 0.35 : 1, outline: r.highlight ? "2px solid var(--text)" : "none", outlineOffset: -2 }} />

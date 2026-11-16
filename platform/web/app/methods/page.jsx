@@ -33,7 +33,7 @@ export default function MethodsPage() {
       <PageHead kicker={t("navResearch")} title={lang === "en" ? "Methodology and reproducibility" : "Методика и воспроизводимость"}>
         {lang === "en" ? "Generated documents of the experiment, the recorded environment and the commands that reproduce every artifact." : "Сгенерированные документы эксперимента, записанное окружение и команды, которые воспроизводят все артефакты."}
       </PageHead>
-      <div className="split" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(280px, 380px)" }}>
+      <div className="split split-side">
         <Panel title={doc === "LIMITATIONS" ? t("limitations") : doc}
           actions={docs.length > 0 && <Segmented label="docs" value={doc} onChange={setDoc} options={docs.map((d) => ({ value: d, label: d }))} />}>
           <State status={index.status} error={index.error} onRetry={index.reload} empty={t("noArtifacts")} emptyHint={t("noArtifactsHint")}>

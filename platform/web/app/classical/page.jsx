@@ -75,7 +75,7 @@ export default function ClassicalPage() {
           <div className="stack">
             <Segmented label={t("methodsLabel")} value={method} onChange={setMethod}
               options={CODES.map((c) => ({ value: c, label: METHOD_NAME[lang][c] }))} />
-            <div className="split" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(260px, 360px)" }}>
+            <div className="split split-side">
               <Panel title={METHOD_NAME[lang][method]} subtitle={RULES[lang][method]} actions={<StepperControls stepper={stepper} total={steps.length} />}>
                 <TransportMatrix cost={view.cost} plan={view.plan} supplyLeft={view.supplyLeft} demandLeft={view.demandLeft}
                   current={view.current} line={view.line}

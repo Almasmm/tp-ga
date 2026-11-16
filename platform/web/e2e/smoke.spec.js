@@ -48,8 +48,12 @@ test("a calculation runs in the laboratory and reports every method", async ({ p
   const results = page.getByRole("table").filter({ hasText: "Отклонение от оптимума" });
   await expect(results).toBeVisible({ timeout: 60_000 });
   for (const code of ["LP", "VAM", "LCM", "GA-rand", "GA-cost"]) await expect(results.getByText(code, { exact: true })).toBeVisible();
+  const saved = page.waitForResponse((r) => r.url().endsWith("/api/history") && r.request().method() === "POST");
   await page.getByRole("button", { name: "Сохранить в историю" }).click();
+  const { id } = await (await saved).json();
   await expect(page.getByRole("button", { name: "Сохранено" })).toBeVisible();
+  // remove the test entry so that the local history keeps only real runs
+  expect((await page.request.delete(`/api/history/${id}`)).status()).toBe(204);
 });
 
 test("cancelling a long calculation asks for confirmation", async ({ page }) => {
@@ -90,6 +94,11 @@ test.describe("phone width", () => {
       expect(overflow).toBeLessThanOrEqual(1);
     });
   }
+  test("decoder controls are usable on a phone", async ({ page }) => {
+    await page.goto("/decoder");
+    await page.getByRole("button", { name: "Шаг", exact: true }).click({ timeout: 10_000 });
+    await expect(page.getByText("Шаг 1 из 12").first()).toBeVisible();
+  });
   test("menu opens and navigates", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Меню" }).first().click();

@@ -6,7 +6,7 @@ import { Info, TriangleAlert } from "lucide-react";
 import { useSettings } from "../providers";
 import { api } from "../lib/api";
 import { useAsync } from "../lib/use-async";
-import { METHOD_NAME, num, pct } from "../lib/format";
+import { METHOD_NAME, compact, num, pct } from "../lib/format";
 import { MethodLabel, PageHead, Panel, Segmented, State } from "../components/ui";
 
 const FlowMap = dynamic(() => import("./flow-map"), { ssr: false });
@@ -78,7 +78,7 @@ export default function MapPage() {
           ? "Plans of the exact method, Vogel's method and the GA on the same instance; switch the plan to see where the cost difference comes from."
           : "Планы точного метода, метода Фогеля и ГА на одной задаче; переключайте план, чтобы увидеть, откуда берётся разница стоимости."}
       </PageHead>
-      <div className="split" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(260px, 340px)" }}>
+      <div className="split split-side">
         <Panel className="map-panel" style={{ padding: 12 }}>
           <div className="row" style={{ marginBottom: 12, justifyContent: "space-between" }}>
             <Segmented label={t("plan")} value={method} onChange={setMethod} options={PLAN_METHODS.map((m) => ({ value: m, label: m }))} />
@@ -126,7 +126,7 @@ export default function MapPage() {
                   <thead><tr><th>{t("plan")}</th><th className="num">{t("cost")}</th><th className="num">Δ %</th></tr></thead>
                   <tbody>
                     {PLAN_METHODS.map((m) => (
-                      <tr key={m}><td><MethodLabel code={m} short /></td><td className="num">{num(data.plans.results[m].cost, 2, lang)}</td><td className="num">{pct(data.plans.results[m].gap_percent ?? 0, lang)}</td></tr>
+                      <tr key={m}><td><MethodLabel code={m} short /></td><td className="num" title={num(data.plans.results[m].cost, 2, lang)}>{compact(data.plans.results[m].cost, lang)}</td><td className="num">{pct(data.plans.results[m].gap_percent ?? 0, lang)}</td></tr>
                     ))}
                   </tbody>
                 </table>

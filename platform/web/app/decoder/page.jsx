@@ -72,7 +72,7 @@ export default function DecoderPage() {
                 })}
               </div>
             </Panel>
-            <div className="split" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(260px, 360px)" }}>
+            <div className="split split-side">
               <Panel title={t("plan")} actions={<StepperControls stepper={stepper} total={steps.length} />}>
                 <TransportMatrix cost={view.cost} plan={view.plan} supplyLeft={view.supplyLeft} demandLeft={view.demandLeft} current={view.current} />
                 <p className="meta" aria-live="polite" style={{ marginTop: 12 }}>

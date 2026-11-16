@@ -6,6 +6,7 @@ const PAGES = ["", "map", "decoder", "classical", "ga", "lab", "experiment", "me
 const OUT = "../../docs/screenshots";
 
 test.skip(process.env.SCREENSHOTS !== "1", "set SCREENSHOTS=1 to write screenshots");
+test.setTimeout(300_000);
 
 for (const width of [1440, 390]) {
   for (const theme of ["aspan", "astana"]) {
@@ -21,6 +22,16 @@ for (const width of [1440, 390]) {
           await page.goto("/" + p);
           await page.waitForLoadState("networkidle");
           await page.waitForTimeout(p === "map" ? 2500 : 600);
+          // teaching pages: advance a few steps so that the picture shows the process, not an empty table
+          const steps = { decoder: 5, classical: 3, ga: 12 }[p];
+          if (steps) {
+            const label = lang === "en" ? "Step" : "Шаг";
+            const button = page.getByRole("button", { name: label, exact: true });
+            await button.evaluate((el) => el.scrollIntoView({ block: "center" }));
+            for (let k = 0; k < steps; k += 1) await button.click();
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(400);
+          }
           const name = `${p || "overview"}-${theme}-${width}${lang === "en" ? "-en" : ""}.png`;
           await page.screenshot({ path: `${OUT}/${name}`, fullPage: true });
         }

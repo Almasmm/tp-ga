@@ -31,7 +31,7 @@ METHOD_ORDER = ["LP", "NWC", "LCM", "VAM", "RS", "GA-rand", "GA-cost"]
 STOCHASTIC = ["RS", "GA-rand", "GA-cost"]
 # Grey levels are distinct (luminance 0.15 ... 0.8) and every method also has its own marker and line style.
 STYLE: dict[str, dict[str, Any]] = {
-    "LP": {"color": "#000000", "marker": "s", "ls": "-", "hatch": ""},
+    "LP": {"color": "#000000", "marker": "s", "ls": (0, (1, 1.5)), "hatch": ""},
     "NWC": {"color": "#8c8c8c", "marker": "v", "ls": ":", "hatch": "xx"},
     "LCM": {"color": "#5e5e5e", "marker": "^", "ls": "-.", "hatch": "\\\\"},
     "VAM": {"color": "#b5b5b5", "marker": "D", "ls": (0, (5, 1)), "hatch": ".."},
@@ -102,6 +102,15 @@ LABELS = {
 
 
 # --- loading ---------------------------------------------------------------------------------
+
+
+def convergence_file(out: Path, name: str) -> Path | None:
+    """The convergence CSV of a phase: plain while the runner appends to it, gzip-compressed when archived."""
+    for suffix in (".csv", ".csv.gz"):
+        p = out / "raw" / "convergence" / f"{name}{suffix}"
+        if p.exists():
+            return p
+    return None
 
 
 def load_runs(cfg: Config) -> pd.DataFrame:
@@ -630,8 +639,8 @@ def fig_decoder(cfg: Config, out: Path, lang: str) -> dict[str, Any]:
 
 def fig_convergence(cfg: Config, out: Path, lang: str, df: pd.DataFrame) -> None:
     """F2: median and interquartile range of the gap against decoder calls, per size (uniform set)."""
-    path = cfg.output / "raw" / "convergence" / "main.csv"
-    if not path.exists():
+    path = convergence_file(cfg.output, "main")
+    if path is None:
         return
     cv = pd.read_csv(path)
     inst = df[["instance", "suite", "size"]].drop_duplicates().set_index("instance")
@@ -755,7 +764,7 @@ def fig_heatmap(out: Path, lang: str, t4: pd.DataFrame) -> None:
             g = t4[(t4["size"] == size) & (t4["initialization"] == init)]
             mat = g.pivot(index="population", columns="mutation_rate", values="gap_mean")
             im = ax.imshow(mat.values, cmap="Greys", aspect="auto")
-            vmax = np.nanmax(mat.values)
+            vmin, vmax = np.nanmin(mat.values), np.nanmax(mat.values)
             for i in range(mat.shape[0]):
                 for j in range(mat.shape[1]):
                     v = mat.values[i, j]
@@ -766,7 +775,7 @@ def fig_heatmap(out: Path, lang: str, t4: pd.DataFrame) -> None:
                         ha="center",
                         va="center",
                         fontsize=7,
-                        color="white" if v > 0.55 * vmax else "black",
+                        color="white" if (v - vmin) > 0.55 * (vmax - vmin) else "black",
                     )
             ax.set_xticks(range(mat.shape[1]), [f"{v:g}" for v in mat.columns])
             ax.set_yticks(range(mat.shape[0]), [str(v) for v in mat.index])
@@ -1162,6 +1171,15 @@ def limitations_md(cfg: Config, df: pd.DataFrame, env: dict, reach: dict | None)
         "**Stopping rule matters.** The stagnation limit of 200 generations ends many large runs long before "
         "the budget (T2b); results of the base configuration describe the GA with this rule, not the GA's "
         "best attainable quality at the budget.",
+        "**LP time at small sizes.** For small instances the measured LP time is dominated by the fixed cost of "
+        "the scipy.optimize.linprog call (model set-up and checks), so the fitted exponent of the LP time does "
+        "not describe the asymptotic complexity of HiGHS.",
+        "**Factorial grid boundary.** In RQ4 the best cells lie at the edge of the grid (largest population and "
+        "mutation probability), so the grid does not bracket the best parameter values; the effect directions "
+        "hold only inside the tested ranges.",
+        "**Timing runs reproduce the quality runs.** The timing phase repeats five seeds of the base GA "
+        "configuration on performance cores; its costs are identical to the corresponding rows of raw/runs.csv, "
+        "which is checked by the report (NUMBERS.md).",
         "**Single machine.** All runs on one laptop; times are not comparable across machines.",
         "**Wheat source links.** The dataset manifest stores the BNS and Comtrade URLs and table positions; "
         "the downloaded source files themselves are not archived in the repository.",
@@ -1175,10 +1193,20 @@ def readme_md(cfg: Config, env: dict, df: pd.DataFrame) -> str:
         f"| {name} | {sum(e['wall_s'] for e in v) / 3600:.2f} | {sum(e['errors'] for e in v)} |"
         for name, v in phases.items()
     )
+    rows = [
+        f"| {i.get('recorded_at')} | {', '.join(i.get('phases_run', [])) or '–'} "
+        f"| `{(i.get('git_commit') or '–')[:10]}` | {i.get('power_scheme') or '–'} |"
+        for i in env.get("invocations", [])
+    ]
+    invocations = "\n".join(rows) or "| – | – | – | – |"
     return f"""# Artifacts of the computational experiment
 
-Code version: `{env.get("git_commit")}` (working tree dirty: {env.get("git_dirty")}). Configuration:
-`{env.get("config")}`. Machine and software: `environment.json`.
+Configuration: `{env.get("config")}`. Machine and software: `environment.json` (one snapshot per invocation
+of the runner in `invocations`).
+
+| Invocation started | Phases | Code version | Power scheme |
+|---|---|---|---|
+{invocations}
 
 ## Reproduce
 
@@ -1203,8 +1231,8 @@ Rows in `raw/runs.csv`: {len(df)}.
 
 * `instances/` — every instance as JSON; `instances/manifest.json` gives seed, SHA-256 and provenance.
 * `raw/runs.csv` — one row per run (LP and classical methods: one row per instance); `raw/timing.csv`
-  — RQ3 timing phase on performance cores; `raw/convergence/*.csv` (+ `.parquet`) — best cost at
-  log-spaced decoder-call counts.
+  — RQ3 timing phase on performance cores; `raw/convergence/*.csv.gz` (+ `.parquet`) — best cost at
+  log-spaced decoder-call counts (the runner appends to plain `.csv`; archived gzip-compressed).
 * `reachability.json` — decoder reproduction of HiGHS vertices.
 * `tables/` — T1 instance sets, T2 gap, T3 time and fits, T4 factorial plan (+ tests), T5 method
   comparison tests, T6 applied cases; CSV and Markdown.
@@ -1279,9 +1307,22 @@ def generate(cfg: Config) -> dict[str, Any]:
         fig_time(figs, lang, t3, fits)
         fig_heatmap(figs, lang, t4)
         fig_wheat_map(cfg, figs, lang)
-    for csv_path in (out / "raw" / "convergence").glob("*.csv"):
-        pd.read_csv(csv_path).to_parquet(csv_path.with_suffix(".parquet"), index=False)
-    (out / "NUMBERS.md").write_text(numbers(cfg, df, t2, t3, fits, t5, t4, reach, env, t2b), encoding="utf-8")
+    for name in ("main", "applied", "stopping"):
+        src = convergence_file(out, name)
+        if src is not None:
+            pd.read_csv(src).to_parquet(out / "raw" / "convergence" / f"{name}.parquet", index=False)
+    text = numbers(cfg, df, t2, t3, fits, t5, t4, reach, env, t2b)
+    if timing is not None and len(timing):
+        keys = ["instance", "method", "config", "seed"]
+        ga = timing[timing["method"].isin(list(GA_METHODS))]
+        both = ga.merge(df[[*keys, "cost"]], on=keys, suffixes=("_timing", "_runs"))
+        same = int((both["cost_timing"] == both["cost_runs"]).sum())
+        text += (
+            f"| Timing runs with the same cost as in raw/runs.csv | {same} of {len(both)} "
+            f"| GA runs of the timing phase matched by instance, method, configuration and seed; equality of cost "
+            f"| raw/timing.csv joined with raw/runs.csv |\n"
+        )
+    (out / "NUMBERS.md").write_text(text, encoding="utf-8")
     (out / "METHODS.md").write_text(methods_md(cfg, f1), encoding="utf-8")
     (out / "LIMITATIONS.md").write_text(limitations_md(cfg, df, env, reach), encoding="utf-8")
     (out / "README.md").write_text(readme_md(cfg, env, df), encoding="utf-8")

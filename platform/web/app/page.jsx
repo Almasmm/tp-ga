@@ -90,7 +90,7 @@ export default function OverviewPage() {
           </div>
         </Panel>
         <State status={index.status} error={index.error} onRetry={index.reload} empty={t("noArtifacts")} emptyHint={t("noArtifactsHint")}>
-          <div className="grid grid-2" style={{ gridTemplateColumns: "minmax(0, 2fr) minmax(260px, 1fr)" }}>
+          <div className="grid split-side">
             <Panel title={t("keyResults")}>
               <State status={t2.status === "loading" && !index.data?.tables?.includes("T2_gap") ? "empty" : t2.status} error={t2.error} onRetry={t2.reload}
                 empty={lang === "en" ? "Tables are not generated yet" : "Таблицы ещё не построены"} emptyHint="python -m tpga.experiments.report --config experiments/paper.yaml">
