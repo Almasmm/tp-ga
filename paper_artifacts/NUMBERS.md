@@ -312,7 +312,7 @@ Every value below is computed by `python -m tpga.experiments.report` from the fi
 | RQ4 mean gap 50x50 cost-aware P=100 pm=0.01 | 30.0101 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 cost-aware P=100 pm=0.05 | 28.1841 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 cost-aware P=100 pm=0.1 | 27.2659 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
-| RQ4 mean gap 50x50 cost-aware P=100 pm=0.2 | 23.8533 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
+| RQ4 mean gap 50x50 cost-aware P=100 pm=0.2 | 25.8414 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 cost-aware P=200 pm=0.01 | 27.8268 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 cost-aware P=200 pm=0.05 | 25.9008 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 cost-aware P=200 pm=0.1 | 24.7531 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
@@ -328,7 +328,7 @@ Every value below is computed by `python -m tpga.experiments.report` from the fi
 | RQ4 mean gap 50x50 random P=100 pm=0.01 | 490.1335 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 random P=100 pm=0.05 | 333.9017 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 random P=100 pm=0.1 | 280.1377 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
-| RQ4 mean gap 50x50 random P=100 pm=0.2 | 202.4325 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
+| RQ4 mean gap 50x50 random P=100 pm=0.2 | 227.4141 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 random P=200 pm=0.01 | 368.0892 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 random P=200 pm=0.05 | 259.1542 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
 | RQ4 mean gap 50x50 random P=200 pm=0.1 | 214.2811 | mean gap over 10 instances x runs, % | tables/T4_factorial.csv |
