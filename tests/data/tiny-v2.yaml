@@ -1,0 +1,68 @@
+name: tiny-v2
+output: OUTPUT
+root: ROOT
+base_seed: 7
+instance_seed_base: 1000
+runs: 2
+tolerance: 1.0e-9
+decoder_tol: 1.0e-12
+lp_repeats: 1
+convergence_points: 10
+zrand_samples: 50
+workers: 2
+priority: normal
+state_interval_s: 1
+budget: {factor: 40, cap: 2000}
+instances:
+  uniform:    {sizes: [[3, 3], [4, 5]], per_size: 2, cost: [1, 100], supply: [20, 100]}
+  structured: {sizes: [[3, 3]], per_size: 1, area: 100, noise: 10, supply: [20, 100]}
+  skewed:     {sizes: [[4, 4]], per_size: 1, cost: [1, 100], lognormal_sigma: 1.5, supply_median: 50}
+  ties:       {sizes: [[4, 4]], per_size: 1, cost: [1, 5], supply: [1, 20]}
+  lp_scaling: {sizes: [[6, 6]], per_size: 1, cost: [1, 100], supply: [20, 100]}
+tuned_parameters: TUNED
+methods:
+  LP:            {kind: lp, solver: highspy}
+  LP-ortools:    {kind: lp, solver: ortools}
+  NWC:           {kind: classical}
+  LCM:           {kind: classical}
+  VAM:           {kind: classical}
+  RS:            {kind: rs}
+  GA-rand-base:  {kind: ga, initialization: random, params: {population: 10, crossover_rate: 0.9, mutation_rate: 0.2, tournament: 3, elite: 2, mutation_mode: swap_fixed}}
+  GA-cost-base:  {kind: ga, initialization: cost-aware, params: {population: 10, crossover_rate: 0.9, mutation_rate: 0.2, tournament: 3, elite: 2, mutation_mode: swap_fixed}}
+  GA-rand-tuned: {kind: ga, initialization: random, tuned: GA-rand}
+  GA-cost-tuned: {kind: ga, initialization: cost-aware, tuned: GA-cost}
+  SA-rand-tuned: {kind: sa, initialization: random, tuned: SA-rand}
+  SA-cost-tuned: {kind: sa, initialization: cost-aware, tuned: SA-cost}
+stochastic_methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+reference_methods: [LP, NWC, LCM, VAM]
+tuning:
+  sampler: TPE
+  seed: 1
+  trials: 2
+  sets: {uniform: [[3, 3]]}
+  instances_per_size: 1
+  seeds: 1
+  objective: mean gap
+  space:
+    ga: {population: [6, 12], crossover_rate: [0.5, 1.0], tournament: [2, 3], elite: [1, 2],
+         mutation_mode: [swap_fixed, swap_count, swap_per_position, swap_scaled],
+         swap_fixed: [0.01, 1.0], swap_count: [1, 3], swap_per_position: [0.01, 0.5], swap_scaled: [0.05, 0.5]}
+    sa: {insertion_probability: [0.0, 1.0], initial_acceptance: [0.05, 0.95], final_ratio: [1.0e-5, 1.0e-1]}
+phases:
+  reference: {sets: [uniform, structured, skewed, ties]}
+  main: {sets: [uniform, structured, skewed, ties], methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned], stop: budget}
+  stagnation: {sets: {uniform: [[3, 3]]}, methods: [GA-rand-base, SA-rand-tuned], stop: {stagnation_evaluations_fraction: 0.1}}
+  legacy: {sets: {uniform: [[3, 3]]}, methods: [GA-rand-base], stop: {stagnation_generations: 5}}
+  factorial:
+    sets: {uniform: [[3, 3]]}
+    population: [6, 10]
+    mutation: {swap_fixed: [0.2], swap_count: [2], swap_per_position: [0.2], swap_scaled: [0.1]}
+    initialization: [random, cost-aware]
+    fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+  timing:
+    sets: {uniform: [[3, 3]], lp_scaling: all}
+    instances: 1
+    runs: 1
+    methods: [LP, LP-ortools, GA-rand-tuned, SA-rand-tuned]
+    lp_methods_only_on: [lp_scaling]
+    cpu_class: performance

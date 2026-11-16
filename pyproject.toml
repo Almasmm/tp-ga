@@ -19,10 +19,12 @@ classifiers = [
 
 [project.optional-dependencies]
 experiments = ["pyyaml>=6.0", "pandas>=2.0", "pyarrow>=14"]
-dev = ["tpga[experiments]", "pytest>=7", "pytest-cov>=5", "hypothesis>=6.100", "ruff>=0.5", "mypy>=1.8", "build>=1.0"]
+v2 = ["tpga[experiments]", "highspy>=1.12", "ortools>=9.12", "optuna>=4.0", "rich>=13", "psutil>=5.9"]
+dev = ["tpga[experiments,v2]", "pytest>=7", "pytest-cov>=5", "hypothesis>=6.100", "ruff>=0.5", "mypy>=1.8", "build>=1.0"]
 
 [project.scripts]
 tpga = "tpga.cli:main"
+tpga-exp = "tpga.experiments.v2.cli:main"
 
 [project.urls]
 Repository = "https://github.com/Almasmm/tp-ga"
@@ -37,11 +39,17 @@ tpga = ["py.typed"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = "-ra"
+markers = ["slow: long regression runs (deselect with -m \"not slow\")"]
+addopts = "-ra -m \"not slow\""
 
 [tool.coverage.run]
 source = ["tpga"]
 branch = true
+# runs execute in worker processes and the CLI in subprocesses; measure them too
+parallel = true
+concurrency = ["thread", "multiprocessing"]
+patch = ["subprocess"]
+sigterm = true
 
 [tool.coverage.report]
 show_missing = true
