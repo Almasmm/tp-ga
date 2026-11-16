@@ -16,3 +16,15 @@ def paper_dir() -> Path:
 
 def db_path() -> Path:
     return Path(os.environ.get("TPGA_DB_PATH", REPO / "platform" / "data" / "runs.db"))
+
+
+def paper_v2_dir() -> Path:
+    return Path(os.environ.get("TPGA_ARTIFACTS_V2_DIR", REPO / "paper_artifacts_v2"))
+
+
+def docs_v04_dir() -> Path:
+    return Path(os.environ.get("TPGA_DOCS_V04_DIR", REPO / "docs" / "v0.4"))
+
+
+def experiments_dir() -> Path:
+    return Path(os.environ.get("TPGA_EXPERIMENTS_DIR", REPO / "experiments"))
