@@ -284,3 +284,21 @@ def markdown(result: dict[str, Any]) -> str:
             *[f"| {r['option']} | {r['saves_h']:.2f} |" for r in result["reductions"]],
         ]
     return "\n".join(lines) + "\n"
+
+
+def reestimate(cfg: ConfigV2, measured: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Estimate the plan of ``cfg`` from the measurements of an earlier pilot (``pilot/estimate.json``).
+
+    Used to compare variants of the configuration (budget cap, runs per size) on the same measurements;
+    a change of the tuned parameters needs a new pilot, since the time per decoder call depends on them.
+    """
+    if measured is None:
+        measured = json.loads((cfg.output / "pilot" / "estimate.json").read_text(encoding="utf-8"))["measured"]
+    per_eval = {tuple(k.split("|")): v for k, v in measured["per_eval_s_performance_core"].items()}
+    det_time = {tuple(k.split("|")): v for k, v in measured["deterministic_s"].items()}
+    p_cores, e_cores = _cores()
+    workers = min(len(p_cores) + len(e_cores), int(cfg.raw.get("workers", 24)))
+    est = estimate_plan(
+        cfg, build(cfg), per_eval, det_time, float(measured["e_over_p_speed_ratio"]), len(p_cores), workers
+    )
+    return {"measured": measured, **est}

@@ -173,12 +173,13 @@ def phase_tasks(cfg: ConfigV2, phase: str, items: list[InstanceV2]) -> list[dict
             cfg, phase, [i for i in chosen if i.set not in lp_only], other, "budget", cfg.seeds(int(spec["runs"]))
         )
         return tasks
-    return stochastic_tasks(
-        cfg,
-        phase,
-        select(items, spec["sets"]),
-        list(spec["methods"]),
-        spec.get("stop"),
-        cfg.seeds(),
-        curve=(phase == "main"),
-    )
+    # runs_by_size: {"200x200": 10} runs seeds r = 0..9 at that size (the first ones of the common seeds)
+    by_size = {str(k): int(v) for k, v in (spec.get("runs_by_size") or {}).items()}
+    chosen = select(items, spec["sets"])
+    tasks = []
+    for runs in sorted({by_size.get(i.size, cfg.runs) for i in chosen}):
+        group = [i for i in chosen if by_size.get(i.size, cfg.runs) == runs]
+        tasks += stochastic_tasks(
+            cfg, phase, group, list(spec["methods"]), spec.get("stop"), cfg.seeds(runs), curve=(phase == "main")
+        )
+    return tasks
