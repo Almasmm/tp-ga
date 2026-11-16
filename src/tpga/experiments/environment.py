@@ -113,5 +113,7 @@ def describe(root: Path) -> dict[str, Any]:
     else:  # pragma: no cover
         info["cpu"] = platform.processor()
     info["git_commit"] = _run(["git", "-C", str(root), "rev-parse", "HEAD"]) or None
-    info["git_dirty"] = bool(_run(["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"]))
+    # the runner itself rewrites tracked files under paper_artifacts/, so they do not count as changes to the code
+    status = ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no", "--", ".", ":!paper_artifacts"]
+    info["git_dirty"] = bool(_run(status))
     return info

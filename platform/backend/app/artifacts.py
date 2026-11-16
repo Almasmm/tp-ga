@@ -128,8 +128,9 @@ def _curves(path: str, mtime: float) -> dict[tuple[str, str], dict[str, list]]:
 
 @router.get("/convergence")
 def convergence(size: str = Query(..., pattern=r"^\d+x\d+$"), suite: str = Query("uniform", pattern=r"^[a-z]+$")):
-    path = _root() / "raw" / "convergence" / "main.csv"
-    if not path.exists():
+    base = _root() / "raw" / "convergence"
+    path = next((p for p in (base / "main.csv", base / "main.csv.gz") if p.exists()), None)
+    if path is None:
         raise HTTPException(404, "Кривые сходимости ещё не записаны")
     curves = _curves(str(path), path.stat().st_mtime)
     data = {method: v for (key, method), v in curves.items() if key == f"{suite}/{size}"}

@@ -409,6 +409,14 @@ def main(argv: list[str] | None = None) -> int:
     env["config"] = str(cfg.path.relative_to(cfg.root)) if cfg.path.is_relative_to(cfg.root) else str(cfg.path)
     previous = json.loads(env_path.read_text(encoding="utf-8")) if env_path.exists() else {}
     env["phases"] = previous.get("phases", {})
+    # every invocation keeps its own snapshot (code version, power scheme, ...); the top level is the latest
+    invocations = list(previous.get("invocations", []))
+    if not invocations and previous.get("git_commit"):
+        invocations.append({k: v for k, v in previous.items() if k not in ("phases", "invocations")})
+    snapshot = {k: v for k, v in env.items() if k != "phases"}
+    snapshot["phases_run"] = list(args.phase or PHASES)
+    invocations.append(snapshot)
+    env["invocations"] = invocations
     errors = 0
     for name in args.phase or PHASES:
         start = time.time()

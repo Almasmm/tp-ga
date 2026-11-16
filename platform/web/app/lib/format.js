@@ -38,5 +38,12 @@ export function num(value, digits = 2, lang = "ru") {
   return new Intl.NumberFormat(lang === "en" ? "en-US" : "ru-RU", { maximumFractionDigits: digits }).format(value);
 }
 
+/** Short form for large values (e.g. 141,7 млрд); the exact value belongs in a title attribute. */
+export function compact(value, lang = "ru") {
+  if (value === null || value === undefined || Number.isNaN(value)) return "–";
+  if (Math.abs(value) < 1e6) return num(value, 2, lang);
+  return new Intl.NumberFormat(lang === "en" ? "en-US" : "ru-RU", { notation: "compact", maximumFractionDigits: 3 }).format(value);
+}
+
 export const pct = (v, lang) => (v === null || v === undefined ? "–" : num(v, Math.abs(v) < 10 ? 2 : 1, lang) + " %");
 export const sec = (v, lang) => (v === null || v === undefined ? "–" : v < 1 ? num(v * 1000, 1, lang) + " ms" : num(v, 2, lang) + " s");
