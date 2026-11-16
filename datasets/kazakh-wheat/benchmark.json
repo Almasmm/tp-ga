@@ -1,0 +1,292 @@
+{
+  "dataset": "kazakh-wheat-2024",
+  "protocol": {
+    "population": 32,
+    "generations": 60,
+    "seeds": [
+      42,
+      7,
+      2026
+    ],
+    "reference": "HiGHS"
+  },
+  "summary": {
+    "scenarios": 5,
+    "runs": 30,
+    "mean_gap_before_percent": 0.3503980111608395,
+    "mean_gap_after_percent": 0.21349882542255644,
+    "improved_scenarios": 2
+  },
+  "scenarios": [
+    {
+      "id": "year-2024",
+      "lp_cost_kzt": 141692996935.74,
+      "runs": [
+        {
+          "initialization": "random",
+          "seed": 42,
+          "cost_kzt": 141981594949.11,
+          "gap_percent": 0.20367838891914206,
+          "initial_cost_kzt": 145559044242.92,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 42,
+          "cost_kzt": 141875990801.62,
+          "gap_percent": 0.1291481370550479,
+          "initial_cost_kzt": 142354754039.62,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 7,
+          "cost_kzt": 143276979560.43,
+          "gap_percent": 1.1178976088764165,
+          "initial_cost_kzt": 146731575152.42,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 7,
+          "cost_kzt": 142070004988.07,
+          "gap_percent": 0.26607387837308966,
+          "initial_cost_kzt": 142354754039.62,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 2026,
+          "cost_kzt": 143111434649.54,
+          "gap_percent": 1.001064092421781,
+          "initial_cost_kzt": 146335513515.76,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 2026,
+          "cost_kzt": 141762610546.12,
+          "gap_percent": 0.049129887775290135,
+          "initial_cost_kzt": 142332416191.08,
+          "evaluations": 1832
+        }
+      ]
+    },
+    {
+      "id": "month-2024-02",
+      "lp_cost_kzt": 12155643247.43,
+      "runs": [
+        {
+          "initialization": "random",
+          "seed": 42,
+          "cost_kzt": 12262245698.93,
+          "gap_percent": 0.8769791061656763,
+          "initial_cost_kzt": 12382808311.31,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 42,
+          "cost_kzt": 12166715956.59,
+          "gap_percent": 0.09109110011385772,
+          "initial_cost_kzt": 12216643413.23,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 7,
+          "cost_kzt": 12158563208.41,
+          "gap_percent": 0.024021443543243943,
+          "initial_cost_kzt": 12535475057.56,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 7,
+          "cost_kzt": 12157033544.72,
+          "gap_percent": 0.011437463749957872,
+          "initial_cost_kzt": 12213890844.23,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 2026,
+          "cost_kzt": 12171646065.98,
+          "gap_percent": 0.13164929427642202,
+          "initial_cost_kzt": 12376699492.4,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 2026,
+          "cost_kzt": 12158291862.41,
+          "gap_percent": 0.02178917993960973,
+          "initial_cost_kzt": 12214743578.31,
+          "evaluations": 1832
+        }
+      ]
+    },
+    {
+      "id": "stress-source",
+      "lp_cost_kzt": 131399243201.49,
+      "runs": [
+        {
+          "initialization": "random",
+          "seed": 42,
+          "cost_kzt": 131648040895.1,
+          "gap_percent": 0.18934484518186281,
+          "initial_cost_kzt": 136803006582.39,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 42,
+          "cost_kzt": 131497670658.59,
+          "gap_percent": 0.07490717199115897,
+          "initial_cost_kzt": 133114857886.43,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 7,
+          "cost_kzt": 131491290844.71,
+          "gap_percent": 0.07005188232238824,
+          "initial_cost_kzt": 137019815481.48,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 7,
+          "cost_kzt": 132608263877.53,
+          "gap_percent": 0.9201123587797911,
+          "initial_cost_kzt": 133114857886.43,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 2026,
+          "cost_kzt": 131819481731.98,
+          "gap_percent": 0.31981807524235084,
+          "initial_cost_kzt": 136700066238.51,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 2026,
+          "cost_kzt": 131546808959.59,
+          "gap_percent": 0.11230335465002744,
+          "initial_cost_kzt": 133114857886.43,
+          "evaluations": 1832
+        }
+      ]
+    },
+    {
+      "id": "stress-demand",
+      "lp_cost_kzt": 136750470741.94,
+      "runs": [
+        {
+          "initialization": "random",
+          "seed": 42,
+          "cost_kzt": 136978539677.56,
+          "gap_percent": 0.1667774409715788,
+          "initial_cost_kzt": 142378556464.43,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 42,
+          "cost_kzt": 137325431375.38,
+          "gap_percent": 0.42044508535915975,
+          "initial_cost_kzt": 137723633876.34,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 7,
+          "cost_kzt": 137154406877.77,
+          "gap_percent": 0.2953818978746184,
+          "initial_cost_kzt": 143434708119.88,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 7,
+          "cost_kzt": 137232028288.69,
+          "gap_percent": 0.35214324611629716,
+          "initial_cost_kzt": 137723633876.34,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 2026,
+          "cost_kzt": 137161445561.75,
+          "gap_percent": 0.3005289982405453,
+          "initial_cost_kzt": 142218500420.99,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 2026,
+          "cost_kzt": 136987565520.49,
+          "gap_percent": 0.17337766902273133,
+          "initial_cost_kzt": 137723633876.34,
+          "evaluations": 1832
+        }
+      ]
+    },
+    {
+      "id": "stress-tariff",
+      "lp_cost_kzt": 146382930178.33,
+      "runs": [
+        {
+          "initialization": "random",
+          "seed": 42,
+          "cost_kzt": 146434997080.85,
+          "gap_percent": 0.0355689713660796,
+          "initial_cost_kzt": 151194008851.53,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 42,
+          "cost_kzt": 146655832015.38,
+          "gap_percent": 0.18643009585716516,
+          "initial_cost_kzt": 149662652591.22,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 7,
+          "cost_kzt": 146615396170.09,
+          "gap_percent": 0.15880676215237605,
+          "initial_cost_kzt": 152024907267.65,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 7,
+          "cost_kzt": 146957415858.66,
+          "gap_percent": 0.3924540106077418,
+          "initial_cost_kzt": 149662652591.22,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "random",
+          "seed": 2026,
+          "cost_kzt": 146916351566.5,
+          "gap_percent": 0.36440135985811045,
+          "initial_cost_kzt": 152245671887.28,
+          "evaluations": 1832
+        },
+        {
+          "initialization": "cost-aware",
+          "seed": 2026,
+          "cost_kzt": 146385330480.64,
+          "gap_percent": 0.0016397419474206496,
+          "initial_cost_kzt": 148559966310.93,
+          "evaluations": 1832
+        }
+      ]
+    }
+  ]
+}

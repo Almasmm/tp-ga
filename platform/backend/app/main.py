@@ -1,18 +1,98 @@
-"""tp-ga platform API (skeleton).
+"""tp-ga API: custom problems, packaged datasets, calculation jobs, traces, artifacts and run history.
 
-Exposes the core library over HTTP.  Long GA runs will move to a job queue (Redis + RQ) in a
-later milestone; for now /solve runs synchronously and is limited to small instances."""
+Meant for local use: run it on 127.0.0.1 only (``scripts/dev.ps1`` does). CORS admits the local
+front end only; every input size is limited in :mod:`app.schemas`.
+"""
 
+import json
+import logging
+import os
+import time
+import uuid
+from contextlib import asynccontextmanager
 from typing import Literal
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from tpga import GAConfig, TransportProblem, run_ga, solve_lp
+from tpga import GAConfig, TransportProblem, __version__, run_ga, solve_lp
 
-MAX_ARCS = 400  # synchronous limit until the job queue exists
+from .artifacts import router as artifacts_router
+from .history import router as history_router
+from .jobs import manager as job_manager
+from .jobs import router as jobs_router
+from .scenarios import router as scenarios_router
+from .traces import router as traces_router
 
-app = FastAPI(title="tp-ga", version="0.1.0")
+MAX_ARCS = 400  # limit for arbitrary matrices submitted to /solve
+
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
+        msg = record.getMessage()
+        try:
+            payload = json.loads(msg)
+        except ValueError:
+            payload = {"message": msg}
+        return json.dumps({"ts": self.formatTime(record), "level": record.levelname, "logger": record.name, **payload})
+
+
+def configure_logging() -> None:
+    handler = logging.StreamHandler()
+    handler.setFormatter(JsonFormatter())
+    for name in ("tpga.http", "tpga.jobs"):
+        logger = logging.getLogger(name)
+        logger.handlers = [handler]
+        logger.setLevel(logging.INFO)
+        logger.propagate = False
+
+
+configure_logging()
+http_log = logging.getLogger("tpga.http")
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):  # type: ignore[no-untyped-def]
+    yield
+    job_manager.shutdown()
+
+
+app = FastAPI(title="tp-ga", version=__version__, lifespan=lifespan)
+ORIGINS = os.environ.get("TPGA_CORS_ORIGINS", "http://127.0.0.1:3000,http://localhost:3000").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in ORIGINS if o.strip()],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type"],
+)
+
+
+@app.middleware("http")
+async def access_log(request: Request, call_next):  # type: ignore[no-untyped-def]
+    rid = uuid.uuid4().hex[:8]
+    t0 = time.perf_counter()
+    response = await call_next(request)
+    http_log.info(
+        json.dumps(
+            {
+                "request": rid,
+                "method": request.method,
+                "path": request.url.path,
+                "status": response.status_code,
+                "ms": round(1000 * (time.perf_counter() - t0), 1),
+            }
+        )
+    )
+    response.headers["X-Request-Id"] = rid
+    return response
+
+
+app.include_router(scenarios_router)
+app.include_router(jobs_router)
+app.include_router(traces_router)
+app.include_router(artifacts_router)
+app.include_router(history_router)
 
 
 class SolveRequest(BaseModel):
@@ -38,6 +118,11 @@ class SolveResponse(BaseModel):
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/version")
+def version():
+    return {"tpga": __version__}
 
 
 @app.post("/solve", response_model=SolveResponse)

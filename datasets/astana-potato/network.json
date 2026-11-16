@@ -1,0 +1,2127 @@
+{
+  "coordinate_system": "simulated_local_grid_km",
+  "districts": [
+    {
+      "id": "alm",
+      "name": "Алматы",
+      "published_pavilion_count": 82
+    },
+    {
+      "id": "bai",
+      "name": "Байконыр",
+      "published_pavilion_count": 66
+    },
+    {
+      "id": "esi",
+      "name": "Есиль",
+      "published_pavilion_count": 35
+    },
+    {
+      "id": "nur",
+      "name": "Нура",
+      "published_pavilion_count": 24
+    },
+    {
+      "id": "sar",
+      "name": "Сарайшык",
+      "published_pavilion_count": 11
+    },
+    {
+      "id": "sry",
+      "name": "Сарыарка",
+      "published_pavilion_count": 106
+    }
+  ],
+  "warehouses": [
+    {
+      "id": "W-alm-01",
+      "district": "alm",
+      "x_km": 7.118,
+      "y_km": -0.051
+    },
+    {
+      "id": "W-alm-02",
+      "district": "alm",
+      "x_km": 9.295,
+      "y_km": -0.379
+    },
+    {
+      "id": "W-alm-03",
+      "district": "alm",
+      "x_km": 7.112,
+      "y_km": 1.852
+    },
+    {
+      "id": "W-alm-04",
+      "district": "alm",
+      "x_km": 10.584,
+      "y_km": 2.469
+    },
+    {
+      "id": "W-bai-01",
+      "district": "bai",
+      "x_km": -1.945,
+      "y_km": 7.287
+    },
+    {
+      "id": "W-bai-02",
+      "district": "bai",
+      "x_km": -2.084,
+      "y_km": 10.81
+    },
+    {
+      "id": "W-bai-03",
+      "district": "bai",
+      "x_km": -1.814,
+      "y_km": 8.816
+    },
+    {
+      "id": "W-bai-04",
+      "district": "bai",
+      "x_km": -0.045,
+      "y_km": 10.178
+    },
+    {
+      "id": "W-esi-01",
+      "district": "esi",
+      "x_km": 1.944,
+      "y_km": -10.46
+    },
+    {
+      "id": "W-esi-02",
+      "district": "esi",
+      "x_km": 3.582,
+      "y_km": -9.053
+    },
+    {
+      "id": "W-esi-03",
+      "district": "esi",
+      "x_km": -0.605,
+      "y_km": -6.522
+    },
+    {
+      "id": "W-esi-04",
+      "district": "esi",
+      "x_km": 1.961,
+      "y_km": -6.577
+    },
+    {
+      "id": "W-nur-01",
+      "district": "nur",
+      "x_km": -9.23,
+      "y_km": -7.29
+    },
+    {
+      "id": "W-nur-02",
+      "district": "nur",
+      "x_km": -9.687,
+      "y_km": -5.919
+    },
+    {
+      "id": "W-nur-03",
+      "district": "nur",
+      "x_km": -6.326,
+      "y_km": -3.976
+    },
+    {
+      "id": "W-nur-04",
+      "district": "nur",
+      "x_km": -9.614,
+      "y_km": -4.425
+    },
+    {
+      "id": "W-sar-01",
+      "district": "sar",
+      "x_km": 7.68,
+      "y_km": -7.145
+    },
+    {
+      "id": "W-sar-02",
+      "district": "sar",
+      "x_km": 8.616,
+      "y_km": -8.194
+    },
+    {
+      "id": "W-sar-03",
+      "district": "sar",
+      "x_km": 10.352,
+      "y_km": -6.34
+    },
+    {
+      "id": "W-sar-04",
+      "district": "sar",
+      "x_km": 12.448,
+      "y_km": -7.269
+    },
+    {
+      "id": "W-sry-01",
+      "district": "sry",
+      "x_km": -6.406,
+      "y_km": 4.872
+    },
+    {
+      "id": "W-sry-02",
+      "district": "sry",
+      "x_km": -5.409,
+      "y_km": 2.069
+    },
+    {
+      "id": "W-sry-03",
+      "district": "sry",
+      "x_km": -9.63,
+      "y_km": 1.949
+    },
+    {
+      "id": "W-sry-04",
+      "district": "sry",
+      "x_km": -7.553,
+      "y_km": 6.068
+    }
+  ],
+  "stores": [
+    {
+      "id": "S-alm-001",
+      "district": "alm",
+      "x_km": 4.702,
+      "y_km": -1.259
+    },
+    {
+      "id": "S-alm-002",
+      "district": "alm",
+      "x_km": 8.092,
+      "y_km": -1.49
+    },
+    {
+      "id": "S-alm-003",
+      "district": "alm",
+      "x_km": 6.667,
+      "y_km": 1.505
+    },
+    {
+      "id": "S-alm-004",
+      "district": "alm",
+      "x_km": 5.131,
+      "y_km": 1.846
+    },
+    {
+      "id": "S-alm-005",
+      "district": "alm",
+      "x_km": 5.43,
+      "y_km": -0.44
+    },
+    {
+      "id": "S-alm-006",
+      "district": "alm",
+      "x_km": 6.347,
+      "y_km": -0.356
+    },
+    {
+      "id": "S-alm-007",
+      "district": "alm",
+      "x_km": 6.882,
+      "y_km": 2.073
+    },
+    {
+      "id": "S-alm-008",
+      "district": "alm",
+      "x_km": 4.626,
+      "y_km": 0.868
+    },
+    {
+      "id": "S-alm-009",
+      "district": "alm",
+      "x_km": 4.499,
+      "y_km": 1.52
+    },
+    {
+      "id": "S-alm-010",
+      "district": "alm",
+      "x_km": 4.385,
+      "y_km": -0.808
+    },
+    {
+      "id": "S-alm-011",
+      "district": "alm",
+      "x_km": 6.586,
+      "y_km": 1.172
+    },
+    {
+      "id": "S-alm-012",
+      "district": "alm",
+      "x_km": 5.829,
+      "y_km": 0.23
+    },
+    {
+      "id": "S-alm-013",
+      "district": "alm",
+      "x_km": 4.627,
+      "y_km": 2.009
+    },
+    {
+      "id": "S-alm-014",
+      "district": "alm",
+      "x_km": 4.151,
+      "y_km": -1.563
+    },
+    {
+      "id": "S-alm-015",
+      "district": "alm",
+      "x_km": 6.495,
+      "y_km": 0.822
+    },
+    {
+      "id": "S-alm-016",
+      "district": "alm",
+      "x_km": 4.061,
+      "y_km": -1.067
+    },
+    {
+      "id": "S-alm-017",
+      "district": "alm",
+      "x_km": 7.412,
+      "y_km": 1.64
+    },
+    {
+      "id": "S-alm-018",
+      "district": "alm",
+      "x_km": 7.998,
+      "y_km": 0.509
+    },
+    {
+      "id": "S-alm-019",
+      "district": "alm",
+      "x_km": 6.685,
+      "y_km": 0.808
+    },
+    {
+      "id": "S-alm-020",
+      "district": "alm",
+      "x_km": 6.844,
+      "y_km": 1.023
+    },
+    {
+      "id": "S-alm-021",
+      "district": "alm",
+      "x_km": 7.134,
+      "y_km": -0.037
+    },
+    {
+      "id": "S-alm-022",
+      "district": "alm",
+      "x_km": 7.798,
+      "y_km": -0.222
+    },
+    {
+      "id": "S-alm-023",
+      "district": "alm",
+      "x_km": 4.611,
+      "y_km": -1.109
+    },
+    {
+      "id": "S-alm-024",
+      "district": "alm",
+      "x_km": 7.49,
+      "y_km": -2.001
+    },
+    {
+      "id": "S-alm-025",
+      "district": "alm",
+      "x_km": 8.025,
+      "y_km": -1.685
+    },
+    {
+      "id": "S-alm-026",
+      "district": "alm",
+      "x_km": 5.573,
+      "y_km": -1.901
+    },
+    {
+      "id": "S-alm-027",
+      "district": "alm",
+      "x_km": 4.285,
+      "y_km": -1.345
+    },
+    {
+      "id": "S-alm-028",
+      "district": "alm",
+      "x_km": 5.11,
+      "y_km": 1.257
+    },
+    {
+      "id": "S-alm-029",
+      "district": "alm",
+      "x_km": 5.92,
+      "y_km": -0.618
+    },
+    {
+      "id": "S-alm-030",
+      "district": "alm",
+      "x_km": 6.448,
+      "y_km": 0.687
+    },
+    {
+      "id": "S-alm-031",
+      "district": "alm",
+      "x_km": 7.157,
+      "y_km": 1.62
+    },
+    {
+      "id": "S-alm-032",
+      "district": "alm",
+      "x_km": 4.908,
+      "y_km": -1.024
+    },
+    {
+      "id": "S-alm-033",
+      "district": "alm",
+      "x_km": 6.007,
+      "y_km": 0.467
+    },
+    {
+      "id": "S-alm-034",
+      "district": "alm",
+      "x_km": 8.004,
+      "y_km": -1.486
+    },
+    {
+      "id": "S-alm-035",
+      "district": "alm",
+      "x_km": 7.539,
+      "y_km": -0.734
+    },
+    {
+      "id": "S-alm-036",
+      "district": "alm",
+      "x_km": 3.949,
+      "y_km": 0.812
+    },
+    {
+      "id": "S-alm-037",
+      "district": "alm",
+      "x_km": 7.078,
+      "y_km": 1.341
+    },
+    {
+      "id": "S-alm-038",
+      "district": "alm",
+      "x_km": 5.07,
+      "y_km": -0.576
+    },
+    {
+      "id": "S-alm-039",
+      "district": "alm",
+      "x_km": 6.653,
+      "y_km": -0.558
+    },
+    {
+      "id": "S-alm-040",
+      "district": "alm",
+      "x_km": 6.998,
+      "y_km": 1.524
+    },
+    {
+      "id": "S-alm-041",
+      "district": "alm",
+      "x_km": 4.167,
+      "y_km": -0.635
+    },
+    {
+      "id": "S-alm-042",
+      "district": "alm",
+      "x_km": 7.677,
+      "y_km": 1.747
+    },
+    {
+      "id": "S-alm-043",
+      "district": "alm",
+      "x_km": 4.698,
+      "y_km": -1.963
+    },
+    {
+      "id": "S-alm-044",
+      "district": "alm",
+      "x_km": 5.886,
+      "y_km": 2.048
+    },
+    {
+      "id": "S-alm-045",
+      "district": "alm",
+      "x_km": 3.881,
+      "y_km": 1.564
+    },
+    {
+      "id": "S-alm-046",
+      "district": "alm",
+      "x_km": 4.105,
+      "y_km": 0.235
+    },
+    {
+      "id": "S-alm-047",
+      "district": "alm",
+      "x_km": 7.931,
+      "y_km": 1.266
+    },
+    {
+      "id": "S-alm-048",
+      "district": "alm",
+      "x_km": 7.95,
+      "y_km": 0.316
+    },
+    {
+      "id": "S-alm-049",
+      "district": "alm",
+      "x_km": 4.524,
+      "y_km": 1.933
+    },
+    {
+      "id": "S-alm-050",
+      "district": "alm",
+      "x_km": 5.503,
+      "y_km": 2.023
+    },
+    {
+      "id": "S-alm-051",
+      "district": "alm",
+      "x_km": 5.341,
+      "y_km": -0.567
+    },
+    {
+      "id": "S-alm-052",
+      "district": "alm",
+      "x_km": 6.806,
+      "y_km": 2.165
+    },
+    {
+      "id": "S-alm-053",
+      "district": "alm",
+      "x_km": 4.844,
+      "y_km": -1.215
+    },
+    {
+      "id": "S-alm-054",
+      "district": "alm",
+      "x_km": 6.221,
+      "y_km": -1.134
+    },
+    {
+      "id": "S-alm-055",
+      "district": "alm",
+      "x_km": 6.572,
+      "y_km": -1.1
+    },
+    {
+      "id": "S-alm-056",
+      "district": "alm",
+      "x_km": 5.968,
+      "y_km": 1.115
+    },
+    {
+      "id": "S-alm-057",
+      "district": "alm",
+      "x_km": 8.14,
+      "y_km": 0.037
+    },
+    {
+      "id": "S-alm-058",
+      "district": "alm",
+      "x_km": 6.229,
+      "y_km": -0.235
+    },
+    {
+      "id": "S-alm-059",
+      "district": "alm",
+      "x_km": 6.496,
+      "y_km": -0.793
+    },
+    {
+      "id": "S-alm-060",
+      "district": "alm",
+      "x_km": 6.211,
+      "y_km": 0.523
+    },
+    {
+      "id": "S-alm-061",
+      "district": "alm",
+      "x_km": 7.293,
+      "y_km": 1.556
+    },
+    {
+      "id": "S-alm-062",
+      "district": "alm",
+      "x_km": 6.576,
+      "y_km": 0.896
+    },
+    {
+      "id": "S-alm-063",
+      "district": "alm",
+      "x_km": 7.634,
+      "y_km": -1.787
+    },
+    {
+      "id": "S-alm-064",
+      "district": "alm",
+      "x_km": 6.598,
+      "y_km": 0.737
+    },
+    {
+      "id": "S-alm-065",
+      "district": "alm",
+      "x_km": 5.201,
+      "y_km": -1.277
+    },
+    {
+      "id": "S-alm-066",
+      "district": "alm",
+      "x_km": 7.867,
+      "y_km": -1.64
+    },
+    {
+      "id": "S-alm-067",
+      "district": "alm",
+      "x_km": 7.605,
+      "y_km": 0.337
+    },
+    {
+      "id": "S-alm-068",
+      "district": "alm",
+      "x_km": 5.556,
+      "y_km": 0.801
+    },
+    {
+      "id": "S-alm-069",
+      "district": "alm",
+      "x_km": 6.444,
+      "y_km": -0.661
+    },
+    {
+      "id": "S-alm-070",
+      "district": "alm",
+      "x_km": 5.094,
+      "y_km": 1.554
+    },
+    {
+      "id": "S-alm-071",
+      "district": "alm",
+      "x_km": 7.45,
+      "y_km": -0.279
+    },
+    {
+      "id": "S-alm-072",
+      "district": "alm",
+      "x_km": 5.684,
+      "y_km": -0.692
+    },
+    {
+      "id": "S-alm-073",
+      "district": "alm",
+      "x_km": 5.929,
+      "y_km": 1.426
+    },
+    {
+      "id": "S-alm-074",
+      "district": "alm",
+      "x_km": 7.753,
+      "y_km": 1.364
+    },
+    {
+      "id": "S-alm-075",
+      "district": "alm",
+      "x_km": 4.473,
+      "y_km": 1.058
+    },
+    {
+      "id": "S-alm-076",
+      "district": "alm",
+      "x_km": 5.95,
+      "y_km": 0.14
+    },
+    {
+      "id": "S-alm-077",
+      "district": "alm",
+      "x_km": 8.196,
+      "y_km": -0.675
+    },
+    {
+      "id": "S-alm-078",
+      "district": "alm",
+      "x_km": 5.255,
+      "y_km": 2.126
+    },
+    {
+      "id": "S-alm-079",
+      "district": "alm",
+      "x_km": 7.003,
+      "y_km": -0.245
+    },
+    {
+      "id": "S-alm-080",
+      "district": "alm",
+      "x_km": 6.102,
+      "y_km": -1.521
+    },
+    {
+      "id": "S-alm-081",
+      "district": "alm",
+      "x_km": 3.864,
+      "y_km": -1.674
+    },
+    {
+      "id": "S-alm-082",
+      "district": "alm",
+      "x_km": 7.776,
+      "y_km": 1.296
+    },
+    {
+      "id": "S-bai-001",
+      "district": "bai",
+      "x_km": -1.551,
+      "y_km": 8.165
+    },
+    {
+      "id": "S-bai-002",
+      "district": "bai",
+      "x_km": 0.858,
+      "y_km": 5.522
+    },
+    {
+      "id": "S-bai-003",
+      "district": "bai",
+      "x_km": -0.259,
+      "y_km": 7.894
+    },
+    {
+      "id": "S-bai-004",
+      "district": "bai",
+      "x_km": 2.11,
+      "y_km": 7.814
+    },
+    {
+      "id": "S-bai-005",
+      "district": "bai",
+      "x_km": -1.08,
+      "y_km": 3.947
+    },
+    {
+      "id": "S-bai-006",
+      "district": "bai",
+      "x_km": -1.41,
+      "y_km": 6.01
+    },
+    {
+      "id": "S-bai-007",
+      "district": "bai",
+      "x_km": -1.246,
+      "y_km": 4.264
+    },
+    {
+      "id": "S-bai-008",
+      "district": "bai",
+      "x_km": -1.451,
+      "y_km": 5.948
+    },
+    {
+      "id": "S-bai-009",
+      "district": "bai",
+      "x_km": -2.106,
+      "y_km": 5.568
+    },
+    {
+      "id": "S-bai-010",
+      "district": "bai",
+      "x_km": 1.626,
+      "y_km": 6.281
+    },
+    {
+      "id": "S-bai-011",
+      "district": "bai",
+      "x_km": -1.221,
+      "y_km": 7.408
+    },
+    {
+      "id": "S-bai-012",
+      "district": "bai",
+      "x_km": 2.08,
+      "y_km": 7.759
+    },
+    {
+      "id": "S-bai-013",
+      "district": "bai",
+      "x_km": 1.978,
+      "y_km": 6.549
+    },
+    {
+      "id": "S-bai-014",
+      "district": "bai",
+      "x_km": -0.52,
+      "y_km": 5.648
+    },
+    {
+      "id": "S-bai-015",
+      "district": "bai",
+      "x_km": 0.518,
+      "y_km": 6.148
+    },
+    {
+      "id": "S-bai-016",
+      "district": "bai",
+      "x_km": -0.367,
+      "y_km": 3.825
+    },
+    {
+      "id": "S-bai-017",
+      "district": "bai",
+      "x_km": 0.544,
+      "y_km": 5.199
+    },
+    {
+      "id": "S-bai-018",
+      "district": "bai",
+      "x_km": 1.055,
+      "y_km": 6.648
+    },
+    {
+      "id": "S-bai-019",
+      "district": "bai",
+      "x_km": 1.672,
+      "y_km": 5.765
+    },
+    {
+      "id": "S-bai-020",
+      "district": "bai",
+      "x_km": -1.387,
+      "y_km": 7.341
+    },
+    {
+      "id": "S-bai-021",
+      "district": "bai",
+      "x_km": -0.425,
+      "y_km": 6.775
+    },
+    {
+      "id": "S-bai-022",
+      "district": "bai",
+      "x_km": -1.214,
+      "y_km": 7.672
+    },
+    {
+      "id": "S-bai-023",
+      "district": "bai",
+      "x_km": -1.345,
+      "y_km": 4.418
+    },
+    {
+      "id": "S-bai-024",
+      "district": "bai",
+      "x_km": 0.566,
+      "y_km": 8.075
+    },
+    {
+      "id": "S-bai-025",
+      "district": "bai",
+      "x_km": -1.647,
+      "y_km": 6.932
+    },
+    {
+      "id": "S-bai-026",
+      "district": "bai",
+      "x_km": -2.187,
+      "y_km": 6.847
+    },
+    {
+      "id": "S-bai-027",
+      "district": "bai",
+      "x_km": 1.017,
+      "y_km": 7.931
+    },
+    {
+      "id": "S-bai-028",
+      "district": "bai",
+      "x_km": 0.051,
+      "y_km": 7.596
+    },
+    {
+      "id": "S-bai-029",
+      "district": "bai",
+      "x_km": 0.4,
+      "y_km": 7.507
+    },
+    {
+      "id": "S-bai-030",
+      "district": "bai",
+      "x_km": -0.551,
+      "y_km": 8.034
+    },
+    {
+      "id": "S-bai-031",
+      "district": "bai",
+      "x_km": 1.466,
+      "y_km": 6.174
+    },
+    {
+      "id": "S-bai-032",
+      "district": "bai",
+      "x_km": -2.106,
+      "y_km": 5.247
+    },
+    {
+      "id": "S-bai-033",
+      "district": "bai",
+      "x_km": -0.616,
+      "y_km": 5.416
+    },
+    {
+      "id": "S-bai-034",
+      "district": "bai",
+      "x_km": -1.624,
+      "y_km": 5.321
+    },
+    {
+      "id": "S-bai-035",
+      "district": "bai",
+      "x_km": -2.13,
+      "y_km": 5.213
+    },
+    {
+      "id": "S-bai-036",
+      "district": "bai",
+      "x_km": -1.242,
+      "y_km": 4.68
+    },
+    {
+      "id": "S-bai-037",
+      "district": "bai",
+      "x_km": 1.606,
+      "y_km": 4.821
+    },
+    {
+      "id": "S-bai-038",
+      "district": "bai",
+      "x_km": -1.944,
+      "y_km": 5.368
+    },
+    {
+      "id": "S-bai-039",
+      "district": "bai",
+      "x_km": 0.385,
+      "y_km": 5.424
+    },
+    {
+      "id": "S-bai-040",
+      "district": "bai",
+      "x_km": -0.252,
+      "y_km": 4.376
+    },
+    {
+      "id": "S-bai-041",
+      "district": "bai",
+      "x_km": -1.193,
+      "y_km": 3.954
+    },
+    {
+      "id": "S-bai-042",
+      "district": "bai",
+      "x_km": -0.505,
+      "y_km": 3.897
+    },
+    {
+      "id": "S-bai-043",
+      "district": "bai",
+      "x_km": -1.245,
+      "y_km": 7.147
+    },
+    {
+      "id": "S-bai-044",
+      "district": "bai",
+      "x_km": -0.276,
+      "y_km": 5.169
+    },
+    {
+      "id": "S-bai-045",
+      "district": "bai",
+      "x_km": 1.56,
+      "y_km": 5.304
+    },
+    {
+      "id": "S-bai-046",
+      "district": "bai",
+      "x_km": -0.237,
+      "y_km": 6.601
+    },
+    {
+      "id": "S-bai-047",
+      "district": "bai",
+      "x_km": 1.285,
+      "y_km": 4.365
+    },
+    {
+      "id": "S-bai-048",
+      "district": "bai",
+      "x_km": 0.169,
+      "y_km": 5.247
+    },
+    {
+      "id": "S-bai-049",
+      "district": "bai",
+      "x_km": 1.262,
+      "y_km": 7.824
+    },
+    {
+      "id": "S-bai-050",
+      "district": "bai",
+      "x_km": -1.967,
+      "y_km": 4.621
+    },
+    {
+      "id": "S-bai-051",
+      "district": "bai",
+      "x_km": -0.46,
+      "y_km": 6.217
+    },
+    {
+      "id": "S-bai-052",
+      "district": "bai",
+      "x_km": 0.38,
+      "y_km": 6.837
+    },
+    {
+      "id": "S-bai-053",
+      "district": "bai",
+      "x_km": -1.318,
+      "y_km": 7.104
+    },
+    {
+      "id": "S-bai-054",
+      "district": "bai",
+      "x_km": 1.213,
+      "y_km": 7.033
+    },
+    {
+      "id": "S-bai-055",
+      "district": "bai",
+      "x_km": -0.264,
+      "y_km": 7.554
+    },
+    {
+      "id": "S-bai-056",
+      "district": "bai",
+      "x_km": 1.991,
+      "y_km": 4.946
+    },
+    {
+      "id": "S-bai-057",
+      "district": "bai",
+      "x_km": 1.592,
+      "y_km": 7.115
+    },
+    {
+      "id": "S-bai-058",
+      "district": "bai",
+      "x_km": -1.251,
+      "y_km": 7.66
+    },
+    {
+      "id": "S-bai-059",
+      "district": "bai",
+      "x_km": -0.414,
+      "y_km": 7.769
+    },
+    {
+      "id": "S-bai-060",
+      "district": "bai",
+      "x_km": -1.242,
+      "y_km": 6.034
+    },
+    {
+      "id": "S-bai-061",
+      "district": "bai",
+      "x_km": -0.485,
+      "y_km": 4.246
+    },
+    {
+      "id": "S-bai-062",
+      "district": "bai",
+      "x_km": 1.67,
+      "y_km": 5.89
+    },
+    {
+      "id": "S-bai-063",
+      "district": "bai",
+      "x_km": 1.274,
+      "y_km": 4.846
+    },
+    {
+      "id": "S-bai-064",
+      "district": "bai",
+      "x_km": 0.51,
+      "y_km": 6.871
+    },
+    {
+      "id": "S-bai-065",
+      "district": "bai",
+      "x_km": -1.097,
+      "y_km": 4.67
+    },
+    {
+      "id": "S-bai-066",
+      "district": "bai",
+      "x_km": 0.978,
+      "y_km": 5.994
+    },
+    {
+      "id": "S-esi-001",
+      "district": "esi",
+      "x_km": -0.777,
+      "y_km": -7.606
+    },
+    {
+      "id": "S-esi-002",
+      "district": "esi",
+      "x_km": -1.118,
+      "y_km": -6.729
+    },
+    {
+      "id": "S-esi-003",
+      "district": "esi",
+      "x_km": 2.121,
+      "y_km": -5.287
+    },
+    {
+      "id": "S-esi-004",
+      "district": "esi",
+      "x_km": 1.86,
+      "y_km": -6.998
+    },
+    {
+      "id": "S-esi-005",
+      "district": "esi",
+      "x_km": 0.942,
+      "y_km": -4.554
+    },
+    {
+      "id": "S-esi-006",
+      "district": "esi",
+      "x_km": -1.078,
+      "y_km": -5.003
+    },
+    {
+      "id": "S-esi-007",
+      "district": "esi",
+      "x_km": 0.79,
+      "y_km": -6.245
+    },
+    {
+      "id": "S-esi-008",
+      "district": "esi",
+      "x_km": 2.201,
+      "y_km": -4.047
+    },
+    {
+      "id": "S-esi-009",
+      "district": "esi",
+      "x_km": 1.402,
+      "y_km": -3.997
+    },
+    {
+      "id": "S-esi-010",
+      "district": "esi",
+      "x_km": -0.189,
+      "y_km": -6.46
+    },
+    {
+      "id": "S-esi-011",
+      "district": "esi",
+      "x_km": 0.552,
+      "y_km": -4.212
+    },
+    {
+      "id": "S-esi-012",
+      "district": "esi",
+      "x_km": 1.417,
+      "y_km": -7.342
+    },
+    {
+      "id": "S-esi-013",
+      "district": "esi",
+      "x_km": 0.011,
+      "y_km": -4.488
+    },
+    {
+      "id": "S-esi-014",
+      "district": "esi",
+      "x_km": 2.069,
+      "y_km": -5.658
+    },
+    {
+      "id": "S-esi-015",
+      "district": "esi",
+      "x_km": 1.703,
+      "y_km": -4.879
+    },
+    {
+      "id": "S-esi-016",
+      "district": "esi",
+      "x_km": 1.049,
+      "y_km": -7.774
+    },
+    {
+      "id": "S-esi-017",
+      "district": "esi",
+      "x_km": 1.945,
+      "y_km": -4.378
+    },
+    {
+      "id": "S-esi-018",
+      "district": "esi",
+      "x_km": 3.049,
+      "y_km": -6.114
+    },
+    {
+      "id": "S-esi-019",
+      "district": "esi",
+      "x_km": 2.992,
+      "y_km": -4.81
+    },
+    {
+      "id": "S-esi-020",
+      "district": "esi",
+      "x_km": -0.243,
+      "y_km": -7.253
+    },
+    {
+      "id": "S-esi-021",
+      "district": "esi",
+      "x_km": 0.791,
+      "y_km": -7.75
+    },
+    {
+      "id": "S-esi-022",
+      "district": "esi",
+      "x_km": 1.345,
+      "y_km": -7.687
+    },
+    {
+      "id": "S-esi-023",
+      "district": "esi",
+      "x_km": 2.272,
+      "y_km": -5.496
+    },
+    {
+      "id": "S-esi-024",
+      "district": "esi",
+      "x_km": 3.076,
+      "y_km": -7.503
+    },
+    {
+      "id": "S-esi-025",
+      "district": "esi",
+      "x_km": 2.874,
+      "y_km": -4.046
+    },
+    {
+      "id": "S-esi-026",
+      "district": "esi",
+      "x_km": 1.006,
+      "y_km": -4.969
+    },
+    {
+      "id": "S-esi-027",
+      "district": "esi",
+      "x_km": 0.388,
+      "y_km": -4.267
+    },
+    {
+      "id": "S-esi-028",
+      "district": "esi",
+      "x_km": -0.036,
+      "y_km": -5.008
+    },
+    {
+      "id": "S-esi-029",
+      "district": "esi",
+      "x_km": 0.421,
+      "y_km": -4.832
+    },
+    {
+      "id": "S-esi-030",
+      "district": "esi",
+      "x_km": 3.002,
+      "y_km": -3.838
+    },
+    {
+      "id": "S-esi-031",
+      "district": "esi",
+      "x_km": -1.116,
+      "y_km": -7.518
+    },
+    {
+      "id": "S-esi-032",
+      "district": "esi",
+      "x_km": -0.063,
+      "y_km": -6.419
+    },
+    {
+      "id": "S-esi-033",
+      "district": "esi",
+      "x_km": -0.385,
+      "y_km": -5.044
+    },
+    {
+      "id": "S-esi-034",
+      "district": "esi",
+      "x_km": 1.96,
+      "y_km": -5.821
+    },
+    {
+      "id": "S-esi-035",
+      "district": "esi",
+      "x_km": 2.444,
+      "y_km": -7.566
+    },
+    {
+      "id": "S-nur-001",
+      "district": "nur",
+      "x_km": -6.854,
+      "y_km": -5.374
+    },
+    {
+      "id": "S-nur-002",
+      "district": "nur",
+      "x_km": -4.322,
+      "y_km": -3.53
+    },
+    {
+      "id": "S-nur-003",
+      "district": "nur",
+      "x_km": -3.927,
+      "y_km": -2.11
+    },
+    {
+      "id": "S-nur-004",
+      "district": "nur",
+      "x_km": -7.709,
+      "y_km": -4.933
+    },
+    {
+      "id": "S-nur-005",
+      "district": "nur",
+      "x_km": -5.754,
+      "y_km": -6.039
+    },
+    {
+      "id": "S-nur-006",
+      "district": "nur",
+      "x_km": -4.807,
+      "y_km": -1.902
+    },
+    {
+      "id": "S-nur-007",
+      "district": "nur",
+      "x_km": -5.154,
+      "y_km": -5.851
+    },
+    {
+      "id": "S-nur-008",
+      "district": "nur",
+      "x_km": -5.416,
+      "y_km": -3.342
+    },
+    {
+      "id": "S-nur-009",
+      "district": "nur",
+      "x_km": -4.451,
+      "y_km": -5.002
+    },
+    {
+      "id": "S-nur-010",
+      "district": "nur",
+      "x_km": -7.75,
+      "y_km": -2.674
+    },
+    {
+      "id": "S-nur-011",
+      "district": "nur",
+      "x_km": -3.992,
+      "y_km": -5.88
+    },
+    {
+      "id": "S-nur-012",
+      "district": "nur",
+      "x_km": -6.48,
+      "y_km": -4.199
+    },
+    {
+      "id": "S-nur-013",
+      "district": "nur",
+      "x_km": -7.337,
+      "y_km": -2.276
+    },
+    {
+      "id": "S-nur-014",
+      "district": "nur",
+      "x_km": -8.176,
+      "y_km": -4.036
+    },
+    {
+      "id": "S-nur-015",
+      "district": "nur",
+      "x_km": -7.014,
+      "y_km": -2.777
+    },
+    {
+      "id": "S-nur-016",
+      "district": "nur",
+      "x_km": -6.006,
+      "y_km": -3.92
+    },
+    {
+      "id": "S-nur-017",
+      "district": "nur",
+      "x_km": -4.749,
+      "y_km": -5.871
+    },
+    {
+      "id": "S-nur-018",
+      "district": "nur",
+      "x_km": -7.053,
+      "y_km": -4.532
+    },
+    {
+      "id": "S-nur-019",
+      "district": "nur",
+      "x_km": -4.376,
+      "y_km": -4.968
+    },
+    {
+      "id": "S-nur-020",
+      "district": "nur",
+      "x_km": -5.416,
+      "y_km": -3.196
+    },
+    {
+      "id": "S-nur-021",
+      "district": "nur",
+      "x_km": -6.554,
+      "y_km": -3.004
+    },
+    {
+      "id": "S-nur-022",
+      "district": "nur",
+      "x_km": -6.249,
+      "y_km": -3.689
+    },
+    {
+      "id": "S-nur-023",
+      "district": "nur",
+      "x_km": -5.509,
+      "y_km": -4.446
+    },
+    {
+      "id": "S-nur-024",
+      "district": "nur",
+      "x_km": -7.256,
+      "y_km": -5.029
+    },
+    {
+      "id": "S-sar-001",
+      "district": "sar",
+      "x_km": 8.471,
+      "y_km": -5.661
+    },
+    {
+      "id": "S-sar-002",
+      "district": "sar",
+      "x_km": 5.074,
+      "y_km": -5.084
+    },
+    {
+      "id": "S-sar-003",
+      "district": "sar",
+      "x_km": 6.97,
+      "y_km": -3.432
+    },
+    {
+      "id": "S-sar-004",
+      "district": "sar",
+      "x_km": 7.273,
+      "y_km": -3.797
+    },
+    {
+      "id": "S-sar-005",
+      "district": "sar",
+      "x_km": 8.27,
+      "y_km": -5.928
+    },
+    {
+      "id": "S-sar-006",
+      "district": "sar",
+      "x_km": 8.696,
+      "y_km": -4.629
+    },
+    {
+      "id": "S-sar-007",
+      "district": "sar",
+      "x_km": 6.629,
+      "y_km": -5.135
+    },
+    {
+      "id": "S-sar-008",
+      "district": "sar",
+      "x_km": 6.683,
+      "y_km": -5.829
+    },
+    {
+      "id": "S-sar-009",
+      "district": "sar",
+      "x_km": 6.823,
+      "y_km": -3.141
+    },
+    {
+      "id": "S-sar-010",
+      "district": "sar",
+      "x_km": 8.188,
+      "y_km": -3.098
+    },
+    {
+      "id": "S-sar-011",
+      "district": "sar",
+      "x_km": 7.667,
+      "y_km": -5.458
+    },
+    {
+      "id": "S-sry-001",
+      "district": "sry",
+      "x_km": -6.436,
+      "y_km": 4.857
+    },
+    {
+      "id": "S-sry-002",
+      "district": "sry",
+      "x_km": -3.046,
+      "y_km": 3.915
+    },
+    {
+      "id": "S-sry-003",
+      "district": "sry",
+      "x_km": -5.299,
+      "y_km": 4.546
+    },
+    {
+      "id": "S-sry-004",
+      "district": "sry",
+      "x_km": -4.591,
+      "y_km": 1.756
+    },
+    {
+      "id": "S-sry-005",
+      "district": "sry",
+      "x_km": -3.115,
+      "y_km": 3.631
+    },
+    {
+      "id": "S-sry-006",
+      "district": "sry",
+      "x_km": -7.085,
+      "y_km": 1.773
+    },
+    {
+      "id": "S-sry-007",
+      "district": "sry",
+      "x_km": -5.409,
+      "y_km": 1.961
+    },
+    {
+      "id": "S-sry-008",
+      "district": "sry",
+      "x_km": -5.056,
+      "y_km": 4.589
+    },
+    {
+      "id": "S-sry-009",
+      "district": "sry",
+      "x_km": -3.713,
+      "y_km": 1.614
+    },
+    {
+      "id": "S-sry-010",
+      "district": "sry",
+      "x_km": -4.021,
+      "y_km": 1.395
+    },
+    {
+      "id": "S-sry-011",
+      "district": "sry",
+      "x_km": -4.232,
+      "y_km": 1.399
+    },
+    {
+      "id": "S-sry-012",
+      "district": "sry",
+      "x_km": -4.308,
+      "y_km": 3.292
+    },
+    {
+      "id": "S-sry-013",
+      "district": "sry",
+      "x_km": -7.196,
+      "y_km": 2.923
+    },
+    {
+      "id": "S-sry-014",
+      "district": "sry",
+      "x_km": -5.135,
+      "y_km": 4.166
+    },
+    {
+      "id": "S-sry-015",
+      "district": "sry",
+      "x_km": -7.078,
+      "y_km": 4.283
+    },
+    {
+      "id": "S-sry-016",
+      "district": "sry",
+      "x_km": -4.738,
+      "y_km": 0.88
+    },
+    {
+      "id": "S-sry-017",
+      "district": "sry",
+      "x_km": -3.947,
+      "y_km": 3.116
+    },
+    {
+      "id": "S-sry-018",
+      "district": "sry",
+      "x_km": -6.51,
+      "y_km": 4.855
+    },
+    {
+      "id": "S-sry-019",
+      "district": "sry",
+      "x_km": -3.983,
+      "y_km": 4.126
+    },
+    {
+      "id": "S-sry-020",
+      "district": "sry",
+      "x_km": -4.767,
+      "y_km": 2.871
+    },
+    {
+      "id": "S-sry-021",
+      "district": "sry",
+      "x_km": -3.918,
+      "y_km": 0.903
+    },
+    {
+      "id": "S-sry-022",
+      "district": "sry",
+      "x_km": -4.078,
+      "y_km": 1.791
+    },
+    {
+      "id": "S-sry-023",
+      "district": "sry",
+      "x_km": -5.525,
+      "y_km": 1.107
+    },
+    {
+      "id": "S-sry-024",
+      "district": "sry",
+      "x_km": -5.659,
+      "y_km": 1.155
+    },
+    {
+      "id": "S-sry-025",
+      "district": "sry",
+      "x_km": -3.097,
+      "y_km": 3.648
+    },
+    {
+      "id": "S-sry-026",
+      "district": "sry",
+      "x_km": -3.86,
+      "y_km": 4.23
+    },
+    {
+      "id": "S-sry-027",
+      "district": "sry",
+      "x_km": -3.652,
+      "y_km": 1.928
+    },
+    {
+      "id": "S-sry-028",
+      "district": "sry",
+      "x_km": -3.097,
+      "y_km": 2.565
+    },
+    {
+      "id": "S-sry-029",
+      "district": "sry",
+      "x_km": -5.221,
+      "y_km": 2.415
+    },
+    {
+      "id": "S-sry-030",
+      "district": "sry",
+      "x_km": -4.528,
+      "y_km": 3.489
+    },
+    {
+      "id": "S-sry-031",
+      "district": "sry",
+      "x_km": -3.457,
+      "y_km": 2.17
+    },
+    {
+      "id": "S-sry-032",
+      "district": "sry",
+      "x_km": -5.418,
+      "y_km": 1.017
+    },
+    {
+      "id": "S-sry-033",
+      "district": "sry",
+      "x_km": -3.506,
+      "y_km": 2.621
+    },
+    {
+      "id": "S-sry-034",
+      "district": "sry",
+      "x_km": -3.28,
+      "y_km": 2.469
+    },
+    {
+      "id": "S-sry-035",
+      "district": "sry",
+      "x_km": -5.422,
+      "y_km": 2.865
+    },
+    {
+      "id": "S-sry-036",
+      "district": "sry",
+      "x_km": -6.295,
+      "y_km": 4.268
+    },
+    {
+      "id": "S-sry-037",
+      "district": "sry",
+      "x_km": -4.97,
+      "y_km": 3.378
+    },
+    {
+      "id": "S-sry-038",
+      "district": "sry",
+      "x_km": -3.201,
+      "y_km": 1.695
+    },
+    {
+      "id": "S-sry-039",
+      "district": "sry",
+      "x_km": -5.647,
+      "y_km": 3.481
+    },
+    {
+      "id": "S-sry-040",
+      "district": "sry",
+      "x_km": -4.261,
+      "y_km": 2.437
+    },
+    {
+      "id": "S-sry-041",
+      "district": "sry",
+      "x_km": -5.988,
+      "y_km": 5.159
+    },
+    {
+      "id": "S-sry-042",
+      "district": "sry",
+      "x_km": -3.079,
+      "y_km": 1.394
+    },
+    {
+      "id": "S-sry-043",
+      "district": "sry",
+      "x_km": -2.886,
+      "y_km": 2.41
+    },
+    {
+      "id": "S-sry-044",
+      "district": "sry",
+      "x_km": -3.759,
+      "y_km": 3.296
+    },
+    {
+      "id": "S-sry-045",
+      "district": "sry",
+      "x_km": -5.866,
+      "y_km": 3.673
+    },
+    {
+      "id": "S-sry-046",
+      "district": "sry",
+      "x_km": -4.785,
+      "y_km": 0.852
+    },
+    {
+      "id": "S-sry-047",
+      "district": "sry",
+      "x_km": -2.941,
+      "y_km": 0.83
+    },
+    {
+      "id": "S-sry-048",
+      "district": "sry",
+      "x_km": -2.831,
+      "y_km": 2.14
+    },
+    {
+      "id": "S-sry-049",
+      "district": "sry",
+      "x_km": -3.606,
+      "y_km": 4.425
+    },
+    {
+      "id": "S-sry-050",
+      "district": "sry",
+      "x_km": -6.122,
+      "y_km": 4.201
+    },
+    {
+      "id": "S-sry-051",
+      "district": "sry",
+      "x_km": -2.889,
+      "y_km": 2.157
+    },
+    {
+      "id": "S-sry-052",
+      "district": "sry",
+      "x_km": -4.118,
+      "y_km": 4.17
+    },
+    {
+      "id": "S-sry-053",
+      "district": "sry",
+      "x_km": -4.354,
+      "y_km": 1.044
+    },
+    {
+      "id": "S-sry-054",
+      "district": "sry",
+      "x_km": -4.094,
+      "y_km": 1.715
+    },
+    {
+      "id": "S-sry-055",
+      "district": "sry",
+      "x_km": -5.386,
+      "y_km": 3.496
+    },
+    {
+      "id": "S-sry-056",
+      "district": "sry",
+      "x_km": -6.671,
+      "y_km": 5.001
+    },
+    {
+      "id": "S-sry-057",
+      "district": "sry",
+      "x_km": -5.286,
+      "y_km": 2.242
+    },
+    {
+      "id": "S-sry-058",
+      "district": "sry",
+      "x_km": -6.734,
+      "y_km": 1.874
+    },
+    {
+      "id": "S-sry-059",
+      "district": "sry",
+      "x_km": -6.591,
+      "y_km": 3.5
+    },
+    {
+      "id": "S-sry-060",
+      "district": "sry",
+      "x_km": -3.116,
+      "y_km": 1.352
+    },
+    {
+      "id": "S-sry-061",
+      "district": "sry",
+      "x_km": -2.955,
+      "y_km": 4.693
+    },
+    {
+      "id": "S-sry-062",
+      "district": "sry",
+      "x_km": -5.233,
+      "y_km": 1.216
+    },
+    {
+      "id": "S-sry-063",
+      "district": "sry",
+      "x_km": -6.265,
+      "y_km": 2.929
+    },
+    {
+      "id": "S-sry-064",
+      "district": "sry",
+      "x_km": -5.165,
+      "y_km": 2.087
+    },
+    {
+      "id": "S-sry-065",
+      "district": "sry",
+      "x_km": -3.643,
+      "y_km": 4.617
+    },
+    {
+      "id": "S-sry-066",
+      "district": "sry",
+      "x_km": -3.338,
+      "y_km": 4.56
+    },
+    {
+      "id": "S-sry-067",
+      "district": "sry",
+      "x_km": -6.707,
+      "y_km": 3.067
+    },
+    {
+      "id": "S-sry-068",
+      "district": "sry",
+      "x_km": -6.753,
+      "y_km": 1.392
+    },
+    {
+      "id": "S-sry-069",
+      "district": "sry",
+      "x_km": -5.62,
+      "y_km": 3.15
+    },
+    {
+      "id": "S-sry-070",
+      "district": "sry",
+      "x_km": -6.264,
+      "y_km": 4.984
+    },
+    {
+      "id": "S-sry-071",
+      "district": "sry",
+      "x_km": -4.177,
+      "y_km": 4.97
+    },
+    {
+      "id": "S-sry-072",
+      "district": "sry",
+      "x_km": -5.402,
+      "y_km": 4.999
+    },
+    {
+      "id": "S-sry-073",
+      "district": "sry",
+      "x_km": -6.21,
+      "y_km": 2.552
+    },
+    {
+      "id": "S-sry-074",
+      "district": "sry",
+      "x_km": -3.235,
+      "y_km": 4.998
+    },
+    {
+      "id": "S-sry-075",
+      "district": "sry",
+      "x_km": -3.297,
+      "y_km": 2.149
+    },
+    {
+      "id": "S-sry-076",
+      "district": "sry",
+      "x_km": -3.248,
+      "y_km": 1.613
+    },
+    {
+      "id": "S-sry-077",
+      "district": "sry",
+      "x_km": -6.979,
+      "y_km": 2.94
+    },
+    {
+      "id": "S-sry-078",
+      "district": "sry",
+      "x_km": -6.687,
+      "y_km": 1.386
+    },
+    {
+      "id": "S-sry-079",
+      "district": "sry",
+      "x_km": -5.522,
+      "y_km": 5.178
+    },
+    {
+      "id": "S-sry-080",
+      "district": "sry",
+      "x_km": -3.239,
+      "y_km": 3.098
+    },
+    {
+      "id": "S-sry-081",
+      "district": "sry",
+      "x_km": -5.425,
+      "y_km": 2.388
+    },
+    {
+      "id": "S-sry-082",
+      "district": "sry",
+      "x_km": -3.746,
+      "y_km": 1.257
+    },
+    {
+      "id": "S-sry-083",
+      "district": "sry",
+      "x_km": -6.206,
+      "y_km": 1.027
+    },
+    {
+      "id": "S-sry-084",
+      "district": "sry",
+      "x_km": -2.895,
+      "y_km": 3.843
+    },
+    {
+      "id": "S-sry-085",
+      "district": "sry",
+      "x_km": -3.699,
+      "y_km": 1.451
+    },
+    {
+      "id": "S-sry-086",
+      "district": "sry",
+      "x_km": -2.852,
+      "y_km": 2.982
+    },
+    {
+      "id": "S-sry-087",
+      "district": "sry",
+      "x_km": -6.371,
+      "y_km": 2.454
+    },
+    {
+      "id": "S-sry-088",
+      "district": "sry",
+      "x_km": -4.215,
+      "y_km": 3.248
+    },
+    {
+      "id": "S-sry-089",
+      "district": "sry",
+      "x_km": -4.851,
+      "y_km": 1.839
+    },
+    {
+      "id": "S-sry-090",
+      "district": "sry",
+      "x_km": -7.098,
+      "y_km": 1.227
+    },
+    {
+      "id": "S-sry-091",
+      "district": "sry",
+      "x_km": -4.869,
+      "y_km": 4.402
+    },
+    {
+      "id": "S-sry-092",
+      "district": "sry",
+      "x_km": -3.026,
+      "y_km": 3.065
+    },
+    {
+      "id": "S-sry-093",
+      "district": "sry",
+      "x_km": -6.882,
+      "y_km": 3.258
+    },
+    {
+      "id": "S-sry-094",
+      "district": "sry",
+      "x_km": -3.734,
+      "y_km": 1.283
+    },
+    {
+      "id": "S-sry-095",
+      "district": "sry",
+      "x_km": -3.178,
+      "y_km": 3.687
+    },
+    {
+      "id": "S-sry-096",
+      "district": "sry",
+      "x_km": -3.508,
+      "y_km": 1.616
+    },
+    {
+      "id": "S-sry-097",
+      "district": "sry",
+      "x_km": -5.941,
+      "y_km": 1.445
+    },
+    {
+      "id": "S-sry-098",
+      "district": "sry",
+      "x_km": -6.523,
+      "y_km": 1.985
+    },
+    {
+      "id": "S-sry-099",
+      "district": "sry",
+      "x_km": -6.216,
+      "y_km": 4.789
+    },
+    {
+      "id": "S-sry-100",
+      "district": "sry",
+      "x_km": -7.064,
+      "y_km": 1.023
+    },
+    {
+      "id": "S-sry-101",
+      "district": "sry",
+      "x_km": -5.914,
+      "y_km": 3.28
+    },
+    {
+      "id": "S-sry-102",
+      "district": "sry",
+      "x_km": -5.074,
+      "y_km": 1.477
+    },
+    {
+      "id": "S-sry-103",
+      "district": "sry",
+      "x_km": -6.431,
+      "y_km": 4.175
+    },
+    {
+      "id": "S-sry-104",
+      "district": "sry",
+      "x_km": -4.871,
+      "y_km": 4.321
+    },
+    {
+      "id": "S-sry-105",
+      "district": "sry",
+      "x_km": -7.085,
+      "y_km": 3.168
+    },
+    {
+      "id": "S-sry-106",
+      "district": "sry",
+      "x_km": -3.308,
+      "y_km": 0.904
+    }
+  ]
+}

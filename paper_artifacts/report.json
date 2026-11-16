@@ -1,0 +1,15 @@
+{
+ "rows": 28012,
+ "font": "Times New Roman",
+ "tables": [
+  "T1_instances.csv",
+  "T2_gap.csv",
+  "T2b_stopping.csv",
+  "T3_time.csv",
+  "T3_time_fit.csv",
+  "T4_factorial.csv",
+  "T4_factorial_tests.csv",
+  "T5_tests.csv",
+  "T6_applied.csv"
+ ]
+}

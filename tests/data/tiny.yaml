@@ -1,0 +1,27 @@
+name: tiny
+output: OUTPUT
+root: ROOT
+base_seed: 7
+runs: 2
+tolerance: 1.0e-9
+lp_repeats: 2
+convergence_points: 10
+workers: 2
+budget: {factor: 20, min: 200, max: 400}
+stagnation: 5
+ga_base: {population: 10, crossover_rate: 0.9, mutation_rate: 0.2, tournament: 3, elite: 2}
+instances:
+  uniform: {sizes: [[3, 3], [4, 5]], per_size: 2, cost_low: 1, cost_high: 100, supply_low: 20, supply_high: 100}
+  structured: {sizes: [[3, 3]], per_size: 1, area: 100, noise: 10, supply_low: 20, supply_high: 100}
+  applied:
+    datasets: [kazakh-wheat]
+    exclude_events: [api_subset]
+    provenance: {kazakh-wheat: test}
+phases:
+  reachability: {instances: 20, seed: 3, min_size: 2, max_size: 6, max_supply: 5, max_cost: 9}
+  main: {suites: [uniform, structured], methods: [RS, GA-rand, GA-cost]}
+  factorial: {suite: uniform, sizes: [[3, 3]], population: [6, 10], mutation_rate: [0.1, 0.2], initialization: [random, cost-aware]}
+  applied: {suites: [applied], methods: [GA-cost], runs: 1}
+  stopping: {suite: uniform, sizes: [[3, 3]], methods: [GA-rand]}
+  timing: {suite: uniform, sizes: [[3, 3]], methods: [GA-rand], runs: 1, cpu_class: performance}
+  pilot: {methods: [RS, GA-rand, GA-cost], runs: 1, applied_ids: [kazakh-wheat/month-2024-02]}

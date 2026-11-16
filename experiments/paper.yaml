@@ -1,0 +1,91 @@
+# Configuration of the computational experiment of the paper
+# "Genetic algorithm with permutation encoding and greedy decoding for the balanced transportation
+# problem: a computational comparison with exact and classical methods".
+#
+# Run:     python -m tpga.experiments.run --config experiments/paper.yaml
+# Pilot:   python -m tpga.experiments.run --config experiments/paper.yaml --pilot
+# Report:  python -m tpga.experiments.report --config experiments/paper.yaml
+#
+# Every parameter of the runs is in this file; relative paths are resolved from the repository root.
+
+name: paper-2026-11
+output: paper_artifacts
+base_seed: 20261116          # run r of every task uses seed base_seed + r; instance seeds derive from it too
+runs: 30                     # independent runs per (instance, configuration)
+tolerance: 1.0e-9            # feasibility and optimality tolerance, relative to max(1, |value|)
+lp_repeats: 5                # HiGHS and the classical methods: median wall-clock over this many solves
+convergence_points: 100      # log-spaced budget points at which the best cost is stored
+workers: 24                  # quality phases: one pinned process per logical processor (24 = physical cores)
+
+# Decoder-call budget B = clamp(factor * m * n, min, max), the same for GA and RS.
+budget: {factor: 200, min: 20000, max: 2000000}
+stagnation: 200              # GA also stops after this many generations without improvement
+
+# Base configuration of the GA (RQ1-RQ3). The mutation rate is the probability that an offspring
+# gets one swap; 0.2 is the library default and lies in the factorial grid of RQ4.
+ga_base: {population: 100, crossover_rate: 0.9, mutation_rate: 0.2, tournament: 3, elite: 2}
+
+instances:
+  uniform:
+    sizes: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100]]
+    per_size: 10
+    cost_low: 1
+    cost_high: 100
+    supply_low: 20
+    supply_high: 100
+  structured:
+    sizes: [[20, 20], [50, 50]]
+    per_size: 10
+    area: 100                # points uniform on [0, area]^2
+    noise: 10                # c_ij = 1 + round(distance + U[0, noise])
+    supply_low: 20
+    supply_high: 100
+  applied:
+    datasets: [kazakh-wheat, astana-potato]
+    exclude_events: [api_subset]   # the 8x40 pilot subset of Astana is an API sample, not a scenario
+    provenance:
+      kazakh-wheat: >-
+        Supplies: model export quotas obtained by distributing the 2024 export volume to seven markets
+        (UN Comtrade / WITS, HS 1001) over 15 regions in proportion to the 2024 wheat harvest (Bureau
+        of National Statistics, table on gross harvest, sheet 6, section 6.7, rows 149-163). Demands:
+        2024 export volumes to the seven markets (February 2024 monthly data for month-2024-02).
+        Costs: modelled, c = round(3.2 + 0.011 * 1.23 * great-circle distance (km) + market handling proxy, 2), KZT/kg;
+        not observed rail tariffs. Stress scenarios are modelled variants.
+      astana-potato: >-
+        Modelled network: 24 warehouses and 324 points whose district counts follow a public city
+        administration report; coordinates, stocks, orders and tariffs are simulated (seed 20261109).
+
+phases:
+  reachability:
+    instances: 1000
+    seed: 20261117
+    min_size: 2
+    max_size: 30
+    max_supply: 20           # small integer supplies make degenerate vertices frequent
+    max_cost: 100
+  main:                      # RQ1-RQ3 on the synthetic sets
+    suites: [uniform, structured]
+    methods: [RS, GA-rand, GA-cost]
+  factorial:                 # RQ4
+    suite: uniform
+    sizes: [[20, 20], [50, 50]]
+    population: [20, 50, 100, 200]
+    mutation_rate: [0.01, 0.05, 0.1, 0.2]
+    initialization: [random, cost-aware]
+  applied:                   # illustration only, not used for statistics
+    suites: [applied]
+    methods: [RS, GA-rand, GA-cost]
+    runs: 10
+  stopping:                  # sensitivity check of the stopping rule: same runs, no stagnation limit
+    suite: uniform
+    sizes: [[50, 50], [100, 100]]
+    methods: [GA-rand, GA-cost]
+  timing:                    # RQ3: wall-clock on performance cores only, nothing else running
+    suite: uniform
+    methods: [GA-rand, GA-cost]
+    runs: 5
+    cpu_class: performance
+  pilot:
+    methods: [RS, GA-rand, GA-cost]
+    runs: 3
+    applied_ids: [astana-potato/day-01]

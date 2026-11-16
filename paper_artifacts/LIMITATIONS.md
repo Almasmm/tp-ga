@@ -1,0 +1,18 @@
+# Limitations
+
+1. **Exact methods solve this problem.** The classical transportation problem is a linear program; HiGHS returns the optimum in every case here. The GA is studied as a heuristic whose gap and run time are measured, not as a competitor that could beat the exact method.
+2. **Reachability is empirical.** The reproduction of HiGHS vertices by the decoder was checked on 1000 random instances; it is not a theorem for every instance or for optimal faces with several vertices.
+3. **Budget sets the run time.** The GA budget grows with m n, so the exponent of the GA's time per run partly reflects the budget rule; T3 also reports time per decoder call.
+4. The quality phases ran one pinned process per logical processor on a CPU with performance and efficiency cores, so their wall-clock times mix two core types (the `cpu_class` column records which). RQ3 uses the separate timing phase, which ran only on performance cores.
+5. **Power settings.** Recorded power scheme: `GUID схемы питания: 381b4222-f694-41f0-9685-ff5bb260df2e  (Сбалансированная)`; on AC power: True. The scheme could not be changed by the agent (system setting); see environment.json.
+6. **Synthetic sets.** Uniform costs U[1, 100] and Euclidean costs with noise; supplies U[20, 100]. Conclusions may not transfer to other cost structures or to much larger instances.
+7. **Applied cases are illustrations.** Wheat: supplies and demands come from public statistics (BNS 2024 harvest table, UN Comtrade/WITS HS 1001), but the supplies are model export quotas and the costs are a distance formula, not observed rail tariffs. Astana: a modelled network. They are not used for statistical tests.
+8. **Rail pilot excluded.** `datasets/kazakh-wheat/rail-pilot` has no waybills or paid amounts yet; no savings can be computed and it is not part of the paper.
+9. **No textbook examples with page references** are stored in the repository; the classical methods are tested on hand-worked small cases and on random instances against HiGHS.
+10. **Statistical power per size.** Each size has 10 instances. The exact Wilcoxon p-value then has a floor of 0.00195, and after Holm over all rows of T5 no per-size comparison is significant at 0.05 even with the same sign on all 10 instances (r = ±1). T5 therefore also gives Holm within each (set, size) group, and pooled rows over all 80 synthetic instances.
+11. **Stopping rule matters.** The stagnation limit of 200 generations ends many large runs long before the budget (T2b); results of the base configuration describe the GA with this rule, not the GA's best attainable quality at the budget.
+12. **LP time at small sizes.** For small instances the measured LP time is dominated by the fixed cost of the scipy.optimize.linprog call (model set-up and checks), so the fitted exponent of the LP time does not describe the asymptotic complexity of HiGHS.
+13. **Factorial grid boundary.** In RQ4 the best cells lie at the edge of the grid (largest population and mutation probability), so the grid does not bracket the best parameter values; the effect directions hold only inside the tested ranges.
+14. **Timing runs reproduce the quality runs.** The timing phase repeats five seeds of the base GA configuration on performance cores; its costs are identical to the corresponding rows of raw/runs.csv, which is checked by the report (NUMBERS.md).
+15. **Single machine.** All runs on one laptop; times are not comparable across machines.
+16. **Wheat source links.** The dataset manifest stores the BNS and Comtrade URLs and table positions; the downloaded source files themselves are not archived in the repository.

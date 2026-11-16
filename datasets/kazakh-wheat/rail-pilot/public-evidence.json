@@ -1,0 +1,44 @@
+{
+  "shipment_series": [
+    {
+      "commodity": "wheat",
+      "hs4": "1001",
+      "period_from": "2025-05",
+      "period_to": "2025-07",
+      "operator": "Продкорпорация",
+      "train_count": 8,
+      "tonnes_strictly_greater_than": 15000,
+      "origin_stations": [
+        "Азат",
+        "Акколь",
+        "Кокшетау"
+      ],
+      "rail_crossing_ids": [
+        "dostyk",
+        "altynkol"
+      ],
+      "destination": "Хайфон, Вьетнам",
+      "paid_kzt": null,
+      "source": "https://ktzh-gp.kz/en/media/news/news_main_section_ru/25333/"
+    }
+  ],
+  "tariff_sources": [
+    {
+      "issuer": "КТЖ-Грузовые перевозки",
+      "type": "tariff_reference",
+      "source": "https://ktzh-gp.kz/ru/activity/tariff-policy/cargo-transportation/"
+    },
+    {
+      "issuer": "Dosjan temir joly",
+      "published_by": "КТЖ-Грузовые перевозки",
+      "type": "infrastructure_component_only",
+      "section": "Шар — Новоустькаменогорск",
+      "effective_from": "2024-01-01",
+      "year": 2024,
+      "commodity_etsng": "011–018",
+      "movement": "export",
+      "kzt_per_tonne_km_excl_vat": 5.02,
+      "source": "https://ktzh-gp.kz/upload/files/2023/obyavlenia/prilozh_k_pismu.pdf"
+    }
+  ]
+}

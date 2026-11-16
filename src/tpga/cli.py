@@ -24,6 +24,7 @@ def _build_parser() -> argparse.ArgumentParser:
     s.add_argument("--generations", type=int, default=200)
     s.add_argument("--population", type=int, default=60)
     s.add_argument("--seed", type=int, default=None)
+    s.add_argument("--initialization", choices=["random", "cost-aware"], default="random")
     s.add_argument("--plot", metavar="PNG", help="save the GA convergence plot")
     s.add_argument("--plan-plot", metavar="PNG", help="save a heat map of the best plan")
     s.add_argument("--json", action="store_true", help="print machine-readable output")
@@ -44,7 +45,12 @@ def _solve(args: argparse.Namespace) -> dict:
     out["lp"] = {"cost": z_lp}
     best_x = x_lp
     if args.method in ("ga", "both"):
-        cfg = GAConfig(population=args.population, generations=args.generations, seed=args.seed)
+        cfg = GAConfig(
+            population=args.population,
+            generations=args.generations,
+            seed=args.seed,
+            initialization=args.initialization,
+        )
         r = run_ga(p, cfg)
         gap = 0.0 if z_lp == 0 else 100.0 * (r.cost - z_lp) / abs(z_lp)
         out["ga"] = {"cost": r.cost, "gap_percent": gap, "evaluations": r.evaluations, "runtime_s": r.runtime_s}

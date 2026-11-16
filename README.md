@@ -3,7 +3,7 @@
 [![CI](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml)
 [![Release](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
+![Python](https://img.shields.io/badge/python-3.10%E2%80%933.14-blue)
 
 The code base of the master's research project *Modelling and optimisation of the transportation problem using
 genetic algorithms* (Astana IT University). It contains the `tpga` Python library and, as it grows, the web
@@ -66,20 +66,39 @@ Unbalanced instances are balanced automatically with a zero-cost dummy source or
 One run with seed 0 (population 80, 300 generations): GA cost 5342, LP optimum 5342.
 This illustrates the tool; it is not a benchmark, and a single run says nothing about average behaviour.
 
+## Computational experiment
+
+The experiment of the paper *Genetic algorithm with permutation encoding and greedy decoding for the
+balanced transportation problem: a computational comparison with exact and classical methods* is defined
+in [`experiments/paper.yaml`](experiments/paper.yaml) and runs with one command; every table and figure is
+then regenerated from the raw results with a second one:
+
+```bash
+pip install -e .[dev]
+python -m tpga.experiments.run --config experiments/paper.yaml       # resumable; --pilot estimates the duration
+python -m tpga.experiments.report --config experiments/paper.yaml
+```
+
+The results, instances, figures (English and Russian), tables, `METHODS.md`, `LIMITATIONS.md` and
+`NUMBERS.md` (every number with its source) are in [`paper_artifacts/`](paper_artifacts/README.md).
+
 ## Project structure
 
 ```text
-src/tpga/        model.py  decoder.py  ga.py  exact.py  plot.py  cli.py
-platform/        web platform: FastAPI backend (app/, tests/), Dockerfile, docker-compose
-tests/           unit, property-style and CLI tests (pytest)
-examples/        JSON instances
-.github/         CI and release workflows, Dependabot, issue and PR templates
+src/tpga/              model, decoder, ga (+ compiled _kernels), exact, classical, basis, verify, ga_trace, cli, plot
+src/tpga/experiments/  configuration, instance sets, runner, reachability check, report
+experiments/           paper.yaml
+paper_artifacts/       instances, raw results, tables, figures and documents of the paper
+platform/              FastAPI backend (app/, migrations/, tests/), Next.js interface (web/), Dockerfile, docker-compose
+datasets/              kazakh-wheat (with rail-pilot), astana-potato
+scripts/               dev.ps1 (local platform), benchmark.py, rail tools
+tests/                 unit, property (hypothesis), kernel, experiment and CLI tests (pytest)
+.github/               CI and release workflows, Dependabot, issue and PR templates
 ```
 
 ## Web platform
 
-The [`platform`](platform) folder holds the FastAPI backend: `POST /solve` runs LP or GA on an instance and a GA
-response always includes the LP optimum and the gap. See [platform/README.md](platform/README.md).
+The [web application](platform/README.md) plans shipments for the Kazakhstan wheat case and the full Astana benchmark. It compares random and cost-aware GA starts with the LP optimum. The platform includes a Next.js interface and a FastAPI backend.
 
 ## Technology choices
 
@@ -87,6 +106,7 @@ response always includes the LP optimum and the gap. See [platform/README.md](pl
 |---|---|---|
 | Language | **Python 3.10+** | Standard in scientific computing; the numerical stack below is mature; readable for reviewers of the research. |
 | Arrays | **NumPy** | Vectorised plan and cost arithmetic; reproducible random streams via `numpy.random.Generator`. |
+| Inner loops | **numba** | Decoder and GA operators compiled to machine code; the same functions run as plain Python in the tests. |
 | Exact baseline | **SciPy `linprog` (HiGHS)** | Open-source, state-of-the-art LP solver shipped with SciPy, so no extra dependency or licence. |
 | Plots | **matplotlib** | De-facto standard for publication figures; works headless in CI (`Agg` backend). |
 | Tests | **pytest** (+ pytest-cov) | Concise fixtures and parametrisation; coverage gate of 90 % in CI. |
@@ -100,8 +120,8 @@ response always includes the LP optimum and the gap. See [platform/README.md](pl
 ## Quality checks and CI/CD
 
 - [`ci.yml`](.github/workflows/ci.yml) — on every push and pull request: ruff lint and format check, mypy, then the
-  test suite on **Ubuntu and Windows × Python 3.10, 3.11, 3.12** with a 90 % coverage gate and the platform API
-  tests, then a package build
+  test suite on **Ubuntu and Windows × Python 3.10–3.14** with a 90 % coverage gate, the platform API
+  tests and the web job (ESLint, `next build`, Playwright), then a package build
   whose wheel is installed in a clean environment and smoke-tested with the CLI.
 - [`release.yml`](.github/workflows/release.yml) — on a tag `vX.Y.Z`: runs the tests, checks that the tag equals the
   package version, builds the sdist and wheel and publishes them as a **GitHub Release** (continuous delivery).
