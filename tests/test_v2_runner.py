@@ -300,3 +300,35 @@ def test_two_writers_in_the_same_second_keep_both_parts(tmp_path) -> None:
     b.add([{"k": 2}])
     b.flush()
     assert sorted(r["k"] for r in read_parts(tmp_path, "runs")) == [1, 2]
+
+
+def test_runs_by_size_uses_the_first_seeds(tuned_cfg) -> None:
+    """Option A of the budget decision: fewer runs at one size, the same first seeds (common random numbers)."""
+    import copy
+
+    from tpga.experiments.v2.instances import build
+
+    _, path = tuned_cfg
+    cfg = ConfigV2.load(path)
+    items = build(cfg)
+    full = tasks.phase_tasks(cfg, "main", items)
+    raw = copy.deepcopy(cfg.raw)
+    raw["runs"] = 3
+    raw["phases"]["main"]["runs_by_size"] = {"4x5": 1}
+    fewer = tasks.phase_tasks(ConfigV2(raw, cfg.path), "main", items)
+    seeds = {t["seed"] for t in fewer if t["size"] == "4x5"}
+    assert seeds == {cfg.seeds(1)[0]}
+    other = [t for t in fewer if t["size"] != "4x5"]
+    assert {t["seed"] for t in other} == set(cfg.seeds(3))
+    assert {t["seed"] for t in full if t["size"] == "4x5"} == set(cfg.seeds())
+
+
+def test_reestimate_matches_the_pilot_on_the_same_measurements(tuned_cfg) -> None:
+    _, path = tuned_cfg
+    cfg = ConfigV2.load(path)
+    if not (cfg.output / "pilot" / "estimate.json").exists():
+        assert cli("pilot", "--config", str(path)).returncode == 0
+    saved = json.loads((cfg.output / "pilot" / "estimate.json").read_text(encoding="utf-8"))
+    again = pilot.reestimate(cfg)
+    assert again["total_wall_h"] == pytest.approx(saved["total_wall_h"])
+    assert {k: v["runs"] for k, v in again["phases"].items()} == {k: v["runs"] for k, v in saved["phases"].items()}
