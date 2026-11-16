@@ -6,3 +6,232 @@
 [2026-11-16 01:03:40] pilot: 58/63 done, 0 errors, ETA 0.1 min
 [2026-11-16 01:04:34] pilot: 63/63 done, 0 errors, ETA 0.0 min
 [2026-11-16 01:04:34] pilot estimate: 1.54 h; {"main": 2683.271031666603, "factorial": 585.8066600000408, "applied": 2007.0994911354255, "timing": 285.09272916665697}
+[2026-11-16 01:09:35] phase reachability started
+[2026-11-16 01:09:37] phase reachability finished in 0.0 min with 0 errors
+[2026-11-16 01:09:37] phase main started
+[2026-11-16 01:09:37] main/LP: 80 tasks, 0 already done, 80 to run on 24 CPUs
+[2026-11-16 01:09:40] main/LP: 80/80 done, 0 errors, ETA 0.0 min
+[2026-11-16 01:09:40] main/classical: 240 tasks, 0 already done, 240 to run on 24 CPUs
+[2026-11-16 01:09:43] main/classical: 240/240 done, 0 errors, ETA 0.0 min
+[2026-11-16 01:09:43] main: 7200 tasks, 0 already done, 7200 to run on 24 CPUs
+[2026-11-16 01:13:09] main: 1/7200 done, 0 errors, ETA 24569.6 min
+[2026-11-16 01:14:10] main: 24/7200 done, 0 errors, ETA 1325.6 min
+[2026-11-16 01:15:10] main: 42/7200 done, 0 errors, ETA 927.3 min
+[2026-11-16 01:16:12] main: 80/7200 done, 0 errors, ETA 576.0 min
+[2026-11-16 01:17:33] main: 89/7200 done, 0 errors, ETA 625.2 min
+[2026-11-16 01:19:41] main: 91/7200 done, 0 errors, ETA 777.5 min
+[2026-11-16 01:20:46] main: 106/7200 done, 0 errors, ETA 738.1 min
+[2026-11-16 01:21:49] main: 121/7200 done, 0 errors, ETA 706.7 min
+[2026-11-16 01:22:54] main: 167/7200 done, 0 errors, ETA 554.4 min
+[2026-11-16 01:24:15] main: 177/7200 done, 0 errors, ETA 576.0 min
+[2026-11-16 01:26:16] main: 181/7200 done, 0 errors, ETA 641.2 min
+[2026-11-16 01:27:18] main: 189/7200 done, 0 errors, ETA 651.9 min
+[2026-11-16 01:28:40] main: 200/7200 done, 0 errors, ETA 662.4 min
+[2026-11-16 01:29:41] main: 218/7200 done, 0 errors, ETA 639.1 min
+[2026-11-16 01:31:03] main: 266/7200 done, 0 errors, ETA 555.5 min
+[2026-11-16 01:33:48] main: 271/7200 done, 0 errors, ETA 615.5 min
+[2026-11-16 01:34:52] main: 283/7200 done, 0 errors, ETA 614.1 min
+[2026-11-16 01:35:55] main: 296/7200 done, 0 errors, ETA 610.7 min
+[2026-11-16 01:36:55] main: 324/7200 done, 0 errors, ETA 576.9 min
+[2026-11-16 01:38:20] main: 358/7200 done, 0 errors, ETA 546.7 min
+[2026-11-16 01:41:07] main: 361/7200 done, 0 errors, ETA 594.4 min
+[2026-11-16 01:42:07] main: 377/7200 done, 0 errors, ETA 586.0 min
+[2026-11-16 01:43:08] main: 393/7200 done, 0 errors, ETA 578.6 min
+[2026-11-16 01:44:14] main: 441/7200 done, 0 errors, ETA 528.9 min
+[2026-11-16 01:45:16] main: 447/7200 done, 0 errors, ETA 536.7 min
+[2026-11-16 01:47:47] main: 451/7200 done, 0 errors, ETA 569.4 min
+[2026-11-16 01:48:56] main: 466/7200 done, 0 errors, ETA 566.5 min
+[2026-11-16 01:49:58] main: 484/7200 done, 0 errors, ETA 558.3 min
+[2026-11-16 01:51:02] main: 529/7200 done, 0 errors, ETA 520.9 min
+[2026-11-16 01:52:37] main: 538/7200 done, 0 errors, ETA 531.0 min
+[2026-11-16 01:54:36] main: 541/7200 done, 0 errors, ETA 552.3 min
+[2026-11-16 01:55:44] main: 553/7200 done, 0 errors, ETA 553.0 min
+[2026-11-16 01:56:49] main: 568/7200 done, 0 errors, ETA 549.7 min
+[2026-11-16 01:57:49] main: 615/7200 done, 0 errors, ETA 514.9 min
+[2026-11-16 01:58:59] main: 626/7200 done, 0 errors, ETA 517.1 min
+[2026-11-16 02:01:36] main: 631/7200 done, 0 errors, ETA 539.9 min
+[2026-11-16 02:02:40] main: 645/7200 done, 0 errors, ETA 537.9 min
+[2026-11-16 02:03:44] main: 660/7200 done, 0 errors, ETA 535.1 min
+[2026-11-16 02:04:47] main: 705/7200 done, 0 errors, ETA 507.2 min
+[2026-11-16 02:05:52] main: 716/7200 done, 0 errors, ETA 508.3 min
+[2026-11-16 02:08:21] main: 721/7200 done, 0 errors, ETA 526.7 min
+[2026-11-16 02:09:35] main: 735/7200 done, 0 errors, ETA 526.5 min
+[2026-11-16 02:10:37] main: 752/7200 done, 0 errors, ETA 522.0 min
+[2026-11-16 02:11:37] main: 799/7200 done, 0 errors, ETA 495.8 min
+[2026-11-16 02:13:33] main: 808/7200 done, 0 errors, ETA 504.8 min
+[2026-11-16 02:15:11] main: 811/7200 done, 0 errors, ETA 515.6 min
+[2026-11-16 02:16:11] main: 827/7200 done, 0 errors, ETA 512.1 min
+[2026-11-16 02:17:13] main: 841/7200 done, 0 errors, ETA 510.3 min
+[2026-11-16 02:18:17] main: 887/7200 done, 0 errors, ETA 487.9 min
+[2026-11-16 02:19:17] main: 1005/7200 done, 0 errors, ETA 428.8 min
+[2026-11-16 02:20:17] main: 1202/7200 done, 0 errors, ETA 352.1 min
+[2026-11-16 02:21:18] main: 1440/7200 done, 0 errors, ETA 286.3 min
+[2026-11-16 02:22:21] main: 1621/7200 done, 0 errors, ETA 249.9 min
+[2026-11-16 02:23:21] main: 1832/7200 done, 0 errors, ETA 215.7 min
+[2026-11-16 02:24:21] main: 2051/7200 done, 0 errors, ETA 187.3 min
+[2026-11-16 02:25:33] main: 2251/7200 done, 0 errors, ETA 166.7 min
+[2026-11-16 02:26:33] main: 2452/7200 done, 0 errors, ETA 148.8 min
+[2026-11-16 02:27:34] main: 2643/7200 done, 0 errors, ETA 134.2 min
+[2026-11-16 02:28:34] main: 5330/7200 done, 0 errors, ETA 27.7 min
+[2026-11-16 02:28:35] main: 7200/7200 done, 0 errors, ETA 0.0 min
+[2026-11-16 02:28:36] phase main finished in 79.0 min with 0 errors
+[2026-11-16 02:28:36] phase factorial started
+[2026-11-16 02:28:36] factorial/LP: 20 tasks, 20 already done, 0 to run on 24 CPUs
+[2026-11-16 02:28:36] factorial/classical: 60 tasks, 60 already done, 0 to run on 24 CPUs
+[2026-11-16 02:28:36] factorial: 19200 tasks, 1200 already done, 18000 to run on 24 CPUs
+[2026-11-16 02:29:37] factorial: 422/18000 done, 0 errors, ETA 41.8 min
+[2026-11-16 02:30:38] factorial: 1281/18000 done, 0 errors, ETA 26.2 min
+[2026-11-16 02:31:38] factorial: 2135/18000 done, 0 errors, ETA 22.4 min
+[2026-11-16 02:32:38] factorial: 2944/18000 done, 0 errors, ETA 20.5 min
+[2026-11-16 02:33:38] factorial: 3533/18000 done, 0 errors, ETA 20.5 min
+[2026-11-16 02:34:39] factorial: 4009/18000 done, 0 errors, ETA 21.0 min
+[2026-11-16 02:35:40] factorial: 4863/18000 done, 0 errors, ETA 19.0 min
+[2026-11-16 02:36:40] factorial: 5717/18000 done, 0 errors, ETA 17.3 min
+[2026-11-16 02:37:40] factorial: 6547/18000 done, 0 errors, ETA 15.8 min
+[2026-11-16 02:38:40] factorial: 7142/18000 done, 0 errors, ETA 15.3 min
+[2026-11-16 02:39:41] factorial: 7623/18000 done, 0 errors, ETA 15.1 min
+[2026-11-16 02:40:41] factorial: 8480/18000 done, 0 errors, ETA 13.6 min
+[2026-11-16 02:41:41] factorial: 15540/18000 done, 0 errors, ETA 2.1 min
+[2026-11-16 02:41:52] factorial: 18000/18000 done, 0 errors, ETA 0.0 min
+[2026-11-16 02:41:52] phase factorial finished in 13.3 min with 0 errors
+[2026-11-16 02:41:52] phase applied started
+[2026-11-16 02:41:53] applied/LP: 38 tasks, 0 already done, 38 to run on 24 CPUs
+[2026-11-16 02:41:55] applied/LP: 38/38 done, 0 errors, ETA 0.0 min
+[2026-11-16 02:41:56] applied/classical: 114 tasks, 0 already done, 114 to run on 24 CPUs
+[2026-11-16 02:41:59] applied/classical: 114/114 done, 0 errors, ETA 0.0 min
+[2026-11-16 02:41:59] applied: 1140 tasks, 0 already done, 1140 to run on 24 CPUs
+[2026-11-16 02:43:02] applied: 15/1140 done, 0 errors, ETA 77.3 min
+[2026-11-16 02:44:05] applied: 21/1140 done, 0 errors, ETA 110.8 min
+[2026-11-16 02:45:05] applied: 47/1140 done, 0 errors, ETA 71.6 min
+[2026-11-16 02:46:05] applied: 62/1140 done, 0 errors, ETA 71.0 min
+[2026-11-16 02:47:06] applied: 79/1140 done, 0 errors, ETA 68.3 min
+[2026-11-16 02:48:06] applied: 96/1140 done, 0 errors, ETA 66.3 min
+[2026-11-16 02:49:07] applied: 117/1140 done, 0 errors, ETA 62.2 min
+[2026-11-16 02:50:08] applied: 135/1140 done, 0 errors, ETA 60.5 min
+[2026-11-16 02:51:10] applied: 149/1140 done, 0 errors, ETA 61.0 min
+[2026-11-16 02:52:16] applied: 169/1140 done, 0 errors, ETA 59.0 min
+[2026-11-16 02:53:17] applied: 190/1140 done, 0 errors, ETA 56.4 min
+[2026-11-16 02:54:29] applied: 208/1140 done, 0 errors, ETA 55.9 min
+[2026-11-16 02:55:31] applied: 226/1140 done, 0 errors, ETA 54.7 min
+[2026-11-16 02:56:38] applied: 242/1140 done, 0 errors, ETA 54.3 min
+[2026-11-16 02:57:38] applied: 262/1140 done, 0 errors, ETA 52.4 min
+[2026-11-16 02:58:39] applied: 280/1140 done, 0 errors, ETA 51.1 min
+[2026-11-16 02:59:41] applied: 292/1140 done, 0 errors, ETA 51.3 min
+[2026-11-16 03:00:43] applied: 311/1140 done, 0 errors, ETA 49.9 min
+[2026-11-16 03:01:47] applied: 330/1140 done, 0 errors, ETA 48.6 min
+[2026-11-16 03:02:52] applied: 350/1140 done, 0 errors, ETA 47.1 min
+[2026-11-16 03:03:53] applied: 364/1140 done, 0 errors, ETA 46.6 min
+[2026-11-16 03:04:58] applied: 385/1140 done, 0 errors, ETA 45.0 min
+[2026-11-16 03:06:03] applied: 407/1140 done, 0 errors, ETA 43.3 min
+[2026-11-16 03:07:04] applied: 422/1140 done, 0 errors, ETA 42.6 min
+[2026-11-16 03:08:14] applied: 442/1140 done, 0 errors, ETA 41.4 min
+[2026-11-16 03:09:14] applied: 465/1140 done, 0 errors, ETA 39.5 min
+[2026-11-16 03:10:15] applied: 477/1140 done, 0 errors, ETA 39.3 min
+[2026-11-16 03:11:19] applied: 500/1140 done, 0 errors, ETA 37.5 min
+[2026-11-16 03:12:20] applied: 516/1140 done, 0 errors, ETA 36.7 min
+[2026-11-16 03:13:22] applied: 535/1140 done, 0 errors, ETA 35.5 min
+[2026-11-16 03:14:22] applied: 550/1140 done, 0 errors, ETA 34.7 min
+[2026-11-16 03:15:22] applied: 568/1140 done, 0 errors, ETA 33.6 min
+[2026-11-16 03:16:27] applied: 588/1140 done, 0 errors, ETA 32.3 min
+[2026-11-16 03:17:28] applied: 602/1140 done, 0 errors, ETA 31.7 min
+[2026-11-16 03:18:30] applied: 623/1140 done, 0 errors, ETA 30.3 min
+[2026-11-16 03:19:30] applied: 643/1140 done, 0 errors, ETA 29.0 min
+[2026-11-16 03:20:33] applied: 657/1140 done, 0 errors, ETA 28.3 min
+[2026-11-16 03:21:38] applied: 678/1140 done, 0 errors, ETA 27.0 min
+[2026-11-16 03:22:40] applied: 692/1140 done, 0 errors, ETA 26.3 min
+[2026-11-16 03:23:42] applied: 716/1140 done, 0 errors, ETA 24.7 min
+[2026-11-16 03:24:42] applied: 733/1140 done, 0 errors, ETA 23.7 min
+[2026-11-16 03:26:01] applied: 751/1140 done, 0 errors, ETA 22.8 min
+[2026-11-16 03:27:04] applied: 774/1140 done, 0 errors, ETA 21.3 min
+[2026-11-16 03:28:04] applied: 792/1140 done, 0 errors, ETA 20.2 min
+[2026-11-16 03:29:06] applied: 806/1140 done, 0 errors, ETA 19.5 min
+[2026-11-16 03:30:06] applied: 827/1140 done, 0 errors, ETA 18.2 min
+[2026-11-16 03:31:15] applied: 843/1140 done, 0 errors, ETA 17.4 min
+[2026-11-16 03:32:25] applied: 861/1140 done, 0 errors, ETA 16.3 min
+[2026-11-16 03:33:29] applied: 885/1140 done, 0 errors, ETA 14.8 min
+[2026-11-16 03:34:31] applied: 900/1140 done, 0 errors, ETA 14.0 min
+[2026-11-16 03:35:34] applied: 921/1140 done, 0 errors, ETA 12.7 min
+[2026-11-16 03:36:34] applied: 939/1140 done, 0 errors, ETA 11.7 min
+[2026-11-16 03:37:38] applied: 959/1140 done, 0 errors, ETA 10.5 min
+[2026-11-16 03:38:40] applied: 1129/1140 done, 0 errors, ETA 0.6 min
+[2026-11-16 03:39:07] applied: 1140/1140 done, 0 errors, ETA 0.0 min
+[2026-11-16 03:39:07] phase applied finished in 57.2 min with 0 errors
+[2026-11-16 03:39:07] phase stopping started
+[2026-11-16 03:39:08] stopping/LP: 20 tasks, 20 already done, 0 to run on 24 CPUs
+[2026-11-16 03:39:08] stopping/classical: 60 tasks, 60 already done, 0 to run on 24 CPUs
+[2026-11-16 03:39:08] stopping: 1200 tasks, 0 already done, 1200 to run on 24 CPUs
+[2026-11-16 03:41:23] stopping: 1/1200 done, 0 errors, ETA 2672.0 min
+[2026-11-16 03:42:31] stopping: 9/1200 done, 0 errors, ETA 446.5 min
+[2026-11-16 03:43:38] stopping: 25/1200 done, 0 errors, ETA 211.0 min
+[2026-11-16 03:45:55] stopping: 33/1200 done, 0 errors, ETA 239.3 min
+[2026-11-16 03:46:57] stopping: 55/1200 done, 0 errors, ETA 162.4 min
+[2026-11-16 03:48:20] stopping: 57/1200 done, 0 errors, ETA 184.3 min
+[2026-11-16 03:49:21] stopping: 63/1200 done, 0 errors, ETA 184.3 min
+[2026-11-16 03:50:38] stopping: 81/1200 done, 0 errors, ETA 158.7 min
+[2026-11-16 03:52:01] stopping: 87/1200 done, 0 errors, ETA 164.7 min
+[2026-11-16 03:53:04] stopping: 101/1200 done, 0 errors, ETA 151.4 min
+[2026-11-16 03:54:10] stopping: 110/1200 done, 0 errors, ETA 148.8 min
+[2026-11-16 03:55:15] stopping: 112/1200 done, 0 errors, ETA 156.4 min
+[2026-11-16 03:56:16] stopping: 125/1200 done, 0 errors, ETA 147.2 min
+[2026-11-16 03:57:19] stopping: 134/1200 done, 0 errors, ETA 144.6 min
+[2026-11-16 03:59:25] stopping: 143/1200 done, 0 errors, ETA 149.9 min
+[2026-11-16 04:00:27] stopping: 164/1200 done, 0 errors, ETA 134.6 min
+[2026-11-16 04:01:35] stopping: 166/1200 done, 0 errors, ETA 139.8 min
+[2026-11-16 04:02:39] stopping: 172/1200 done, 0 errors, ETA 140.5 min
+[2026-11-16 04:03:40] stopping: 187/1200 done, 0 errors, ETA 132.8 min
+[2026-11-16 04:04:40] stopping: 189/1200 done, 0 errors, ETA 136.5 min
+[2026-11-16 04:06:11] stopping: 199/1200 done, 0 errors, ETA 136.0 min
+[2026-11-16 04:07:11] stopping: 213/1200 done, 0 errors, ETA 129.9 min
+[2026-11-16 04:08:22] stopping: 221/1200 done, 0 errors, ETA 129.4 min
+[2026-11-16 04:09:27] stopping: 223/1200 done, 0 errors, ETA 132.7 min
+[2026-11-16 04:10:35] stopping: 242/1200 done, 0 errors, ETA 124.4 min
+[2026-11-16 04:11:43] stopping: 245/1200 done, 0 errors, ETA 126.9 min
+[2026-11-16 04:13:06] stopping: 254/1200 done, 0 errors, ETA 126.5 min
+[2026-11-16 04:14:15] stopping: 269/1200 done, 0 errors, ETA 121.5 min
+[2026-11-16 04:15:40] stopping: 276/1200 done, 0 errors, ETA 122.3 min
+[2026-11-16 04:16:42] stopping: 287/1200 done, 0 errors, ETA 119.5 min
+[2026-11-16 04:17:51] stopping: 298/1200 done, 0 errors, ETA 117.1 min
+[2026-11-16 04:19:05] stopping: 304/1200 done, 0 errors, ETA 117.7 min
+[2026-11-16 04:20:05] stopping: 313/1200 done, 0 errors, ETA 116.0 min
+[2026-11-16 04:21:07] stopping: 325/1200 done, 0 errors, ETA 113.0 min
+[2026-11-16 04:22:35] stopping: 331/1200 done, 0 errors, ETA 114.1 min
+[2026-11-16 04:23:37] stopping: 342/1200 done, 0 errors, ETA 111.6 min
+[2026-11-16 04:24:51] stopping: 353/1200 done, 0 errors, ETA 109.7 min
+[2026-11-16 04:26:06] stopping: 359/1200 done, 0 errors, ETA 110.0 min
+[2026-11-16 04:27:09] stopping: 372/1200 done, 0 errors, ETA 106.8 min
+[2026-11-16 04:28:17] stopping: 381/1200 done, 0 errors, ETA 105.6 min
+[2026-11-16 04:30:06] stopping: 387/1200 done, 0 errors, ETA 107.0 min
+[2026-11-16 04:31:21] stopping: 407/1200 done, 0 errors, ETA 101.7 min
+[2026-11-16 04:32:43] stopping: 411/1200 done, 0 errors, ETA 102.8 min
+[2026-11-16 04:33:49] stopping: 421/1200 done, 0 errors, ETA 101.2 min
+[2026-11-16 04:35:01] stopping: 432/1200 done, 0 errors, ETA 99.3 min
+[2026-11-16 04:36:52] stopping: 442/1200 done, 0 errors, ETA 99.0 min
+[2026-11-16 04:37:56] stopping: 460/1200 done, 0 errors, ETA 94.6 min
+[2026-11-16 04:39:04] stopping: 465/1200 done, 0 errors, ETA 94.7 min
+[2026-11-16 04:40:05] stopping: 470/1200 done, 0 errors, ETA 94.6 min
+[2026-11-16 04:41:07] stopping: 485/1200 done, 0 errors, ETA 91.4 min
+[2026-11-16 04:42:14] stopping: 487/1200 done, 0 errors, ETA 92.4 min
+[2026-11-16 04:43:42] stopping: 498/1200 done, 0 errors, ETA 91.0 min
+[2026-11-16 04:44:45] stopping: 511/1200 done, 0 errors, ETA 88.4 min
+[2026-11-16 04:45:46] stopping: 519/1200 done, 0 errors, ETA 87.4 min
+[2026-11-16 04:47:02] stopping: 522/1200 done, 0 errors, ETA 88.2 min
+[2026-11-16 04:48:02] stopping: 541/1200 done, 0 errors, ETA 83.9 min
+[2026-11-16 04:49:14] stopping: 543/1200 done, 0 errors, ETA 84.8 min
+[2026-11-16 04:50:17] stopping: 553/1200 done, 0 errors, ETA 83.2 min
+[2026-11-16 04:51:28] stopping: 565/1200 done, 0 errors, ETA 81.3 min
+[2026-11-16 04:52:37] stopping: 573/1200 done, 0 errors, ETA 80.4 min
+[2026-11-16 04:53:38] stopping: 577/1200 done, 0 errors, ETA 80.4 min
+[2026-11-16 04:54:38] stopping: 656/1200 done, 0 errors, ETA 62.6 min
+[2026-11-16 04:55:38] stopping: 838/1200 done, 0 errors, ETA 33.0 min
+[2026-11-16 04:56:38] stopping: 1041/1200 done, 0 errors, ETA 11.8 min
+[2026-11-16 04:57:24] stopping: 1200/1200 done, 0 errors, ETA 0.0 min
+[2026-11-16 04:57:25] phase stopping finished in 78.3 min with 0 errors
+[2026-11-16 04:59:33] phase timing started
+[2026-11-16 04:59:33] timing/LP: 60 tasks, 0 already done, 60 to run on 8 CPUs
+[2026-11-16 04:59:35] timing/LP: 60/60 done, 0 errors, ETA 0.0 min
+[2026-11-16 04:59:35] timing/ga: 600 tasks, 0 already done, 600 to run on 8 CPUs
+[2026-11-16 05:00:39] timing/ga: 28/600 done, 0 errors, ETA 21.5 min
+[2026-11-16 05:01:41] timing/ga: 65/600 done, 0 errors, ETA 17.2 min
+[2026-11-16 05:02:41] timing/ga: 131/600 done, 0 errors, ETA 11.1 min
+[2026-11-16 05:03:00] timing/ga: 600/600 done, 0 errors, ETA 0.0 min
+[2026-11-16 05:03:00] phase timing finished in 3.5 min with 0 errors
