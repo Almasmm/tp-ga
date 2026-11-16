@@ -10,6 +10,7 @@ import json
 import os
 import time
 import traceback
+import uuid
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 from typing import Any
@@ -40,8 +41,16 @@ class PartWriter:
         if not self.buffer:
             return
         self.count += 1
-        name = f"{self.prefix}-{time.strftime('%Y%m%d-%H%M%S')}-{os.getpid()}-{self.count:05d}.jsonl"
-        final = self.dir / name
+        # The random part keeps names unique when two writers of one process flush in the same second
+        # (the counter starts at 1 in every writer); without it the second part replaced the first.
+        while True:
+            name = (
+                f"{self.prefix}-{time.strftime('%Y%m%d-%H%M%S')}-{os.getpid()}-{uuid.uuid4().hex[:8]}"
+                f"-{self.count:05d}.jsonl"
+            )
+            final = self.dir / name
+            if not final.exists():
+                break
         tmp = self.dir / (name + ".tmp")
         with tmp.open("w", encoding="utf-8", newline="\n") as fh:
             for r in self.buffer:
