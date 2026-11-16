@@ -1,0 +1,100 @@
+{
+ "device": "NVIDIA GeForce RTX 5090 Laptop GPU",
+ "compute_capability": [
+  12,
+  0
+ ],
+ "numba": "0.68.1",
+ "numba_cuda": "0.30.4",
+ "numpy": "2.4.6",
+ "python": "3.14.6",
+ "platform": "Windows-11-10.0.26300-SP0",
+ "cpu_count": 24,
+ "repeats": 5,
+ "rows": [
+  {
+   "size": "50x50",
+   "batch": 100,
+   "cpu_1core_s": 0.0005268999957479537,
+   "cpu_allcores_s": 7.6299998909235e-05,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.0014364000089699402,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.05311890729097854,
+   "gpu_float64_s": 0.0014555999950971454,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.05241824619829214
+  },
+  {
+   "size": "50x50",
+   "batch": 2400,
+   "cpu_1core_s": 0.013927000007242896,
+   "cpu_allcores_s": 0.0015787000011187047,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.005797799996798858,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.27229293904418106,
+   "gpu_float64_s": 0.005710299999918789,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.276465334770705
+  },
+  {
+   "size": "100x100",
+   "batch": 100,
+   "cpu_1core_s": 0.001858199990238063,
+   "cpu_allcores_s": 0.00023589999182149768,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.00569530000211671,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.04142011689179206,
+   "gpu_float64_s": 0.005917100002989173,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.039867501259455956
+  },
+  {
+   "size": "100x100",
+   "batch": 2400,
+   "cpu_1core_s": 0.04825389999314211,
+   "cpu_allcores_s": 0.004422900005010888,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.022446999995736405,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.19703746629175284,
+   "gpu_float64_s": 0.022948099998757243,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.19273491074426252
+  },
+  {
+   "size": "200x200",
+   "batch": 100,
+   "cpu_1core_s": 0.007738000000244938,
+   "cpu_allcores_s": 0.0008346999966306612,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.022679400004562922,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.03680432447343077,
+   "gpu_float64_s": 0.024252599992905743,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.0344169283654051
+  },
+  {
+   "size": "200x200",
+   "batch": 2400,
+   "cpu_1core_s": 0.18098780000582337,
+   "cpu_allcores_s": 0.019756800000322983,
+   "cpu_threads": 24,
+   "cpu_parallel_equal": true,
+   "gpu_int64_s": 0.09350269999413285,
+   "gpu_int64_bitwise_equal": true,
+   "speedup_int64_vs_allcores": 0.21129657220125933,
+   "gpu_float64_s": 0.10222149999754038,
+   "gpu_float64_bitwise_equal": true,
+   "speedup_float64_vs_allcores": 0.1932744090117868
+  }
+ ]
+}
