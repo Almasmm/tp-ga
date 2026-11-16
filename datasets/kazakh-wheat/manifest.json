@@ -1,0 +1,127 @@
+{
+  "id": "kazakh-wheat-2024",
+  "data_kind": "public_volumes_with_modeled_transport",
+  "commodity": "wheat_and_meslin",
+  "city": "Казахстан",
+  "units": {
+    "supply": "kg",
+    "demand": "kg",
+    "cost": "KZT/kg"
+  },
+  "display": {
+    "title": "Экспорт пшеницы",
+    "place": "Казахстан",
+    "commodity": "Пшеница и меслин",
+    "badge": "Факт экспорта · модель перевозок",
+    "source_label": "Регион",
+    "destination_label": "Рынок",
+    "source_plural": "Региональные узлы",
+    "destination_plural": "Экспортные рынки",
+    "mass_unit": "т"
+  },
+  "sources": [
+    {
+      "url": "https://stat.gov.kz/api/iblock/element/301855/file/ru/",
+      "title": "БНС Казахстана · сбор пшеницы по областям, 2024",
+      "use": "Лист 6, раздел 6.7, столбец B, строки 149–163. Центнеры переведены в килограммы."
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/KAZ/year/2024/tradeflow/Exports/partner/ALL/product/1001",
+      "title": "WITS / UN Comtrade · экспорт HS 1001 за 2024",
+      "use": "Отчётные годовые объёмы семи выбранных партнёров."
+    },
+    {
+      "url": "https://comtradeapi.un.org/public/v1/preview/C/M/HS?period=202402&reporterCode=398&flowCode=X&cmdCode=1001&partner2Code=0&customsCode=C00&motCode=0&maxRecords=500",
+      "title": "UN Comtrade · экспорт HS 1001 за февраль 2024",
+      "use": "netWgt по тем же партнёрам; отсутствие строки представлено нулём."
+    },
+    {
+      "url": "https://www.naturalearthdata.com/downloads/",
+      "title": "Natural Earth · география",
+      "use": "Границы стран и координаты городов. Города представляют агрегированные узлы на карте."
+    }
+  ],
+  "network": "network.json",
+  "scenarios": [
+    {
+      "id": "year-2024",
+      "title": "Экспорт за 2024 год",
+      "file": "instances/year-2024.json",
+      "date": "2024-12-31",
+      "event": "daily",
+      "parent": null,
+      "note": "Фактический экспорт по семи рынкам. Региональные квоты рассчитаны по долям урожая.",
+      "warehouse_count": 15,
+      "store_count": 7,
+      "direction_count": 105,
+      "supply_kg": 5607981400,
+      "demand_kg": 5607981400,
+      "uncovered_kg": 0,
+      "unused_stock_kg": 0
+    },
+    {
+      "id": "month-2024-02",
+      "title": "Экспорт за февраль 2024",
+      "file": "instances/month-2024-02.json",
+      "date": "2024-02-29",
+      "event": "daily",
+      "parent": null,
+      "note": "Отчётные объёмы за февраль по тем же рынкам. Ноль означает отсутствие записи в выборке.",
+      "warehouse_count": 15,
+      "store_count": 7,
+      "direction_count": 105,
+      "supply_kg": 481507500,
+      "demand_kg": 481507500,
+      "uncovered_kg": 0,
+      "unused_stock_kg": 0
+    },
+    {
+      "id": "stress-source",
+      "title": "Сокращение доступного объёма",
+      "file": "instances/stress-source.json",
+      "date": "2024-12-31",
+      "event": "warehouse_outage",
+      "parent": "year-2024",
+      "note": "Стресс-тест: экспортная квота Акмолинской области сокращена на 20%.",
+      "warehouse_count": 15,
+      "store_count": 7,
+      "direction_count": 105,
+      "supply_kg": 5315114528,
+      "demand_kg": 5607981400,
+      "uncovered_kg": 292866872,
+      "unused_stock_kg": 0
+    },
+    {
+      "id": "stress-demand",
+      "title": "Рост спроса в Узбекистане",
+      "file": "instances/stress-demand.json",
+      "date": "2024-12-31",
+      "event": "export_demand_plus_15_pct",
+      "parent": "year-2024",
+      "note": "Стресс-тест: плановый объём поставок в Узбекистан увеличен на 15%.",
+      "warehouse_count": 15,
+      "store_count": 7,
+      "direction_count": 105,
+      "supply_kg": 5607981400,
+      "demand_kg": 6112387900,
+      "uncovered_kg": 504406500,
+      "unused_stock_kg": 0
+    },
+    {
+      "id": "stress-tariff",
+      "title": "Удорожание перевозки",
+      "file": "instances/stress-tariff.json",
+      "date": "2024-12-31",
+      "event": "export_tariffs_plus_25_pct",
+      "parent": "year-2024",
+      "note": "Стресс-тест: модельные тарифы для Китая и Азербайджана увеличены на 25%.",
+      "warehouse_count": 15,
+      "store_count": 7,
+      "direction_count": 105,
+      "supply_kg": 5607981400,
+      "demand_kg": 5607981400,
+      "uncovered_kg": 0,
+      "unused_stock_kg": 0
+    }
+  ]
+}

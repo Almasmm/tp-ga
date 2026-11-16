@@ -16,3 +16,6 @@ htmlcov/
 !docs/img/*.png
 .DS_Store
 Thumbs.db
+
+# local platform data (run history database, server logs)
+platform/data/

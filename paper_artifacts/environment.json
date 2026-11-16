@@ -1,0 +1,314 @@
+{
+ "recorded_at": "2026-11-16T04:59:30+05:00",
+ "os": "Windows-11-10.0.26300-SP0",
+ "machine": "AMD64",
+ "python": "3.14.6",
+ "packages": {
+  "tpga": "0.3.0",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "numba": "0.68.1",
+  "llvmlite": "0.50.0",
+  "pandas": "3.1.1",
+  "matplotlib": "3.11.2"
+ },
+ "highs": "1.12.0 (bundled with SciPy)",
+ "logical_processors": 24,
+ "thread_environment": {
+  "OMP_NUM_THREADS": "1",
+  "MKL_NUM_THREADS": "1",
+  "OPENBLAS_NUM_THREADS": "1",
+  "NUMBA_NUM_THREADS": "1"
+ },
+ "cpu_efficiency_class": {
+  "0": 1,
+  "1": 1,
+  "2": 0,
+  "3": 0,
+  "4": 0,
+  "5": 0,
+  "6": 0,
+  "7": 0,
+  "8": 0,
+  "9": 0,
+  "10": 1,
+  "11": 1,
+  "12": 1,
+  "13": 1,
+  "14": 0,
+  "15": 0,
+  "16": 0,
+  "17": 0,
+  "18": 0,
+  "19": 0,
+  "20": 0,
+  "21": 0,
+  "22": 1,
+  "23": 1
+ },
+ "performance_cores": [
+  0,
+  1,
+  10,
+  11,
+  12,
+  13,
+  22,
+  23
+ ],
+ "efficiency_cores": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21
+ ],
+ "cpu": "Intel(R) Core(TM) Ultra 9 275HX",
+ "physical_cores": "24",
+ "ram_gb": 63.4,
+ "power_scheme": "GUID схемы питания: 381b4222-f694-41f0-9685-ff5bb260df2e  (Сбалансированная)",
+ "on_ac_power": true,
+ "git_commit": "eb61ad105b51c075992bfe5adf22eaddd2dff298",
+ "git_dirty": true,
+ "config": "experiments\\paper.yaml",
+ "phases": {
+  "reachability": [
+   {
+    "started": "2026-11-16T01:09:35",
+    "wall_s": 2.3352890014648438,
+    "errors": 0
+   }
+  ],
+  "main": [
+   {
+    "started": "2026-11-16T01:09:37",
+    "wall_s": 4738.885974645615,
+    "errors": 0
+   }
+  ],
+  "factorial": [
+   {
+    "started": "2026-11-16T02:28:36",
+    "wall_s": 796.3505232334137,
+    "errors": 0
+   }
+  ],
+  "applied": [
+   {
+    "started": "2026-11-16T02:41:52",
+    "wall_s": 3434.9523525238037,
+    "errors": 0
+   }
+  ],
+  "stopping": [
+   {
+    "started": "2026-11-16T03:39:07",
+    "wall_s": 4697.421618938446,
+    "errors": 0
+   }
+  ],
+  "timing": [
+   {
+    "started": "2026-11-16T04:59:33",
+    "wall_s": 207.44749283790588,
+    "errors": 0
+   }
+  ]
+ },
+ "invocations": [
+  {
+   "recorded_at": "2026-11-16T01:09:32+05:00",
+   "os": "Windows-11-10.0.26300-SP0",
+   "machine": "AMD64",
+   "python": "3.14.6",
+   "packages": {
+    "tpga": "0.2.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "numba": "0.68.1",
+    "llvmlite": "0.50.0",
+    "pandas": "3.1.1",
+    "matplotlib": "3.11.2"
+   },
+   "highs": "1.12.0 (bundled with SciPy)",
+   "logical_processors": 24,
+   "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMBA_NUM_THREADS": "1"
+   },
+   "cpu_efficiency_class": {
+    "0": 1,
+    "1": 1,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0,
+    "21": 0,
+    "22": 1,
+    "23": 1
+   },
+   "performance_cores": [
+    0,
+    1,
+    10,
+    11,
+    12,
+    13,
+    22,
+    23
+   ],
+   "efficiency_cores": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+   ],
+   "cpu": "Intel(R) Core(TM) Ultra 9 275HX",
+   "physical_cores": "24",
+   "ram_gb": 63.4,
+   "power_scheme": "GUID схемы питания: 381b4222-f694-41f0-9685-ff5bb260df2e  (Сбалансированная)",
+   "on_ac_power": true,
+   "git_commit": "0a7a31573bc681611e261d8edd242e55dcaa462e",
+   "git_dirty": false,
+   "config": "experiments\\paper.yaml",
+   "power_scheme_note": "Recorded at the start of the run; re-decoded from the OEM code page (cp866) after the run because the first version of the recorder read powercfg output as cp1251.",
+   "phases_run": [
+    "reachability",
+    "main",
+    "factorial",
+    "applied",
+    "stopping"
+   ]
+  },
+  {
+   "recorded_at": "2026-11-16T04:59:30+05:00",
+   "os": "Windows-11-10.0.26300-SP0",
+   "machine": "AMD64",
+   "python": "3.14.6",
+   "packages": {
+    "tpga": "0.3.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "numba": "0.68.1",
+    "llvmlite": "0.50.0",
+    "pandas": "3.1.1",
+    "matplotlib": "3.11.2"
+   },
+   "highs": "1.12.0 (bundled with SciPy)",
+   "logical_processors": 24,
+   "thread_environment": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "NUMBA_NUM_THREADS": "1"
+   },
+   "cpu_efficiency_class": {
+    "0": 1,
+    "1": 1,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0,
+    "21": 0,
+    "22": 1,
+    "23": 1
+   },
+   "performance_cores": [
+    0,
+    1,
+    10,
+    11,
+    12,
+    13,
+    22,
+    23
+   ],
+   "efficiency_cores": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+   ],
+   "cpu": "Intel(R) Core(TM) Ultra 9 275HX",
+   "physical_cores": "24",
+   "ram_gb": 63.4,
+   "power_scheme": "GUID схемы питания: 381b4222-f694-41f0-9685-ff5bb260df2e  (Сбалансированная)",
+   "on_ac_power": true,
+   "git_commit": "eb61ad105b51c075992bfe5adf22eaddd2dff298",
+   "git_dirty": true,
+   "config": "experiments\\paper.yaml",
+   "phases_run": [
+    "timing"
+   ],
+   "git_dirty_note": "git_dirty was recorded with the first version of the recorder, which also counted tracked files under paper_artifacts/ that the runner rewrites (logs/run.log); the source files were those of the recorded commit."
+  }
+ ],
+ "git_dirty_note": "git_dirty was recorded with the first version of the recorder, which also counted tracked files under paper_artifacts/ that the runner rewrites (logs/run.log); the source files were those of the recorded commit."
+}
