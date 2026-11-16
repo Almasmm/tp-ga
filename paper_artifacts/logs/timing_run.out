@@ -1,0 +1,9 @@
+[2026-11-16 04:59:33] phase timing started
+[2026-11-16 04:59:33] timing/LP: 60 tasks, 0 already done, 60 to run on 8 CPUs
+[2026-11-16 04:59:35] timing/LP: 60/60 done, 0 errors, ETA 0.0 min
+[2026-11-16 04:59:35] timing/ga: 600 tasks, 0 already done, 600 to run on 8 CPUs
+[2026-11-16 05:00:39] timing/ga: 28/600 done, 0 errors, ETA 21.5 min
+[2026-11-16 05:01:41] timing/ga: 65/600 done, 0 errors, ETA 17.2 min
+[2026-11-16 05:02:41] timing/ga: 131/600 done, 0 errors, ETA 11.1 min
+[2026-11-16 05:03:00] timing/ga: 600/600 done, 0 errors, ETA 0.0 min
+[2026-11-16 05:03:00] phase timing finished in 3.5 min with 0 errors
