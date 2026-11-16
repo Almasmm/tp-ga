@@ -150,9 +150,9 @@ def build(
                 path = root / set_name / f"{iid}.json"
                 data = GENERATORS[set_name](int(m), int(n), seed, spec)
                 text = json.dumps(data, separators=(",", ":")) + "\n"
-                if not path.exists() or path.read_text(encoding="utf-8") != text:
+                if not path.exists() or path.read_bytes() != text.encode("utf-8"):
                     path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_text(text, encoding="utf-8")
+                    path.write_text(text, encoding="utf-8", newline="\n")
                 digest = _sha(path)
                 entry = entries.get(iid)
                 if entry is None or entry.get("sha256") != digest or "z_rand" not in entry:
@@ -177,7 +177,7 @@ def build(
                 out.append(InstanceV2(iid, set_name, int(m), int(n), path, seed, entry["z_rand"], split))
     root.mkdir(parents=True, exist_ok=True)
     tmp = manifest_path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
+    tmp.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8", newline="\n")
     tmp.replace(manifest_path)
     return out
 

@@ -90,7 +90,8 @@ def fmt(v: Any, digits: int = 3) -> str:
 def write_table(df: pd.DataFrame, path: Path, title: str, note: str = "") -> None:
     """CSV plus Markdown with the same rows; ``note`` states the source filter and the method."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(path.with_suffix(".csv"), index=False)
+    # pandas writes os.linesep by default; LF keeps the files identical on every system
+    df.to_csv(path.with_suffix(".csv"), index=False, lineterminator="\n")
     cols = list(df.columns)
     lines = [f"# {title}", ""]
     if note:
@@ -102,7 +103,7 @@ def write_table(df: pd.DataFrame, path: Path, title: str, note: str = "") -> Non
             lines.append("| " + " | ".join(fmt(r[c]) for c in cols) + " |")
     else:
         lines.append("_No rows: the phase has not been run._")
-    path.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    path.with_suffix(".md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
 def per_instance(df: pd.DataFrame, value: str = "gap") -> pd.DataFrame:

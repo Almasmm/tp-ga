@@ -161,8 +161,8 @@ def run(cfg: ConfigV2) -> dict[str, Any]:
         },
         **estimate,
     }
-    (out_dir / "estimate.json").write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8")
-    (out_dir / "PILOT.md").write_text(markdown(result), encoding="utf-8")
+    (out_dir / "estimate.json").write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8", newline="\n")
+    (out_dir / "PILOT.md").write_text(markdown(result), encoding="utf-8", newline="\n")
     return result
 
 
