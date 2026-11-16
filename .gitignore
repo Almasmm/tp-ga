@@ -14,6 +14,8 @@ coverage.xml
 htmlcov/
 *.png
 !docs/img/*.png
+!docs/screenshots/*.png
+!paper_artifacts/figures/**/*.png
 .DS_Store
 Thumbs.db
 

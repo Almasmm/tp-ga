@@ -29,35 +29,35 @@ size,initialization,test,blocks,treatments,statistic,p,best_mean_rank,best_rank,
 20x20,random,Wilcoxon post-hoc mutation_rate 0.05 vs 0.1,10,2,0.0,0.001953125,,,1.0,0.64,0.0234375
 20x20,random,Wilcoxon post-hoc mutation_rate 0.05 vs 0.2,10,2,0.0,0.001953125,,,1.0,0.88,0.0234375
 20x20,random,Wilcoxon post-hoc mutation_rate 0.1 vs 0.2,10,2,0.0,0.001953125,,,1.0,0.52,0.0234375
-50x50,cost-aware,Friedman over population x mutation,10,16,130.8714942164475,1.435272616187342e-20,P=100.0 pm=0.2,1.7,,,
-50x50,cost-aware,Friedman over population,10,4,25.933333333333337,9.848905050140925e-06,population=200.0,1.25,,,
+50x50,cost-aware,Friedman over population x mutation,10,16,128.0800837898808,5.0492456922712126e-20,P=200.0 pm=0.2,1.4,,,
+50x50,cost-aware,Friedman over population,10,4,26.99999999999998,5.887355583577723e-06,population=200.0,1.15,,,
 50x50,cost-aware,Wilcoxon post-hoc population 20 vs 50,10,2,0.0,0.00390625,,,1.0,0.19,0.046875
-50x50,cost-aware,Wilcoxon post-hoc population 20 vs 100,10,2,0.0,0.00390625,,,1.0,0.31,0.046875
+50x50,cost-aware,Wilcoxon post-hoc population 20 vs 100,10,2,0.0,0.00390625,,,1.0,0.29,0.046875
 50x50,cost-aware,Wilcoxon post-hoc population 20 vs 200,10,2,0.0,0.00390625,,,1.0,0.39,0.046875
-50x50,cost-aware,Wilcoxon post-hoc population 50 vs 100,10,2,0.0,0.00390625,,,1.0,0.25,0.046875
+50x50,cost-aware,Wilcoxon post-hoc population 50 vs 100,10,2,0.0,0.00390625,,,1.0,0.23,0.046875
 50x50,cost-aware,Wilcoxon post-hoc population 50 vs 200,10,2,0.0,0.00390625,,,1.0,0.29,0.046875
-50x50,cost-aware,Wilcoxon post-hoc population 100 vs 200,10,2,1.0,0.0078125,,,0.9555555555555556,0.11,0.046875
-50x50,cost-aware,Friedman over mutation_rate,10,4,26.730337078651676,6.705693811629488e-06,mutation_rate=0.2,1.15,,,
+50x50,cost-aware,Wilcoxon post-hoc population 100 vs 200,10,2,0.0,0.00390625,,,1.0,0.21,0.046875
+50x50,cost-aware,Friedman over mutation_rate,10,4,26.454545454545457,7.66005478359125e-06,mutation_rate=0.2,1.2,,,
 50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.01 vs 0.05,10,2,0.0,0.0078125,,,1.0,0.14,0.046875
 50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.01 vs 0.1,10,2,0.0,0.00390625,,,1.0,0.19,0.046875
-50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.01 vs 0.2,10,2,0.0,0.00390625,,,1.0,0.37,0.046875
+50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.01 vs 0.2,10,2,0.0,0.00390625,,,1.0,0.29,0.046875
 50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.05 vs 0.1,10,2,0.0,0.00390625,,,1.0,0.13,0.046875
-50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.05 vs 0.2,10,2,0.0,0.00390625,,,1.0,0.25,0.046875
-50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.1 vs 0.2,10,2,0.0,0.00390625,,,1.0,0.21,0.046875
-50x50,random,Friedman over population x mutation,10,16,148.97647058823532,3.8518551371094034e-24,P=200.0 pm=0.2,1.1,,,
+50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.05 vs 0.2,10,2,0.0,0.00390625,,,1.0,0.21,0.046875
+50x50,cost-aware,Wilcoxon post-hoc mutation_rate 0.1 vs 0.2,10,2,0.0,0.0078125,,,1.0,0.16,0.046875
+50x50,random,Friedman over population x mutation,10,16,148.97647058823532,3.8518551371094034e-24,P=200.0 pm=0.2,1.0,,,
 50x50,random,Friedman over population,10,4,30.0,1.3800570312932553e-06,population=200.0,1.0,,,
 50x50,random,Wilcoxon post-hoc population 20 vs 50,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
 50x50,random,Wilcoxon post-hoc population 20 vs 100,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
 50x50,random,Wilcoxon post-hoc population 20 vs 200,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
-50x50,random,Wilcoxon post-hoc population 50 vs 100,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
+50x50,random,Wilcoxon post-hoc population 50 vs 100,10,2,0.0,0.001953125,,,1.0,0.98,0.0234375
 50x50,random,Wilcoxon post-hoc population 50 vs 200,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
-50x50,random,Wilcoxon post-hoc population 100 vs 200,10,2,0.0,0.001953125,,,1.0,0.6,0.0234375
+50x50,random,Wilcoxon post-hoc population 100 vs 200,10,2,0.0,0.001953125,,,1.0,0.98,0.0234375
 50x50,random,Friedman over mutation_rate,10,4,30.0,1.3800570312932553e-06,mutation_rate=0.2,1.0,,,
 50x50,random,Wilcoxon post-hoc mutation_rate 0.01 vs 0.05,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
 50x50,random,Wilcoxon post-hoc mutation_rate 0.01 vs 0.1,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
 50x50,random,Wilcoxon post-hoc mutation_rate 0.01 vs 0.2,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
 50x50,random,Wilcoxon post-hoc mutation_rate 0.05 vs 0.1,10,2,0.0,0.001953125,,,1.0,0.86,0.0234375
 50x50,random,Wilcoxon post-hoc mutation_rate 0.05 vs 0.2,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
-50x50,random,Wilcoxon post-hoc mutation_rate 0.1 vs 0.2,10,2,0.0,0.001953125,,,1.0,1.0,0.0234375
+50x50,random,Wilcoxon post-hoc mutation_rate 0.1 vs 0.2,10,2,0.0,0.001953125,,,1.0,0.84,0.0234375
 20x20,cost-aware vs random,"Wilcoxon over (instance, population, mutation) cells",160,2,0.0,5.23953462037631e-28,,,-1.0,-0.999921875,
 50x50,cost-aware vs random,"Wilcoxon over (instance, population, mutation) cells",160,2,0.0,5.23953462037631e-28,,,-1.0,-1.0,

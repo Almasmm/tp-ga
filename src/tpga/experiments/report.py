@@ -373,6 +373,7 @@ def factorial_tables(cfg: Config, df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Da
         & df["population"].isin(pops)
         & df["mutation_rate"].isin(pms)
         & np.isclose(df["crossover_rate"].fillna(-1), cfg.ga_base.crossover_rate)
+        & df["phase"].isin(["main", "factorial"])  # the stopping-rule check reuses P=100, pm=0.2 without stagnation
     ]
     rows = []
     for (size, method, pop, pm), g in f.groupby(["size", "method", "population", "mutation_rate"]):
@@ -572,7 +573,7 @@ def save_fig(fig: plt.Figure, out: Path, lang: str, name: str) -> None:
     d = out / lang
     d.mkdir(parents=True, exist_ok=True)
     fig.savefig(d / f"{name}.png", dpi=600)
-    fig.savefig(d / f"{name}.pdf")
+    fig.savefig(d / f"{name}.pdf", metadata={"CreationDate": None})  # no timestamp: identical bytes on rebuild
     plt.close(fig)
 
 

@@ -67,6 +67,9 @@ def test_pipeline_outputs(tiny):
 def test_report(tiny):
     summary = report.generate(tiny)
     out = tiny.output
+    # every factorial cell holds instances x runs rows; the stopping-rule runs (no stagnation) stay out
+    t4 = pd.read_csv(out / "tables" / "T4_factorial.csv")
+    assert set(t4["runs"]) == {2 * tiny.runs}
     for name in ("T1_instances", "T2_gap", "T3_time", "T4_factorial", "T5_tests", "T6_applied"):
         assert (out / "tables" / f"{name}.csv").exists() and (out / "tables" / f"{name}.md").exists()
     for lang in ("en", "ru"):

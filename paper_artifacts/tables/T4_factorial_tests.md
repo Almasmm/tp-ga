@@ -32,35 +32,35 @@
 | 20x20 | random | Wilcoxon post-hoc mutation_rate 0.05 vs 0.1 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.640 | 0.023 |
 | 20x20 | random | Wilcoxon post-hoc mutation_rate 0.05 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.880 | 0.023 |
 | 20x20 | random | Wilcoxon post-hoc mutation_rate 0.1 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.520 | 0.023 |
-| 50x50 | cost-aware | Friedman over population x mutation | 10 | 16 | 130.871 | 1.435e-20 | P=100.0 pm=0.2 | 1.700 | – | – | – |
-| 50x50 | cost-aware | Friedman over population | 10 | 4 | 25.933 | 9.849e-06 | population=200.0 | 1.250 | – | – | – |
+| 50x50 | cost-aware | Friedman over population x mutation | 10 | 16 | 128.080 | 5.049e-20 | P=200.0 pm=0.2 | 1.400 | – | – | – |
+| 50x50 | cost-aware | Friedman over population | 10 | 4 | 27.000 | 5.887e-06 | population=200.0 | 1.150 | – | – | – |
 | 50x50 | cost-aware | Wilcoxon post-hoc population 20 vs 50 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.190 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc population 20 vs 100 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.310 | 0.047 |
+| 50x50 | cost-aware | Wilcoxon post-hoc population 20 vs 100 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.290 | 0.047 |
 | 50x50 | cost-aware | Wilcoxon post-hoc population 20 vs 200 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.390 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc population 50 vs 100 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.250 | 0.047 |
+| 50x50 | cost-aware | Wilcoxon post-hoc population 50 vs 100 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.230 | 0.047 |
 | 50x50 | cost-aware | Wilcoxon post-hoc population 50 vs 200 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.290 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc population 100 vs 200 | 10 | 2 | 1.000 | 0.008 | – | – | 0.956 | 0.110 | 0.047 |
-| 50x50 | cost-aware | Friedman over mutation_rate | 10 | 4 | 26.730 | 6.706e-06 | mutation_rate=0.2 | 1.150 | – | – | – |
+| 50x50 | cost-aware | Wilcoxon post-hoc population 100 vs 200 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.210 | 0.047 |
+| 50x50 | cost-aware | Friedman over mutation_rate | 10 | 4 | 26.455 | 7.660e-06 | mutation_rate=0.2 | 1.200 | – | – | – |
 | 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.01 vs 0.05 | 10 | 2 | 0 | 0.008 | – | – | 1.000 | 0.140 | 0.047 |
 | 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.01 vs 0.1 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.190 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.01 vs 0.2 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.370 | 0.047 |
+| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.01 vs 0.2 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.290 | 0.047 |
 | 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.05 vs 0.1 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.130 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.05 vs 0.2 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.250 | 0.047 |
-| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.1 vs 0.2 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.210 | 0.047 |
-| 50x50 | random | Friedman over population x mutation | 10 | 16 | 148.976 | 3.852e-24 | P=200.0 pm=0.2 | 1.100 | – | – | – |
+| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.05 vs 0.2 | 10 | 2 | 0 | 0.004 | – | – | 1.000 | 0.210 | 0.047 |
+| 50x50 | cost-aware | Wilcoxon post-hoc mutation_rate 0.1 vs 0.2 | 10 | 2 | 0 | 0.008 | – | – | 1.000 | 0.160 | 0.047 |
+| 50x50 | random | Friedman over population x mutation | 10 | 16 | 148.976 | 3.852e-24 | P=200.0 pm=0.2 | 1.000 | – | – | – |
 | 50x50 | random | Friedman over population | 10 | 4 | 30.000 | 1.380e-06 | population=200.0 | 1.000 | – | – | – |
 | 50x50 | random | Wilcoxon post-hoc population 20 vs 50 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc population 20 vs 100 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc population 20 vs 200 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
-| 50x50 | random | Wilcoxon post-hoc population 50 vs 100 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
+| 50x50 | random | Wilcoxon post-hoc population 50 vs 100 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.980 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc population 50 vs 200 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
-| 50x50 | random | Wilcoxon post-hoc population 100 vs 200 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.600 | 0.023 |
+| 50x50 | random | Wilcoxon post-hoc population 100 vs 200 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.980 | 0.023 |
 | 50x50 | random | Friedman over mutation_rate | 10 | 4 | 30.000 | 1.380e-06 | mutation_rate=0.2 | 1.000 | – | – | – |
 | 50x50 | random | Wilcoxon post-hoc mutation_rate 0.01 vs 0.05 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc mutation_rate 0.01 vs 0.1 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc mutation_rate 0.01 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc mutation_rate 0.05 vs 0.1 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.860 | 0.023 |
 | 50x50 | random | Wilcoxon post-hoc mutation_rate 0.05 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
-| 50x50 | random | Wilcoxon post-hoc mutation_rate 0.1 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 1.000 | 0.023 |
+| 50x50 | random | Wilcoxon post-hoc mutation_rate 0.1 vs 0.2 | 10 | 2 | 0 | 0.002 | – | – | 1.000 | 0.840 | 0.023 |
 | 20x20 | cost-aware vs random | Wilcoxon over (instance, population, mutation) cells | 160 | 2 | 0 | 5.240e-28 | – | – | -1.000 | -1.000 | – |
 | 50x50 | cost-aware vs random | Wilcoxon over (instance, population, mutation) cells | 160 | 2 | 0 | 5.240e-28 | – | – | -1.000 | -1.000 | – |
