@@ -43,7 +43,7 @@ class PartWriter:
         name = f"{self.prefix}-{time.strftime('%Y%m%d-%H%M%S')}-{os.getpid()}-{self.count:05d}.jsonl"
         final = self.dir / name
         tmp = self.dir / (name + ".tmp")
-        with tmp.open("w", encoding="utf-8") as fh:
+        with tmp.open("w", encoding="utf-8", newline="\n") as fh:
             for r in self.buffer:
                 fh.write(json.dumps(r, ensure_ascii=False, separators=(",", ":")) + "\n")
             fh.flush()
@@ -77,7 +77,7 @@ def clean_temporary(directory: Path) -> int:
 def append_jsonl(path: Path, record: dict[str, Any]) -> None:
     """Append one line (logs and errors; a torn last line is skipped by :func:`read_jsonl`)."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as fh:
+    with path.open("a", encoding="utf-8", newline="\n") as fh:
         fh.write(json.dumps(record, ensure_ascii=False, separators=(",", ":"), default=str) + "\n")
         fh.flush()
 
@@ -106,5 +106,5 @@ def error_record(task: dict[str, Any], exc: BaseException) -> dict[str, Any]:
 def write_atomic(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=str), encoding="utf-8", newline="\n")
     os.replace(tmp, path)

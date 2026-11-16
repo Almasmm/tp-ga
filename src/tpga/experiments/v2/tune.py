@@ -106,7 +106,7 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
                     t["z_star"] = z[t["instance"]]
                 gaps = [r["gap"] for r, _ in pool.map(methods.execute, tasks)]
                 value = statistics.fmean(gaps)
-                with log.open("a", encoding="utf-8") as fh:
+                with log.open("a", encoding="utf-8", newline="\n") as fh:
                     fh.write(
                         json.dumps({"trial": trial.number, "params": params, "mean_gap": value, "runs": len(gaps)})
                         + "\n"
@@ -137,7 +137,8 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
         previous["parameters"].update(frozen["parameters"])
         previous["best_objective"].update(frozen["best_objective"])
         frozen = {**previous, "frozen": frozen["frozen"], "git_commit": frozen["git_commit"]}
-    cfg.tuned_path.write_text(yaml.safe_dump(frozen, sort_keys=False, allow_unicode=True), encoding="utf-8")
+    text = yaml.safe_dump(frozen, sort_keys=False, allow_unicode=True)
+    cfg.tuned_path.write_text(text, encoding="utf-8", newline="\n")
     return frozen
 
 
