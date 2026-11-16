@@ -74,3 +74,15 @@ Known problems and security notes (local single-user server bound to 127.0.0.1, 
   the new package is tested that way.
 * `run.estimate_plan` assumes time depends on size and method only and ignores the stagnation stop; the v0.4
   pilot measures time per decoder call and multiplies by the budget (the main v0.4 mode stops by budget only).
+
+## 5. Status of the web items after the v0.4 changes
+
+| # | Status |
+|---|---|
+| W1 | Fixed: `/solve` returns 422 when population x (generations + 1) > 1 000 000 decoder calls (GA only). |
+| W2 | Checked, not changed: `/plans` is a plain `def` endpoint, so FastAPI already runs it in its thread pool; the GA budget is capped at 200 000 decoder calls. |
+| W3 | Fixed: both downloads write the zip to a temporary file, stream it and delete it. |
+| W4 | Added: `/artifacts/v2`, `/tables`, `/figures`, `/docs`, `/manifest`, `/reproducibility`, `/config`, `/download` (raw records left out of the zip). |
+| W5 | Added: `/monitor/state` (read only, with the age of the file and a stale flag after 60 s). |
+| W6 | Fixed: events carry a sequence number; at most 500 progress events per job are kept, other events always. |
+| W7 | Fixed: the convergence sizes come from T2 of the artifacts. |

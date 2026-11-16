@@ -58,9 +58,10 @@ test("run monitor shows the state written by the runner and warns when it is old
   await expect(page.getByRole("cell", { name: "uniform-50x50-03" })).toBeVisible();
   await expect(page.getByRole("cell", { name: "50 %" })).toBeVisible();
   await expect(page.getByText("120 / 1 000")).toBeVisible();
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  const main = page.locator("main"); // Next.js adds its own route announcer with role=alert outside <main>
+  await expect(main.getByRole("alert")).toHaveCount(0);
   stale = true;
-  await expect(page.getByRole("alert")).toContainText("прогон, вероятно, остановлен", { timeout: 10_000 });
+  await expect(main.getByRole("alert")).toContainText("прогон, вероятно, остановлен", { timeout: 10_000 });
   // the page has no control that could change the run
   await expect(page.getByRole("button", { name: /Запустить|Остановить|Отменить/ })).toHaveCount(0);
 });
