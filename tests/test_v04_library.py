@@ -144,3 +144,13 @@ def test_tolerance_treats_tiny_residuals_as_zero():
     exact = decode_permutation(p, [0, 1, 2, 3], tol=0.0)
     tolerant = decode_permutation(p, [0, 1, 2, 3], tol=1e-12)
     assert exact[0, 1] > 0 and tolerant[0, 1] == 0
+
+
+def test_gpu_module_reports_unavailable_cuda_cleanly() -> None:
+    """The GPU prototype is optional: without CUDA it imports and refuses to build a decoder."""
+    from tpga import gpu
+
+    if gpu.AVAILABLE:  # pragma: no cover - only on a machine with numba-cuda
+        pytest.skip("CUDA available here; the GPU path is checked by experiments/gpu_bench.py")
+    with pytest.raises(RuntimeError, match="CUDA is not available"):
+        gpu.GPUDecoder(np.ones(2), np.ones(2), np.ones((2, 2)), batch=1)
