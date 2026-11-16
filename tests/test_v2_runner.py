@@ -288,3 +288,15 @@ def test_cli_output_is_utf8_when_redirected(tmp_path) -> None:
     code = "from tpga.experiments.v2 import cli; cli._utf8_output(); print('50×50 → ok')"
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, env=env, check=True).stdout
     assert out.decode("utf-8").strip() == "50×50 → ok"
+
+
+def test_two_writers_in_the_same_second_keep_both_parts(tmp_path) -> None:
+    """Regression: the LP and classical writers of the reference phase used the same part name."""
+    from tpga.experiments.v2.storage import PartWriter
+
+    a, b = PartWriter(tmp_path, "runs"), PartWriter(tmp_path, "runs")
+    a.add([{"k": 1}])
+    a.flush()
+    b.add([{"k": 2}])
+    b.flush()
+    assert sorted(r["k"] for r in read_parts(tmp_path, "runs")) == [1, 2]
