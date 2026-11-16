@@ -218,18 +218,23 @@ def reductions(
 ) -> list[dict[str, Any]]:
     """Candidate reductions with the time they save; the user chooses."""
     out = []
-    big = [("main", "uniform 200x200"), ("timing", "uniform 200x200")]
-    tasks = {ph: phase_tasks(cfg, ph, items) for ph in ("main", "timing", "factorial")}
+    tasks = {ph: phase_tasks(cfg, ph, items) for ph in PHASES}
 
     def hours(ts: list[dict[str, Any]], cap: float) -> float:
         return sum(_task_seconds(t, per_eval, det_time, cfg) for t in ts) / (cap * 3600)
 
     t200 = [t for t in tasks["main"] if t["size"] == "200x200"]
     for cap in (4_000_000, 2_000_000, 1_000_000):
-        saved = sum(
-            _task_seconds(t, per_eval, det_time, cfg) * (1 - cap / t["budget"]) for t in t200 if t["budget"] > cap
-        ) / (capacity * 3600)
-        out.append({"option": f"budget cap {cap:,} decoder calls (affects 200x200 only)", "saves_h": saved})
+        # a lower cap shortens every budget-limited run above it, in every phase
+        saved, sizes = 0.0, set()
+        for ph, ts in tasks.items():
+            cores = p_cores if ph == "timing" else capacity
+            for t in ts:
+                if t["kind"] not in ("lp", "classical") and int(t["budget"]) > cap:
+                    saved += _task_seconds(t, per_eval, det_time, cfg) * (1 - cap / int(t["budget"])) / (cores * 3600)
+                    sizes.add(t["size"])
+        label = ", ".join(sorted(sizes, key=lambda s: int(s.split("x")[0]) * int(s.split("x")[1])))
+        out.append({"option": f"budget cap {cap:,} decoder calls (shortens runs at {label})", "saves_h": saved})
     seeds10 = [t for t in t200 if int(t["seed"]) - int(cfg.raw["base_seed"]) >= 10]
     out.append({"option": "200x200 in the main phase with 10 runs instead of 30", "saves_h": hours(seeds10, capacity)})
     base = [t for t in t200 if t["method"].endswith("-base")]
@@ -238,7 +243,6 @@ def reductions(
     out.append({"option": "timing phase without 200x200 for GA and SA", "saves_h": hours(tim, p_cores)})
     fac = [t for t in tasks["factorial"] if int(t["params"]["population"]) == 400]
     out.append({"option": "factorial plan without population 400", "saves_h": hours(fac, capacity)})
-    del big
     return sorted(out, key=lambda r: -r["saves_h"])
 
 
