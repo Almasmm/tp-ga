@@ -276,3 +276,14 @@ def test_pilot_and_doctor_commands(tuned_cfg, capsys):
     assert est["measured"]["e_over_p_speed_ratio"] > 0 and est["total_wall_h"] > 0
     assert v2cli.main(["doctor", "--config", str(path)]) == 0
     assert "doctor ничего не меняет" in capsys.readouterr().out
+
+
+def test_cli_output_is_utf8_when_redirected(tmp_path) -> None:
+    """``tpga-exp ... > file`` must not fail on non-ASCII output (Windows code pages)."""
+    import subprocess
+    import sys
+
+    env = {**__import__("os").environ, "PYTHONIOENCODING": "cp1251"}
+    code = "from tpga.experiments.v2 import cli; cli._utf8_output(); print('50×50 → ok')"
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True, env=env, check=True).stdout
+    assert out.decode("utf-8").strip() == "50×50 → ok"

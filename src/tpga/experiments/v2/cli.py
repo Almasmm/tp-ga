@@ -169,7 +169,17 @@ def main(argv: list[str] | None = None) -> int:
         if name == "tune":
             p.add_argument("--method", action="append", choices=["GA-rand", "GA-cost", "SA-rand", "SA-cost"])
     args = ap.parse_args(argv)
+    _utf8_output()
     return int(args.fn(args))
+
+
+def _utf8_output() -> None:
+    """Redirected output (``--plain > run.log``) would use the ANSI code page on Windows and fail on
+    characters such as the multiplication sign; write UTF-8 instead."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None and (stream.encoding or "").lower().replace("-", "") != "utf8":
+            reconfigure(encoding="utf-8", errors="replace")
 
 
 if __name__ == "__main__":

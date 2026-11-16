@@ -1,0 +1,326 @@
+{
+ "measured": {
+  "per_eval_s_performance_core": {
+   "skewed|20x20|GA-cost-base": 1.6727625711690925e-06,
+   "skewed|20x20|GA-cost-tuned": 2.321168282751141e-06,
+   "skewed|20x20|GA-rand-base": 1.7235070487363775e-06,
+   "skewed|20x20|GA-rand-tuned": 2.5236287765006105e-06,
+   "skewed|20x20|RS": 5.626255000242964e-06,
+   "skewed|20x20|SA-cost-tuned": 9.953308893824114e-07,
+   "skewed|20x20|SA-rand-tuned": 1.2008549994789064e-06,
+   "skewed|50x50|GA-cost-base": 7.717508864795035e-06,
+   "skewed|50x50|GA-cost-tuned": 1.243547716365007e-05,
+   "skewed|50x50|GA-rand-base": 7.463247663758596e-06,
+   "skewed|50x50|GA-rand-tuned": 1.2385508164900481e-05,
+   "skewed|50x50|RS": 2.2667435000039406e-05,
+   "skewed|50x50|SA-cost-tuned": 5.101127417080907e-06,
+   "skewed|50x50|SA-rand-tuned": 4.796299012778776e-06,
+   "structured|100x100|GA-cost-base": 4.0651640574128396e-05,
+   "structured|100x100|GA-cost-tuned": 5.2824175713803975e-05,
+   "structured|100x100|GA-rand-base": 4.072839966085158e-05,
+   "structured|100x100|GA-rand-tuned": 4.118106717883201e-05,
+   "structured|100x100|RS": 8.315934750025917e-05,
+   "structured|100x100|SA-cost-tuned": 2.4149680000118678e-05,
+   "structured|100x100|SA-rand-tuned": 2.0204752499921595e-05,
+   "structured|20x20|GA-cost-base": 2.0489546860068143e-06,
+   "structured|20x20|GA-cost-tuned": 3.449827621308607e-06,
+   "structured|20x20|GA-rand-base": 1.8457837350103556e-06,
+   "structured|20x20|GA-rand-tuned": 2.4692473979769838e-06,
+   "structured|20x20|RS": 5.2959699998609725e-06,
+   "structured|20x20|SA-cost-tuned": 3.020544999890262e-06,
+   "structured|20x20|SA-rand-tuned": 2.7488799998536708e-06,
+   "structured|50x50|GA-cost-base": 1.0754031209497127e-05,
+   "structured|50x50|GA-cost-tuned": 1.4078183938314778e-05,
+   "structured|50x50|GA-rand-base": 9.18905171489553e-06,
+   "structured|50x50|GA-rand-tuned": 1.130267881373573e-05,
+   "structured|50x50|RS": 1.648905591781812e-05,
+   "structured|50x50|SA-cost-tuned": 4.667774999688845e-06,
+   "structured|50x50|SA-rand-tuned": 4.990764999820385e-06,
+   "ties|20x20|GA-cost-base": 1.915604680913262e-06,
+   "ties|20x20|GA-cost-tuned": 2.28568343476633e-06,
+   "ties|20x20|GA-rand-base": 1.764559367859746e-06,
+   "ties|20x20|GA-rand-tuned": 2.7062741947709575e-06,
+   "ties|20x20|RS": 4.142879999562865e-06,
+   "ties|20x20|SA-cost-tuned": 9.975506801650014e-07,
+   "ties|20x20|SA-rand-tuned": 1.0199650001595728e-06,
+   "ties|50x50|GA-cost-base": 8.430683958947395e-06,
+   "ties|50x50|GA-cost-tuned": 1.2866064921911043e-05,
+   "ties|50x50|GA-rand-base": 9.114584375357404e-06,
+   "ties|50x50|GA-rand-tuned": 1.1938213341547599e-05,
+   "ties|50x50|RS": 2.3700814999756403e-05,
+   "ties|50x50|SA-cost-tuned": 7.247104999987642e-06,
+   "ties|50x50|SA-rand-tuned": 4.809545708571866e-06,
+   "uniform|100x100|GA-cost-base": 4.184593056453712e-05,
+   "uniform|100x100|GA-cost-tuned": 4.515994714513646e-05,
+   "uniform|100x100|GA-rand-base": 3.8985372146097874e-05,
+   "uniform|100x100|GA-rand-tuned": 4.377488084625358e-05,
+   "uniform|100x100|RS": 5.788193342857877e-05,
+   "uniform|100x100|SA-cost-tuned": 1.955103096277418e-05,
+   "uniform|100x100|SA-rand-tuned": 1.9042402084415566e-05,
+   "uniform|10x10|GA-cost-base": 8.08240510806362e-06,
+   "uniform|10x10|GA-cost-tuned": 1.1993540863660803e-05,
+   "uniform|10x10|GA-rand-base": 8.098092448047904e-06,
+   "uniform|10x10|GA-rand-tuned": 1.1342878688453053e-05,
+   "uniform|10x10|RS": 7.770146302215966e-06,
+   "uniform|10x10|SA-cost-tuned": 1.3501260000339243e-05,
+   "uniform|10x10|SA-rand-tuned": 1.1659849999705329e-05,
+   "uniform|200x200|GA-cost-base": 0.0001274577945337625,
+   "uniform|200x200|GA-cost-tuned": 0.00012487959762016258,
+   "uniform|200x200|GA-rand-base": 0.00015747379484550472,
+   "uniform|200x200|GA-rand-tuned": 0.0001243665899112773,
+   "uniform|200x200|RS": 0.0001709642195970612,
+   "uniform|200x200|SA-cost-tuned": 6.939984812506736e-05,
+   "uniform|200x200|SA-rand-tuned": 6.624141104380803e-05,
+   "uniform|20x20|GA-P20": 9.912388574617477e-06,
+   "uniform|20x20|GA-P400": 1.546843030868369e-05,
+   "uniform|20x20|GA-cost-base": 9.238528768614201e-06,
+   "uniform|20x20|GA-cost-tuned": 9.811525716437144e-06,
+   "uniform|20x20|GA-rand-base": 9.726390968069813e-06,
+   "uniform|20x20|GA-rand-tuned": 9.891279467996366e-06,
+   "uniform|20x20|RS": 1.2507512783655758e-05,
+   "uniform|20x20|SA-cost-tuned": 8.97791838082295e-06,
+   "uniform|20x20|SA-rand-tuned": 9.170947550952876e-06,
+   "uniform|30x30|GA-cost-base": 4.346927221395452e-06,
+   "uniform|30x30|GA-cost-tuned": 4.7266409115643675e-06,
+   "uniform|30x30|GA-rand-base": 2.944236741072847e-06,
+   "uniform|30x30|GA-rand-tuned": 8.458549092294517e-06,
+   "uniform|30x30|RS": 2.0329420000052777e-05,
+   "uniform|30x30|SA-cost-tuned": 2.0760087914390163e-06,
+   "uniform|30x30|SA-rand-tuned": 5.205450725509681e-06,
+   "uniform|50x50|GA-P20": 8.08249523477137e-06,
+   "uniform|50x50|GA-P400": 1.442365591394525e-05,
+   "uniform|50x50|GA-cost-base": 8.70706712054276e-06,
+   "uniform|50x50|GA-cost-tuned": 1.2438615137068377e-05,
+   "uniform|50x50|GA-rand-base": 1.4855601680060727e-05,
+   "uniform|50x50|GA-rand-tuned": 1.04635361740379e-05,
+   "uniform|50x50|RS": 1.5166534031960912e-05,
+   "uniform|50x50|SA-cost-tuned": 9.715915000560926e-06,
+   "uniform|50x50|SA-rand-tuned": 5.417324999871198e-06,
+   "uniform|5x5|GA-cost-base": 4.102659315056816e-05,
+   "uniform|5x5|GA-cost-tuned": 3.313175352435939e-05,
+   "uniform|5x5|GA-rand-base": 5.905237999977544e-05,
+   "uniform|5x5|GA-rand-tuned": 3.5913699905776395e-05,
+   "uniform|5x5|RS": 6.58428399998229e-05,
+   "uniform|5x5|SA-cost-tuned": 3.3373852168227294e-05,
+   "uniform|5x5|SA-rand-tuned": 3.662063423811395e-05
+  },
+  "deterministic_s": {
+   "lp_scaling|1000x1000|LP": 6.538925400003791,
+   "lp_scaling|1000x1000|LP-ortools": 0.26706969999941066,
+   "lp_scaling|100x100|LP": 0.030833299999358132,
+   "lp_scaling|100x100|LP-ortools": 0.004488500009756535,
+   "lp_scaling|200x200|LP": 0.13527280000562314,
+   "lp_scaling|200x200|LP-ortools": 0.012185400002636015,
+   "lp_scaling|500x500|LP": 1.2861907000042265,
+   "lp_scaling|500x500|LP-ortools": 0.06333080001058988,
+   "skewed|20x20|LCM": 0.00023920000239741057,
+   "skewed|20x20|LP": 0.0012738000077661127,
+   "skewed|20x20|LP-ortools": 0.0002125000028172508,
+   "skewed|20x20|NWC": 0.00019920000340789557,
+   "skewed|20x20|VAM": 0.0015291000017896295,
+   "skewed|50x50|LCM": 0.0007323000027099624,
+   "skewed|50x50|LP": 0.014645600007497706,
+   "skewed|50x50|LP-ortools": 0.000709700005245395,
+   "skewed|50x50|NWC": 0.00034899999445769936,
+   "skewed|50x50|VAM": 0.004704999999376014,
+   "structured|100x100|LCM": 0.0025771999935386702,
+   "structured|100x100|LP": 0.036319400009233505,
+   "structured|100x100|LP-ortools": 0.004899499996099621,
+   "structured|100x100|NWC": 0.0014754000003449619,
+   "structured|100x100|VAM": 0.03428629999689292,
+   "structured|20x20|LCM": 0.0006292000034591183,
+   "structured|20x20|LP": 0.0028403000032994896,
+   "structured|20x20|LP-ortools": 0.00019239999528508633,
+   "structured|20x20|NWC": 0.00011959999392274767,
+   "structured|20x20|VAM": 0.0012865000026067719,
+   "structured|50x50|LCM": 0.001128100004279986,
+   "structured|50x50|LP": 0.0074717999959830195,
+   "structured|50x50|LP-ortools": 0.001435799989849329,
+   "structured|50x50|NWC": 0.00023119999968912452,
+   "structured|50x50|VAM": 0.005160899992915802,
+   "ties|20x20|LCM": 0.0001947999990079552,
+   "ties|20x20|LP": 0.0017672000103630126,
+   "ties|20x20|LP-ortools": 0.00018930000078398734,
+   "ties|20x20|NWC": 0.00037850000080652535,
+   "ties|20x20|VAM": 0.0014583000011043623,
+   "ties|50x50|LCM": 0.0006499000010080636,
+   "ties|50x50|LP": 0.011548700000275858,
+   "ties|50x50|LP-ortools": 0.0004819000023417175,
+   "ties|50x50|NWC": 0.00025660000392235816,
+   "ties|50x50|VAM": 0.004926800000248477,
+   "uniform|100x100|LCM": 0.0018961000023409724,
+   "uniform|100x100|LP": 0.03460099999210797,
+   "uniform|100x100|LP-ortools": 0.002686899999389425,
+   "uniform|100x100|NWC": 0.0008215000125346705,
+   "uniform|100x100|VAM": 0.012956299993675202,
+   "uniform|10x10|LCM": 6.839999696239829e-05,
+   "uniform|10x10|LP": 0.000641100006760098,
+   "uniform|10x10|LP-ortools": 5.94000011915341e-05,
+   "uniform|10x10|NWC": 4.999998782295734e-05,
+   "uniform|10x10|VAM": 0.00039879999530967325,
+   "uniform|200x200|LCM": 0.011447400000179186,
+   "uniform|200x200|LP": 0.14288729999680072,
+   "uniform|200x200|LP-ortools": 0.013124899996910244,
+   "uniform|200x200|NWC": 0.0019446000078460202,
+   "uniform|200x200|VAM": 0.08408939999935683,
+   "uniform|20x20|LCM": 0.00013139999646227807,
+   "uniform|20x20|LP": 0.001485000000684522,
+   "uniform|20x20|LP-ortools": 0.00016199999663513154,
+   "uniform|20x20|NWC": 8.720000914763659e-05,
+   "uniform|20x20|VAM": 0.0008719000034034252,
+   "uniform|30x30|LCM": 0.0002361999941058457,
+   "uniform|30x30|LP": 0.002910299997893162,
+   "uniform|30x30|LP-ortools": 0.00032469999860040843,
+   "uniform|30x30|NWC": 0.00010240000847261399,
+   "uniform|30x30|VAM": 0.001332100000581704,
+   "uniform|50x50|LCM": 0.000527299998793751,
+   "uniform|50x50|LP": 0.007550000009359792,
+   "uniform|50x50|LP-ortools": 0.0008291000121971592,
+   "uniform|50x50|NWC": 0.00020030001178383827,
+   "uniform|50x50|VAM": 0.0029614999948535115,
+   "uniform|5x5|LCM": 7.239999831654131e-05,
+   "uniform|5x5|LP": 0.0006208999984664842,
+   "uniform|5x5|LP-ortools": 7.999999797903001e-05,
+   "uniform|5x5|NWC": 6.200000643730164e-05,
+   "uniform|5x5|VAM": 0.00032219999411609024
+  },
+  "e_over_p_speed_ratio": 1.4573445029156022,
+  "monitor_overhead": {
+   "without_s": 0.588047800003551,
+   "with_reporting_s": 0.6226584999967599,
+   "overhead_percent": 5.8856950052359664
+  }
+ },
+ "phases": {
+  "reference": {
+   "runs": 560,
+   "core_s": 22.482745002344018,
+   "wall_h": 0.0003290610034424567,
+   "share": 7.594094757374365e-06
+  },
+  "main": {
+   "runs": 29400,
+   "core_s": 2410595.838872673,
+   "wall_h": 35.28186106949801,
+   "share": 0.8142374616721774
+  },
+  "stagnation": {
+   "runs": 5400,
+   "core_s": 135619.04544681852,
+   "wall_h": 1.9849417487048622,
+   "share": 0.04580863599709128
+  },
+  "legacy": {
+   "runs": 1800,
+   "core_s": 52488.34002015191,
+   "wall_h": 0.7682276267537307,
+   "share": 0.017729215348426586
+  },
+  "factorial": {
+   "runs": 72000,
+   "core_s": 263077.3197131627,
+   "wall_h": 3.850441162711218,
+   "share": 0.08886077274859176
+  },
+  "timing": {
+   "runs": 425,
+   "core_s": 41626.60835432968,
+   "wall_h": 1.4453683456364472,
+   "share": 0.033356320138955745
+  }
+ },
+ "total_wall_h": 43.331169014307704,
+ "capacity_performance_cores": 18.97887285263709,
+ "largest_items": [
+  {
+   "phase": "main",
+   "item": "uniform 200x200 RS",
+   "wall_h": 6.005422307373947
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 GA-rand-base",
+   "wall_h": 5.531547142559435
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 GA-cost-base",
+   "wall_h": 4.477181742155033
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 GA-cost-tuned",
+   "wall_h": 4.386617989726424
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 GA-rand-tuned",
+   "wall_h": 4.368597681465114
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 SA-cost-tuned",
+   "wall_h": 2.4377931068905863
+  },
+  {
+   "phase": "main",
+   "item": "uniform 200x200 SA-rand-tuned",
+   "wall_h": 2.3268473864998627
+  },
+  {
+   "phase": "factorial",
+   "item": "uniform 50x50 GA-rand",
+   "wall_h": 1.6361856967171287
+  },
+  {
+   "phase": "factorial",
+   "item": "uniform 50x50 GA-cost",
+   "wall_h": 1.6361856967171287
+  },
+  {
+   "phase": "main",
+   "item": "structured 100x100 RS",
+   "wall_h": 0.7302799991158264
+  },
+  {
+   "phase": "main",
+   "item": "uniform 100x100 RS",
+   "wall_h": 0.5083014665658956
+  },
+  {
+   "phase": "main",
+   "item": "structured 100x100 GA-cost-tuned",
+   "wall_h": 0.4638857825748424
+  }
+ ],
+ "reductions": [
+  {
+   "option": "budget cap 1,000,000 decoder calls (affects 200x200 only)",
+   "saves_h": 25.842256437086593
+  },
+  {
+   "option": "budget cap 2,000,000 decoder calls (affects 200x200 only)",
+   "saves_h": 22.150505517502797
+  },
+  {
+   "option": "200x200 in the main phase with 10 runs instead of 30",
+   "saves_h": 19.689338237780262
+  },
+  {
+   "option": "budget cap 4,000,000 decoder calls (affects 200x200 only)",
+   "saves_h": 14.767003678335195
+  },
+  {
+   "option": "drop the base GA configurations at 200x200",
+   "saves_h": 10.008728884714436
+  },
+  {
+   "option": "timing phase without 200x200 for GA and SA",
+   "saves_h": 1.3145316607301996
+  },
+  {
+   "option": "factorial plan without population 400",
+   "saves_h": 0.890390324786153
+  }
+ ]
+}
