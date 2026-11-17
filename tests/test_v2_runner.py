@@ -143,7 +143,11 @@ def test_interrupt_and_resume(tmp_path, signals):
     assert "прерван" in out
     assert not list(runs_dir.glob("*.tmp"))
     partial = list(read_parts(runs_dir, "runs"))
-    expected = 7 + 21 + 7 * 3 * 7  # LP, classical, 7 instances x 3 seeds x 7 methods
+    items = instances.build(cfg)
+    expected = sum(len(tasks.phase_tasks(cfg, ph, items)) for ph in ("reference", "main"))
+    # LP and classical on 7 synthetic instances, LP and classical on 5 wheat scenarios (amendment 4),
+    # 7 instances x 3 seeds x 7 stochastic methods
+    assert expected == 7 + 21 + 5 * 4 + 7 * 3 * 7
     assert 0 < len(partial) < expected
     res = cli("run", "--config", str(path), "--plain", "--phase", "reference", "--phase", "main")
     assert res.returncode == 0, res.stdout
