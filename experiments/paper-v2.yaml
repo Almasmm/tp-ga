@@ -96,11 +96,15 @@ phases:
     sets: [uniform, structured, skewed, ties]
     methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
     stop: budget
-    runs_by_size: {200x200: 10}  # option A (amendment 1): seeds r = 0..9 at 200x200, B = 200 m n everywhere
+    # 200x200: seeds r = 0..9 (option A, amendment 1); 50x50 and 100x100: r = 0..19 (amendment 7, e);
+    # smaller sizes: r = 0..29. B = 200 m n everywhere.
+    runs_by_size: {50x50: 20, 100x100: 20, 200x200: 10}
+    skip_methods_by_size: {200x200: [GA-rand-base, GA-cost-base]}   # amendment 7, d
   stagnation:                  # additional stopping mode: stagnation_evaluations = 0.1 B
     sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
     methods: [GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
     stop: {stagnation_evaluations_fraction: 0.1}
+    runs: 10                   # seeds r = 0..9 (amendment 7, c)
   legacy:                      # link with v0.3.0: the old rule, 200 generations without improvement
     sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
     methods: [GA-rand-base, GA-cost-base]
@@ -115,10 +119,12 @@ phases:
       swap_scaled: [0.05, 0.1, 0.25]
     initialization: [random, cost-aware]
     fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+    runs: 10                   # seeds r = 0..9 (amendment 7, b); unit of analysis: median per cell and instance
   applied:                     # illustration only (amendment 4): no test, not pooled with the synthetic sets
     sets: [wheat, astana]
     methods: [RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
     runs: 10
+    runs_by_set: {astana: 5}   # seeds r = 0..4 on the Astana instances (amendment 7, f)
     stop: budget
   representation:              # non-confirmatory (amendment 3): why the gap grows with the size
     sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]],
@@ -134,4 +140,5 @@ phases:
     runs: 3
     methods: [LP, LP-ortools, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned]
     lp_methods_only_on: [lp_scaling]
+    stochastic_max_arcs: 10000   # GA and SA up to 100x100; LP and OR-Tools on every size (amendment 7, a)
     cpu_class: performance
