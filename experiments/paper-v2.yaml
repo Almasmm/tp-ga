@@ -74,9 +74,9 @@ tuning:
   objective: mean gap (%) over training instances and seeds, budget-only stop
   space:
     ga:
-      population: [20, 400]
+      population: [20, 4000]       # widened once (amendment 2, round 2): was [20, 400]
       crossover_rate: [0.5, 1.0]
-      tournament: [2, 7]
+      tournament: [2, 9]           # widened once (amendment 2, round 2): was [2, 7]
       elite: [1, 5]
       mutation_mode: [swap_fixed, swap_count, swap_per_position, swap_scaled]
       swap_fixed: [0.01, 1.0]
@@ -85,8 +85,8 @@ tuning:
       swap_scaled: [0.01, 0.5]
     sa:
       insertion_probability: [0.0, 1.0]
-      initial_acceptance: {range: [0.001, 0.95], log: true}
-      final_ratio: [1.0e-5, 1.0e-1]
+      initial_acceptance: {range: [0.0001, 0.95], log: true}   # widened once (round 2): was [0.001, 0.95]
+      final_ratio: [1.0e-6, 0.99]  # widened once (round 2): was [1e-5, 0.1]; must stay below 1
 
 phases:
   reference:                   # LP (HiGHS via highspy), classical methods and Z_rand on every test instance
