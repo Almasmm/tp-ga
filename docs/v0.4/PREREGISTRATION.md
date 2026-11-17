@@ -241,3 +241,26 @@ with these amendments; where they differ, the amendment applies.
 * Output: `T10_applied_instances` (per scenario: mean over runs) and `T10_applied_summary` (median and range
   over the scenarios of a set; number of scenarios better than VAM; median time). No test; the cases are not
   pooled with the synthetic sets and enter no conclusion of sections 5-6.
+
+### Amendment 5 (2026-11-17, 20:55 +05:00, during round 2): final parameters are the best of rounds 1 and 2
+
+* Rule: the final parameters of each tuned method are those of the trial with the lowest mean training gap
+  among all completed trials of round 1 and round 2 of amendment 2. The same rule for all four methods.
+  On an exact tie the round-2 trial is taken. `experiments/tuned-v2.yaml` records, for every method, the
+  round and the trial number the parameters come from and the best training gap of each round.
+* Candidates: round 1 (`paper_artifacts_v2/tuning/round1/`, 100 trials per method) and round 2
+  (`paper_artifacts_v2/tuning/`, 100 trials per method, the restarted run). The 10 trials of the first start
+  of round 2 (`round2-attempt1/`) are not candidates, as stated under amendment 2. The superseded first
+  tuning (`experiments/tuned-v2-superseded.yaml`) is not a candidate: it used other training instances.
+* Why the rounds can be compared: both use the same 10 training instances (uniform 20x20 x 4, 50x50 x 4,
+  100x100 x 2, seed offset 5 000 000), the same 3 seeds, the same budget-only stop and the same objective;
+  every trial is the mean gap of the same 30 runs. Round 2 only searches a wider range.
+* Reason: round 2 searches a wider range, but 100 TPE trials in a wider space need not find a point as good
+  as the best point of round 1, which also lies inside the round-2 range. Using a worse training result only
+  because it came later would disadvantage a method for no reason related to its quality.
+* Selection uses training data only; no test instance has been run with tuned parameters. The best of 200
+  trials has a slightly optimistic training gap compared with the best of 100; this concerns the training
+  gap only, not the test results, and applies equally to all four methods.
+* Disclosed state when this rule was written: round 2 had finished 95 of 100 GA-rand trials (best training
+  gap 56.47 % against 46.14 % in round 1); GA-cost, SA-rand and SA-cost of round 2 had not started.
+  Replaces the sentence "the second result is the one used" of amendment 2.
