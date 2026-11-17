@@ -296,3 +296,45 @@ with these amendments; where they differ, the amendment applies.
 * The pilot estimates the wall time with the same rule and lists the runs that are limited by memory, with the
   number that fit at once (`paper_artifacts_v2/pilot/PILOT.md`, section Memory). The number of runs at once and
   the memory budget of each phase are written to the run log.
+
+### Amendment 7 (2026-11-17, before the main run): shorter plan, run order, 10 GiB memory reserve
+
+* Reason: время прогона; выбрано до основного прогона, по оценке пилота, без знания тестовых результатов
+  (run time; chosen before the main run, from the pilot estimate, without knowledge of any test result).
+  No run of the phases `main`, `stagnation`, `legacy`, `factorial`, `applied`, `representation` or `timing`
+  with the final tuned parameters existed when this was written; the pilot runs use shortened budgets on one
+  instance per set and size and are not used in any table.
+* Rule fixed in advance: target 14 h for the pilot estimate of all phases; the reductions a-f below are
+  applied in this order and only while the estimate is above the target. Never removed: RS and SA from
+  `main`, any phase, any instance (10 per size and set), the common seeds r = 0..k-1 of all methods.
+* Pilot with the final parameters (`paper_artifacts_v2/pilot/`, commit 2d4bec4): 28.6 h for the plan as it was
+  if memory did not limit the number of runs at once, 140.9 h with the memory free at that moment. The
+  estimate stayed above 14 h after every step, so all six reductions are applied:
+  a. `timing`: GA and SA up to 100x100 only; LP (HiGHS) and OR-Tools on every size up to 1000x1000.
+  b. `factorial`: seeds r = 0..9 instead of 0..29 (unit of analysis: median per cell and instance).
+  c. `stagnation`: seeds r = 0..9 instead of 0..29.
+  d. `main`, 200x200: without GA-rand-base and GA-cost-base (the tuned GA, SA and RS stay).
+  e. `main`, 50x50 and 100x100: seeds r = 0..19 instead of 0..29 (200x200 keeps r = 0..9; sizes below 50x50
+     keep r = 0..29).
+  f. `applied`, Astana: seeds r = 0..4 instead of 0..9 (wheat keeps r = 0..9).
+* After step f the estimate is 18.2 h without a memory limit and 21.2 h with 60 GiB for the runs, still above
+  the target. As the rule requires, the work stopped and the author was asked; the author accepted a run of
+  about 21 h with the reductions a-f and no further reduction (2026-11-17, 23:50 +05:00).
+* Consequences for the analysis. Tests still use one value per instance (median over its seeds), 10 pairs per
+  (set, size); fewer seeds make that median less precise, not the number of pairs smaller. At 200x200 the
+  comparisons with GA-rand-base (against NWC, LCM, VAM, RS, and GA-rand-tuned against GA-rand-base) are not
+  available; the Holm family of uniform 200x200 has the remaining pre-registered pairs. `T7` pairs the
+  budget-only runs of `main` (20 or 30 seeds) with the stagnation runs (10 seeds) through per-instance
+  medians. The time fits of GA and SA end at 100x100.
+* Run order (was: reference, main, stagnation, legacy, factorial, applied, representation, timing):
+  reference, representation, main, applied, factorial, stagnation, legacy, timing. Timing runs last and
+  alone, on the performance cores. Within a phase the longest runs start first, one task per submission.
+  `scripts/run_main.py` starts the phases, repeats a phase that ended with an error (recorded runs are
+  skipped) and runs `tpga-exp report` after each phase at idle priority on one processor.
+* Memory (extends amendment 6): a run starts only while 10 GiB stay free (`memory_reserve_gib: 10`; was
+  4 GiB). When the next run in the order does not fit, the first later run that fits starts instead. The
+  start order does not change any record.
+* Report additions (no change of any test): `T2` also gives the standard deviation and the minimum of the gap
+  and the decoder call at which the best plan was found; `T0` gives the share of feasible plans; the English
+  figures are also written to `figures/final_en` (600 dpi JPG and PDF); `PROGRESS.md` lists the finished
+  phases.
