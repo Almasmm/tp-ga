@@ -546,3 +546,65 @@ def test_keep_awake_holds_a_request_only_inside_the_block() -> None:
 
     with keep_awake() as ok:
         assert ok is (sys.platform == "win32")
+
+
+def test_plan_options_of_amendment_7(tuned_cfg) -> None:
+    """Fewer runs keep the first seeds; methods left out at one size; GA and SA timed up to a size."""
+    import copy
+
+    from tpga.experiments.v2.instances import build
+
+    _, path = tuned_cfg
+    cfg = ConfigV2.load(path)
+    items = build(cfg)
+    raw = copy.deepcopy(cfg.raw)
+    raw["runs"] = 3
+    raw["phases"]["factorial"]["runs"] = 1
+    raw["phases"]["main"]["skip_methods_by_size"] = {"4x5": ["GA-rand-base", "GA-cost-base"]}
+    raw["phases"]["main"]["runs_by_set"] = {"ties": 2}
+    raw["phases"]["main"]["runs_by_size"] = {"4x5": 1}
+    raw["phases"]["timing"]["sets"] = {"uniform": [[3, 3], [4, 5]], "lp_scaling": "all"}
+    raw["phases"]["timing"]["stochastic_max_arcs"] = 9
+    new = ConfigV2(raw, cfg.path)
+    fac = tasks.phase_tasks(new, "factorial", items)
+    assert {t["seed"] for t in fac} == {new.seeds(1)[0]}
+    assert len(fac) == len(tasks.phase_tasks(cfg, "factorial", items)) // cfg.runs
+    main = tasks.phase_tasks(new, "main", items)
+    at = {t["method"] for t in main if t["size"] == "4x5"}
+    assert at == set(raw["phases"]["main"]["methods"]) - {"GA-rand-base", "GA-cost-base"}
+    assert {"RS", "SA-rand-tuned", "SA-cost-tuned"} <= at  # never left out
+    assert {t["seed"] for t in main if t["set"] == "ties"} == set(new.seeds(2))
+    assert {t["seed"] for t in main if t["set"] == "structured"} == set(new.seeds(3))
+    assert {t["instance"] for t in main} == {t["instance"] for t in tasks.phase_tasks(cfg, "main", items)}
+    timing = tasks.phase_tasks(new, "timing", items)
+    assert {t["size"] for t in timing if t["kind"] != "lp"} == {"3x3"}
+    assert {t["size"] for t in timing if t["kind"] == "lp"} == {"3x3", "4x5", "6x6"}
+
+
+def test_select_tuned_takes_the_best_trial_of_both_rounds(tmp_path) -> None:
+    sys.path.insert(0, str(ROOT / "scripts"))
+    try:
+        import select_tuned
+    finally:
+        sys.path.pop(0)
+    from tpga.experiments.v2.tune import TUNED
+
+    (tmp_path / "round1").mkdir()
+    best = {"GA-rand": (1, 2), "GA-cost": (2, 1), "SA-rand": (2, 0), "SA-cost": (1, 0)}  # (round, trial)
+    for name, (rnd, trial) in best.items():
+        for r, folder in ((1, tmp_path / "round1"), (2, tmp_path)):
+            rows = [{"trial": t, "params": {"x": 10 * r + t}, "mean_gap": 5.0 + t, "runs": 30} for t in range(3)]
+            if r == rnd:
+                rows[trial]["mean_gap"] = 1.0
+            if name == "SA-rand":  # exact tie between the rounds: round 2 wins
+                rows[0]["mean_gap"] = 1.0
+            folder.joinpath(f"{name}.jsonl").write_text("".join(json.dumps(x) + "\n" for x in rows), encoding="utf-8")
+    chosen = select_tuned.select(tmp_path, 3)
+    assert set(chosen) == set(TUNED)
+    for name, (rnd, trial) in best.items():
+        assert (chosen[name]["round"], chosen[name]["trial"]) == (rnd, trial)
+        assert chosen[name]["params"] == {"x": 10 * rnd + trial}
+        assert chosen[name]["mean_gap"] == 1.0
+    assert chosen["GA-rand"]["best_mean_gap_by_round"] == {"round1": 1.0, "round2": 5.0}
+    with pytest.raises(SystemExit):
+        select_tuned.select(tmp_path, 100)  # an unfinished round is refused

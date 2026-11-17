@@ -15,6 +15,7 @@ import pandas as pd
 
 from tpga.experiments.reporting import (
     figures,
+    progress,
     t0_checks,
     t1_instances,
     t2_gap,
@@ -62,10 +63,19 @@ def tables(output: Path, runs: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
 
 TITLES = {
-    "T0_checks": ("Checks of the run", "Records, failed runs, independent feasibility check of every final plan."),
+    "T0_checks": (
+        "Checks of the run",
+        "Records, failed runs, independent feasibility check of every final plan (a check, not a comparison "
+        "metric: plans_feasible_share is expected to be 1).",
+    ),
     "T0_example1": ("Example 1 (Section 2.2)", "Recomputed by the library; shipments in the order of allocation."),
     "T1_instances": ("Instance sets", "Median LP optimum and Z_rand (mean cost of 1000 decoded random permutations)."),
-    "T2_gap": ("Gap by set, size and method", "Phases reference and main; budget-only stop."),
+    "T2_gap": (
+        "Gap by set, size and method",
+        "Phases reference and main; budget-only stop. Statistics over all runs of the instances of a (set, size); "
+        "best_eval_median is the decoder call at which the best plan of a run was found (convergence), "
+        "best_eval_share_median the same as a share of the budget.",
+    ),
     "T3_time": ("Run time", "Phase timing on performance cores; LP time is solver run time (median of repeats)."),
     "T3_fits": ("Power-law fits t = a (m n)^b", "Per-instance medians; two ranges; no extrapolation."),
     "T4_factorial": ("Factorial plan (RQ4)", "Phase factorial only; budget-only stop."),
@@ -77,7 +87,10 @@ TITLES = {
     "T8_lp_scaling": ("Exact solvers on large instances", "HiGHS (highspy) and OR-Tools min-cost flow."),
     "T8_lp_disagreement": ("Instances where the two exact solvers disagree", "Expected to be empty."),
     "A1_methods_pooled": ("Appendix: comparisons pooled over sizes", "Not used for conclusions; see T5."),
-    "T10_applied_instances": ("Illustrative cases by instance", "Stochastic methods: mean over 10 runs."),
+    "T10_applied_instances": (
+        "Illustrative cases by instance",
+        "Stochastic methods: mean over the runs (column runs).",
+    ),
     "T10_applied_summary": (
         "Illustrative cases by set",
         "Median and range over instances of the per-instance mean gap; better_than_vam counts instances.",
@@ -118,6 +131,7 @@ def generate(cfg: ConfigV2) -> dict[str, Any]:
         result["phases"] = {str(k): int(v) for k, v in runs["phase"].value_counts().sort_index().items()}
     if "reachability" in cfg.raw:
         result["reachability"] = reachability_check(cfg)
+    result["progress"] = progress.write(cfg, runs, built, result).name
     write_atomic(output / "report.json", result)
     return result
 

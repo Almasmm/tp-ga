@@ -71,3 +71,20 @@ def test_memory_status_reports_commit() -> None:
     s = environment.memory_status()
     assert s["ram_free"] > 0 and s["commit_free"] > 0 and s["commit_limit"] >= s["commit_free"]
     assert 0 < environment.usable_memory_bytes() <= s["commit_limit"]
+
+
+def test_pick_lets_a_smaller_run_overtake_one_that_waits_for_memory() -> None:
+    gate = memory.MemoryGate(workers=3, budget=5 * GIB, reserve=0, free_now=lambda: 100 * GIB)
+    needs = [4 * GIB, 4 * GIB, GIB // 2, 4 * GIB, GIB // 4]
+    waiting = list(range(5))
+    started = []
+    while (pos := memory.pick(waiting, needs, gate)) is not None:
+        i = waiting.pop(pos)
+        gate.start(i, needs[i])
+        started.append(i)
+    assert started == [0, 2, 4]  # the second 4 GiB run does not fit; the small ones start instead
+    assert memory.pick(waiting, needs, gate) is None  # all three workers are busy
+    gate.finish(0)
+    assert waiting[memory.pick(waiting, needs, gate)] == 1  # the order of the waiting runs is kept
+    assert memory.reserve_bytes({}) == memory.RESERVE_BYTES
+    assert memory.reserve_bytes({"memory_reserve_gib": 10}) == 10 * GIB

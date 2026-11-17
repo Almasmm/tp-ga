@@ -260,6 +260,23 @@ def test_generate_on_partial_and_full_records(tmp_path: Path) -> None:
     assert res["tables"]["T2_gap"] == 2
     assert res["phases"] == {"main": 8, "reference": 4}
     assert any(f.endswith("boxplot_gap.pdf") for f in res["figures"])
+    final = tmp_path / "out" / "figures" / "final_en"  # for the article: 600 dpi JPG and PDF, serif font
+    assert (final / "boxplot_gap.jpg").stat().st_size > 0 and (final / "boxplot_gap.pdf").exists()
+    from PIL import Image
+
+    with Image.open(final / "boxplot_gap.jpg") as im:
+        assert round(im.info["dpi"][0]) == 600
+    import matplotlib
+
+    assert matplotlib.rcParams["font.family"][0] in ("Times New Roman", "DejaVu Serif")
+    t2 = pd.read_csv(tmp_path / "out" / "tables" / "T2_gap.csv")
+    ga = t2[t2["method"] == "GA-rand-base"].iloc[0]
+    assert (ga["gap_min"], ga["gap_max"], ga["gap_mean"]) == (2.0, 5.0, 3.5)
+    assert ga["gap_std"] == pytest.approx(np.std([2, 2, 3, 3, 4, 4, 5, 5], ddof=1))
+    progress = (tmp_path / "out" / "PROGRESS.md").read_text(encoding="utf-8")
+    assert "| main | 8 runs recorded (plan not available) |" in progress and "figures/final_en" in progress
+    t0 = pd.read_csv(tmp_path / "out" / "tables" / "T0_checks.csv")
+    assert "plans_feasible_share" in t0.columns
     assert json.loads((tmp_path / "out" / "report.json").read_text(encoding="utf-8"))["runs"] == 12
 
 

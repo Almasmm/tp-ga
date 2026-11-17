@@ -147,18 +147,23 @@ def execute_tasks(
         initargs=(cpu_queue, classes, status, str(cfg.raw.get("priority", "above_normal")), 1.0),
     )
     pending: dict[Future, dict[str, Any]] = {}
-    # A run starts only while its memory is free (memory.MemoryGate); runs start in the order of `todo`.
-    gate = memory.MemoryGate(len(cpus))
+    # A run starts only while its memory is free (memory.MemoryGate). Runs start in the order of `todo`
+    # (longest first); when the next one does not fit, the first later run that fits starts instead, so a
+    # large run never leaves processors idle. The start order does not change any result.
+    gate = memory.MemoryGate(len(cpus), reserve=memory.reserve_bytes(cfg.raw))
     append_jsonl(log_path, {"time": time.time(), "event": "memory", "phase": phase, "budget_bytes": gate.budget})
-    nxt = 0
+    needs = [memory.task_bytes(t) for t in todo]
+    waiting = list(range(len(todo)))
 
     def fill() -> None:
-        nonlocal nxt
-        while nxt < len(todo) and interrupt.count == 0 and gate.admits(memory.task_bytes(todo[nxt])):
-            fut = pool.submit(methods.execute, todo[nxt])
-            gate.start(fut, memory.task_bytes(todo[nxt]))
-            pending[fut] = todo[nxt]
-            nxt += 1
+        while interrupt.count == 0:
+            pos = memory.pick(waiting, needs, gate)
+            if pos is None:
+                break
+            i = waiting.pop(pos)
+            fut = pool.submit(methods.execute, todo[i])
+            gate.start(fut, needs[i])
+            pending[fut] = todo[i]
 
     aborted = False
     try:

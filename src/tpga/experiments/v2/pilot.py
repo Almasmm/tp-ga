@@ -23,7 +23,7 @@ from tpga.experiments.v2.instances import APPLIED, InstanceV2, build
 from tpga.experiments.v2.runner import init_worker
 from tpga.experiments.v2.tasks import phase_tasks, reference_tasks, stochastic_tasks
 
-PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "applied", "representation", "timing")
+PHASES = ("reference", "representation", "main", "applied", "factorial", "stagnation", "legacy", "timing")
 SPLIT_BY_SET = ("applied",)  # phases whose estimate is also given per instance set
 
 
@@ -240,7 +240,7 @@ def estimate_plan(
     from tpga.experiments.v2 import memory
 
     if memory_budget is None:
-        memory_budget = environment.usable_memory_bytes() - memory.RESERVE_BYTES
+        memory_budget = environment.usable_memory_bytes() - memory.reserve_bytes(cfg.raw)
     capacity = p_cores + (workers - p_cores) / ratio  # performance-core equivalents
     phases: dict[str, Any] = {}
     detail: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
@@ -362,7 +362,7 @@ def markdown(result: dict[str, Any]) -> str:
             "## Memory",
             "",
             f"Memory runs may use: {result['memory_budget_gib']:.1f} GiB (smaller of free RAM and free commit when the "
-            "estimate was made, less 4 GiB). A run starts only while its memory is free; the times above include "
+            "estimate was made, less the reserve). A run starts only while its memory is free; the times above include "
             "the slowdown where fewer runs fit at once.",
         ]
         if lim:

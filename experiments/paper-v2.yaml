@@ -19,6 +19,7 @@ convergence_points: 100
 zrand_samples: 1000            # random permutations decoded to estimate Z_rand of an instance
 workers: 24                    # quality phases: one pinned process per logical processor
 priority: above_normal
+memory_reserve_gib: 10         # a run starts only while this much memory stays free (amendments 6 and 7)
 state_interval_s: 3            # how often the state file for the web monitor is rewritten
 
 # Check of Proposition 2 written by `tpga-exp report` (Section 3.1): the permutation built from the HiGHS
