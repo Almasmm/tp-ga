@@ -9,7 +9,9 @@ in the configuration (``experiments/tuned-v2.yaml``) together with the trial log
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
+import math
 import multiprocessing as mp
 import statistics
 from concurrent.futures import ProcessPoolExecutor
@@ -33,41 +35,99 @@ TUNED = {
 }
 
 
+def bounds(spec: Any, log_default: bool) -> tuple[float, float, bool]:
+    """``[lo, hi]`` (scale as before) or ``{range: [lo, hi], log: bool}``."""
+    if isinstance(spec, dict):
+        lo, hi = spec["range"]
+        return float(lo), float(hi), bool(spec.get("log", log_default))
+    lo, hi = spec
+    return float(lo), float(hi), log_default
+
+
+#: parameters of each kind, with the scale used when the space gives a plain [lo, hi]
+SA_PARAMS = {"insertion_probability": False, "initial_acceptance": False, "final_ratio": True}
+GA_FLOATS = {"crossover_rate": False, "swap_fixed": True, "swap_per_position": True, "swap_scaled": True}
+GA_INTS = {"population": True, "tournament": False, "elite": False, "swap_count": False}
+
+
 def suggest(trial: Any, kind: str, space: dict[str, Any]) -> dict[str, Any]:
+    def f(name: str, s: dict[str, Any], log: bool) -> float:
+        lo, hi, lg = bounds(s[name], log)
+        return float(trial.suggest_float(name, lo, hi, log=lg))
+
+    def i(name: str, s: dict[str, Any], log: bool) -> int:
+        lo, hi, lg = bounds(s[name], log)
+        return int(trial.suggest_int(name, int(lo), int(hi), log=lg))
+
     if kind == "sa":
         s = space["sa"]
-        return {
-            "insertion_probability": trial.suggest_float("insertion_probability", *s["insertion_probability"]),
-            "initial_acceptance": trial.suggest_float("initial_acceptance", *s["initial_acceptance"]),
-            "final_ratio": trial.suggest_float("final_ratio", *s["final_ratio"], log=True),
-        }
+        return {name: f(name, s, log) for name, log in SA_PARAMS.items()}
     g = space["ga"]
-    pop = trial.suggest_int("population", *g["population"], log=True)
+    pop = i("population", g, True)
     mode = trial.suggest_categorical("mutation_mode", g["mutation_mode"])
     p: dict[str, Any] = {
         "population": pop,
-        "crossover_rate": trial.suggest_float("crossover_rate", *g["crossover_rate"]),
-        "tournament": min(pop, trial.suggest_int("tournament", *g["tournament"])),
-        "elite": min(pop - 1, trial.suggest_int("elite", *g["elite"])),
+        "crossover_rate": f("crossover_rate", g, False),
+        "tournament": min(pop, i("tournament", g, False)),
+        "elite": min(pop - 1, i("elite", g, False)),
         "mutation_mode": mode,
     }
-    lo, hi = g[mode]
     if mode == "swap_fixed":
-        p["mutation_rate"] = trial.suggest_float("swap_fixed", lo, hi, log=True)
+        p["mutation_rate"] = f("swap_fixed", g, True)
     elif mode == "swap_count":
-        p["mutation_strength"] = trial.suggest_int("swap_count", lo, hi)
+        p["mutation_strength"] = i("swap_count", g, False)
     else:
-        p["mutation_strength"] = trial.suggest_float(mode, lo, hi, log=True)
+        p["mutation_strength"] = f(mode, g, True)
     return p
+
+
+def near_bounds(kind: str, params: dict[str, Any], space: dict[str, Any], share: float = 0.05) -> list[dict[str, Any]]:
+    """Parameters within ``share`` of the width of their range from a bound (on the scale they were sampled)."""
+    if kind == "sa":
+        items = [(name, params[name], space["sa"][name], log) for name, log in SA_PARAMS.items()]
+    else:
+        g = space["ga"]
+        items = [(n, params[n], g[n], log) for n, log in {**GA_INTS, **GA_FLOATS}.items() if n in params]
+        mode = params["mutation_mode"]
+        value = params["mutation_rate"] if mode == "swap_fixed" else params["mutation_strength"]
+        items.append((mode, value, g[mode], {**GA_INTS, **GA_FLOATS}[mode]))
+    out = []
+    for name, value, spec, log in items:
+        lo, hi, lg = bounds(spec, log)
+        t = (lambda v: math.log(v)) if lg else (lambda v: v)
+        width = t(hi) - t(lo)
+        for side, bound in (("lower", lo), ("upper", hi)):
+            if abs(t(float(value)) - t(bound)) <= share * width:
+                out.append({"parameter": name, "value": value, "side": side, "bound": bound, "log": lg})
+    return out
+
+
+def per_size_counts(spec: Any) -> dict[str, int] | int:
+    return {str(k): int(v) for k, v in spec.items()} if isinstance(spec, dict) else int(spec)
+
+
+def overlap_with_test(cfg: ConfigV2, train: list[Any]) -> int:
+    """Number of training instance files whose SHA-256 is in the test manifest (must be 0)."""
+    path = cfg.output / "instances" / "manifest.json"
+    if not path.exists():
+        build(cfg)
+    test = {e["sha256"] for e in json.loads(path.read_text(encoding="utf-8"))["instances"].values()}
+    return sum(hashlib.sha256(i.path.read_bytes()).hexdigest() in test for i in train)
 
 
 def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, Any]:
     import optuna
 
     spec = cfg.raw["tuning"]
-    train = select(
-        build(cfg, split="train", sets=list(spec["sets"]), per_size=int(spec["instances_per_size"])), spec["sets"]
-    )
+    counts = per_size_counts(spec["instances_per_size"])
+    most = max(counts.values()) if isinstance(counts, dict) else counts
+    train = select(build(cfg, split="train", sets=list(spec["sets"]), per_size=most), spec["sets"])
+    if isinstance(counts, dict):
+        train = [i for i in train if int(i.id.split("-")[1]) < counts.get(i.size, most)]
+    overlap = overlap_with_test(cfg, train)
+    if overlap:
+        raise RuntimeError(f"{overlap} training instances have the SHA-256 of a test instance")
+    train.sort(key=lambda i: -i.m * i.n)  # largest first: the slowest runs start at once
     z = {i.id: solve_lp_highspy(methods.load(str(i.path))).cost for i in train}
     seeds = cfg.seeds(int(spec["seeds"]))
     out_dir = cfg.output / "tuning"
@@ -128,9 +188,12 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
         "procedure": {
             k: spec[k] for k in ("sampler", "seed", "trials", "sets", "instances_per_size", "seeds", "objective")
         },
+        "space": spec["space"],
         "training_instances": sorted(i.id for i in train),
+        "training_overlap_with_test": overlap,
         "parameters": {k: v["params"] for k, v in results.items()},
         "best_objective": {k: v["mean_gap"] for k, v in results.items()},
+        "near_bounds": {k: near_bounds(TUNED[k][0], v["params"], spec["space"]) for k, v in results.items()},
     }
     previous = yaml.safe_load(cfg.tuned_path.read_text(encoding="utf-8")) if cfg.tuned_path.exists() else None
     if previous and methods_to_tune:
