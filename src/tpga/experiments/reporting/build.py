@@ -15,6 +15,7 @@ import pandas as pd
 
 from tpga.experiments.reporting import (
     figures,
+    t0_checks,
     t1_instances,
     t2_gap,
     t3_time,
@@ -58,6 +59,8 @@ def tables(output: Path, runs: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
 
 TITLES = {
+    "T0_checks": ("Checks of the run", "Records, failed runs, independent feasibility check of every final plan."),
+    "T0_example1": ("Example 1 (Section 2.2)", "Recomputed by the library; shipments in the order of allocation."),
     "T1_instances": ("Instance sets", "Median LP optimum and Z_rand (mean cost of 1000 decoded random permutations)."),
     "T2_gap": ("Gap by set, size and method", "Phases reference and main; budget-only stop."),
     "T3_time": ("Run time", "Phase timing on performance cores; LP time is solver run time (median of repeats)."),
@@ -86,6 +89,8 @@ def generate(cfg: ConfigV2) -> dict[str, Any]:
     out_tables = output / "tables"
     result: dict[str, Any] = {"runs": int(len(runs)), "curve_rows": int(len(curves)), "tables": {}, "figures": []}
     built = tables(output, runs)
+    built["T0_checks"] = t0_checks.checks(output, runs)
+    built["T0_example1"] = t0_checks.example1()
     rep = t9_representation.load(output)
     built["representation"] = t9_representation.table(rep)
     for name, df in built.items():
@@ -103,8 +108,25 @@ def generate(cfg: ConfigV2) -> dict[str, Any]:
         result["figures"] += figures.representation_neutrality(rep, fig_dir)
     if len(runs):
         result["phases"] = {str(k): int(v) for k, v in runs["phase"].value_counts().sort_index().items()}
+    if "reachability" in cfg.raw:
+        result["reachability"] = reachability_check(cfg)
     write_atomic(output / "report.json", result)
     return result
+
+
+def reachability_check(cfg: ConfigV2) -> dict[str, Any]:
+    """Run the reachability check once (``reachability.json``) and return its summary without the cases."""
+    from types import SimpleNamespace
+
+    from tpga.experiments import reachability
+
+    path = cfg.output / "reachability.json"
+    if not path.exists():
+        ns = SimpleNamespace(base_seed=int(cfg.raw["base_seed"]), tolerance=cfg.tolerance, output=cfg.output)
+        reachability.run(ns, cfg.raw["reachability"])  # type: ignore[arg-type]
+        path.write_text(path.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")  # LF on every system
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {k: v for k, v in data.items() if k not in ("cases", "failures")}
 
 
 def summary_text(result: dict[str, Any]) -> str:

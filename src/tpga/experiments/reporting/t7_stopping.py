@@ -31,6 +31,9 @@ def table(runs: pd.DataFrame) -> pd.DataFrame:
                 "gap_median": part["gap"].median(),
                 "evals_median": part["evals"].median(),
                 "time_median_s": part["time_s"].median(),
+                "stopped_early_share": float((part["stop_reason"] != "budget").mean()),
+                "budget_used_median": float((part["evals"] / part["budget"]).median()),
+                "best_found_median": float((part["best_eval"] / part["budget"]).median()),
             }
             if phase != "main" and "main" in per and phase in per:
                 pair = per[["main", phase]].dropna()

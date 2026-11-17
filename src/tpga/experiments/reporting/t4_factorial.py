@@ -64,7 +64,15 @@ def table(runs: pd.DataFrame) -> pd.DataFrame:
                 "time_median_s": g["time_s"].median(),
             }
         )
-    return sort_frame(pd.DataFrame(rows), ["size", "initialization", "population", "mutation"])
+    out = pd.DataFrame(rows)
+    # mean rank of a cell over the instances of its (size, start) group (1 = smallest per-instance median gap)
+    med = f.groupby(["size", "initialization", "instance", "population", "mutation"])["gap"].median().reset_index()
+    med["rank"] = med.groupby(["size", "initialization", "instance"])["gap"].rank(method="average")
+    ranks = med.groupby(["size", "initialization", "population", "mutation"])["rank"].mean().reset_index()
+    out = out.merge(
+        ranks.rename(columns={"rank": "mean_rank"}), on=["size", "initialization", "population", "mutation"]
+    )
+    return sort_frame(out, ["size", "initialization", "population", "mutation"])
 
 
 def tests(runs: pd.DataFrame) -> pd.DataFrame:

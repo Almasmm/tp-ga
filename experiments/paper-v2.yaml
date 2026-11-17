@@ -21,6 +21,10 @@ workers: 24                    # quality phases: one pinned process per logical 
 priority: above_normal
 state_interval_s: 3            # how often the state file for the web monitor is rewritten
 
+# Check of Proposition 2 written by `tpga-exp report` (Section 3.1): the permutation built from the HiGHS
+# optimal basis must decode to that vertex. Same generator and seed as v0.3.0.
+reachability: {instances: 1000, seed: 20261117, min_size: 2, max_size: 30, max_supply: 20, max_cost: 100}
+
 # Decoder-call budget B = min(factor * m * n, cap). The cap equals 200 m n at 200x200, so it is not active
 # (option A of the budget decision, PREREGISTRATION.md section 9, amendment 1).
 budget: {factor: 200, cap: 8000000}
@@ -60,6 +64,7 @@ tuning:
   sampler: TPE
   seed: 20261201
   trials: 100                  # the same for every tuned method (40 before amendment 2, PREREGISTRATION.md section 9)
+  parallel_trials: 5           # trials evaluated together (ask/tell, TPE constant_liar); amendment 2
   sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
   instances_per_size: {20x20: 4, 50x50: 4, 100x100: 2}
   seeds: 3

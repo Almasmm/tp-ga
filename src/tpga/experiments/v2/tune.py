@@ -140,43 +140,48 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
         q.put(c)
     pool = ProcessPoolExecutor(len(cpus), initializer=init_worker, initargs=(q, classes, None, "normal", 1.0))
     results: dict[str, Any] = {}
+    parallel = int(spec.get("parallel_trials", 1))
     try:
         for name in methods_to_tune or list(TUNED):
             kind, init = TUNED[name]
             log = out_dir / f"{name}.jsonl"
             log.unlink(missing_ok=True)
 
-            def objective(trial: Any, kind: str = kind, init: str = init, name: str = name, log: Any = log) -> float:
-                params = suggest(trial, kind, spec["space"])
-                override = {**params, "init": init}
-                tasks = (
-                    stochastic_tasks(
-                        cfg,
-                        "tune",
-                        train,
-                        [name],
-                        "budget",
-                        seeds,
-                        params_override={name: override} if kind == "ga" else None,
-                    )
-                    if kind == "ga"
-                    else _sa_tasks(cfg, train, name, params, init, seeds)
-                )
+            def trial_tasks(params: dict[str, Any], kind: str = kind, init: str = init, name: str = name) -> list:
+                if kind == "ga":
+                    override = {name: {**params, "init": init}}
+                    tasks = stochastic_tasks(cfg, "tune", train, [name], "budget", seeds, params_override=override)
+                else:
+                    tasks = _sa_tasks(cfg, train, name, params, init, seeds)
                 for t in tasks:
                     t["z_star"] = z[t["instance"]]
-                gaps = [r["gap"] for r, _ in pool.map(methods.execute, tasks)]
-                value = statistics.fmean(gaps)
-                with log.open("a", encoding="utf-8", newline="\n") as fh:
-                    fh.write(
-                        json.dumps({"trial": trial.number, "params": params, "mean_gap": value, "runs": len(gaps)})
-                        + "\n"
-                    )
-                return value
+                return tasks
 
-            sampler = optuna.samplers.TPESampler(seed=int(spec["seed"]))
+            # Trials run in batches of `parallel_trials` (ask/tell). TPE with constant_liar treats the trials
+            # already asked in the batch as running, and the batch is told in trial order after all its runs
+            # finished, so the result depends on the seed only (not on which run finishes first).
+            sampler = optuna.samplers.TPESampler(seed=int(spec["seed"]), constant_liar=parallel > 1)
             study = optuna.create_study(direction="minimize", sampler=sampler, study_name=name)
             optuna.logging.set_verbosity(optuna.logging.WARNING)
-            study.optimize(objective, n_trials=int(spec["trials"]))
+            n_trials = int(spec["trials"])
+            while len(study.trials) < n_trials:
+                batch = []
+                for _ in range(min(parallel, n_trials - len(study.trials))):
+                    trial = study.ask()
+                    params = suggest(trial, kind, spec["space"])
+                    batch.append((trial, params, trial_tasks(params)))
+                jobs = [(b, t) for b, (_, _, tasks) in enumerate(batch) for t in tasks]
+                jobs.sort(key=lambda j: -int(j[1]["m"]) * int(j[1]["n"]))  # the slowest runs start first
+                futures = [(b, pool.submit(methods.execute, t)) for b, t in jobs]
+                gaps: list[list[float]] = [[] for _ in batch]
+                for b, fut in futures:
+                    gaps[b].append(float(fut.result()[0]["gap"]))
+                with log.open("a", encoding="utf-8", newline="\n") as fh:
+                    for (trial, params, _), g in zip(batch, gaps, strict=True):
+                        value = statistics.fmean(g)
+                        study.tell(trial, value)
+                        line = {"trial": trial.number, "params": params, "mean_gap": value, "runs": len(g)}
+                        fh.write(json.dumps(line) + "\n")
             best = json.loads(log.read_text(encoding="utf-8").splitlines()[study.best_trial.number])
             results[name] = {"params": best["params"], "mean_gap": study.best_value, "trials": len(study.trials)}
     finally:
@@ -187,7 +192,8 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
         "git_commit": environment.describe(cfg.root).get("git_commit"),
         "procedure": {
             k: spec[k] for k in ("sampler", "seed", "trials", "sets", "instances_per_size", "seeds", "objective")
-        },
+        }
+        | {"parallel_trials": parallel, "constant_liar": parallel > 1},
         "space": spec["space"],
         "training_instances": sorted(i.id for i in train),
         "training_overlap_with_test": overlap,
