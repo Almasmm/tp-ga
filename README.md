@@ -82,6 +82,34 @@ python -m tpga.experiments.report --config experiments/paper.yaml
 The results, instances, figures (English and Russian), tables, `METHODS.md`, `LIMITATIONS.md` and
 `NUMBERS.md` (every number with its source) are in [`paper_artifacts/`](paper_artifacts/README.md).
 
+## Paper materials
+
+The article is based on the data of release 0.3.0. These files belong to it:
+
+| Path | Content |
+|---|---|
+| [`experiments/paper.yaml`](experiments/paper.yaml) | Configuration of the experiment (instances, methods, seeds, budget) |
+| [`paper_artifacts/`](paper_artifacts/README.md) | Instances, raw runs, tables, figures (English and Russian), `METHODS.md`, `LIMITATIONS.md`, `NUMBERS.md` |
+| [`paper_artifacts_supplement/neutrality/`](paper_artifacts_supplement/neutrality) | Check of Proposition 3 on the test instances: share of neutral swaps, the two kinds of non-neutral swaps, exceptions (0) |
+| [`paper_artifacts_supplement/normalised_gap/`](paper_artifacts_supplement/normalised_gap) | `Z_rand` of every instance and the normalised gap `(Z - Z*) / (Z_rand - Z*)` of the runs of the main phase |
+| [`scripts/neutrality_check.py`](scripts/neutrality_check.py), [`scripts/normalised_gap.py`](scripts/normalised_gap.py) | The scripts that write the two supplement folders |
+| [`tests/test_proposition3.py`](tests/test_proposition3.py) | Property test of Proposition 3 on random and degenerate instances |
+
+Reproduce from the repository root (tag `v0.3.1-paper`):
+
+```bash
+pip install -e .[dev]
+python -m tpga.experiments.report --config experiments/paper.yaml   # tables and figures of v0.3.0 from the raw runs
+python scripts/neutrality_check.py                                  # paper_artifacts_supplement/neutrality
+python scripts/normalised_gap.py                                    # paper_artifacts_supplement/normalised_gap
+pytest tests/test_proposition3.py
+```
+
+Both scripts use fixed seeds and write the same files on every run. `normalised_gap.py` keeps the `Z_rand`
+values already in `zrand.csv`; delete that file to compute them again (a few minutes on one core).
+`scripts/watch_tuning.py` is a read-only terminal view of the parameter tuning of the next version (v0.4,
+branch `work/v0.4`); it is not needed for the article.
+
 ## Project structure
 
 ```text
@@ -89,9 +117,10 @@ src/tpga/              model, decoder, ga (+ compiled _kernels), exact, classica
 src/tpga/experiments/  configuration, instance sets, runner, reachability check, report
 experiments/           paper.yaml
 paper_artifacts/       instances, raw results, tables, figures and documents of the paper
+paper_artifacts_supplement/  Proposition 3 check and normalised gap for the v0.3.0 results
 platform/              FastAPI backend (app/, migrations/, tests/), Next.js interface (web/), Dockerfile, docker-compose
 datasets/              kazakh-wheat (with rail-pilot), astana-potato
-scripts/               dev.ps1 (local platform), benchmark.py, rail tools
+scripts/               dev.ps1 (local platform), benchmark.py, rail tools, neutrality_check.py, normalised_gap.py, watch_tuning.py
 tests/                 unit, property (hypothesis), kernel, experiment and CLI tests (pytest)
 .github/               CI and release workflows, Dependabot, issue and PR templates
 ```
