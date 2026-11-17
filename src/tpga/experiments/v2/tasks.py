@@ -147,10 +147,11 @@ def factorial_tasks(cfg: ConfigV2, items: list[InstanceV2]) -> list[dict[str, An
                 p["mutation_strength"] = level
             name = f"GA-{'rand' if init == 'random' else 'cost'}"
             overrides[f"{name}|{pop}|{mode}|{level}"] = p
+    seeds = cfg.seeds(int(spec["runs"])) if "runs" in spec else cfg.seeds()  # seeds r = 0..runs-1
     tasks = []
     for label, p in overrides.items():
         method = label.split("|")[0]
-        for t in stochastic_tasks(cfg, "factorial", chosen, [label], "budget", cfg.seeds(), params_override={label: p}):
+        for t in stochastic_tasks(cfg, "factorial", chosen, [label], "budget", seeds, params_override={label: p}):
             t["method"] = method
             tasks.append(t)
     return tasks
@@ -173,18 +174,27 @@ def phase_tasks(cfg: ConfigV2, phase: str, items: list[InstanceV2]) -> list[dict
         lp_methods = [m for m in spec["methods"] if cfg.method(m)["kind"] == "lp"]
         other = [m for m in spec["methods"] if m not in lp_methods]
         tasks = reference_tasks(cfg, phase, chosen, lp_methods)
-        tasks += stochastic_tasks(
-            cfg, phase, [i for i in chosen if i.set not in lp_only], other, "budget", cfg.seeds(int(spec["runs"]))
-        )
+        # stochastic_max_arcs: GA and SA are timed up to this m*n only (the exact solvers on every size)
+        limit = int(spec.get("stochastic_max_arcs", 0))
+        timed = [i for i in chosen if i.set not in lp_only and (not limit or i.m * i.n <= limit)]
+        tasks += stochastic_tasks(cfg, phase, timed, other, "budget", cfg.seeds(int(spec["runs"])))
         return tasks
-    # runs_by_size: {"200x200": 10} runs seeds r = 0..9 at that size (the first ones of the common seeds)
+    # Number of runs of an instance: runs_by_size, then runs_by_set, then the phase's `runs`, then cfg.runs.
+    # k runs are always the seeds r = 0..k-1, the same for every method (common random numbers).
     by_size = {str(k): int(v) for k, v in (spec.get("runs_by_size") or {}).items()}
+    by_set = {str(k): int(v) for k, v in (spec.get("runs_by_set") or {}).items()}
     default = int(spec.get("runs", cfg.runs))  # a phase may set its own number of runs (applied: 10)
+    # skip_methods_by_size: {"200x200": [GA-rand-base, ...]} leaves these methods out at that size
+    skip = {str(k): set(v) for k, v in (spec.get("skip_methods_by_size") or {}).items()}
+
+    def runs_of(i: InstanceV2) -> int:
+        return by_size.get(i.size, by_set.get(i.set, default))
+
     chosen = select(items, spec["sets"])
     tasks = []
-    for runs in sorted({by_size.get(i.size, default) for i in chosen}):
-        group = [i for i in chosen if by_size.get(i.size, default) == runs]
+    for runs in sorted({runs_of(i) for i in chosen}):
+        group = [i for i in chosen if runs_of(i) == runs]
         tasks += stochastic_tasks(
             cfg, phase, group, list(spec["methods"]), spec.get("stop"), cfg.seeds(runs), curve=(phase == "main")
         )
-    return tasks
+    return [t for t in tasks if t["method"] not in skip.get(t["size"], ())]

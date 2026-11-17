@@ -47,6 +47,9 @@ def checks(output: Path, runs: pd.DataFrame) -> pd.DataFrame:
                 "failed_runs": sum(1 for e in errors if e.get("phase") == phase),
                 "plans_checked": len(plans),
                 "plans_infeasible": int((plans["feasible"] != True).sum()) if len(plans) else 0,  # noqa: E712
+                "plans_feasible_share": float((plans["feasible"] == True).mean())  # noqa: E712
+                if len(plans)
+                else np.nan,
                 "max_residual": float(plans["max_residual"].max())
                 if len(plans) and "max_residual" in plans
                 else np.nan,
@@ -63,6 +66,9 @@ def checks(output: Path, runs: pd.DataFrame) -> pd.DataFrame:
                 k: sum(int(r[k]) for r in rows) for k in ("records", "failed_runs", "plans_checked", "plans_infeasible")
             },
         }
+        checked = sum(int(r["plans_checked"]) for r in rows)
+        bad = sum(int(r["plans_infeasible"]) for r in rows)
+        total["plans_feasible_share"] = (checked - bad) / checked if checked else np.nan
         total["max_residual"] = _nanmax([r["max_residual"] for r in rows])
         total["max_dummy_volume"] = _nanmax([r["max_dummy_volume"] for r in rows])
         total["wall_h"] = float(np.nansum([r["wall_h"] for r in rows]))

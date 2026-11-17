@@ -8,12 +8,15 @@ from tpga.experiments.environment import single_thread_environment
 single_thread_environment()
 
 import argparse  # noqa: E402
+import json  # noqa: E402
 import os  # noqa: E402
 import sys  # noqa: E402
 import time  # noqa: E402
 from typing import Any  # noqa: E402
 
-PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "applied", "representation", "timing")
+# Order of a full run (amendment 7): the phases the article needs first; timing last and alone, on the
+# performance cores only.
+PHASES = ("reference", "representation", "main", "applied", "factorial", "stagnation", "legacy", "timing")
 
 
 def _cfg(path: str):
@@ -36,7 +39,14 @@ def cmd_doctor(args: argparse.Namespace) -> int:
 def cmd_pilot(args: argparse.Namespace) -> int:
     from tpga.experiments.v2 import pilot
 
-    result = pilot.run(_cfg(args.config))
+    cfg = _cfg(args.config)
+    if args.reestimate:  # the plan of the configuration as it is now, on the measurements of the last pilot
+        result = pilot.reestimate(cfg)
+        out_dir = cfg.output / "pilot"
+        (out_dir / "estimate.json").write_text(json.dumps(result, indent=1) + "\n", encoding="utf-8", newline="\n")
+        (out_dir / "PILOT.md").write_text(pilot.markdown(result), encoding="utf-8", newline="\n")
+    else:
+        result = pilot.run(cfg)
     print((_cfg(args.config).output / "pilot" / "PILOT.md").read_text(encoding="utf-8"))
     return 0 if result else 1
 
@@ -168,6 +178,12 @@ def main(argv: list[str] | None = None) -> int:
             p.add_argument("--phase", action="append", choices=PHASES)
             p.add_argument("--plain", action="store_true", help="one line per finished run (no TTY needed)")
             p.add_argument("--priority", choices=["normal", "above_normal"])
+        if name == "pilot":
+            p.add_argument(
+                "--reestimate",
+                action="store_true",
+                help="no new runs: estimate the current plan from the measurements of the last pilot",
+            )
         if name == "tune":
             p.add_argument("--method", action="append", choices=["GA-rand", "GA-cost", "SA-rand", "SA-cost"])
     args = ap.parse_args(argv)

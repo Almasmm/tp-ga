@@ -10,8 +10,9 @@ the peak private bytes measured on this machine (2026-11-17, numerical libraries
 * A process that imports NumPy without ``OPENBLAS_NUM_THREADS=1`` commits about 1.5 GiB of OpenBLAS buffers
   before doing any work; the runners set the variable before NumPy is imported.
 
-The gate admits runs in the given order (no run overtakes another), so the order of the results and every
-result are the same as without it; only the number of runs at once can be smaller.
+The tuning admits runs in the given order; the runner lets a later run that fits overtake one that waits for
+memory. Results are collected by key or by index, so every
+result is the same as without the gate; only the number of runs at once can be smaller.
 """
 
 from __future__ import annotations
@@ -26,6 +27,11 @@ MIB = 2**20
 GIB = 2**30
 BASE_BYTES = 150 * MIB
 RESERVE_BYTES = 4 * GIB  # left to the system and to other programs
+
+
+def reserve_bytes(raw: dict[str, Any]) -> int:
+    """Memory left free by a run: ``memory_reserve_gib`` of the configuration (default 4 GiB)."""
+    return int(float(raw.get("memory_reserve_gib", RESERVE_BYTES / GIB)) * GIB)
 
 
 def ga_bytes(population: int, arcs: int) -> int:
@@ -94,6 +100,24 @@ class MemoryGate:
 
     def finish(self, key: Any) -> None:
         self.running.pop(key, None)
+
+
+def pick(waiting: list[int], needs: list[int], gate: MemoryGate) -> int | None:
+    """Position in ``waiting`` of the first run the gate admits now; None when no waiting run fits.
+
+    ``waiting`` holds indices into ``needs`` in the order the runs should start. A run that does not fit is
+    passed over together with every later run that needs at least as much.
+    """
+    if len(gate.running) >= gate.workers:
+        return None
+    refused: int | None = None
+    for pos, i in enumerate(waiting):
+        if refused is not None and needs[i] >= refused:
+            continue
+        if gate.admits(needs[i]):
+            return pos
+        refused = needs[i]
+    return None
 
 
 def run_gated(

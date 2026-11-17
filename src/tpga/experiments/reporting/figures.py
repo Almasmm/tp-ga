@@ -1,4 +1,8 @@
-"""Figures of the v0.4 report, each in English and Russian (PNG 600 dpi and PDF without a timestamp)."""
+"""Figures of the v0.4 report, each in English and Russian (PNG 600 dpi and PDF without a timestamp).
+
+The English figures are also written to ``figures/final_en`` as 600 dpi JPG and PDF for the article. The font
+is Times New Roman, or DejaVu Serif where it is not installed.
+"""
 
 from __future__ import annotations
 
@@ -37,11 +41,12 @@ LABELS = {
     },
 }
 LANGS = ("en", "ru")
+FINAL_LANG, FINAL_DIR = "en", "final_en"
 
 
 def setup_fonts() -> str:
     names = {f.name for f in font_manager.fontManager.ttflist}
-    family = "Times New Roman" if "Times New Roman" in names else "serif"
+    family = "Times New Roman" if "Times New Roman" in names else "DejaVu Serif"  # both have serifs
     plt.rcParams.update(
         {
             "font.family": family,
@@ -66,8 +71,15 @@ def save(fig: plt.Figure, out: Path, lang: str, name: str) -> list[str]:
     d.mkdir(parents=True, exist_ok=True)
     fig.savefig(d / f"{name}.png", dpi=600)
     fig.savefig(d / f"{name}.pdf", metadata={"CreationDate": None})
+    files = [f"{lang}/{name}.png", f"{lang}/{name}.pdf"]
+    if lang == FINAL_LANG:  # the files submitted with the article: 600 dpi JPG and PDF
+        d = out / FINAL_DIR
+        d.mkdir(parents=True, exist_ok=True)
+        fig.savefig(d / f"{name}.jpg", dpi=600, pil_kwargs={"quality": 95})
+        fig.savefig(d / f"{name}.pdf", metadata={"CreationDate": None})
+        files += [f"{FINAL_DIR}/{name}.jpg", f"{FINAL_DIR}/{name}.pdf"]
     plt.close(fig)
-    return [f"{lang}/{name}.png", f"{lang}/{name}.pdf"]
+    return files
 
 
 def boxplot(runs: pd.DataFrame, out: Path, value: str = "gap") -> list[str]:
