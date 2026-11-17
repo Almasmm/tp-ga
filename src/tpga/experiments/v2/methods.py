@@ -136,6 +136,13 @@ def execute(task: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]
     record: dict[str, Any] = {k: task.get(k) for k in (*KEY_FIELDS, "size", "m", "n", "budget")}
     record.update(cpu=_STATE["cpu"], cpu_class=_STATE["cpu_class"], started=time.time(), z_rand=task.get("z_rand"))
     _report("start", task)
+    if kind == "representation":
+        from tpga.experiments.v2.representation_phase import execute as representation
+
+        rec, rows = representation(task, problem)
+        rec.update(cpu=record["cpu"], cpu_class=record["cpu_class"], started=record["started"], finished=time.time())
+        _report("done", task, gap=None, gap_norm=None, stop_reason=None, time_s=rec["time_s"])
+        return rec, rows
     curve: list[dict[str, Any]] = []
     if kind == "lp":
         times: list[float] = []

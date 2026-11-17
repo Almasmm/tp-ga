@@ -23,17 +23,22 @@ from tpga.experiments.v2.instances import InstanceV2, build
 from tpga.experiments.v2.runner import init_worker
 from tpga.experiments.v2.tasks import phase_tasks, reference_tasks, stochastic_tasks
 
-PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "timing")
+PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "representation", "timing")
 
 
-def _pool_run(tasks: list[dict[str, Any]], cpus: list[int]) -> list[dict[str, Any]]:
+def _pool_run(tasks: list[dict[str, Any]], cpus: list[int], rows: list | None = None) -> list[dict[str, Any]]:
+    """Records of the tasks; extra rows of the tasks are appended to ``rows`` when it is given."""
     classes = environment.cpu_classes()
     manager = mp.Manager()
     q = manager.Queue()
     for c in cpus:
         q.put(c)
     with ProcessPoolExecutor(len(cpus), initializer=init_worker, initargs=(q, classes, None, "normal", 1.0)) as pool:
-        out = [r for r, _ in pool.map(methods.execute, tasks)]
+        out = []
+        for record, extra in pool.map(methods.execute, tasks):
+            out.append(record)
+            if rows is not None:
+                rows.extend(extra)
     manager.shutdown()
     return out
 
@@ -138,6 +143,11 @@ def run(cfg: ConfigV2) -> dict[str, Any]:
                 t.update(method=f"GA-P{pop}", budget=int(min(full, max(20_000, full // 50))), z_star=z[inst.id])
                 stoch.append(t)
     rows = _pool_run(stoch, all_cores)
+    rep_values: list[dict[str, Any]] = []
+    rep_rows = _pool_run(_representation_tasks(cfg, list(firsts.values()), z), all_cores, rep_values)
+    if rep_values:  # first numbers of the representation phase (pilot instances; GA runs with a short budget)
+        lines = "".join(json.dumps(r) + "\n" for r in rep_values)
+        (out_dir / "representation_rows.jsonl").write_text(lines, encoding="utf-8", newline="\n")
     uniform = sorted((i for i in firsts.values() if i.set == "uniform"), key=lambda i: i.m * i.n)
     calib = next((i for i in uniform if (i.m, i.n) == (50, 50)), uniform[-1])
     small = next((i for i in uniform if (i.m, i.n) == (20, 20)), uniform[0])
@@ -149,6 +159,13 @@ def run(cfg: ConfigV2) -> dict[str, Any]:
         if r.get("cpu_class") is not None and r["cpu_class"] != top:
             t /= ratio  # to performance-core seconds
         per_eval[(r["set"], r["size"], r["method"])] = t
+    for r in rep_rows:  # representation: GA time per decoder call, analysis and random-parent time
+        scale = 1.0 / ratio if r.get("cpu_class") is not None and r["cpu_class"] != top else 1.0
+        if r["method"] == "random-parents":
+            det_time[(r["set"], r["size"], "rep:random")] = r["time_s"] * scale
+        else:
+            per_eval[(r["set"], r["size"], f"rep:{r['method']}")] = r["ga_time_s"] / max(1, r["evals"]) * scale
+            det_time[(r["set"], r["size"], f"rep:{r['method']}:analysis")] = (r["time_s"] - r["ga_time_s"]) * scale
     overhead = monitor_overhead(cfg, small, z[small.id])
     # 3. estimate of every phase from its full task list
     estimate = estimate_plan(cfg, items, per_eval, det_time, ratio, len(p_cores), len(all_cores))
@@ -166,8 +183,31 @@ def run(cfg: ConfigV2) -> dict[str, Any]:
     return result
 
 
+def _representation_tasks(cfg: ConfigV2, firsts: list[InstanceV2], z: dict[str, float]) -> list[dict[str, Any]]:
+    """Pilot tasks of the representation phase: every random-parent task of the pilot instances and one GA
+    run per method with a shortened budget (its GA time is scaled to the full budget, its analysis is not)."""
+    if "representation" not in cfg.raw["phases"]:
+        return []
+    from tpga.experiments.v2 import representation_phase
+
+    first_seed = cfg.seeds(1)[0]
+    out = []
+    for t in representation_phase.tasks(cfg, firsts):
+        if t["part"] == "ga":
+            if t["seed"] != first_seed:
+                continue
+            t["budget"] = int(min(t["budget"], max(20_000, t["budget"] // 50)))
+        out.append({**t, "phase": "pilot", "z_star": z[t["instance"]]})
+    return out
+
+
 def _task_seconds(t: dict[str, Any], per_eval: dict, det_time: dict, cfg: ConfigV2) -> float:
     key = (t["set"], t["size"], t["method"])
+    if t["kind"] == "representation":
+        if t["part"] == "random":
+            return float(det_time.get((t["set"], t["size"], "rep:random"), 0.0))
+        rep = (t["set"], t["size"], f"rep:{t['method']}")
+        return per_eval.get(rep, 0.0) * int(t["budget"]) + det_time.get((*rep[:2], f"{rep[2]}:analysis"), 0.0)
     if t["kind"] in ("lp", "classical"):
         return det_time.get(key, 0.0) * int(t.get("repeats", 1))
     if t["phase"] == "factorial":
@@ -230,7 +270,7 @@ def reductions(
         for ph, ts in tasks.items():
             cores = p_cores if ph == "timing" else capacity
             for t in ts:
-                if t["kind"] not in ("lp", "classical") and int(t["budget"]) > cap:
+                if t["kind"] not in ("lp", "classical") and int(t.get("budget") or 0) > cap:
                     saved += _task_seconds(t, per_eval, det_time, cfg) * (1 - cap / int(t["budget"])) / (cores * 3600)
                     sizes.add(t["size"])
         label = ", ".join(sorted(sizes, key=lambda s: int(s.split("x")[0]) * int(s.split("x")[1])))

@@ -114,6 +114,7 @@ def execute_tasks(
     raw = cfg.output / "raw"
     clean_temporary(raw / "runs")
     clean_temporary(raw / "curves")
+    clean_temporary(raw / "representation")
     finished = done_keys(cfg)
     todo = [t for t in tasks if methods.key_of(t) not in finished]
     todo.sort(key=lambda t: -(int(t["m"]) * int(t["n"])) * int(t.get("budget") or 1))
@@ -133,6 +134,7 @@ def execute_tasks(
         return counts
     runs = PartWriter(raw / "runs", "runs")
     curves = PartWriter(raw / "curves", "curves", max_records=5000)
+    stores = {"curves": curves}  # extra rows of a task go to raw/<record["rows_store"]> (curves by default)
     classes = environment.cpu_classes()
     manager = mp.Manager()
     cpu_queue = manager.Queue()
@@ -184,7 +186,10 @@ def execute_tasks(
                     continue
                 runs.add([record])
                 if curve_rows:
-                    curves.add(curve_rows)
+                    store = str(record.get("rows_store", "curves"))
+                    if store not in stores:
+                        stores[store] = PartWriter(raw / store, store, max_records=5000)
+                    stores[store].add(curve_rows)
                 counts["done"] += 1
                 monitor.finished(record)
                 append_jsonl(
@@ -206,7 +211,8 @@ def execute_tasks(
                 live.update(monitor.render())
     finally:
         runs.flush()
-        curves.flush()
+        for writer in stores.values():
+            writer.flush()
         if aborted:
             for proc in list(getattr(pool, "_processes", {}).values()):
                 proc.terminate()

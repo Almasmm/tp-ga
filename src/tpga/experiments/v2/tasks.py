@@ -163,6 +163,10 @@ def phase_tasks(cfg: ConfigV2, phase: str, items: list[InstanceV2]) -> list[dict
         return reference_tasks(cfg, phase, select(items, spec["sets"]), list(cfg.raw["reference_methods"]))
     if phase == "factorial":
         return factorial_tasks(cfg, items)
+    if phase == "representation":
+        from tpga.experiments.v2.representation_phase import tasks as representation_tasks
+
+        return representation_tasks(cfg, items)
     if phase == "timing":
         chosen = select(items, spec["sets"], int(spec["instances"]))
         lp_only = set(spec.get("lp_methods_only_on", []))

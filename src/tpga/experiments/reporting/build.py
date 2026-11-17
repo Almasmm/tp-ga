@@ -23,6 +23,7 @@ from tpga.experiments.reporting import (
     t6_initialisation,
     t7_stopping,
     t8_lp_scaling,
+    t9_representation,
 )
 from tpga.experiments.reporting.common import load_curves, load_runs, write_table
 from tpga.experiments.v2.config import ConfigV2
@@ -70,6 +71,11 @@ TITLES = {
     "T8_lp_scaling": ("Exact solvers on large instances", "HiGHS (highspy) and OR-Tools min-cost flow."),
     "T8_lp_disagreement": ("Instances where the two exact solvers disagree", "Expected to be empty."),
     "A1_methods_pooled": ("Appendix: comparisons pooled over sizes", "Not used for conclusions; see T5."),
+    "representation": (
+        "Representation: decoder prefix, neutrality, locality, heritability (non-confirmatory)",
+        "Medians over instances and seeds; source random = random permutations, otherwise the tuned GA "
+        "population at the given fraction of the budget.",
+    ),
 }
 
 
@@ -80,6 +86,8 @@ def generate(cfg: ConfigV2) -> dict[str, Any]:
     out_tables = output / "tables"
     result: dict[str, Any] = {"runs": int(len(runs)), "curve_rows": int(len(curves)), "tables": {}, "figures": []}
     built = tables(output, runs)
+    rep = t9_representation.load(output)
+    built["representation"] = t9_representation.table(rep)
     for name, df in built.items():
         title, note = TITLES[name]
         write_table(df, out_tables / name, title, note)
@@ -92,6 +100,7 @@ def generate(cfg: ConfigV2) -> dict[str, Any]:
         result["figures"] += figures.convergence(curves, runs, fig_dir)
         result["figures"] += figures.time_scaling(runs, built["T3_fits"], fig_dir)
         result["figures"] += figures.factorial_heatmap(built["T4_factorial"], fig_dir)
+        result["figures"] += figures.representation_neutrality(rep, fig_dir)
     if len(runs):
         result["phases"] = {str(k): int(v) for k, v in runs["phase"].value_counts().sort_index().items()}
     write_atomic(output / "report.json", result)

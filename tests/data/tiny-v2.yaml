@@ -59,6 +59,14 @@ phases:
     mutation: {swap_fixed: [0.2], swap_count: [2], swap_per_position: [0.2], swap_scaled: [0.1]}
     initialization: [random, cost-aware]
     fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+  representation:
+    sets: {uniform: [[3, 3], [4, 5]], ties: [[4, 4]]}
+    random_parents: 30
+    ga_methods: [GA-rand-tuned, GA-cost-tuned]
+    ga_seeds: 2
+    ga_instances_by_size: {4x5: 1}
+    snapshots: [0.1, 0.5, 1.0]
+    crossover_pairs: 10
   timing:
     sets: {uniform: [[3, 3]], lp_scaling: all}
     instances: 1

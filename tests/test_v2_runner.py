@@ -56,8 +56,21 @@ def test_full_pipeline(tuned_cfg):
     cfg = ConfigV2.load(path)
     records = list(read_parts(cfg.output / "raw" / "runs", "runs"))
     keys = [methods.key_of(r) for r in records]
-    assert len(keys) == len(set(keys)) == 208
-    assert all(r["feasible"] for r in records)
+    assert len(keys) == len(set(keys)) == 208 + 21  # 21: representation (5 random-parent tasks, 16 GA runs)
+    assert all(r["feasible"] for r in records if r["phase"] != "representation")
+    rep_rows = list(read_parts(cfg.output / "raw" / "representation", "representation"))
+    measures = {(r["source"], r["measure"]) for r in rep_rows}
+    assert {
+        ("random", "prefix"),
+        ("random", "neutrality"),
+        ("random", "locality"),
+        ("GA-rand-tuned", "prefix"),
+        ("GA-cost-tuned", "heritability"),
+    } <= measures
+    rep_records = [r for r in records if r["phase"] == "representation"]
+    assert sum(r["rows"] for r in rep_records) == len(rep_rows)
+    shares = [r["value"] for r in rep_rows if r["metric"] == "neutral_share"]
+    assert shares and all(0.0 <= v <= 1.0 for v in shares)
     assert all(r["gap_norm"] is not None for r in records if r["phase"] == "main")
     main = [r for r in records if r["phase"] == "main"]
     assert {r["method"] for r in main} == set(cfg.raw["stochastic_methods"])
@@ -65,7 +78,15 @@ def test_full_pipeline(tuned_cfg):
     assert all(r["solver"] == "highspy" and r["presolve_s"] is not None for r in timing)
     manifest = json.loads((cfg.output / "run_manifest.json").read_text(encoding="utf-8"))
     assert manifest["invocations"][0]["config"]["sha256"] == cfg.sha256
-    assert set(manifest["phases"]) == {"reference", "main", "stagnation", "legacy", "factorial", "timing"}
+    assert set(manifest["phases"]) == {
+        "reference",
+        "main",
+        "stagnation",
+        "legacy",
+        "factorial",
+        "representation",
+        "timing",
+    }
     state = json.loads((cfg.output / "state" / "monitor.json").read_text(encoding="utf-8"))
     assert "workers" in state and "system" in state
     assert (cfg.output / "logs").glob("run-*.jsonl")
@@ -390,3 +411,18 @@ def test_near_bounds_on_the_sampled_scale() -> None:
     assert found == {("crossover_rate", "upper"), ("tournament", "upper"), ("swap_count", "lower")}
     assert tune.bounds([0.1, 0.9], False) == (0.1, 0.9, False)
     assert tune.per_size_counts({"20x20": 4}) == {"20x20": 4} and tune.per_size_counts(3) == 3
+
+
+def test_report_after_the_tiny_run_includes_representation(tuned_cfg) -> None:
+    """End to end: run (all phases) then report; the representation table and figure are produced."""
+    _, path = tuned_cfg
+    cfg = ConfigV2.load(path)
+    if not (cfg.output / "run_manifest.json").exists():
+        assert cli("run", "--config", str(path), "--plain").returncode == 0
+    res = cli("report", "--config", str(path))
+    assert res.returncode == 0, res.stdout + res.stderr
+    table = (cfg.output / "tables" / "representation.csv").read_text(encoding="utf-8")
+    assert "neutral_share" in table and "inherited_share" in table and "prefix_share" in table
+    assert (cfg.output / "figures" / "en" / "representation_neutrality.pdf").exists()
+    summary = json.loads((cfg.output / "report.json").read_text(encoding="utf-8"))
+    assert summary["tables"]["representation"] > 0 and summary["tables"]["T2_gap"] > 0
