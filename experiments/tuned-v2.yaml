@@ -1,0 +1,304 @@
+frozen: '2026-11-17T23:37:51+05:00'
+git_commit: 7d70f8587dcd75bf1dc739718996b0fbc97c9064
+procedure:
+  sampler: TPE
+  seed: 20261201
+  trials: 100
+  sets:
+    uniform:
+    - - 20
+      - 20
+    - - 50
+      - 50
+    - - 100
+      - 100
+  instances_per_size:
+    20x20: 4
+    50x50: 4
+    100x100: 2
+  seeds: 3
+  objective: mean gap (%) over training instances and seeds, budget-only stop
+  parallel_trials: 5
+  constant_liar: true
+  sampler_seed: seed + batch index
+  storage: optuna JournalStorage, tuning/optuna-journal.log
+space:
+  ga:
+    population:
+    - 20
+    - 4000
+    crossover_rate:
+    - 0.5
+    - 1.0
+    tournament:
+    - 2
+    - 9
+    elite:
+    - 1
+    - 5
+    mutation_mode:
+    - swap_fixed
+    - swap_count
+    - swap_per_position
+    - swap_scaled
+    swap_fixed:
+    - 0.01
+    - 1.0
+    swap_count:
+    - 1
+    - 20
+    swap_per_position:
+    - 0.0001
+    - 0.05
+    swap_scaled:
+    - 0.01
+    - 0.5
+  sa:
+    insertion_probability:
+    - 0.0
+    - 1.0
+    initial_acceptance:
+      range:
+      - 0.0001
+      - 0.95
+      log: true
+    final_ratio:
+    - 1.0e-06
+    - 0.99
+training_instances:
+- u100x100-00-train
+- u100x100-01-train
+- u20x20-00-train
+- u20x20-01-train
+- u20x20-02-train
+- u20x20-03-train
+- u50x50-00-train
+- u50x50-01-train
+- u50x50-02-train
+- u50x50-03-train
+training_overlap_with_test: 0
+parameters:
+  GA-rand:
+    population: 143
+    crossover_rate: 0.9772403930796645
+    tournament: 5
+    elite: 1
+    mutation_mode: swap_scaled
+    mutation_strength: 0.08371937516446804
+  GA-cost:
+    population: 2700
+    crossover_rate: 0.9655685541088251
+    tournament: 8
+    elite: 5
+    mutation_mode: swap_count
+    mutation_strength: 7
+  SA-rand:
+    insertion_probability: 0.44395015040174424
+    initial_acceptance: 0.1643423910600663
+    final_ratio: 0.004404303461377754
+  SA-cost:
+    insertion_probability: 0.25603748368640916
+    initial_acceptance: 0.00015706121564795986
+    final_ratio: 1.2355955108968477e-06
+best_objective:
+  GA-rand: 46.13733815761119
+  GA-cost: 8.652868592688488
+  SA-rand: 82.46492268645194
+  SA-cost: 13.506742350698142
+near_bounds:
+  GA-rand:
+    own_round_range:
+    - parameter: elite
+      value: 1
+      side: lower
+      bound: 1.0
+      log: false
+    - parameter: crossover_rate
+      value: 0.9772403930796645
+      side: upper
+      bound: 1.0
+      log: false
+    round2_range:
+    - parameter: elite
+      value: 1
+      side: lower
+      bound: 1.0
+      log: false
+    - parameter: crossover_rate
+      value: 0.9772403930796645
+      side: upper
+      bound: 1.0
+      log: false
+  GA-cost:
+    own_round_range:
+    - parameter: elite
+      value: 5
+      side: upper
+      bound: 5.0
+      log: false
+    round2_range:
+    - parameter: elite
+      value: 5
+      side: upper
+      bound: 5.0
+      log: false
+  SA-rand:
+    own_round_range: []
+    round2_range: []
+  SA-cost:
+    own_round_range:
+    - parameter: initial_acceptance
+      value: 0.00015706121564795986
+      side: lower
+      bound: 0.0001
+      log: true
+    - parameter: final_ratio
+      value: 1.2355955108968477e-06
+      side: lower
+      bound: 1.0e-06
+      log: true
+    round2_range:
+    - parameter: initial_acceptance
+      value: 0.00015706121564795986
+      side: lower
+      bound: 0.0001
+      log: true
+    - parameter: final_ratio
+      value: 1.2355955108968477e-06
+      side: lower
+      bound: 1.0e-06
+      log: true
+rule: 'amendment 5: per method, the trial with the lowest mean training gap among
+  all completed trials of round 1 and round 2; exact tie: round 2'
+selection:
+  GA-rand:
+    round: 1
+    trial: 68
+    mean_gap: 46.13733815761119
+    runs: 30
+    best_mean_gap_by_round:
+      round1: 46.13733815761119
+      round2: 56.47481154130401
+    best_trial_by_round:
+      round1: 68
+      round2: 77
+  GA-cost:
+    round: 2
+    trial: 99
+    mean_gap: 8.652868592688488
+    runs: 30
+    best_mean_gap_by_round:
+      round1: 9.895827614732548
+      round2: 8.652868592688488
+    best_trial_by_round:
+      round1: 97
+      round2: 99
+  SA-rand:
+    round: 2
+    trial: 89
+    mean_gap: 82.46492268645194
+    runs: 30
+    best_mean_gap_by_round:
+      round1: 86.47890205040788
+      round2: 82.46492268645194
+    best_trial_by_round:
+      round1: 31
+      round2: 89
+  SA-cost:
+    round: 2
+    trial: 70
+    mean_gap: 13.506742350698142
+    runs: 30
+    best_mean_gap_by_round:
+      round1: 14.57774292941582
+      round2: 13.506742350698142
+    best_trial_by_round:
+      round1: 80
+      round2: 70
+space_by_round:
+  round1:
+    ga:
+      population:
+      - 20
+      - 400
+      crossover_rate:
+      - 0.5
+      - 1.0
+      tournament:
+      - 2
+      - 7
+      elite:
+      - 1
+      - 5
+      mutation_mode:
+      - swap_fixed
+      - swap_count
+      - swap_per_position
+      - swap_scaled
+      swap_fixed:
+      - 0.01
+      - 1.0
+      swap_count:
+      - 1
+      - 20
+      swap_per_position:
+      - 0.0001
+      - 0.05
+      swap_scaled:
+      - 0.01
+      - 0.5
+    sa:
+      insertion_probability:
+      - 0.0
+      - 1.0
+      initial_acceptance:
+        range:
+        - 0.001
+        - 0.95
+        log: true
+      final_ratio:
+      - 1.0e-05
+      - 0.1
+  round2:
+    ga:
+      population:
+      - 20
+      - 4000
+      crossover_rate:
+      - 0.5
+      - 1.0
+      tournament:
+      - 2
+      - 9
+      elite:
+      - 1
+      - 5
+      mutation_mode:
+      - swap_fixed
+      - swap_count
+      - swap_per_position
+      - swap_scaled
+      swap_fixed:
+      - 0.01
+      - 1.0
+      swap_count:
+      - 1
+      - 20
+      swap_per_position:
+      - 0.0001
+      - 0.05
+      swap_scaled:
+      - 0.01
+      - 0.5
+    sa:
+      insertion_probability:
+      - 0.0
+      - 1.0
+      initial_acceptance:
+        range:
+        - 0.0001
+        - 0.95
+        log: true
+      final_ratio:
+      - 1.0e-06
+      - 0.99
