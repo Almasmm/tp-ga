@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import statistics
 import subprocess
 import sys
@@ -179,7 +180,9 @@ class Monitor:
         now = time.time()
         if now - self.last_state >= self.state_interval_s:
             self.sample_system()
-            write_atomic(self.output / "state" / "monitor.json", self.snapshot())
+            # the file may be open in another program (viewer, antivirus): then it is written at the next tick
+            with contextlib.suppress(OSError):
+                write_atomic(self.output / "state" / "monitor.json", self.snapshot())
             self.last_state = now
         if self.plain and now - self.last_plain >= 60:
             eta = self.eta_s()
