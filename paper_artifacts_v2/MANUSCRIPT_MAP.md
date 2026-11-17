@@ -158,7 +158,7 @@ same numbers as the English one and take them from the same cells.
 | "30 seeded runs per instance" | `paper-v2.yaml: runs`, `runs_by_size` |
 | "A gap normalised by the cost of a random basic plan ... planned" | now reported: `T2.gap_norm_median`, `T5_methods_gap_norm`, `F:boxplot_gap_norm`; Z_rand per instance in `instances/manifest.json` and `T1.z_rand_median` |
 | "parameters were not tuned", "mutation intensity does not grow" | v0.4: tuned (`tuned-v2.yaml`), mutation modes `swap_count`, `swap_per_position`, `swap_scaled` |
-| new: why the gap grows with size | `tables/representation.csv` (prefix_share, neutral_share by operator and m n, locality, inherited_share) and `F:representation_neutrality` |
+| new: why the gap grows with size | `tables/representation.csv` (prefix_share, neutral_share by operator and m n, locality, inherited_share) and `F:representation_neutrality`; sizes 5x5 to 100x100 (amendment 7, g); for 200x200 use the exact bound of Proposition 3, not a measured value |
 
 ## 4. Conclusions
 

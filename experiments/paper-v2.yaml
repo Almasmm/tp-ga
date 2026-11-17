@@ -127,7 +127,8 @@ phases:
     runs_by_set: {astana: 5}   # seeds r = 0..4 on the Astana instances (amendment 7, f)
     stop: budget
   representation:              # non-confirmatory (amendment 3): why the gap grows with the size
-    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]],
+    # up to 100x100 (amendment 7, g): 200x200 is covered in the article by the exact bound of Proposition 3
+    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100]],
            structured: [[50, 50]], skewed: [[50, 50]], ties: [[50, 50]]}
     random_parents: 1000       # random permutations per instance (prefix, neutrality, locality)
     ga_methods: [GA-rand-tuned, GA-cost-tuned]

@@ -268,29 +268,29 @@
    "runs": 712,
    "core_s": 33.203453000387526,
    "wall_h": 0.00046167016406215954,
-   "share": 4.963310837547877e-06
+   "share": 2.6911984956941454e-05
   },
   "representation": {
-   "runs": 2100,
-   "core_s": 297267.66113541694,
-   "wall_h": 53.486971790666445,
-   "share": 0.5750262577516033
+   "runs": 1890,
+   "core_s": 37564.45182549005,
+   "wall_h": 0.5796154404605801,
+   "share": 0.03378732963212655
   },
   "main": {
    "runs": 23600,
    "core_s": 786553.6188806457,
-   "wall_h": 35.59718458509959,
-   "share": 0.3826972280011336
+   "wall_h": 13.399880461066736,
+   "share": 0.7811147643157811
   },
   "applied": {
    "runs": 1075,
    "core_s": 47554.79375985491,
-   "wall_h": 1.0136028948225237,
+   "wall_h": 0.6612152488115661,
    "by_set": {
     "astana": {
      "runs": 825,
      "core_s": 47549.172855461475,
-     "wall_h": 1.0135247401844063
+     "wall_h": 0.6611370941734486
     },
     "wheat": {
      "runs": 250,
@@ -298,260 +298,61 @@
      "wall_h": 7.815463811690376e-05
     }
    },
-   "share": 0.010897013981967393
+   "share": 0.03854400005567891
   },
   "factorial": {
    "runs": 24000,
    "core_s": 71232.5044052832,
    "wall_h": 0.990436807730864,
-   "share": 0.01064796065325774
+   "share": 0.05773520263021661
   },
   "stagnation": {
    "runs": 1800,
    "core_s": 49466.160621468356,
-   "wall_h": 1.089254296717967,
-   "share": 0.011710324982183532
+   "wall_h": 0.6877914320950865,
+   "share": 0.0400931966475616
   },
   "legacy": {
    "runs": 1800,
    "core_s": 48519.80524705234,
    "wall_h": 0.6746330403771332,
-   "share": 0.007252826241162223
+   "share": 0.039326158906037925
   },
   "timing": {
    "runs": 380,
    "core_s": 4630.53360806336,
-   "wall_h": 0.1640277572070639,
-   "share": 0.0017634250778546703
+   "wall_h": 0.16078241694664444,
+   "share": 0.009372435827640354
   }
  },
- "total_wall_h": 93.01657284278565,
+ "total_wall_h": 17.154816517652673,
  "capacity_performance_cores": 19.977858884887176,
- "memory_budget_gib": 6.274238586425781,
+ "memory_budget_gib": 29.67873764038086,
  "memory_limited": [
-  {
-   "phase": "applied",
-   "set": "astana",
-   "size": "24x324",
-   "method": "GA-cost-tuned",
-   "at_once": 10,
-   "of": 24,
-   "gib_per_run": 0.6157636642456055
-  },
-  {
-   "phase": "main",
-   "set": "skewed",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.2973586320877075
-  },
-  {
-   "phase": "main",
-   "set": "structured",
-   "size": "100x100",
-   "method": "GA-cost-tuned",
-   "at_once": 8,
-   "of": 24,
-   "gib_per_run": 0.7499814033508301
-  },
-  {
-   "phase": "main",
-   "set": "structured",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.2973586320877075
-  },
-  {
-   "phase": "main",
-   "set": "ties",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.2973586320877075
-  },
-  {
-   "phase": "main",
-   "set": "uniform",
-   "size": "100x100",
-   "method": "GA-cost-tuned",
-   "at_once": 8,
-   "of": 24,
-   "gib_per_run": 0.7499814033508301
-  },
   {
    "phase": "main",
    "set": "uniform",
    "size": "200x200",
    "method": "GA-cost-tuned",
-   "at_once": 2,
+   "at_once": 11,
    "of": 24,
    "gib_per_run": 2.5604724884033203
   },
   {
-   "phase": "main",
-   "set": "uniform",
-   "size": "200x200",
-   "method": "GA-rand-tuned",
-   "at_once": 22,
-   "of": 24,
-   "gib_per_run": 0.2743363380432129
-  },
-  {
-   "phase": "main",
-   "set": "uniform",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.2973586320877075
-  },
-  {
-   "phase": "representation",
-   "set": "skewed",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 12,
-   "of": 24,
-   "gib_per_run": 0.4985243082046509
-  },
-  {
-   "phase": "representation",
-   "set": "structured",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 12,
-   "of": 24,
-   "gib_per_run": 0.4985243082046509
-  },
-  {
-   "phase": "representation",
-   "set": "ties",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 12,
-   "of": 24,
-   "gib_per_run": 0.4985243082046509
-  },
-  {
    "phase": "representation",
    "set": "uniform",
    "size": "100x100",
    "method": "GA-cost-tuned",
-   "at_once": 4,
+   "at_once": 19,
    "of": 24,
    "gib_per_run": 1.5546441078186035
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "100x100",
-   "method": "random-parents",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.29549598693847656
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "200x200",
-   "method": "GA-cost-tuned",
-   "at_once": 1,
-   "of": 24,
-   "gib_per_run": 5.779123306274414
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "200x200",
-   "method": "GA-rand-tuned",
-   "at_once": 14,
-   "of": 24,
-   "gib_per_run": 0.4448056221008301
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "200x200",
-   "method": "random-parents",
-   "at_once": 8,
-   "of": 24,
-   "gib_per_run": 0.7425308227539062
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "30x30",
-   "method": "GA-cost-tuned",
-   "at_once": 22,
-   "of": 24,
-   "gib_per_run": 0.2732187509536743
-  },
-  {
-   "phase": "representation",
-   "set": "uniform",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 12,
-   "of": 24,
-   "gib_per_run": 0.4985243082046509
-  },
-  {
-   "phase": "stagnation",
-   "set": "uniform",
-   "size": "100x100",
-   "method": "GA-cost-tuned",
-   "at_once": 8,
-   "of": 24,
-   "gib_per_run": 0.7499814033508301
-  },
-  {
-   "phase": "stagnation",
-   "set": "uniform",
-   "size": "50x50",
-   "method": "GA-cost-tuned",
-   "at_once": 21,
-   "of": 24,
-   "gib_per_run": 0.2973586320877075
-  },
-  {
-   "phase": "timing",
-   "set": "lp_scaling",
-   "size": "1000x1000",
-   "method": "LP",
-   "at_once": 5,
-   "of": 8,
-   "gib_per_run": 1.0778069496154785
-  },
-  {
-   "phase": "timing",
-   "set": "lp_scaling",
-   "size": "1000x1000",
-   "method": "LP-ortools",
-   "at_once": 5,
-   "of": 8,
-   "gib_per_run": 1.0778069496154785
   }
  ],
  "largest_items": [
   {
-   "phase": "representation",
-   "item": "uniform 200x200 GA-cost-tuned",
-   "wall_h": 49.067104722977746
-  },
-  {
    "phase": "main",
    "item": "uniform 200x200 GA-cost-tuned",
-   "wall_h": 25.013160976193017
-  },
-  {
-   "phase": "representation",
-   "item": "uniform 200x200 GA-rand-tuned",
-   "wall_h": 2.6841734654919382
+   "wall_h": 4.547847450216927
   },
   {
    "phase": "main",
@@ -561,22 +362,7 @@
   {
    "phase": "main",
    "item": "uniform 200x200 GA-rand-tuned",
-   "wall_h": 1.6046021475818693
-  },
-  {
-   "phase": "representation",
-   "item": "uniform 100x100 GA-cost-tuned",
-   "wall_h": 1.3066388210952546
-  },
-  {
-   "phase": "main",
-   "item": "uniform 100x100 GA-cost-tuned",
-   "wall_h": 1.1958753744989745
-  },
-  {
-   "phase": "main",
-   "item": "structured 100x100 GA-cost-tuned",
-   "wall_h": 1.1685750356953901
+   "wall_h": 1.4708853019500479
   },
   {
    "phase": "main",
@@ -589,44 +375,40 @@
    "wall_h": 0.7506307678897569
   },
   {
-   "phase": "applied",
-   "item": "astana 24x324 GA-cost-tuned",
-   "wall_h": 0.6040931074473651
+   "phase": "factorial",
+   "item": "uniform 50x50 GA-rand",
+   "wall_h": 0.42976549207262915
   },
   {
-   "phase": "stagnation",
+   "phase": "factorial",
+   "item": "uniform 50x50 GA-cost",
+   "wall_h": 0.42976549207262915
+  },
+  {
+   "phase": "main",
    "item": "uniform 100x100 GA-cost-tuned",
-   "wall_h": 0.5979376872494871
+   "wall_h": 0.3986251248329915
+  },
+  {
+   "phase": "main",
+   "item": "structured 100x100 GA-cost-tuned",
+   "wall_h": 0.3895250118984605
+  },
+  {
+   "phase": "main",
+   "item": "uniform 100x100 RS",
+   "wall_h": 0.3789684141644898
+  },
+  {
+   "phase": "legacy",
+   "item": "uniform 100x100 GA-cost-base",
+   "wall_h": 0.3364672044397269
+  },
+  {
+   "phase": "legacy",
+   "item": "uniform 100x100 GA-rand-base",
+   "wall_h": 0.29937166854927777
   }
  ],
- "reductions": [
-  {
-   "option": "budget cap 1,000,000 decoder calls (shortens runs at 24x324, 100x100, 200x200)",
-   "saves_h": 12.153275928234226
-  },
-  {
-   "option": "budget cap 2,000,000 decoder calls (shortens runs at 200x200)",
-   "saves_h": 8.081491902707741
-  },
-  {
-   "option": "budget cap 4,000,000 decoder calls (shortens runs at 200x200)",
-   "saves_h": 5.387661268471796
-  },
-  {
-   "option": "factorial plan without population 400",
-   "saves_h": 0.22001989113818632
-  },
-  {
-   "option": "200x200 in the main phase with 10 runs instead of 30",
-   "saves_h": 0.0
-  },
-  {
-   "option": "drop the base GA configurations at 200x200",
-   "saves_h": 0.0
-  },
-  {
-   "option": "timing phase without 200x200 for GA and SA",
-   "saves_h": 0.0
-  }
- ]
+ "reductions": []
 }

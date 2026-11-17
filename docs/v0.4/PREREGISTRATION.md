@@ -320,6 +320,14 @@ with these amendments; where they differ, the amendment applies.
 * After step f the estimate is 18.2 h without a memory limit and 21.2 h with 60 GiB for the runs, still above
   the target. As the rule requires, the work stopped and the author was asked; the author accepted a run of
   about 21 h with the reductions a-f and no further reduction (2026-11-17, 23:50 +05:00).
+* Changed by the author on 2026-11-18, 00:30 +05:00, still before the main run (no run of any phase with the
+  final parameters existed; the tag `v0.4.0-run` of commit 5cf48a7 was set but no run was started from it):
+  g. `representation`: sizes up to 100x100 only, without 200x200. Reason: время; решение принято до
+     основного прогона, тестовые результаты неизвестны (run time; decided before the main run, test results
+     unknown). For 200x200 the article uses the exact bound of Proposition 3.
+  The target of the estimate is 18 h instead of 14 h. The estimate of the plan with a-g, made with the
+  memory free before the start, is in `paper_artifacts_v2/pilot/PILOT.md`; the run starts only if it is
+  at most 18 h. The main run is started from the tag `v0.4.0-run2` (the commit with step g).
 * Consequences for the analysis. Tests still use one value per instance (median over its seeds), 10 pairs per
   (set, size); fewer seeds make that median less precise, not the number of pairs smaller. At 200x200 the
   comparisons with GA-rand-base (against NWC, LCM, VAM, RS, and GA-rand-tuned against GA-rand-base) are not
