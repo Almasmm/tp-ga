@@ -39,15 +39,15 @@ tuning:
   sampler: TPE
   seed: 1
   trials: 2
-  sets: {uniform: [[3, 3]]}
-  instances_per_size: 1
+  sets: {uniform: [[3, 3], [4, 5]]}
+  instances_per_size: {3x3: 2, 4x5: 1}
   seeds: 1
   objective: mean gap
   space:
     ga: {population: [6, 12], crossover_rate: [0.5, 1.0], tournament: [2, 3], elite: [1, 2],
          mutation_mode: [swap_fixed, swap_count, swap_per_position, swap_scaled],
          swap_fixed: [0.01, 1.0], swap_count: [1, 3], swap_per_position: [0.01, 0.5], swap_scaled: [0.05, 0.5]}
-    sa: {insertion_probability: [0.0, 1.0], initial_acceptance: [0.05, 0.95], final_ratio: [1.0e-5, 1.0e-1]}
+    sa: {insertion_probability: [0.0, 1.0], initial_acceptance: {range: [0.001, 0.95], log: true}, final_ratio: [1.0e-5, 1.0e-1]}
 phases:
   reference: {sets: [uniform, structured, skewed, ties]}
   main: {sets: [uniform, structured, skewed, ties], methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned], stop: budget}

@@ -21,7 +21,8 @@ workers: 24                    # quality phases: one pinned process per logical 
 priority: above_normal
 state_interval_s: 3            # how often the state file for the web monitor is rewritten
 
-# Decoder-call budget B = min(factor * m * n, cap). The cap is chosen from the pilot (see PREREGISTRATION.md).
+# Decoder-call budget B = min(factor * m * n, cap). The cap equals 200 m n at 200x200, so it is not active
+# (option A of the budget decision, PREREGISTRATION.md section 9, amendment 1).
 budget: {factor: 200, cap: 8000000}
 
 instances:
@@ -58,9 +59,9 @@ reference_methods: [LP, NWC, LCM, VAM]
 tuning:
   sampler: TPE
   seed: 20261201
-  trials: 40                   # the same for every tuned method
-  sets: {uniform: [[20, 20], [50, 50]]}
-  instances_per_size: 4
+  trials: 100                  # the same for every tuned method (40 before amendment 2, PREREGISTRATION.md section 9)
+  sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
+  instances_per_size: {20x20: 4, 50x50: 4, 100x100: 2}
   seeds: 3
   objective: mean gap (%) over training instances and seeds, budget-only stop
   space:
@@ -76,7 +77,7 @@ tuning:
       swap_scaled: [0.01, 0.5]
     sa:
       insertion_probability: [0.0, 1.0]
-      initial_acceptance: [0.05, 0.95]
+      initial_acceptance: {range: [0.001, 0.95], log: true}
       final_ratio: [1.0e-5, 1.0e-1]
 
 phases:
@@ -86,6 +87,7 @@ phases:
     sets: [uniform, structured, skewed, ties]
     methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
     stop: budget
+    runs_by_size: {200x200: 10}  # option A (amendment 1): seeds r = 0..9 at 200x200, B = 200 m n everywhere
   stagnation:                  # additional stopping mode: stagnation_evaluations = 0.1 B
     sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
     methods: [GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]

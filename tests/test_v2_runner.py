@@ -332,3 +332,61 @@ def test_reestimate_matches_the_pilot_on_the_same_measurements(tuned_cfg) -> Non
     again = pilot.reestimate(cfg)
     assert again["total_wall_h"] == pytest.approx(saved["total_wall_h"])
     assert {k: v["runs"] for k, v in again["phases"].items()} == {k: v["runs"] for k, v in saved["phases"].items()}
+
+
+def test_tuning_record_has_space_overlap_check_and_bounds(tuned_cfg) -> None:
+    import yaml
+
+    tmp, _ = tuned_cfg
+    frozen = yaml.safe_load((tmp / "tuned.yaml").read_text(encoding="utf-8"))
+    assert frozen["training_overlap_with_test"] == 0
+    assert sorted(frozen["training_instances"]) == ["u3x3-00-train", "u3x3-01-train", "u4x5-00-train"]
+    assert frozen["space"]["sa"]["initial_acceptance"] == {"range": [0.001, 0.95], "log": True}
+    assert set(frozen["near_bounds"]) == {"GA-rand", "GA-cost", "SA-rand", "SA-cost"}
+    assert 0.001 <= frozen["parameters"]["SA-rand"]["initial_acceptance"] <= 0.95
+
+
+def test_near_bounds_on_the_sampled_scale() -> None:
+    from tpga.experiments.v2 import tune
+
+    space = {
+        "sa": {
+            "insertion_probability": [0.0, 1.0],
+            "initial_acceptance": {"range": [0.001, 0.95], "log": True},
+            "final_ratio": [1e-5, 1e-1],
+        }
+    }
+    # log width of [0.001, 0.95] is 6.86, 5 % of it 0.34; log(0.0012 / 0.001) = 0.18 is near the bound
+    hits = tune.near_bounds(
+        "sa", {"insertion_probability": 0.98, "initial_acceptance": 0.0012, "final_ratio": 1e-3}, space
+    )
+    assert {(h["parameter"], h["side"]) for h in hits} == {
+        ("insertion_probability", "upper"),
+        ("initial_acceptance", "lower"),
+    }
+    # on a linear scale 0.03 would be "near" 0.001; on the log scale it is far from both bounds
+    assert (
+        tune.near_bounds("sa", {"insertion_probability": 0.5, "initial_acceptance": 0.03, "final_ratio": 1e-3}, space)
+        == []
+    )
+    g = {
+        "ga": {
+            "population": [20, 400],
+            "crossover_rate": [0.5, 1.0],
+            "tournament": [2, 7],
+            "elite": [1, 5],
+            "swap_count": [1, 20],
+        }
+    }
+    params = {
+        "population": 100,
+        "crossover_rate": 0.99,
+        "tournament": 7,
+        "elite": 3,
+        "mutation_mode": "swap_count",
+        "mutation_strength": 1,
+    }
+    found = {(h["parameter"], h["side"]) for h in tune.near_bounds("ga", params, g)}
+    assert found == {("crossover_rate", "upper"), ("tournament", "upper"), ("swap_count", "lower")}
+    assert tune.bounds([0.1, 0.9], False) == (0.1, 0.9, False)
+    assert tune.per_size_counts({"20x20": 4}) == {"20x20": 4} and tune.per_size_counts(3) == 3

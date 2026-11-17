@@ -118,6 +118,49 @@ For each (set, size) separately, two-sided Wilcoxon signed-rank tests on per-ins
 
 ## 9. Amendments before the main run
 
-| Date | Change | Reason |
+Each amendment is dated and was committed before the run it affects. Sections 1-8 above are read together
+with these amendments; where they differ, the amendment applies.
+
+### Amendment 1 (2026-11-17): budget and number of runs
+
+* Chosen: option A. B = 200 m n decoder calls at every size (the cap of 8 000 000 equals 200 m n at
+  200x200, so no cap is active). In the main phase the uniform 200x200 instances run with 10 seeds
+  (r = 0..9, the first ten of the common seeds) instead of 30; every other size and phase keeps 30.
+* Reason: run time. The pilot estimated 43.9 h for the full plan, 23.8 h with option A and 20.2 h with
+  option B (cap 2 000 000, 30 seeds everywhere). Option A keeps the same budget per arc at every size, so
+  the growth of the gap with size is not confounded with a smaller budget per arc; the unit of every test
+  is the per-instance median, so the 200x200 tests still have 10 pairs.
+* Effect on section 3: "r = 0..29" becomes "r = 0..9" for the main phase at uniform 200x200.
+
+### Amendment 2 (2026-11-17): tuning repeated with a range that does not bind
+
+* Reason: both SA results of the first tuning had `initial_acceptance` near the lower bound 0.05 of its range
+  (0.0676 and 0.0688). A comparator tuned against a bound is disadvantaged. Forty TPE trials are also few
+  for the conditional nine-dimensional GA space.
+* Changes, identical for all four tuned methods (equal tuning effort):
+  * `initial_acceptance`: range [0.001, 0.95], sampled on a log scale (was [0.05, 0.95], linear);
+  * trials per method: 100 (was 40);
+  * training instances: uniform 20x20 and 50x50 (4 each, as before) plus uniform 100x100 (2), 3 seeds,
+    seed offset 5 000 000 as before; the run stops if a training instance file has the SHA-256 of a test
+    instance (`paper_artifacts_v2/instances/manifest.json`);
+  * all other ranges and scales unchanged.
+* Bound rule, fixed before the tuning is run: after the tuning, every parameter of every method is checked
+  (for the GA: population, crossover rate, tournament size, elite count and the strength of the chosen
+  mutation operator). A value within 5 % of the width of its range from a bound, measured on the scale on
+  which it is sampled, makes that bound widen once: by a factor of 10 for a range that spans more than a
+  factor of 10 (sampled on a log scale), otherwise by half the width of the range; never beyond the domain
+  of the parameter (probabilities in [0, 1], acceptance probability below 1, tournament >= 2, elite >= 1,
+  population >= 2, swap count >= 1). A bound that is already at the limit of its domain is not widened and
+  is reported. If any bound is widened, the tuning of all four methods is repeated once with the widened
+  ranges and both results are recorded here; the second result is the one used. No further widening.
+* The first result is kept as `experiments/tuned-v2-superseded.yaml` (frozen 2026-11-16 23:55 +05:00):
+
+| Method | Parameters | Training mean gap, % |
 |---|---|---|
-| (to be filled at the decision point) | budget cap and any reduction chosen from the pilot | run time |
+| GA-rand | P 179, pc 0.948, t 3, e 3, swap_scaled s 0.0592 | 37.62 |
+| GA-cost | P 348, pc 0.713, t 5, e 2, swap_scaled s 0.1329 | 7.71 |
+| SA-rand | p_ins 0.593, p0 0.0676, final_ratio 9.12e-4 | 48.14 |
+| SA-cost | p_ins 0.982, p0 0.0688, final_ratio 6.74e-5 | 15.86 |
+
+  These training gaps were measured on 20x20 and 50x50 only and are not comparable with those of the
+  repeated tuning, which includes 100x100.
