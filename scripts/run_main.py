@@ -12,6 +12,7 @@ runs alone. The script keeps the machine awake while it runs and writes ``logs/m
 Start it again with the same command after a crash or a reboot: finished runs are not repeated.
 """
 
+# ruff: noqa: E402
 from __future__ import annotations
 
 import argparse
