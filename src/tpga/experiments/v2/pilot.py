@@ -24,6 +24,7 @@ from tpga.experiments.v2.runner import init_worker
 from tpga.experiments.v2.tasks import phase_tasks, reference_tasks, stochastic_tasks
 
 PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "applied", "representation", "timing")
+SPLIT_BY_SET = ("applied",)  # phases whose estimate is also given per instance set
 
 
 def _pool_run(tasks: list[dict[str, Any]], cpus: list[int], rows: list | None = None) -> list[dict[str, Any]]:
@@ -232,13 +233,21 @@ def estimate_plan(
     detail: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
     for name in PHASES:
         tasks = phase_tasks(cfg, name, items)
+        cores = p_cores if name == "timing" else capacity
         core_s = 0.0
+        by_set: dict[str, dict[str, float]] = defaultdict(lambda: {"runs": 0, "core_s": 0.0})
         for t in tasks:
             s = _task_seconds(t, per_eval, det_time, cfg)
             core_s += s
             detail[name][f"{t['set']} {t['size']} {t['method']}"] += s
-        wall = core_s / (p_cores if name == "timing" else capacity)
-        phases[name] = {"runs": len(tasks), "core_s": core_s, "wall_h": wall / 3600}
+            by_set[t["set"]]["runs"] += 1
+            by_set[t["set"]]["core_s"] += s
+        phases[name] = {"runs": len(tasks), "core_s": core_s, "wall_h": core_s / cores / 3600}
+        if name in SPLIT_BY_SET:  # e.g. applied: wheat and Astana separately
+            phases[name]["by_set"] = {
+                k: {"runs": int(v["runs"]), "core_s": v["core_s"], "wall_h": v["core_s"] / cores / 3600}
+                for k, v in by_set.items()
+            }
     total = sum(p["wall_h"] for p in phases.values())
     for p in phases.values():
         p["share"] = p["wall_h"] / total if total else 0.0
@@ -298,6 +307,9 @@ def markdown(result: dict[str, Any]) -> str:
     ]
     for name, p in result["phases"].items():
         lines.append(f"| {name} | {p['runs']:,} | {p['wall_h']:.2f} | {100 * p['share']:.1f} % |")
+        if name in SPLIT_BY_SET:
+            for set_, s in p.get("by_set", {}).items():
+                lines.append(f"| &nbsp;&nbsp;{name}: {set_} | {s['runs']:,} | {s['wall_h']:.2f} | |")
     lines += [
         f"| **total** | {sum(p['runs'] for p in result['phases'].values()):,} "
         f"| **{result['total_wall_h']:.2f}** | 100 % |",
