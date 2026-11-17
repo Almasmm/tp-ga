@@ -114,13 +114,15 @@ def boxplot(runs: pd.DataFrame, out: Path, value: str = "gap") -> list[str]:
 
 
 def convergence(curves: pd.DataFrame, runs: pd.DataFrame, out: Path) -> list[str]:
-    """F3: median best gap against decoder calls (convergence rows of the ``main`` phase)."""
+    """F3: median best gap against decoder calls on the uniform set (main phase), with the interquartile
+    range over all runs and horizontal lines at the median gaps of NWC, LCM and VAM."""
     if not len(curves):
         return []
-    keys = runs[runs["phase"] == "main"][["key", "method", "size"]]
+    keys = runs[(runs["phase"] == "main") & (runs["set"] == "uniform")][["key", "method", "size"]]
     c = curves.merge(keys, on="key")
     if not len(c):
         return []
+    ref = runs[(runs["phase"] == "reference") & (runs["set"] == "uniform") & runs["method"].isin(["NWC", "LCM", "VAM"])]
     sizes = sorted(c["size"].unique(), key=size_key)
     files: list[str] = []
     for lang in LANGS:
@@ -128,13 +130,21 @@ def convergence(curves: pd.DataFrame, runs: pd.DataFrame, out: Path) -> list[str
         for ax, size in zip(axes[0], sizes, strict=True):
             sub = c[c["size"] == size]
             for method, g in sub.groupby("method"):
-                line = g.groupby("evals")["gap"].median()
-                ax.plot(line.index, line.to_numpy(), label=method, lw=1)
+                q = g.groupby("evals")["gap"].quantile([0.25, 0.5, 0.75]).unstack()
+                line = ax.plot(q.index, q[0.5].to_numpy(), label=method, lw=1)[0]
+                ax.fill_between(
+                    q.index, q[0.25].to_numpy(), q[0.75].to_numpy(), color=line.get_color(), alpha=0.15, lw=0
+                )
+            for method, style in (("NWC", ":"), ("LCM", "--"), ("VAM", "-.")):
+                level = ref[(ref["size"] == size) & (ref["method"] == method)]["gap"].median()
+                if level == level:  # not NaN
+                    ax.axhline(level, color="0.35", ls=style, lw=0.8, label=method)
             ax.set_xscale("log")
+            ax.set_yscale("symlog", linthresh=1.0)
             ax.set_title(size)
             ax.set_xlabel(LABELS[lang]["evals"])
         axes[0][0].set_ylabel(LABELS[lang]["gap"])
-        axes[0][-1].legend(fontsize=6)
+        axes[0][-1].legend(fontsize=5)
         fig.tight_layout()
         files += save(fig, out, lang, "convergence")
     return files
