@@ -270,7 +270,12 @@ def test_pilot_estimate_and_reductions(tmp_path, tuned_cfg):
         for mname in [*cfg.raw["stochastic_methods"], "GA-P20", "GA-P400"]:
             per_eval[(i.set, i.size, mname)] = 1e-3 if mname != "GA-P20" else 2e-3
     det = {(i.set, i.size, mname): 0.01 for i in items for mname in ("LP", "LP-ortools", "NWC", "LCM", "VAM")}
-    est = pilot.estimate_plan(cfg, items, per_eval, det, ratio=1.5, p_cores=8, workers=24)
+    est = pilot.estimate_plan(cfg, items, per_eval, det, ratio=1.5, p_cores=8, workers=24, memory_budget=64 * 2**30)
+    assert est["memory_limited"] == []  # tiny instances: everything fits
+    tight = pilot.estimate_plan(cfg, items, per_eval, det, ratio=1.5, p_cores=8, workers=24, memory_budget=2**30)
+    assert tight["memory_limited"] and all(r["at_once"] < r["of"] for r in tight["memory_limited"])
+    assert tight["phases"]["main"]["wall_h"] > est["phases"]["main"]["wall_h"]
+    assert tight["phases"]["main"]["core_s"] == est["phases"]["main"]["core_s"]  # same work, fewer at once
     assert set(est["phases"]) == set(pilot.PHASES)
     assert est["total_wall_h"] > 0 and abs(sum(p["share"] for p in est["phases"].values()) - 1) < 1e-9
     applied = est["phases"]["applied"]

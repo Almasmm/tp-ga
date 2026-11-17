@@ -281,3 +281,18 @@ with these amendments; where they differ, the amendment applies.
 * Disclosed state when this rule was written: round 2 had finished 95 of 100 GA-rand trials (best training
   gap 56.47 % against 46.14 % in round 1); GA-cost, SA-rand and SA-cost of round 2 had not started.
   Replaces the sentence "the second result is the one used" of amendment 2.
+
+### Amendment 6 (2026-11-17): runs start only while their memory is free (procedure, no change of results)
+
+* Reason: with the tuned populations a GA run can need several GiB (on 200x200: 2.3 GiB at population 2431,
+  3.7 GiB at 4000; measured peak private bytes), so 24 runs at once need more memory than the laptop has
+  (63 GB RAM, commit limit about 94 GB, part of it held by other programs). On Windows a run then fails to
+  allocate, or the whole run stops (see the second stop of round 2 under amendment 2).
+* Change: every phase of `tpga-exp run` uses the same rule as the tuning (`src/tpga/experiments/v2/memory.py`):
+  a run starts only while the estimates of the running runs plus its own fit in the memory usable at the start
+  of the phase (smaller of free RAM and free commit, less 4 GiB), and while the memory free at that moment still
+  covers it; with nothing running, a run always starts. Runs start in the same order as before. Each run is
+  deterministic (its own seed), so no record changes; only the number of runs at once, and so the wall time, can.
+* The pilot estimates the wall time with the same rule and lists the runs that are limited by memory, with the
+  number that fit at once (`paper_artifacts_v2/pilot/PILOT.md`, section Memory). The number of runs at once and
+  the memory budget of each phase are written to the run log.

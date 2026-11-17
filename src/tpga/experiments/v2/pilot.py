@@ -226,26 +226,49 @@ def _task_seconds(t: dict[str, Any], per_eval: dict, det_time: dict, cfg: Config
 
 
 def estimate_plan(
-    cfg: ConfigV2, items: list[InstanceV2], per_eval: dict, det_time: dict, ratio: float, p_cores: int, workers: int
+    cfg: ConfigV2,
+    items: list[InstanceV2],
+    per_eval: dict,
+    det_time: dict,
+    ratio: float,
+    p_cores: int,
+    workers: int,
+    memory_budget: int | None = None,
 ) -> dict[str, Any]:
+    """Wall time of every phase. Runs whose memory (``memory.task_bytes``) does not let all workers run at once
+    within ``memory_budget`` (default: the memory usable now, less the reserve) are slowed down accordingly."""
+    from tpga.experiments.v2 import memory
+
+    if memory_budget is None:
+        memory_budget = environment.usable_memory_bytes() - memory.RESERVE_BYTES
     capacity = p_cores + (workers - p_cores) / ratio  # performance-core equivalents
     phases: dict[str, Any] = {}
     detail: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+    limited: dict[tuple[str, str, str, str], dict[str, Any]] = {}
     for name in PHASES:
         tasks = phase_tasks(cfg, name, items)
         cores = p_cores if name == "timing" else capacity
-        core_s = 0.0
-        by_set: dict[str, dict[str, float]] = defaultdict(lambda: {"runs": 0, "core_s": 0.0})
+        n_proc = p_cores if name == "timing" else workers
+        core_s = wall_s = 0.0
+        by_set: dict[str, dict[str, float]] = defaultdict(lambda: {"runs": 0, "core_s": 0.0, "wall_s": 0.0})
         for t in tasks:
             s = _task_seconds(t, per_eval, det_time, cfg)
+            need = memory.task_bytes(t)
+            k = memory.slots(need, n_proc, memory_budget)
+            w = s * n_proc / k  # only k of n_proc runs of this kind fit in memory at once
+            if k < n_proc:
+                key = (name, t["set"], t["size"], t["method"])
+                limited[key] = {"at_once": k, "of": n_proc, "gib_per_run": need / 2**30}
             core_s += s
-            detail[name][f"{t['set']} {t['size']} {t['method']}"] += s
+            wall_s += w
+            detail[name][f"{t['set']} {t['size']} {t['method']}"] += w
             by_set[t["set"]]["runs"] += 1
             by_set[t["set"]]["core_s"] += s
-        phases[name] = {"runs": len(tasks), "core_s": core_s, "wall_h": core_s / cores / 3600}
+            by_set[t["set"]]["wall_s"] += w
+        phases[name] = {"runs": len(tasks), "core_s": core_s, "wall_h": wall_s / cores / 3600}
         if name in SPLIT_BY_SET:  # e.g. applied: wheat and Astana separately
             phases[name]["by_set"] = {
-                k: {"runs": int(v["runs"]), "core_s": v["core_s"], "wall_h": v["core_s"] / cores / 3600}
+                k: {"runs": int(v["runs"]), "core_s": v["core_s"], "wall_h": v["wall_s"] / cores / 3600}
                 for k, v in by_set.items()
             }
     total = sum(p["wall_h"] for p in phases.values())
@@ -256,6 +279,10 @@ def estimate_plan(
         "phases": phases,
         "total_wall_h": total,
         "capacity_performance_cores": capacity,
+        "memory_budget_gib": memory_budget / 2**30,
+        "memory_limited": [
+            {"phase": k[0], "set": k[1], "size": k[2], "method": k[3], **v} for k, v in sorted(limited.items())
+        ],
         "largest_items": [
             {"phase": ph, "item": k, "wall_h": v / ((p_cores if ph == "timing" else capacity) * 3600)}
             for ph, k, v in top
@@ -328,6 +355,29 @@ def markdown(result: dict[str, Any]) -> str:
         "|---|---|---|",
         *[f"| {r['phase']} | {r['item']} | {r['wall_h']:.2f} |" for r in result["largest_items"]],
     ]
+    if "memory_budget_gib" in result:
+        lim = result.get("memory_limited", [])
+        lines += [
+            "",
+            "## Memory",
+            "",
+            f"Memory runs may use: {result['memory_budget_gib']:.1f} GiB (smaller of free RAM and free commit when the "
+            "estimate was made, less 4 GiB). A run starts only while its memory is free; the times above include "
+            "the slowdown where fewer runs fit at once.",
+        ]
+        if lim:
+            lines += [
+                "",
+                "| Phase | Set | Size | Method | GiB per run | Runs at once |",
+                "|---|---|---|---|---|---|",
+                *[
+                    f"| {r['phase']} | {r['set']} | {r['size']} | {r['method']} | {r['gib_per_run']:.2f} "
+                    f"| {r['at_once']} of {r['of']} |"
+                    for r in lim
+                ],
+            ]
+        else:
+            lines += ["", "No run is limited by memory: every phase runs all workers at once."]
     if result["reductions"]:
         lines += [
             "",
