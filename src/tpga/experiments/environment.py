@@ -79,6 +79,43 @@ def keep_awake() -> Iterator[bool]:
             ctypes.windll.kernel32.SetThreadExecutionState(ctypes.c_uint(ES_CONTINUOUS))  # type: ignore[attr-defined,unused-ignore]
 
 
+class _MemoryStatus(ctypes.Structure):
+    _fields_ = [
+        ("dwLength", ctypes.c_ulong),
+        ("dwMemoryLoad", ctypes.c_ulong),
+        ("ullTotalPhys", ctypes.c_ulonglong),
+        ("ullAvailPhys", ctypes.c_ulonglong),
+        ("ullTotalPageFile", ctypes.c_ulonglong),
+        ("ullAvailPageFile", ctypes.c_ulonglong),
+        ("ullTotalVirtual", ctypes.c_ulonglong),
+        ("ullAvailVirtual", ctypes.c_ulonglong),
+        ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+    ]
+
+
+def memory_status() -> dict[str, int]:
+    """Free RAM and, on Windows, the commit limit and the free commit (RAM plus page file not yet promised)."""
+    if sys.platform == "win32":
+        m = _MemoryStatus()
+        m.dwLength = ctypes.sizeof(_MemoryStatus)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)):  # type: ignore[attr-defined,unused-ignore]
+            return {
+                "ram_free": int(m.ullAvailPhys),
+                "commit_limit": int(m.ullTotalPageFile),
+                "commit_free": int(m.ullAvailPageFile),
+            }
+    import psutil  # pragma: no cover - other systems
+
+    free = int(psutil.virtual_memory().available)  # pragma: no cover
+    return {"ram_free": free, "commit_limit": free, "commit_free": free}  # pragma: no cover
+
+
+def usable_memory_bytes() -> int:
+    """Memory new runs may use: the smaller of the free RAM and the free commit."""
+    s = memory_status()
+    return min(s["ram_free"], s["commit_free"])
+
+
 def _run(cmd: list[str], encoding: str | None = None) -> str:
     try:
         out = subprocess.run(cmd, capture_output=True, timeout=30, check=False).stdout

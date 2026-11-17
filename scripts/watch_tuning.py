@@ -1,3 +1,4 @@
+# ruff: noqa: E402  (the thread variables below must be set before NumPy is imported)
 """Live view of the parameter tuning (read-only).
 
 Shows the progress of every tuned method, the best training gap so far next to the result of round 1,
@@ -13,6 +14,12 @@ Ctrl+C closes the view only; the tuning keeps running. The script reads files an
 """
 
 from __future__ import annotations
+
+import os
+
+# Before NumPy is imported (through tpga): otherwise OpenBLAS commits about 1.5 GiB of buffers in this process.
+for _name in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS", "NUMBA_NUM_THREADS"):
+    os.environ.setdefault(_name, "1")
 
 import argparse
 import contextlib
