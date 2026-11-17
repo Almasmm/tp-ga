@@ -21,7 +21,7 @@ import yaml
 
 from tpga.exact import solve_lp_highspy
 from tpga.experiments import environment
-from tpga.experiments.v2 import methods
+from tpga.experiments.v2 import memory, methods
 from tpga.experiments.v2.config import ConfigV2
 from tpga.experiments.v2.instances import build, select
 from tpga.experiments.v2.runner import init_worker
@@ -116,15 +116,12 @@ def overlap_with_test(cfg: ConfigV2, train: list[Any]) -> int:
 
 
 JOURNAL = "optuna-journal.log"
-RESERVE_BYTES = 4 * 2**30  # memory left to the system and the other programs
+RESERVE_BYTES = memory.RESERVE_BYTES
 
 
 def worst_case_bytes(population: int, arcs: int) -> int:
-    """Peak memory of one GA run: two populations of int64 permutations plus working arrays.
-
-    Measured on this machine (2026-11-17): population 4000 on 100x100 peaked at 1054 MiB, population 20 at
-    140 MiB; 150 MiB + 24 bytes per (individual, arc) bounds both."""
-    return 150 * 2**20 + 24 * int(population) * int(arcs)
+    """Peak memory of one GA run (see :mod:`tpga.experiments.v2.memory` for the measurements)."""
+    return memory.ga_bytes(population, arcs)
 
 
 def safe_workers(requested: int, per_worker: int, available: int, reserve: int = RESERVE_BYTES) -> int:
@@ -192,7 +189,6 @@ def run(
     import time
 
     import optuna
-    import psutil
     from optuna.trial import TrialState
 
     spec = cfg.raw["tuning"]
@@ -213,12 +209,11 @@ def run(
     classes = environment.cpu_classes()
     pop_hi = int(bounds(spec["space"]["ga"]["population"], True)[1])
     per_worker = worst_case_bytes(pop_hi, max(i.m * i.n for i in train))
-    requested = int(cfg.raw.get("workers", 24))
-    free = psutil.virtual_memory().available
-    workers = safe_workers(requested, per_worker, free)
+    workers = int(cfg.raw.get("workers", 24))
+    free = environment.usable_memory_bytes()
     print(
-        f"workers: {workers} of {requested} (worst case {per_worker / 2**30:.2f} GB per process, "
-        f"{free / 2**30:.1f} GB free)",
+        f"workers: {workers} of {workers}; runs start only while their memory is free "
+        f"(worst case {per_worker / 2**30:.2f} GB per run, {free / 2**30:.1f} GB usable now)",
         flush=True,
     )
     manager = mp.Manager()
@@ -232,6 +227,7 @@ def run(
     seed = int(spec["seed"])
     n_trials = int(spec["trials"])
     batches_run = 0
+    gate_log: list[dict[str, int]] = []
     started = time.time()
     try:
         with environment.keep_awake():
@@ -253,10 +249,16 @@ def run(
                     """Mean gap and number of runs of every parameter set; all runs of the batch at once."""
                     jobs = [(b, t) for b, p in enumerate(batch_params) for t in trial_tasks(p)]
                     jobs.sort(key=lambda j: -int(j[1]["m"]) * int(j[1]["n"]))  # the slowest runs start first
-                    futures = [(b, pool.submit(methods.execute, t)) for b, t in jobs]
+                    gate = memory.MemoryGate(workers)  # budget: memory usable at the start of the batch
+                    values: list[float | None] = [None] * len(jobs)
+                    for i, fut in memory.run_gated(
+                        pool, methods.execute, [t for _, t in jobs], memory.task_bytes, gate
+                    ):
+                        values[i] = float(fut.result()[0]["gap"])
+                    gate_log.append({"runs": len(jobs), "peak_running": gate.peak_running, "held": gate.held_back})
                     gaps: list[list[float]] = [[] for _ in batch_params]
-                    for b, fut in futures:
-                        gaps[b].append(float(fut.result()[0]["gap"]))
+                    for (b, _), v in zip(jobs, values, strict=True):  # job order, as before the gate
+                        gaps[b].append(float(v))  # type: ignore[arg-type]
                     return [(statistics.fmean(g), len(g)) for g in gaps]
 
                 # Trials run in batches of `parallel_trials` (ask/tell). Batch k is proposed by
@@ -296,6 +298,12 @@ def run(
                     print(
                         f"{name}: {done()}/{n_trials} trials, best mean gap {study.best_value:.3f} %, "
                         f"{(time.time() - started) / 60:.1f} min",
+                        flush=True,
+                    )
+                    g = gate_log[-1]
+                    print(
+                        f"  memory: up to {g['peak_running']} of {workers} runs at once"
+                        + (f", a run waited for memory {g['held']} times" if g["held"] else ""),
                         flush=True,
                     )
                 write_log(study, log)

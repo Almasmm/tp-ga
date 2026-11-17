@@ -207,6 +207,23 @@ with these amendments; where they differ, the amendment applies.
   separate process, detached from the launch session; (d) the number of worker processes is reduced if the
   worst case (150 MiB + 24 bytes per individual and arc) would not fit in free memory less 4 GiB; the number of
   workers does not change any result.
+* Round 2 stopped a second time (2026-11-17, between 21:11 and 21:16 +05:00) with GA-rand complete (100 trials)
+  and GA-cost at 15 trials; batch 3 of GA-cost (trials 15-19, populations 417 to 3995) was asked but not
+  finished. The process ended without a traceback and without a Windows error event. Most likely cause:
+  the commit limit of Windows (RAM plus page file, 94.4 GB) was used up, which makes allocations fail even
+  with free RAM. At the time, the audio service process `DAX3API.exe` held 35.9 GB of private memory, the
+  tuning view held 1.5 GB (it imported NumPy without `OPENBLAS_NUM_THREADS=1`, so OpenBLAS committed its
+  buffers), and batch 3 starts with 24 runs on 100x100 that need about 12 GB; at 21:15:50 another program's
+  service ended unexpectedly. The earlier memory check of the tuning used the free RAM at start only.
+* Change (2026-11-17, before the resume): a run starts only while its memory is free. Memory per run is an upper
+  bound of the measured peak private bytes (GA: 150 MiB + 24 bytes per individual and arc; checked at 100x100
+  and 200x200 up to population 4000); the memory a batch may use is the smaller of the free RAM and the free
+  commit at the start of the batch, less 4 GiB, and a run also waits while the memory free at that moment would
+  not cover it. Runs are admitted in the same order as before and the results are collected in that order, so
+  every trial value is unchanged; only the number of runs at once can be smaller. The resume continues from the
+  journal: GA-rand is kept, batch 3 of GA-cost is marked failed and asked again with the same parameters (the
+  sampler of a batch is seeded by its index), and the round continues with the same trials, instances, seeds and
+  ranges.
 
 ### Amendment 3 (2026-11-17): phase `representation` (non-confirmatory; added to section 7)
 
