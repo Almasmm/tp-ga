@@ -10,7 +10,8 @@ PHASES = ("reference", "main")
 
 
 def table(runs: pd.DataFrame) -> pd.DataFrame:
-    df = runs[runs["phase"].isin(PHASES) & (runs["set"] != "lp_scaling") & (runs["method"] != "LP-ortools")]
+    synthetic = ~runs["set"].isin(["lp_scaling", "wheat", "astana"])
+    df = runs[runs["phase"].isin(PHASES) & synthetic & (runs["method"] != "LP-ortools")]
     rows = []
     for (set_, size, method), g in df.groupby(["set", "size", "method"]):
         rows.append(

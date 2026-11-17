@@ -18,6 +18,8 @@ from tpga.experiments.v2.config import ConfigV2
 from tpga.model import TransportProblem
 
 SET_ORDER = ("uniform", "structured", "skewed", "ties", "lp_scaling")
+#: applied datasets (``datasets/<name>``) and the set name their instances get (amendment 4)
+APPLIED = {"kazakh-wheat": "wheat", "astana-potato": "astana"}
 TRAIN_OFFSET = 5_000_000
 
 
@@ -175,10 +177,60 @@ def build(
                     }
                     entries[iid] = entry
                 out.append(InstanceV2(iid, set_name, int(m), int(n), path, seed, entry["z_rand"], split))
+    if split == "test" and sets is None and "applied" in spec_all:
+        out += _applied(cfg, root, entries, spec_all["applied"], samples, base)
     root.mkdir(parents=True, exist_ok=True)
     tmp = manifest_path.with_suffix(".tmp")
     tmp.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8", newline="\n")
     tmp.replace(manifest_path)
+    return out
+
+
+def _applied(
+    cfg: ConfigV2, root: Path, entries: dict[str, Any], spec: dict[str, Any], samples: int, base: int
+) -> list[InstanceV2]:
+    """Scenarios of the applied datasets, copied byte for byte from ``datasets/`` (illustration only)."""
+    out = []
+    for dataset in spec["datasets"]:
+        set_name = APPLIED[dataset]
+        src_root = cfg.root / "datasets" / dataset
+        info = json.loads((src_root / "manifest.json").read_text(encoding="utf-8"))
+        scenarios = [s for s in info["scenarios"] if s.get("event") not in spec.get("exclude_events", [])]
+        for k, sc in enumerate(scenarios):
+            iid = f"{set_name}-{k:02d}-{sc['id']}"
+            src = src_root / sc["file"]
+            path = root / set_name / f"{iid}.json"
+            data = src.read_bytes()
+            if not path.exists() or path.read_bytes() != data:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+            digest = _sha(path)
+            problem = TransportProblem.from_json(path)
+            m, n = problem.shape
+            entry = entries.get(iid)
+            if entry is None or entry.get("sha256") != digest or "z_rand" not in entry:
+                entry = {
+                    "id": iid,
+                    "set": set_name,
+                    "m": int(m),
+                    "n": int(n),
+                    "seed": None,
+                    "split": "test",
+                    "file": path.relative_to(root).as_posix(),
+                    "sha256": digest,
+                    "source_file": src.relative_to(cfg.root).as_posix(),
+                    "dataset": dataset,
+                    "scenario": sc["id"],
+                    "event": sc.get("event"),
+                    "balanced": bool(problem.is_balanced),
+                    "data_kind": info.get("data_kind"),
+                    "z_rand": z_rand(problem, samples, zrand_seed(iid, base), cfg.decoder_tol),
+                    "z_rand_samples": samples,
+                    "z_rand_seed": zrand_seed(iid, base),
+                    "generator": None,
+                }
+                entries[iid] = entry
+            out.append(InstanceV2(iid, set_name, int(m), int(n), path, 0, entry["z_rand"], "test"))
     return out
 
 

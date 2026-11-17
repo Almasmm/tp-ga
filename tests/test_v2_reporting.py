@@ -358,3 +358,21 @@ def test_checks_counts_records_failures_and_residuals(tmp_path: Path) -> None:
     assert t.loc["main", "records"] == 3 and t.loc["main", "failed_runs"] == 1
     assert t.loc["main", "plans_infeasible"] == 0 and t.loc["main", "max_residual"] == pytest.approx(2e-12)
     assert t.loc["total", "records"] == 4 and t.loc["representation", "plans_checked"] == 0
+
+
+def test_t10_applied_summary_counts_instances_better_than_vam() -> None:
+    from tpga.experiments.reporting import t10_applied
+
+    rows = []
+    for i, vam in enumerate((5.0, 6.0, 7.0)):
+        inst = f"astana-{i:02d}-day"
+        rows.append(rec("reference", "astana", "24x324", inst, "VAM", vam, seed=None))
+        for s in range(2):
+            rows.append(rec("applied", "astana", "24x324", inst, "GA-cost-tuned", 6.0 + s, seed=s))  # mean 6.5
+    rows.append(rec("main", "uniform", "5x5", "u", "RS", 1.0))
+    df = frame(rows)
+    s = t10_applied.summary(df).set_index("method")
+    assert s.loc["GA-cost-tuned", "better_than_vam"] == 1  # 6.5 < 7.0 only
+    assert s.loc["GA-cost-tuned", "gap_median"] == 6.5 and s.loc["VAM", "gap_min"] == 5.0
+    assert len(t10_applied.per_instance(df)) == 6
+    assert "astana" not in set(t2_gap.table(df)["set"])  # illustrative sets stay out of the synthetic tables

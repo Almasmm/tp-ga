@@ -25,6 +25,7 @@ from tpga.experiments.reporting import (
     t7_stopping,
     t8_lp_scaling,
     t9_representation,
+    t10_applied,
 )
 from tpga.experiments.reporting.common import load_curves, load_runs, write_table
 from tpga.experiments.v2.config import ConfigV2
@@ -55,6 +56,8 @@ def tables(output: Path, runs: pd.DataFrame) -> dict[str, pd.DataFrame]:
         "T8_lp_scaling": t8_lp_scaling.table(runs) if have else empty,
         "T8_lp_disagreement": t8_lp_scaling.agreement(runs) if have else empty,
         "A1_methods_pooled": t5_methods.appendix_pooled(runs, "gap") if have else empty,
+        "T10_applied_instances": t10_applied.per_instance(runs) if have else empty,
+        "T10_applied_summary": t10_applied.summary(runs) if have else empty,
     }
 
 
@@ -74,6 +77,11 @@ TITLES = {
     "T8_lp_scaling": ("Exact solvers on large instances", "HiGHS (highspy) and OR-Tools min-cost flow."),
     "T8_lp_disagreement": ("Instances where the two exact solvers disagree", "Expected to be empty."),
     "A1_methods_pooled": ("Appendix: comparisons pooled over sizes", "Not used for conclusions; see T5."),
+    "T10_applied_instances": ("Illustrative cases by instance", "Stochastic methods: mean over 10 runs."),
+    "T10_applied_summary": (
+        "Illustrative cases by set",
+        "Median and range over instances of the per-instance mean gap; better_than_vam counts instances.",
+    ),
     "representation": (
         "Representation: decoder prefix, neutrality, locality, heritability (non-confirmatory)",
         "Medians over instances and seeds; source random = random permutations, otherwise the tuned GA "

@@ -19,11 +19,11 @@ from typing import Any
 from tpga.experiments import environment
 from tpga.experiments.v2 import methods
 from tpga.experiments.v2.config import ConfigV2
-from tpga.experiments.v2.instances import InstanceV2, build
+from tpga.experiments.v2.instances import APPLIED, InstanceV2, build
 from tpga.experiments.v2.runner import init_worker
 from tpga.experiments.v2.tasks import phase_tasks, reference_tasks, stochastic_tasks
 
-PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "representation", "timing")
+PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "applied", "representation", "timing")
 
 
 def _pool_run(tasks: list[dict[str, Any]], cpus: list[int], rows: list | None = None) -> list[dict[str, Any]]:
@@ -105,6 +105,8 @@ def run(cfg: ConfigV2) -> dict[str, Any]:
         t
         for t in reference_tasks(cfg, "pilot", list(firsts.values()), ["LP-ortools", "NWC", "LCM", "VAM"], repeats=1)
         if not (t["method"] != "LP-ortools" and t["set"] == "lp_scaling")
+        # OR-Tools (integer data only) is timed on the uniform and lp_scaling sets only
+        and not (t["method"] == "LP-ortools" and t["set"] in APPLIED.values())
     ]
     for t in other_ref:
         t["z_star"] = z[t["instance"]]

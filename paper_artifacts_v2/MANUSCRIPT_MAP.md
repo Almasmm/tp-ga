@@ -24,7 +24,7 @@ same numbers as the English one and take them from the same cells.
 |---|---|
 | "80 synthetic instances from 5×5 to 100×100" | `T1_instances.instances` summed over sets used in RQ1-RQ2 (uniform, structured, skewed, ties); sizes from `T1.size` (v0.4: 5x5 to 200x200) |
 | "30 runs each" | `experiments/paper-v2.yaml: runs` (30; 10 at uniform 200x200, amendment 1) |
-| "two illustrative cases ... Kazakhstan" | No v0.4 source (see end) |
+| "two illustrative cases ... Kazakhstan" | phase `applied` (amendment 4): `T10_applied_summary`, `T10_applied_instances` |
 | "200 generations" stagnation | v0.4 main stop is budget only; the 200-generation rule is `T7[stop=200 generations]` |
 | "median gap of GA-rand grows from 5.9% at 10×10 to 603% at 100×100" | `T2[set=uniform, size=10x10 / 100x100, method=GA-rand-base or GA-rand-tuned].gap_median` |
 | "GA-rand beats random search and NWC on every instance from 10×10 on" | `T5_methods_gap[method_a=GA-rand-base, method_b=RS / NWC].wins_x == n`, per (set, size) |
@@ -140,7 +140,14 @@ same numbers as the English one and take them from the same cells.
 
 | Article | v0.4 source |
 |---|---|
-| Table 7 and all numbers of 3.7 (wheat 15×7, Astana 24×324, 33 instances, 22 s, 0.044 s) | **No v0.4 source.** v0.4 has no applied phase. |
+| Table 7, wheat rows (5 scenarios): NWC/LCM/VAM gaps, RS and GA means over runs | `T10_applied_instances[set=wheat, instance, method].gap_mean` (10 runs per stochastic method) |
+| "VAM is 0.47–2.24% above the optimum", "RS 0.47–1.39%", "below 0.14%", "1.5–6.9%" | min and max of `T10_applied_instances[set=wheat, method].gap_mean` over the scenarios |
+| "105 arcs" | 15 x 7 (`T10_applied_summary[set=wheat].size`) |
+| Astana row: median (range) over 33 instances: 34.4, 8.4, 6.2, 37.7, 8.4, 1.6 % | `T10_applied_summary[set=astana, method].gap_median (gap_min - gap_max)`, `instances` = 33 |
+| "GA-cost was better than VAM on all 33 instances and GA-rand on 3" | `T10_applied_summary[set=astana, method=GA-*-tuned].better_than_vam` |
+| "7,776 arcs" | 24 x 324 |
+| "22 s" (GA-cost per run), "0.044 s" (HiGHS) | `T10_applied_summary[set=astana, method=GA-cost-tuned / LP].time_median_s` (quality phase, all cores; LP is HiGHS run time) |
+| v0.4 adds SA-rand-tuned, SA-cost-tuned | same tables |
 
 ### 3.8 Discussion, 3.9 Threats to validity
 
@@ -164,7 +171,6 @@ same numbers as the English one and take them from the same cells.
 
 ## Numbers without a v0.4 source (decision needed before writing)
 
-1. Section 3.7 and Table 7 (wheat export, Astana potato): either add an `applied` phase to v0.4 (amendment;
-   the v0.3.0 design ran 10 runs per instance and method) or remove the section from the article.
+1. Section 3.7: resolved by the phase `applied` (amendment 4, 2026-11-17).
 2. Section 3.2, Mann–Whitney comparison of structured and uniform instances: not pre-registered in v0.4;
    report the medians from `T2.instance_median_median` without a test, or drop the sentence.
