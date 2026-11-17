@@ -189,6 +189,24 @@ with these amendments; where they differ, the amendment applies.
   0 < final_ratio < 1; 0.99 is used). Not widened, already at the limit of the domain: elite >= 1 and
   crossover rate <= 1. Round 2 tunes all four methods again with these ranges, otherwise unchanged; its
   result is `experiments/tuned-v2.yaml` and is the one used. No further widening.
+* Round 2, first start (2026-11-17, 13:13 +05:00) stopped after 10 GA-rand trials (two batches of 5; the last
+  trial was written at 13:22). Cause, from the Windows system log: at 13:23:47 the computer was restarted from
+  the Start menu by the user account (event 1074, StartMenuExperienceHost, "Other (Unplanned)"), followed by a
+  second restart by winlogon at 13:25:36 (event 1074, reason code 0x500ff). The tuning ran as a child process of
+  the agent's session and ended with it. There was no sleep (no Kernel-Power 42 / Power-Troubleshooter event)
+  and no memory exhaustion (no Resource-Exhaustion event); the worst case of round 2, population 4000 on
+  100x100, peaks at 1054 MiB per process (measured), so 24 processes need about 25 GiB with 33 GiB free.
+  The 10 trials are kept in `paper_artifacts_v2/tuning/round2-attempt1/` and are not used.
+* Round 2 restarted from the beginning (2026-11-17), with the same trials (100 per method, batches of 5), the
+  same training instances, seeds and ranges. Changes to the procedure, none of which changes what is tuned or
+  how a trial is scored: (a) the Optuna study is stored on disk (JournalStorage,
+  `paper_artifacts_v2/tuning/optuna-journal.log`), so a crash loses at most the batch in flight; (b) batch k is
+  proposed by `TPESampler(seed=20261201 + k, constant_liar=True)` (before: one sampler seeded once), so a run
+  resumed from the journal proposes the same trials as an uninterrupted run (tested); (c) the tuning process
+  asks Windows not to sleep while it runs (`SetThreadExecutionState`, no setting changed) and runs as a
+  separate process, independent of the agent's session; (d) the number of worker processes is reduced if the
+  worst case (150 MiB + 24 bytes per individual and arc) would not fit in free memory less 4 GiB; the number of
+  workers does not change any result.
 
 ### Amendment 3 (2026-11-17): phase `representation` (non-confirmatory; added to section 7)
 
