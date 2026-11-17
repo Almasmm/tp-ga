@@ -449,3 +449,87 @@ def test_parallel_tuning_is_reproducible(tuned_cfg, tmp_path) -> None:
     assert second["best_objective"] == first["best_objective"]
     log = (tmp_path / "out" / "tuning" / "SA-rand.jsonl").read_text(encoding="utf-8").splitlines()
     assert [json.loads(line)["trial"] for line in log] == [0, 1, 2]
+
+
+def _trial_log(out: Path, name: str) -> list[tuple[dict, float]]:
+    rows = [json.loads(line) for line in (out / "tuning" / f"{name}.jsonl").read_text(encoding="utf-8").splitlines()]
+    return [(r["params"], r["mean_gap"]) for r in rows]
+
+
+def test_tuning_resumes_after_a_crash_with_the_same_trials(tmp_path) -> None:
+    """A run stopped between batches and then left with a batch asked but never told (a crash) continues from
+    the journal on disk and ends with the same trials, values and frozen parameters as an uninterrupted run."""
+    import optuna
+    import yaml
+
+    from tpga.experiments.v2 import tune
+
+    (tmp_path / "a").mkdir()
+    (tmp_path / "b").mkdir()
+    whole = ConfigV2.load(make_config(tmp_path / "a"))
+    tune.run(whole, ["GA-rand"])
+    cfg = ConfigV2.load(make_config(tmp_path / "b"))
+    assert tune.run(cfg, ["GA-rand"], stop_after_batches=1) == {}
+    assert len(_trial_log(cfg.output, "GA-rand")) == 2  # batch 0 of size 2 (parallel_trials: 2)
+    # the crash: batch 1 asked (parameters stored in the trial) but the process died before telling it
+    study = optuna.load_study(study_name="GA-rand", storage=tune.journal_storage(cfg.output / "tuning"))
+    study.sampler = optuna.samplers.TPESampler(seed=int(cfg.raw["tuning"]["seed"]) + 1, constant_liar=True)
+    trial = study.ask()
+    trial.set_user_attr("params", tune.suggest(trial, "ga", cfg.raw["tuning"]["space"]))
+    trial.set_user_attr("batch", 1)
+    frozen = tune.run(cfg, ["GA-rand"])
+    assert _trial_log(cfg.output, "GA-rand") == _trial_log(whole.output, "GA-rand")
+    first = yaml.safe_load(whole.tuned_path.read_text(encoding="utf-8"))
+    assert frozen["parameters"] == first["parameters"]
+    assert frozen["best_objective"] == first["best_objective"]
+    states = [
+        t.state.name
+        for t in optuna.load_study(study_name="GA-rand", storage=tune.journal_storage(cfg.output / "tuning")).trials
+    ]
+    assert states == ["COMPLETE", "COMPLETE", "FAIL", "COMPLETE"]  # the lost trial was asked again
+    assert frozen["procedure"]["sampler_seed"] == "seed + batch index"
+
+
+def test_recover_finishes_or_repeats_the_batch_in_flight() -> None:
+    import optuna
+    from optuna.trial import TrialState
+
+    from tpga.experiments.v2 import tune
+
+    study = optuna.create_study(storage=optuna.storages.InMemoryStorage())
+    for batch, n in ((0, 2), (1, 1)):
+        for _ in range(n):
+            t = study.ask()
+            t.set_user_attr("params", {"x": t.suggest_float("x", 0, 1)})
+            t.set_user_attr("batch", batch)
+    study.tell(0, 5.0)  # batch 0 half told: trial 1 is finished with its stored parameters
+    seen = []
+
+    def evaluate(params):
+        seen.extend(params)
+        return [(1.5, 7) for _ in params]
+
+    assert tune.recover(study, evaluate) == {"finished": 1, "failed": 1}
+    t = study.trials
+    assert seen == [t[1].user_attrs["params"]]
+    assert (t[1].state, t[1].value, t[1].user_attrs["runs"]) == (TrialState.COMPLETE, 1.5, 7)
+    assert t[2].state == TrialState.FAIL  # batch 1 had nothing told: it is asked again by the caller
+
+
+def test_workers_fit_the_worst_case_in_memory() -> None:
+    from tpga.experiments.v2 import tune
+
+    gib = 2**30
+    worst = tune.worst_case_bytes(4000, 100 * 100)
+    assert 1054 * 2**20 <= worst < 1.2 * gib  # measured peak 1054 MiB for population 4000 on 100x100
+    assert 140 * 2**20 <= tune.worst_case_bytes(20, 100 * 100) < 0.2 * gib  # measured 140 MiB
+    assert tune.safe_workers(24, worst, 33 * gib) == 24
+    assert tune.safe_workers(24, worst, 14 * gib) == 9
+    assert tune.safe_workers(24, worst, 1 * gib) == 1
+
+
+def test_keep_awake_holds_a_request_only_inside_the_block() -> None:
+    from tpga.experiments.environment import keep_awake
+
+    with keep_awake() as ok:
+        assert ok is (sys.platform == "win32")

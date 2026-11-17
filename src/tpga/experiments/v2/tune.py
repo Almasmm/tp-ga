@@ -115,8 +115,85 @@ def overlap_with_test(cfg: ConfigV2, train: list[Any]) -> int:
     return sum(hashlib.sha256(i.path.read_bytes()).hexdigest() in test for i in train)
 
 
-def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, Any]:
+JOURNAL = "optuna-journal.log"
+RESERVE_BYTES = 4 * 2**30  # memory left to the system and the other programs
+
+
+def worst_case_bytes(population: int, arcs: int) -> int:
+    """Peak memory of one GA run: two populations of int64 permutations plus working arrays.
+
+    Measured on this machine (2026-11-17): population 4000 on 100x100 peaked at 1054 MiB, population 20 at
+    140 MiB; 150 MiB + 24 bytes per (individual, arc) bounds both."""
+    return 150 * 2**20 + 24 * int(population) * int(arcs)
+
+
+def safe_workers(requested: int, per_worker: int, available: int, reserve: int = RESERVE_BYTES) -> int:
+    """Largest number of worker processes, at most ``requested``, whose worst case fits in free memory."""
+    return max(1, min(int(requested), int((available - reserve) // max(1, per_worker))))
+
+
+def journal_storage(out_dir: Any) -> Any:
+    """Optuna study on disk (one journal file for all tuned methods); a crash loses at most the batch in flight."""
+    from optuna.storages import JournalStorage
+    from optuna.storages.journal import JournalFileBackend, JournalFileOpenLock
+
+    path = str(out_dir / JOURNAL)
+    return JournalStorage(JournalFileBackend(path, lock_obj=JournalFileOpenLock(path)))
+
+
+def write_log(study: Any, path: Any) -> None:
+    """Trial log (one line per finished trial, in trial order), rewritten from the stored study."""
+    from optuna.trial import TrialState
+
+    lines = []
+    for t in sorted(study.get_trials(deepcopy=False, states=(TrialState.COMPLETE,)), key=lambda t: t.number):
+        a = t.user_attrs
+        row = {"trial": t.number, "batch": a["batch"], "params": a["params"], "mean_gap": t.value, "runs": a["runs"]}
+        lines.append(json.dumps(row))
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text("".join(line + "\n" for line in lines), encoding="utf-8", newline="\n")
+    tmp.replace(path)
+
+
+def recover(study: Any, evaluate: Any) -> dict[str, int]:
+    """Bring a study left by a crash back to a state an uninterrupted run passes through.
+
+    A trial that was asked but not told belongs to the batch in flight. If some trial of its batch was already
+    told, the batch is finished with the stored parameters (same runs, same values). Otherwise the trial is
+    marked FAIL (failed trials are ignored by the sampler) and the whole batch is asked again: the sampler is
+    seeded per batch, so it proposes the same parameters again.
+    """
+    from optuna.trial import Trial, TrialState
+
+    trials = study.get_trials(deepcopy=False)
+    told = {t.user_attrs.get("batch") for t in trials if t.state == TrialState.COMPLETE}
+    out = {"finished": 0, "failed": 0}
+    for t in sorted(trials, key=lambda t: t.number):
+        if t.state not in (TrialState.RUNNING, TrialState.WAITING):
+            continue
+        if t.user_attrs.get("batch") in told and "params" in t.user_attrs:
+            value, runs = evaluate([t.user_attrs["params"]])[0]
+            Trial(study, t._trial_id).set_user_attr("runs", runs)
+            study.tell(t.number, value)
+            out["finished"] += 1
+        else:
+            study.tell(t.number, state=TrialState.FAIL)
+            out["failed"] += 1
+    return out
+
+
+def run(
+    cfg: ConfigV2, methods_to_tune: list[str] | None = None, *, stop_after_batches: int | None = None
+) -> dict[str, Any]:
+    """Tune every method (or ``methods_to_tune``); resumes from the journal in ``<output>/tuning`` if present.
+
+    ``stop_after_batches`` ends the run early, between two batches (used by the tests to simulate a crash).
+    """
+    import time
+
     import optuna
+    import psutil
+    from optuna.trial import TrialState
 
     spec = cfg.raw["tuning"]
     counts = per_size_counts(spec["instances_per_size"])
@@ -132,58 +209,98 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
     seeds = cfg.seeds(int(spec["seeds"]))
     out_dir = cfg.output / "tuning"
     out_dir.mkdir(parents=True, exist_ok=True)
+    storage = journal_storage(out_dir)
     classes = environment.cpu_classes()
+    pop_hi = int(bounds(spec["space"]["ga"]["population"], True)[1])
+    per_worker = worst_case_bytes(pop_hi, max(i.m * i.n for i in train))
+    requested = int(cfg.raw.get("workers", 24))
+    free = psutil.virtual_memory().available
+    workers = safe_workers(requested, per_worker, free)
+    print(
+        f"workers: {workers} of {requested} (worst case {per_worker / 2**30:.2f} GB per process, "
+        f"{free / 2**30:.1f} GB free)",
+        flush=True,
+    )
     manager = mp.Manager()
-    cpus = list(range(int(cfg.raw.get("workers", 24))))
+    cpus = list(range(workers))
     q = manager.Queue()
     for c in cpus:
         q.put(c)
     pool = ProcessPoolExecutor(len(cpus), initializer=init_worker, initargs=(q, classes, None, "normal", 1.0))
     results: dict[str, Any] = {}
     parallel = int(spec.get("parallel_trials", 1))
+    seed = int(spec["seed"])
+    n_trials = int(spec["trials"])
+    batches_run = 0
+    started = time.time()
     try:
-        for name in methods_to_tune or list(TUNED):
-            kind, init = TUNED[name]
-            log = out_dir / f"{name}.jsonl"
-            log.unlink(missing_ok=True)
+        with environment.keep_awake():
+            for name in methods_to_tune or list(TUNED):
+                kind, init = TUNED[name]
+                log = out_dir / f"{name}.jsonl"
 
-            def trial_tasks(params: dict[str, Any], kind: str = kind, init: str = init, name: str = name) -> list:
-                if kind == "ga":
-                    override = {name: {**params, "init": init}}
-                    tasks = stochastic_tasks(cfg, "tune", train, [name], "budget", seeds, params_override=override)
-                else:
-                    tasks = _sa_tasks(cfg, train, name, params, init, seeds)
-                for t in tasks:
-                    t["z_star"] = z[t["instance"]]
-                return tasks
+                def trial_tasks(params: dict[str, Any], kind: str = kind, init: str = init, name: str = name) -> list:
+                    if kind == "ga":
+                        override = {name: {**params, "init": init}}
+                        tasks = stochastic_tasks(cfg, "tune", train, [name], "budget", seeds, params_override=override)
+                    else:
+                        tasks = _sa_tasks(cfg, train, name, params, init, seeds)
+                    for t in tasks:
+                        t["z_star"] = z[t["instance"]]
+                    return tasks
 
-            # Trials run in batches of `parallel_trials` (ask/tell). TPE with constant_liar treats the trials
-            # already asked in the batch as running, and the batch is told in trial order after all its runs
-            # finished, so the result depends on the seed only (not on which run finishes first).
-            sampler = optuna.samplers.TPESampler(seed=int(spec["seed"]), constant_liar=parallel > 1)
-            study = optuna.create_study(direction="minimize", sampler=sampler, study_name=name)
-            optuna.logging.set_verbosity(optuna.logging.WARNING)
-            n_trials = int(spec["trials"])
-            while len(study.trials) < n_trials:
-                batch = []
-                for _ in range(min(parallel, n_trials - len(study.trials))):
-                    trial = study.ask()
-                    params = suggest(trial, kind, spec["space"])
-                    batch.append((trial, params, trial_tasks(params)))
-                jobs = [(b, t) for b, (_, _, tasks) in enumerate(batch) for t in tasks]
-                jobs.sort(key=lambda j: -int(j[1]["m"]) * int(j[1]["n"]))  # the slowest runs start first
-                futures = [(b, pool.submit(methods.execute, t)) for b, t in jobs]
-                gaps: list[list[float]] = [[] for _ in batch]
-                for b, fut in futures:
-                    gaps[b].append(float(fut.result()[0]["gap"]))
-                with log.open("a", encoding="utf-8", newline="\n") as fh:
-                    for (trial, params, _), g in zip(batch, gaps, strict=True):
-                        value = statistics.fmean(g)
+                def evaluate(batch_params: list[dict[str, Any]], trial_tasks: Any = trial_tasks) -> list:
+                    """Mean gap and number of runs of every parameter set; all runs of the batch at once."""
+                    jobs = [(b, t) for b, p in enumerate(batch_params) for t in trial_tasks(p)]
+                    jobs.sort(key=lambda j: -int(j[1]["m"]) * int(j[1]["n"]))  # the slowest runs start first
+                    futures = [(b, pool.submit(methods.execute, t)) for b, t in jobs]
+                    gaps: list[list[float]] = [[] for _ in batch_params]
+                    for b, fut in futures:
+                        gaps[b].append(float(fut.result()[0]["gap"]))
+                    return [(statistics.fmean(g), len(g)) for g in gaps]
+
+                # Trials run in batches of `parallel_trials` (ask/tell). Batch k is proposed by
+                # TPESampler(seed + k, constant_liar): the trials already asked in the batch count as running.
+                # A batch is told in trial order after all its runs finished. The proposals depend on the seed
+                # and the stored results only, so a run resumed from the journal repeats an uninterrupted one.
+                study = optuna.create_study(direction="minimize", study_name=name, storage=storage, load_if_exists=True)
+                optuna.logging.set_verbosity(optuna.logging.WARNING)
+                fixed = recover(study, evaluate)
+                if fixed["finished"] or fixed["failed"]:
+                    print(
+                        f"{name}: resumed; {fixed['finished']} trials finished, {fixed['failed']} asked again",
+                        flush=True,
+                    )
+
+                def done(study: Any = study) -> int:
+                    return len(study.get_trials(deepcopy=False, states=(TrialState.COMPLETE,)))
+
+                while done() < n_trials:
+                    if stop_after_batches is not None and batches_run >= stop_after_batches:
+                        return {}
+                    k = done() // parallel
+                    study.sampler = optuna.samplers.TPESampler(seed=seed + k, constant_liar=parallel > 1)
+                    batch = []
+                    for _ in range(min(parallel, n_trials - done())):
+                        trial = study.ask()
+                        params = suggest(trial, kind, spec["space"])
+                        trial.set_user_attr("params", params)
+                        trial.set_user_attr("batch", k)
+                        batch.append((trial, params))
+                    values = evaluate([p for _, p in batch])
+                    for (trial, _), (value, runs) in zip(batch, values, strict=True):
+                        trial.set_user_attr("runs", runs)
                         study.tell(trial, value)
-                        line = {"trial": trial.number, "params": params, "mean_gap": value, "runs": len(g)}
-                        fh.write(json.dumps(line) + "\n")
-            best = json.loads(log.read_text(encoding="utf-8").splitlines()[study.best_trial.number])
-            results[name] = {"params": best["params"], "mean_gap": study.best_value, "trials": len(study.trials)}
+                    batches_run += 1
+                    write_log(study, log)
+                    print(
+                        f"{name}: {done()}/{n_trials} trials, best mean gap {study.best_value:.3f} %, "
+                        f"{(time.time() - started) / 60:.1f} min",
+                        flush=True,
+                    )
+                write_log(study, log)
+                best = study.best_trial
+                results[name] = {"params": best.user_attrs["params"], "mean_gap": best.value, "trials": done()}
     finally:
         pool.shutdown()
         manager.shutdown()
@@ -193,7 +310,12 @@ def run(cfg: ConfigV2, methods_to_tune: list[str] | None = None) -> dict[str, An
         "procedure": {
             k: spec[k] for k in ("sampler", "seed", "trials", "sets", "instances_per_size", "seeds", "objective")
         }
-        | {"parallel_trials": parallel, "constant_liar": parallel > 1},
+        | {
+            "parallel_trials": parallel,
+            "constant_liar": parallel > 1,
+            "sampler_seed": "seed + batch index",
+            "storage": f"optuna JournalStorage, {out_dir.name}/{JOURNAL}",
+        },
         "space": spec["space"],
         "training_instances": sorted(i.id for i in train),
         "training_overlap_with_test": overlap,

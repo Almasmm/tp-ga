@@ -82,7 +82,9 @@ def cmd_run(args: argparse.Namespace) -> int:
     plans = {ph: phase_tasks(cfg, ph, items) for ph in phases}
     monitor.total = sum(len(t) for t in plans.values())
     status = 0
-    with runner.Interrupt() as interrupt:
+    from tpga.experiments.environment import keep_awake
+
+    with runner.Interrupt() as interrupt, keep_awake():  # no idle sleep while the run is in progress
         live = None
         if not args.plain:
             from rich.live import Live
