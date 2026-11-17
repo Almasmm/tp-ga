@@ -16,7 +16,7 @@ from concurrent.futures import FIRST_COMPLETED, Future, ProcessPoolExecutor, wai
 from typing import Any
 
 from tpga.experiments import environment
-from tpga.experiments.v2 import methods
+from tpga.experiments.v2 import memory, methods
 from tpga.experiments.v2.config import ConfigV2
 from tpga.experiments.v2.monitor import Monitor
 from tpga.experiments.v2.storage import PartWriter, append_jsonl, clean_temporary, error_record, read_parts
@@ -147,13 +147,22 @@ def execute_tasks(
         initargs=(cpu_queue, classes, status, str(cfg.raw.get("priority", "above_normal")), 1.0),
     )
     pending: dict[Future, dict[str, Any]] = {}
-    it = iter(todo)
+    # A run starts only while its memory is free (memory.MemoryGate); runs start in the order of `todo`.
+    gate = memory.MemoryGate(len(cpus))
+    append_jsonl(log_path, {"time": time.time(), "event": "memory", "phase": phase, "budget_bytes": gate.budget})
+    nxt = 0
+
+    def fill() -> None:
+        nonlocal nxt
+        while nxt < len(todo) and interrupt.count == 0 and gate.admits(memory.task_bytes(todo[nxt])):
+            fut = pool.submit(methods.execute, todo[nxt])
+            gate.start(fut, memory.task_bytes(todo[nxt]))
+            pending[fut] = todo[nxt]
+            nxt += 1
+
     aborted = False
     try:
-        for t in it:
-            pending[pool.submit(methods.execute, t)] = t
-            if len(pending) >= 2 * len(cpus):
-                break
+        fill()
         while pending:
             if interrupt.count >= 1 and not monitor.message:
                 monitor.message = (
@@ -163,6 +172,7 @@ def execute_tasks(
                 append_jsonl(log_path, {"time": time.time(), "event": "interrupt", "phase": phase})
                 for fut in [f for f in pending if f.cancel()]:
                     pending.pop(fut)
+                    gate.finish(fut)
             if interrupt.count >= 2:
                 aborted = True
                 counts["abandoned"] = len(pending)
@@ -175,6 +185,7 @@ def execute_tasks(
                     break
             for fut in done:
                 task = pending.pop(fut)
+                gate.finish(fut)
                 try:
                     record, curve_rows = fut.result()
                 except Exception as exc:  # noqa: BLE001 - every failure is logged with its traceback
@@ -202,10 +213,7 @@ def execute_tasks(
                         "time_s": record.get("time_s"),
                     },
                 )
-                if interrupt.count == 0:
-                    nxt = next(it, None)
-                    if nxt is not None:
-                        pending[pool.submit(methods.execute, nxt)] = nxt
+            fill()
             monitor.tick()
             if live is not None:
                 live.update(monitor.render())
@@ -222,6 +230,14 @@ def execute_tasks(
         manager.shutdown()
         append_jsonl(
             log_path,
-            {"time": time.time(), "event": "phase_end", "phase": phase, **counts, "interrupted": interrupt.count > 0},
+            {
+                "time": time.time(),
+                "event": "phase_end",
+                "phase": phase,
+                **counts,
+                "interrupted": interrupt.count > 0,
+                "peak_running": gate.peak_running,
+                "waited_for_memory": gate.held_back,
+            },
         )
     return counts
