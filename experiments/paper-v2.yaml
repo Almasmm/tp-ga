@@ -37,6 +37,9 @@ instances:
   ties:       {sizes: [[20, 20], [50, 50]], per_size: 10, cost: [1, 5], supply: [1, 20]}
   lp_scaling: {sizes: [[100, 100], [200, 200], [500, 500], [1000, 1000]], per_size: 10, cost: [1, 100],
                supply: [20, 100]}
+  # illustration (amendment 4): the scenarios of datasets/kazakh-wheat (set "wheat", 5) and
+  # datasets/astana-potato (set "astana", 33; the 8x40 API sample is left out, as in v0.3.0)
+  applied:    {datasets: [kazakh-wheat, astana-potato], exclude_events: [api_subset]}
 
 # Methods. "base" GA = the v0.3.0 base configuration (P=100, pc=0.9, pm=0.2 single swap, t=3, e=2) but
 # stopped by the budget only. Tuned parameters come from the frozen file below.
@@ -87,7 +90,7 @@ tuning:
 
 phases:
   reference:                   # LP (HiGHS via highspy), classical methods and Z_rand on every test instance
-    sets: [uniform, structured, skewed, ties]
+    sets: [uniform, structured, skewed, ties, wheat, astana]
   main:                        # RQ1-RQ3 quality, budget-only stop
     sets: [uniform, structured, skewed, ties]
     methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
@@ -111,6 +114,11 @@ phases:
       swap_scaled: [0.05, 0.1, 0.25]
     initialization: [random, cost-aware]
     fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+  applied:                     # illustration only (amendment 4): no test, not pooled with the synthetic sets
+    sets: [wheat, astana]
+    methods: [RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+    runs: 10
+    stop: budget
   representation:              # non-confirmatory (amendment 3): why the gap grows with the size
     sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]],
            structured: [[50, 50]], skewed: [[50, 50]], ties: [[50, 50]]}

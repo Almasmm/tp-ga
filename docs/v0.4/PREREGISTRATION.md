@@ -193,3 +193,17 @@ with these amendments; where they differ, the amendment applies.
   50 % of the budget, the share of the child's positive cells that are positive in at least one parent.
 * Output: `paper_artifacts_v2/tables/representation.csv` and one figure (neutral share against m n per
   operator, log x axis). No test; no conclusion of sections 5-6 depends on this phase.
+
+### Amendment 4 (2026-11-17): phase `applied` (illustration; added to section 7)
+
+* Reason: the article reports two illustrative cases (Section 3.7); every number of the revised article is
+  to come from v0.4, so the cases are run again under the v0.4 protocol.
+* Instances: the scenarios of `datasets/kazakh-wheat` (5, set `wheat`, 15x7) and `datasets/astana-potato`
+  (33, set `astana`, 24x324; the 8x40 API sample is left out, as in v0.3.0), copied byte for byte with their
+  SHA-256 into `paper_artifacts_v2/instances/`. Unbalanced scenarios get a zero-cost dummy node, as for every
+  method. The data are modelled (see the dataset READMEs); costs are not observed freight tariffs.
+* Methods: LP, NWC, LCM, VAM (reference phase) and RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned,
+  SA-cost-tuned with 10 runs (r = 0..9) and B = 200 m n of the scenario as given (budget-only stop).
+* Output: `T10_applied_instances` (per scenario: mean over runs) and `T10_applied_summary` (median and range
+  over the scenarios of a set; number of scenarios better than VAM; median time). No test; the cases are not
+  pooled with the synthetic sets and enter no conclusion of sections 5-6.

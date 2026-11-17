@@ -56,7 +56,11 @@ def test_full_pipeline(tuned_cfg):
     cfg = ConfigV2.load(path)
     records = list(read_parts(cfg.output / "raw" / "runs", "runs"))
     keys = [methods.key_of(r) for r in records]
-    assert len(keys) == len(set(keys)) == 208 + 21  # 21: representation (5 random-parent tasks, 16 GA runs)
+    # 21: representation (5 random-parent tasks, 16 GA runs); 40: wheat (20 reference, 5 x 2 methods x 2 runs)
+    assert len(keys) == len(set(keys)) == 208 + 21 + 40
+    applied = [r for r in records if r["phase"] == "applied"]
+    assert len(applied) == 20 and {r["set"] for r in applied} == {"wheat"}
+    assert all(r["z_star"] > 0 for r in applied)
     assert all(r["feasible"] for r in records if r["phase"] != "representation")
     rep_rows = list(read_parts(cfg.output / "raw" / "representation", "representation"))
     measures = {(r["source"], r["measure"]) for r in rep_rows}
@@ -84,6 +88,7 @@ def test_full_pipeline(tuned_cfg):
         "stagnation",
         "legacy",
         "factorial",
+        "applied",
         "representation",
         "timing",
     }
@@ -171,11 +176,13 @@ def test_storage_parts_are_atomic(tmp_path):
 def test_instances_and_tasks(tmp_path):
     cfg = ConfigV2.load(make_config(tmp_path))
     items = instances.build(cfg)
-    assert len({i.id for i in items}) == len(items) == 8
+    assert len({i.id for i in items}) == len(items) == 8 + 5  # 5 wheat scenarios (applied)
     train = instances.build(cfg, split="train", sets=["uniform"], per_size=1)
     assert not {i.seed for i in items} & {i.seed for i in train}
     for i in items:
         p = methods.load(str(i.path))
+        if i.set == "wheat":  # applied data as published: a stress scenario has a market with zero demand
+            continue
         assert p.is_balanced and (p.supply > 0).all() and (p.demand > 0).all()
         if i.set == "ties":
             assert p.cost.max() <= 5

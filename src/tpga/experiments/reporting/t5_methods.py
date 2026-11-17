@@ -49,7 +49,7 @@ def _rows(med: pd.DataFrame, groups: list[tuple[str, str, pd.DataFrame]], value:
 
 
 def table(runs: pd.DataFrame, value: str = "gap") -> pd.DataFrame:
-    df = runs[runs["phase"].isin(PHASES) & (runs["set"] != "lp_scaling")]
+    df = runs[runs["phase"].isin(PHASES) & ~runs["set"].isin(["lp_scaling", "wheat", "astana"])]
     med = per_instance(df, value)
     groups = [(s, z, g) for (s, z), g in med.groupby(["set", "size"])]
     return sort_frame(pd.DataFrame(_rows(med, groups, value)), ["set", "size"])
@@ -57,7 +57,7 @@ def table(runs: pd.DataFrame, value: str = "gap") -> pd.DataFrame:
 
 def appendix_pooled(runs: pd.DataFrame, value: str = "gap") -> pd.DataFrame:
     """Appendix A1: pooled over all instances of a set (not used in the main tables)."""
-    df = runs[runs["phase"].isin(PHASES) & (runs["set"] != "lp_scaling")]
+    df = runs[runs["phase"].isin(PHASES) & ~runs["set"].isin(["lp_scaling", "wheat", "astana"])]
     med = per_instance(df, value)
     groups = [(s, "all sizes", g) for s, g in med.groupby("set")]
     return pd.DataFrame(_rows(med, groups, value))

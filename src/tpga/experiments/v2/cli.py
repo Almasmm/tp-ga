@@ -13,7 +13,7 @@ import sys  # noqa: E402
 import time  # noqa: E402
 from typing import Any  # noqa: E402
 
-PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "representation", "timing")
+PHASES = ("reference", "main", "stagnation", "legacy", "factorial", "applied", "representation", "timing")
 
 
 def _cfg(path: str):
