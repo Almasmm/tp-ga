@@ -173,6 +173,22 @@ with these amendments; where they differ, the amendment applies.
   when trials run one at a time, about 30 s per trial in batches of 5). A first, sequential run of the
   repeated tuning was stopped after 14 GA-rand trials when this change was made; its trials were discarded
   and are not used.
+* Result of the repeated tuning, round 1 (2026-11-17, 3 h 48 min; `experiments/tuned-v2-round1.yaml`, trial
+  logs in `paper_artifacts_v2/tuning/round1/`; no training instance has the SHA-256 of a test instance):
+
+| Method | Parameters | Training mean gap, % | Within 5 % of a bound |
+|---|---|---|---|
+| GA-rand | P 143, pc 0.977, t 5, e 1, swap_scaled s 0.0837 | 46.14 | elite = 1 (lower), pc (upper) |
+| GA-cost | P 399, pc 0.952, t 7, e 4, swap_scaled s 0.1053 | 9.90 | population (upper), tournament (upper) |
+| SA-rand | p_ins 0.246, p0 0.0341, final_ratio 0.0677 | 86.48 | final_ratio (upper) |
+| SA-cost | p_ins 0.915, p0 0.00138, final_ratio 1.23e-5 | 14.58 | p0 (lower), final_ratio (lower) |
+
+* Widening by the rule above (once): population [20, 400] -> [20, 4000] (log range, factor 10); tournament
+  [2, 7] -> [2, 9] (half the width, 2.5, rounded down for an integer); initial_acceptance [0.001, 0.95] ->
+  [0.0001, 0.95]; final_ratio [1e-5, 0.1] -> [1e-6, 0.99] (the factor 10 would give 1.0, outside the domain
+  0 < final_ratio < 1; 0.99 is used). Not widened, already at the limit of the domain: elite >= 1 and
+  crossover rate <= 1. Round 2 tunes all four methods again with these ranges, otherwise unchanged; its
+  result is `experiments/tuned-v2.yaml` and is the one used. No further widening.
 
 ### Amendment 3 (2026-11-17): phase `representation` (non-confirmatory; added to section 7)
 

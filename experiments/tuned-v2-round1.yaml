@@ -1,0 +1,145 @@
+frozen: '2026-11-17T13:12:44+05:00'
+git_commit: 741a14b75ea43331c5a05098c7fd765399cd35ba
+procedure:
+  sampler: TPE
+  seed: 20261201
+  trials: 100
+  sets:
+    uniform:
+    - - 20
+      - 20
+    - - 50
+      - 50
+    - - 100
+      - 100
+  instances_per_size:
+    20x20: 4
+    50x50: 4
+    100x100: 2
+  seeds: 3
+  objective: mean gap (%) over training instances and seeds, budget-only stop
+  parallel_trials: 5
+  constant_liar: true
+space:
+  ga:
+    population:
+    - 20
+    - 400
+    crossover_rate:
+    - 0.5
+    - 1.0
+    tournament:
+    - 2
+    - 7
+    elite:
+    - 1
+    - 5
+    mutation_mode:
+    - swap_fixed
+    - swap_count
+    - swap_per_position
+    - swap_scaled
+    swap_fixed:
+    - 0.01
+    - 1.0
+    swap_count:
+    - 1
+    - 20
+    swap_per_position:
+    - 0.0001
+    - 0.05
+    swap_scaled:
+    - 0.01
+    - 0.5
+  sa:
+    insertion_probability:
+    - 0.0
+    - 1.0
+    initial_acceptance:
+      range:
+      - 0.001
+      - 0.95
+      log: true
+    final_ratio:
+    - 1.0e-05
+    - 0.1
+training_instances:
+- u100x100-00-train
+- u100x100-01-train
+- u20x20-00-train
+- u20x20-01-train
+- u20x20-02-train
+- u20x20-03-train
+- u50x50-00-train
+- u50x50-01-train
+- u50x50-02-train
+- u50x50-03-train
+training_overlap_with_test: 0
+parameters:
+  GA-rand:
+    population: 143
+    crossover_rate: 0.9772403930796645
+    tournament: 5
+    elite: 1
+    mutation_mode: swap_scaled
+    mutation_strength: 0.08371937516446804
+  GA-cost:
+    population: 399
+    crossover_rate: 0.9517136534757651
+    tournament: 7
+    elite: 4
+    mutation_mode: swap_scaled
+    mutation_strength: 0.10527063351756269
+  SA-rand:
+    insertion_probability: 0.24633024086153102
+    initial_acceptance: 0.03414160111718659
+    final_ratio: 0.06766717482854993
+  SA-cost:
+    insertion_probability: 0.9151095851868742
+    initial_acceptance: 0.0013811458031759325
+    final_ratio: 1.2325674794254492e-05
+best_objective:
+  GA-rand: 46.13733815761119
+  GA-cost: 9.895827614732548
+  SA-rand: 86.47890205040788
+  SA-cost: 14.57774292941582
+near_bounds:
+  GA-rand:
+  - parameter: elite
+    value: 1
+    side: lower
+    bound: 1.0
+    log: false
+  - parameter: crossover_rate
+    value: 0.9772403930796645
+    side: upper
+    bound: 1.0
+    log: false
+  GA-cost:
+  - parameter: population
+    value: 399
+    side: upper
+    bound: 400.0
+    log: true
+  - parameter: tournament
+    value: 7
+    side: upper
+    bound: 7.0
+    log: false
+  SA-rand:
+  - parameter: final_ratio
+    value: 0.06766717482854993
+    side: upper
+    bound: 0.1
+    log: true
+  SA-cost:
+  - parameter: initial_acceptance
+    value: 0.0013811458031759325
+    side: lower
+    bound: 0.001
+    log: true
+  - parameter: final_ratio
+    value: 1.2325674794254492e-05
+    side: lower
+    bound: 1.0e-05
+    log: true

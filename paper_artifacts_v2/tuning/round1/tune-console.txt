@@ -1,0 +1,11 @@
+Running HiGHS 1.16.0 (git hash: f3f113d): Copyright (c) 2026 under MIT licence terms
+Includes third-party software components, see THIRD_PARTY_NOTICES.md for full details
+[I 2026-11-17 09:25:11,986] A new study created in memory with name: GA-rand
+GA-rand: mean gap 46.137 %  {'population': 143, 'crossover_rate': 0.9772403930796645, 'tournament': 5, 'elite': 1, 'mutation_mode': 'swap_scaled', 'mutation_strength': 0.08371937516446804}
+GA-cost: mean gap 9.896 %  {'population': 399, 'crossover_rate': 0.9517136534757651, 'tournament': 7, 'elite': 4, 'mutation_mode': 'swap_scaled', 'mutation_strength': 0.10527063351756269}
+SA-rand: mean gap 86.479 %  {'insertion_probability': 0.24633024086153102, 'initial_acceptance': 0.03414160111718659, 'final_ratio': 0.06766717482854993}
+SA-cost: mean gap 14.578 %  {'insertion_probability': 0.9151095851868742, 'initial_acceptance': 0.0013811458031759325, 'final_ratio': 1.2325674794254492e-05}
+
+real	227m37.743s
+user	0m0.015s
+sys	0m0.000s
