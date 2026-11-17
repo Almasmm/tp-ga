@@ -146,6 +146,7 @@ same numbers as the English one and take them from the same cells.
 | Astana row: median (range) over 33 instances: 34.4, 8.4, 6.2, 37.7, 8.4, 1.6 % | `T10_applied_summary[set=astana, method].gap_median (gap_min - gap_max)`, `instances` = 33 |
 | "GA-cost was better than VAM on all 33 instances and GA-rand on 3" | `T10_applied_summary[set=astana, method=GA-*-tuned].better_than_vam` |
 | "7,776 arcs" | 24 x 324 |
+| **Size of the Astana instances: 24×324, not 8×40.** Wherever section 3.7 (text, Table 7, figure captions) gives the Astana problem as 8×40 (320 arcs), it changes to 24×324 (7,776 arcs). The 8×40 API sample is not an instance of the phase `applied` (amendment 4) | `T10_applied_summary[set=astana].size` = `24x324`; `paper_artifacts_v2/instances/manifest.json` (33 instances, m = 24, n = 324) |
 | "22 s" (GA-cost per run), "0.044 s" (HiGHS) | `T10_applied_summary[set=astana, method=GA-cost-tuned / LP].time_median_s` (quality phase, all cores; LP is HiGHS run time) |
 | v0.4 adds SA-rand-tuned, SA-cost-tuned | same tables |
 

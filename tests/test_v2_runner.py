@@ -269,6 +269,9 @@ def test_pilot_estimate_and_reductions(tmp_path, tuned_cfg):
     est = pilot.estimate_plan(cfg, items, per_eval, det, ratio=1.5, p_cores=8, workers=24)
     assert set(est["phases"]) == set(pilot.PHASES)
     assert est["total_wall_h"] > 0 and abs(sum(p["share"] for p in est["phases"].values()) - 1) < 1e-9
+    applied = est["phases"]["applied"]
+    assert set(applied["by_set"]) == {"wheat"} and applied["by_set"]["wheat"]["runs"] == applied["runs"]
+    assert abs(sum(s["wall_h"] for s in applied["by_set"].values()) - applied["wall_h"]) < 1e-12
     red = pilot.reductions(cfg, items, per_eval, det, capacity=18.0, p_cores=8)
     assert red and all("saves_h" in r for r in red)
     md = pilot.markdown(
@@ -282,6 +285,7 @@ def test_pilot_estimate_and_reductions(tmp_path, tuned_cfg):
         }
     )
     assert "| total" in md.replace("**", "") and "Possible reductions" in md
+    assert "applied: wheat |" in md
 
 
 def test_doctor_reads_only(tmp_path):
