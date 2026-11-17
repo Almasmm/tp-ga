@@ -13,7 +13,8 @@ RULES = {"main": "budget only", "stagnation": "0.1 B calls without improvement",
 def table(runs: pd.DataFrame) -> pd.DataFrame:
     sub = runs[runs["phase"].isin(RULES)]
     have = set(sub[sub["phase"] != "main"][["set", "size", "method"]].itertuples(index=False, name=None))
-    sub = sub[[(s, z, m) in have for s, z, m in sub[["set", "size", "method"]].itertuples(index=False, name=None)]]
+    keep = [(s, z, m) in have for s, z, m in sub[["set", "size", "method"]].itertuples(index=False, name=None)]
+    sub = sub[pd.Series(keep, index=sub.index, dtype=bool)]  # a Series: an empty list would select no columns
     rows = []
     for (set_, size, method), g in sub.groupby(["set", "size", "method"]):
         per = g.groupby(["instance", "phase"])["gap"].median().unstack("phase")

@@ -20,7 +20,10 @@ import sys
 import time
 from pathlib import Path
 
-from tpga.experiments.environment import keep_awake
+from tpga.experiments.environment import keep_awake, single_thread_environment
+
+single_thread_environment()  # before NumPy is imported: otherwise OpenBLAS commits about 1.5 GiB here
+
 from tpga.experiments.v2.cli import PHASES
 from tpga.experiments.v2.config import ConfigV2
 from tpga.experiments.v2.instances import build
