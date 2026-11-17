@@ -51,8 +51,18 @@ def fits(runs: pd.DataFrame) -> pd.DataFrame:
     t = runs[runs["phase"] == PHASE]
     rows = []
     for method, g in t.groupby("method"):
-        per = g.groupby("instance").agg(arcs=("arcs", "first"), t=("time_s", "median"))
-        for label, sub in (("all sizes", per), (f"m n >= {LARGE}", per[per["arcs"] >= LARGE])):
-            if sub["arcs"].nunique() >= 2 and len(sub) >= 3:
-                rows.append({"method": method, "range": label, **stats.loglog_fit(sub["arcs"], sub["t"])})
+        g = g.assign(per_call=g["time_s"] / g["evals"]) if "evals" in g and g["evals"].notna().all() else g
+        measures = [("time per run", "time_s")] + ([("time per decoder call", "per_call")] if "per_call" in g else [])
+        for measure, col in measures:
+            per = g.groupby("instance").agg(arcs=("arcs", "first"), t=(col, "median"))
+            for label, sub in (("all sizes", per), (f"m n >= {LARGE}", per[per["arcs"] >= LARGE])):
+                if sub["arcs"].nunique() >= 2 and len(sub) >= 3:
+                    rows.append(
+                        {
+                            "method": method,
+                            "measure": measure,
+                            "range": label,
+                            **stats.loglog_fit(sub["arcs"], sub["t"]),
+                        }
+                    )
     return pd.DataFrame(rows)

@@ -426,3 +426,19 @@ def test_report_after_the_tiny_run_includes_representation(tuned_cfg) -> None:
     assert (cfg.output / "figures" / "en" / "representation_neutrality.pdf").exists()
     summary = json.loads((cfg.output / "report.json").read_text(encoding="utf-8"))
     assert summary["tables"]["representation"] > 0 and summary["tables"]["T2_gap"] > 0
+
+
+def test_parallel_tuning_is_reproducible(tuned_cfg, tmp_path) -> None:
+    """Batches of trials (ask/tell, constant liar) give the same frozen parameters on a second run."""
+    import yaml
+
+    tmp, _ = tuned_cfg
+    first = yaml.safe_load((tmp / "tuned.yaml").read_text(encoding="utf-8"))
+    assert first["procedure"]["parallel_trials"] == 2 and first["procedure"]["constant_liar"] is True
+    path = make_config(tmp_path)
+    assert cli("tune", "--config", str(path)).returncode == 0
+    second = yaml.safe_load((tmp_path / "tuned.yaml").read_text(encoding="utf-8"))
+    assert second["parameters"] == first["parameters"]
+    assert second["best_objective"] == first["best_objective"]
+    log = (tmp_path / "out" / "tuning" / "SA-rand.jsonl").read_text(encoding="utf-8").splitlines()
+    assert [json.loads(line)["trial"] for line in log] == [0, 1, 2]

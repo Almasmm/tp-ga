@@ -21,12 +21,18 @@ def table(runs: pd.DataFrame) -> pd.DataFrame:
         per = g.groupby(["instance", "initialization"])["gap"].median().unstack("initialization").dropna()
         if {"random", "cost-aware"} <= set(per.columns) and len(per) >= 2:
             res = stats.paired(per["cost-aware"].to_numpy(), per["random"].to_numpy())
+            cell = g.groupby(["instance", "population", "mutation", "initialization"])["gap"].median()
+            cell = cell.unstack("initialization").dropna()
+            ratio = per["random"] / per["cost-aware"].where(per["cost-aware"] > 0)
             rows.append(
                 {
                     "size": size,
                     "pairs": len(per),
                     "median_random": per["random"].median(),
                     "median_cost_aware": per["cost-aware"].median(),
+                    "ratio_median": ratio.median(),  # median over instances of random / cost-aware
+                    "reduction_pp_median": (cell["random"] - cell["cost-aware"]).median(),  # over cells
+                    "cells_cost_aware_lower_share": float((cell["random"] > cell["cost-aware"]).mean()),
                     **res,
                     "p_text": stats.format_p(res["p"]),
                 }

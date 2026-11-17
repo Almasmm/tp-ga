@@ -164,6 +164,15 @@ with these amendments; where they differ, the amendment applies.
 
   These training gaps were measured on 20x20 and 50x50 only and are not comparable with those of the
   repeated tuning, which includes 100x100.
+* Parallel trials (added 2026-11-17, before the repeated tuning was run to the end): the trials are evaluated
+  in batches of 5 at a time (Optuna ask/tell; `TPESampler(seed=20261201, constant_liar=True)`, so that the
+  trials of a batch are proposed with the others treated as running). A batch is told to the sampler in trial
+  order after all its runs have finished, so the result depends on the seed only; a test checks that two
+  tuning runs give the same parameters. The number of trials, the training instances, the seeds, the search
+  space and the selection rule (best mean training gap) are unchanged. Reason: run time (about 90 s per trial
+  when trials run one at a time, about 30 s per trial in batches of 5). A first, sequential run of the
+  repeated tuning was stopped after 14 GA-rand trials when this change was made; its trials were discarded
+  and are not used.
 
 ### Amendment 3 (2026-11-17): phase `representation` (non-confirmatory; added to section 7)
 

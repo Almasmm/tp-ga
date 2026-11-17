@@ -38,7 +38,8 @@ reference_methods: [LP, NWC, LCM, VAM]
 tuning:
   sampler: TPE
   seed: 1
-  trials: 2
+  trials: 3
+  parallel_trials: 2
   sets: {uniform: [[3, 3], [4, 5]]}
   instances_per_size: {3x3: 2, 4x5: 1}
   seeds: 1

@@ -53,6 +53,9 @@ def rec(
         "optimal": gap == 0,
         "time_s": 1.0,
         "evals": 100,
+        "budget": 100,
+        "best_eval": 50,
+        "stop_reason": "budget",
         "cpu_class": 1,
         "cost": 100 + gap,
     }
@@ -130,6 +133,9 @@ def test_t4_friedman_and_posthoc() -> None:
             for mut in ("swap_count:1", "swap_count:3", "swap_count:10"):
                 cfg = f"P{pop}-pc0.9-t3-e2-{mut}-random-budget"
                 rows.append(rec("factorial", "uniform", "20x20", f"i{i}", "GA-rand", base * (1 + 0.05 * i), config=cfg))
+    cells = t4_factorial.table(frame(rows))
+    by_pop = cells.groupby("population")["mean_rank"].mean()
+    assert by_pop[100] == pytest.approx(2.0) and by_pop[20] == pytest.approx(8.0)  # 3 tied cells per population
     tests = t4_factorial.tests(frame(rows))
     pop = tests[tests["test"] == "Friedman, population"].iloc[0]
     assert pop["kendall_w"] == pytest.approx(1.0)
@@ -152,6 +158,10 @@ def test_t6_one_pair_per_instance() -> None:
     assert t["pairs"].iloc[0] == 10
     assert t["hl_shift"].iloc[0] == pytest.approx(-1.0)
     assert t["ties"].iloc[0] == 0 and t["wins_x"].iloc[0] == 10
+    # random / cost-aware per instance: (5 + i) / (4 + i), median over i = 0..9 at i = 4.5
+    assert t["ratio_median"].iloc[0] == pytest.approx(float(np.median([(5 + i) / (4 + i) for i in range(10)])))
+    assert t["reduction_pp_median"].iloc[0] == pytest.approx(1.0)
+    assert t["cells_cost_aware_lower_share"].iloc[0] == 1.0
 
 
 def test_t5_per_size_families_with_holm() -> None:
@@ -197,8 +207,11 @@ def test_t3_fits_two_ranges() -> None:
                 )
             )
     fits = t3_time.fits(frame(rows))
-    assert set(fits["range"]) == {"all sizes", "m n >= 2500"}
-    assert fits["b"].to_numpy() == pytest.approx([1.2, 1.2])
+    per_run = fits[fits["measure"] == "time per run"]
+    assert set(per_run["range"]) == {"all sizes", "m n >= 2500"}
+    assert per_run["b"].to_numpy() == pytest.approx([1.2, 1.2])
+    per_call = fits[fits["measure"] == "time per decoder call"]  # evals = 100 in every record
+    assert per_call["b"].to_numpy() == pytest.approx([1.2, 1.2])
 
 
 def test_t7_pairs_budget_with_stagnation() -> None:
@@ -209,6 +222,8 @@ def test_t7_pairs_budget_with_stagnation() -> None:
     t = t7_stopping.table(frame(rows))
     stag = t[t["stop"].str.startswith("0.1")].iloc[0]
     assert stag["hl_shift"] == pytest.approx(2.0)
+    assert stag["stopped_early_share"] == 0.0 and stag["budget_used_median"] == 1.0
+    assert stag["best_found_median"] == 0.5
 
 
 def test_t8_detects_disagreement() -> None:
@@ -310,3 +325,36 @@ def test_generate_builds_every_figure(tmp_path: Path) -> None:
     assert res["tables"]["T3_fits"] >= 2 and res["tables"]["T4_tests"] > 0
     t3 = (out / "tables" / "T3_time.csv").read_text(encoding="utf-8")
     assert "presolve_median_s" in t3 and "\r" not in t3
+
+
+def test_example1_reproduces_the_article() -> None:
+    from tpga.experiments.reporting import t0_checks
+
+    t = t0_checks.example1().set_index("method")
+    assert t["cost"].to_dict() == {
+        "NWC": 2445.0,
+        "LCM": 2345.0,
+        "VAM": 2310.0,
+        "Decoder, random permutation": 2835.0,
+        "Decoder, leaf-elimination order": 2220.0,
+        "LP optimum (HiGHS)": 2220.0,
+    }
+    assert t.loc["NWC", "gap"] == pytest.approx(10.135, abs=1e-3)
+    assert (t["positive"] == 6).all()  # m + n - 1: no plan is degenerate
+    assert t.loc["Decoder, random permutation", "shipments_in_order"].startswith("x11 = 50, x24 = 25, x23 = 40")
+
+
+def test_checks_counts_records_failures_and_residuals(tmp_path: Path) -> None:
+    from tpga.experiments.reporting import t0_checks
+
+    (tmp_path / "logs").mkdir()
+    (tmp_path / "logs" / "errors.jsonl").write_text('{"phase": "main", "error": "x"}\n', encoding="utf-8")
+    rows = [
+        rec("main", "uniform", "5x5", "a", "RS", 1.0, seed=s, feasible=True, max_residual=1e-12 * s, dummy_volume=0.0)
+        for s in range(3)
+    ]
+    rows.append(rec("representation", "uniform", "5x5", "a", "random-parents", 0.0, seed=None))
+    t = t0_checks.checks(tmp_path, frame(rows)).set_index("phase")
+    assert t.loc["main", "records"] == 3 and t.loc["main", "failed_runs"] == 1
+    assert t.loc["main", "plans_infeasible"] == 0 and t.loc["main", "max_residual"] == pytest.approx(2e-12)
+    assert t.loc["total", "records"] == 4 and t.loc["representation", "plans_checked"] == 0

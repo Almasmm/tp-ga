@@ -24,6 +24,8 @@ def table(runs: pd.DataFrame) -> pd.DataFrame:
                 "gap_median": g["gap"].median(),
                 "gap_q1": g["gap"].quantile(0.25),
                 "gap_q3": g["gap"].quantile(0.75),
+                "gap_max": g["gap"].max(),
+                "instance_median_median": g.groupby("instance")["gap"].median().median(),
                 "gap_norm_median": g["gap_norm"].median(),
                 "share_optimal": g["optimal"].mean(),
                 "time_median_s": g["time_s"].median(),
