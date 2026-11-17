@@ -154,11 +154,14 @@ def run_ga(
     config: GAConfig | None = None,
     callback: ProgressCallback | None = None,
     engine: str = "numba",
+    population_hook: Callable[[int, np.ndarray, np.ndarray], None] | None = None,
 ) -> GAResult:
     """Run the GA. Every individual decodes to a feasible plan of the balanced classical model,
     so no penalty or repair is used. This is a reference implementation, not a tuned solver.
 
     ``engine="python"`` runs the plain-Python kernels; it gives the same result and is meant for tests.
+    ``population_hook(evaluations, population, costs)`` sees the population after the start and after every
+    generation (read only: copy what you keep); it draws no random numbers, so the run is unchanged.
     """
     cfg = config or GAConfig()
     t0 = time.perf_counter()
@@ -185,6 +188,8 @@ def run_ga(
     best_evaluation, best_generation = winner + 1, 0
     history = [best_cost]
     improvements = [(best_evaluation, best_cost)]
+    if population_hook is not None:
+        population_hook(evaluations, pop, fit)
 
     new_pop = np.empty_like(pop)
     new_fit = np.empty_like(fit)
@@ -269,6 +274,8 @@ def run_ga(
                 since_improvement += 1
             evaluations += offspring
             history.append(best_cost)
+            if population_hook is not None:
+                population_hook(evaluations, pop, fit)
             if callback is not None and callback(generation, evaluations, best_cost):
                 stop_reason = "cancelled"
                 break

@@ -22,7 +22,7 @@ from .zipstream import zip_response
 
 router = APIRouter(prefix="/artifacts/v2", tags=["Experiment v0.4"])
 
-TABLE = re.compile(r"^[TA]\d[A-Za-z0-9_]*$")
+TABLE = re.compile(r"^([TA]\d[A-Za-z0-9_]*|representation)$")
 FIGURE = re.compile(r"^[a-z][a-z0-9_]*$")
 DOCS = {  # name -> (directory function, file name)
     "PREREGISTRATION": ("docs", "PREREGISTRATION.md"),

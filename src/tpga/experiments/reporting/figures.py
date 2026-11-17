@@ -188,3 +188,37 @@ def factorial_heatmap(t4: pd.DataFrame, out: Path) -> list[str]:
         fig.tight_layout()
         files += save(fig, out, lang, "factorial_heatmap")
     return files
+
+
+def representation_neutrality(rep: pd.DataFrame, out: Path) -> list[str]:
+    """F6: share of neutral mutation offspring against m n (uniform set), one line per operator.
+
+    Left: random permutations as parents; right: the GA-rand-tuned population at 50 % of the budget.
+    """
+    if not len(rep):
+        return []
+    df = rep[(rep["set"] == "uniform") & (rep["measure"] == "neutrality") & (rep["metric"] == "neutral_share")]
+    panels = [("random", None), ("GA-rand-tuned", 0.5)]
+    titles = {
+        "en": ["random parents", "GA-rand-tuned, population at 50 % of B"],
+        "ru": ["случайные родители", "GA-rand-tuned, популяция на 50 % бюджета"],
+    }
+    ylabel = {"en": "Share of neutral offspring", "ru": "Доля нейтральных потомков"}
+    files: list[str] = []
+    for lang in LANGS:
+        fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.2), sharey=True)
+        for ax, (source, snap), title in zip(axes, panels, titles[lang], strict=True):
+            sub = df[df["source"] == source]
+            sub = sub[sub["snapshot"].isna()] if snap is None else sub[sub["snapshot"] == snap]
+            for op, g in sub.groupby("operator"):
+                line = g.groupby("mn")["value"].median()
+                ax.plot(line.index, line.to_numpy(), marker="o", ms=2.5, lw=0.9, label=op)
+            ax.set_xscale("log")
+            ax.set_xlabel(LABELS[lang]["arcs"])
+            ax.set_title(title)
+            ax.set_ylim(0, 1)
+        axes[0].set_ylabel(ylabel[lang])
+        axes[1].legend(fontsize=5, ncol=2)
+        fig.tight_layout()
+        files += save(fig, out, lang, "representation_neutrality")
+    return files

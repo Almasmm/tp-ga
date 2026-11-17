@@ -106,6 +106,14 @@ phases:
       swap_scaled: [0.05, 0.1, 0.25]
     initialization: [random, cost-aware]
     fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+  representation:              # non-confirmatory (amendment 3): why the gap grows with the size
+    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]],
+           structured: [[50, 50]], skewed: [[50, 50]], ties: [[50, 50]]}
+    random_parents: 1000       # random permutations per instance (prefix, neutrality, locality)
+    ga_methods: [GA-rand-tuned, GA-cost-tuned]
+    ga_seeds: 10               # populations of these runs at 10 %, 50 % and 100 % of the budget
+    snapshots: [0.1, 0.5, 1.0]
+    crossover_pairs: 200       # parent pairs from the population at 50 % (heritability of OX1)
   timing:                      # RQ3: performance cores only, nothing else running, no GPU
     sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]], lp_scaling: all}
     instances: 5

@@ -164,3 +164,23 @@ with these amendments; where they differ, the amendment applies.
 
   These training gaps were measured on 20x20 and 50x50 only and are not comparable with those of the
   repeated tuning, which includes 100x100.
+
+### Amendment 3 (2026-11-17): phase `representation` (non-confirmatory; added to section 7)
+
+* Purpose: explain why the gap grows with the size. A plan has at most m + n - 1 positive cells out of m n,
+  so most swaps exchange two arcs that carry no flow in either order. A check outside the project (uniform
+  costs in [1, 100], random permutations) gave 0.70, 0.81, 0.90 and 0.94 for the share of single swaps that
+  leave the decoded cost unchanged at 10x10, 20x20, 50x50 and 100x100. The phase measures this with the
+  project's decoder, operators and instances (`src/tpga/analysis/representation.py`).
+* Instances: uniform 5x5 to 200x200 and structured, skewed and ties at 50x50, 10 instances each.
+* Per instance: (1) decoder prefix — positive cells and the number of positions read before all supply is
+  used, absolute and as a share of m n — for 1000 random permutations and for the final populations of
+  GA-rand-tuned and GA-cost-tuned (seeds r = 0..9); (2) neutrality — share of mutation offspring whose decoded
+  cost equals the parent's, for every mutation operator and strength of the factorial plan and the tuned
+  settings, with parents (a) the 1000 random permutations and (b) the GA populations at 10 %, 50 % and 100 %
+  of the budget; the share is also reported among offspring with at least one swap; (3) locality — for
+  k = 1, 2, 5, 10, 20 random swaps: median |dZ| / Z*, the neutral share and the Spearman correlation between
+  k and |dZ|; (4) heritability of the order crossover — for 200 random parent pairs from the population at
+  50 % of the budget, the share of the child's positive cells that are positive in at least one parent.
+* Output: `paper_artifacts_v2/tables/representation.csv` and one figure (neutral share against m n per
+  operator, log x axis). No test; no conclusion of sections 5-6 depends on this phase.
