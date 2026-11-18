@@ -182,7 +182,8 @@ def solve_mip(
         x = _clean_plan(p, np.asarray(h.getSolution().col_value)[:arcs].reshape(m, n))
         objective = float(info.objective_function_value)
         cost = fcp.total_cost(x)
-        gap = max(0.0, (cost - bound) / cost) if cost > 0 else 0.0
+        if math.isfinite(bound):  # no bound yet when the limit ends the run before the root relaxation
+            gap = max(0.0, (cost - bound) / cost) if cost > 0 else 0.0
     return MIPResult(
         x=x,
         cost=cost,
