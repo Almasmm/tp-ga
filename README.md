@@ -82,6 +82,26 @@ python -m tpga.experiments.report --config experiments/paper.yaml
 The results, instances, figures (English and Russian), tables, `METHODS.md`, `LIMITATIONS.md` and
 `NUMBERS.md` (every number with its source) are in [`paper_artifacts/`](paper_artifacts/README.md).
 
+### Quick run of the v0.4 experiment
+
+A short version of the experiment of v0.4 (work in progress, branch `work/v0.4`) is defined in
+[`experiments/paper-v2-quick.yaml`](experiments/paper-v2-quick.yaml): uniform instances 5x5 to 50x50 and
+structured 20x20, 10 instances per size, 10 seeds, budget of 200 m n decoder calls, the methods LP, NWC, LCM,
+VAM, RS and the tuned GA and SA (random and cost-aware start), the phases `reference`, `representation` and
+`main`. One command runs it (4 500 runs, about 8 minutes on 24 logical processors) and writes the tables and
+figures:
+
+```bash
+pip install -e ".[runner]"
+python scripts/run_main.py --config experiments/paper-v2-quick.yaml --priority normal --phase reference --phase representation --phase main
+```
+
+The results of the run of 2026-11-18 are in [`paper_artifacts_quick/`](paper_artifacts_quick/): `tables/`,
+`figures/`, `raw/` (every run record), `run_manifest.json` and `PROGRESS.md`. This run is **not** part of the
+pre-registered plan of v0.4 (`docs/v0.4/PREREGISTRATION.md`) and does not replace it; it uses the first
+instances and seeds of that plan and the frozen parameters `experiments/tuned-v2.yaml`. Run times in it were
+measured with 24 runs at once and are not a timing result.
+
 ## Project structure
 
 ```text
