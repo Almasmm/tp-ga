@@ -7,8 +7,12 @@ change made before the main run are in `docs/v0.4/PREREGISTRATION.md` (section 9
 ## Reproduce with one command
 
 ```
-python scripts/run_main.py --config experiments/paper-v2.yaml
+python scripts/run_main.py --config experiments/paper-v2.yaml --priority normal
 ```
+
+`--priority` is `normal` (default) or `above_normal`; it replaces the `priority` of the configuration and
+changes run times only. The stops and restarts of the published run and its priorities are in the run
+record at the end of section 9 of `docs/v0.4/PREREGISTRATION.md`.
 
 The command runs every phase in the order reference, representation, main, applied, factorial, stagnation,
 legacy, timing, and writes the tables, the figures and `PROGRESS.md` after each phase. It can be started
