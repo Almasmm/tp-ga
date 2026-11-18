@@ -158,3 +158,24 @@ def test_fc_drivers_validate_and_can_be_cancelled() -> None:
     assert rs.stop_reason == "cancelled" and rs.evaluations < 500
     sa = run_sa_fc(fcp, SAConfig(max_evaluations=500, seed=1), chunk=100, callback=lambda s, e, c: True)
     assert sa.stop_reason == "cancelled" and sa.evaluations < 500
+
+
+def test_mip_plan_is_cleaned_of_solver_noise() -> None:
+    """With integer supplies and demands the reference plan is integer and exactly feasible; the instance is
+    one on which HiGHS returned amounts 1e-7 away from the vertex."""
+    from tpga.fctp import _clean_plan
+
+    fcp = FixedChargeProblem.from_dict(generate(10, 10, 20300100, 1.0))
+    mip = solve_mip(fcp, time_limit=60)
+    assert mip.x is not None and np.array_equal(mip.x, np.rint(mip.x))
+    assert check_plan(fcp.problem, mip.x, rtol=0.0).feasible
+    assert mip.cost == float(round(mip.cost))
+    p = TransportProblem([3, 4], [2, 2, 3], [[1, 5, 3], [4, 2, 6]])
+    exact = np.array([[2.0, 0.0, 1.0], [0.0, 2.0, 2.0]])
+    noisy = exact + np.array([[1e-7, 0.0, -1e-7], [-1e-7, 0.0, 1e-7]])
+    assert np.array_equal(_clean_plan(p, noisy), exact)
+    far = np.array([[1.6, 0.4, 1.0], [0.4, 1.6, 2.0]])  # not near a vertex: left as it is
+    assert np.array_equal(_clean_plan(p, far), far)
+    fractional = TransportProblem([2.5, 4.5], [2, 2, 3], p.cost)  # non-integer data: only tiny amounts are cut
+    plan = np.array([[2.0, 0.5, 1e-9], [0.0, 1.5, 3.0]])
+    assert np.array_equal(_clean_plan(fractional, plan), [[2.0, 0.5, 0.0], [0.0, 1.5, 3.0]])

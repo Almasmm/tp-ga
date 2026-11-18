@@ -310,8 +310,8 @@ def _run_fields(result: Any) -> dict[str, Any]:
     return out
 
 
-def _feasible(problem: TransportProblem, x: np.ndarray, label: str) -> float:
-    check = check_plan(problem, x, rtol=TOLERANCE)
+def _feasible(problem: TransportProblem, x: np.ndarray, label: str, rtol: float = TOLERANCE) -> float:
+    check = check_plan(problem, x, rtol=rtol)
     if not check.feasible:
         raise RuntimeError(f"infeasible plan from {label}: {check}")
     return max(check.max_row_residual, check.max_col_residual, max(0.0, -check.min_value))
@@ -377,7 +377,8 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
                 highs_version=mip.version,
             )
             if mip.x is not None:
-                record["max_residual"] = _feasible(fcp.problem, mip.x, label)
+                # the MIP plan is a reference from a solver with a feasibility tolerance of 1e-7
+                record["max_residual"] = _feasible(fcp.problem, mip.x, label, rtol=1e-6)
         else:
             if kind == "balinski":
                 t0 = time.perf_counter()

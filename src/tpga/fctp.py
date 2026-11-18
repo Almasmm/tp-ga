@@ -179,8 +179,7 @@ def solve_mip(
     has_solution = info.primal_solution_status == highspy.SolutionStatus.kSolutionStatusFeasible
     x = cost = objective = gap = None
     if has_solution:
-        x = np.asarray(h.getSolution().col_value)[:arcs].reshape(m, n)
-        x = np.where(x > 1e-6, x, 0.0)
+        x = _clean_plan(p, np.asarray(h.getSolution().col_value)[:arcs].reshape(m, n))
         objective = float(info.objective_function_value)
         cost = fcp.total_cost(x)
         gap = max(0.0, (cost - bound) / cost) if cost > 0 else 0.0
@@ -196,6 +195,23 @@ def solve_mip(
         nodes=int(info.mip_node_count),
         version=h.version(),
     )
+
+
+def _clean_plan(p: TransportProblem, x: FloatArray) -> FloatArray:
+    """Plan of the MIP solver without its numerical noise. HiGHS returns amounts within its feasibility
+    tolerance (1e-7) of a vertex; with integer supplies and demands every vertex is integer, so the amounts
+    are rounded when the rounded plan satisfies the constraints exactly. Otherwise only amounts below 1e-6
+    are set to zero."""
+    integral = bool(np.array_equal(p.supply, np.rint(p.supply)) and np.array_equal(p.demand, np.rint(p.demand)))
+    rounded = np.rint(x)
+    if (
+        integral
+        and float(np.abs(x - rounded).max()) <= 1e-5
+        and np.array_equal(rounded.sum(axis=1), p.supply)
+        and np.array_equal(rounded.sum(axis=0), p.demand)
+    ):
+        return np.maximum(rounded, 0.0)
+    return np.where(x > 1e-6, x, 0.0)
 
 
 def balinski(fcp: FixedChargeProblem) -> tuple[FloatArray, float, float]:
