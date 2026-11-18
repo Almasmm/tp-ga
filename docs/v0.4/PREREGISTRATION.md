@@ -380,3 +380,113 @@ times are +05:00; the source is `paper_artifacts_v2/logs/main-run.log` and `logs
   therefore measured under two priorities and in several sessions.
 * Command of every further start:
   `python scripts/run_main.py --config experiments/paper-v2.yaml --priority normal`.
+
+### Amendment 8 (2026-11-18, 23:50 +05:00): additional experiment v3 - cycle mutation, one protocol for the linear problem, fixed-charge problem
+
+Written and committed before any code of this amendment was run and before any run of it. The plan of
+sections 1-8 and amendments 1-7 (RQ1-RQ4, `experiments/paper-v2.yaml`, `paper_artifacts_v2/`) is not changed
+and is not replaced; nothing below is a confirmatory test of that plan. Everything below is an addition to
+section 7. The existing operators, kernels and the results of v0.3.0 and v0.4 are not changed: the new
+operator and the fixed-charge objective are new modules with their own kernels. Results go to
+`paper_artifacts_v3/`; the configurations are `experiments/paper-v3-cycle.yaml` and
+`experiments/paper-v3-fctp.yaml`. Decisions that the task left open are marked "(decision)".
+
+**8.1 Operator: cycle mutation.** Applied to an offspring after selection and crossover.
+
+1. The offspring is decoded (one decoder call). Its positive arcs form a forest. If there are fewer than
+   m + n - 1 of them, the forest is completed to a spanning tree with zero arcs: the arcs are scanned in
+   index order (i n + j) and an arc is added when it joins two components, until the tree has m + n - 1 arcs.
+2. k pivots. The entering arc is drawn uniformly from the m n - (m + n - 1) non-basic arcs (one uniform
+   number per pivot: the r-th non-basic arc in index order); no cost, dual value or other LP information is
+   used. The cycle of the entering arc in the tree is found; theta is the minimum flow on its minus
+   positions; theta is moved along the cycle; the leaving arc is the first minus arc with flow theta on the
+   path that starts at the destination of the entering arc. With theta = 0 the basis changes and the plan
+   does not; these pivots are counted separately.
+3. The new plan is encoded by the construction in the proof of Proposition 2: the m + n - 1 basic arcs in
+   the order of leaf elimination (leaves are taken first by node index, sources before destinations, then
+   first in, first out), then the non-basic arcs in the relative order they had in the offspring before the
+   mutation. The offspring is replaced by this permutation; its cost is the cost of the new plan.
+4. Counting: the one decoding of step 1 is the one decoder call of the offspring. Encoding is not counted;
+   its time is part of the run time.
+5. Implementations: Numba and plain Python with identical results. Tests fixed in advance: (a) the encoded
+   permutation decodes to exactly the plan it was built from, on 10 000 random basic plans of sizes 5x5 to
+   100x100; (b) the plan after a pivot is feasible; (c) the plan is unchanged only if theta = 0;
+   (d) Numba and Python agree. Exactness of (a) is claimed for integer data (all instances here).
+6. `scripts/neutrality_check.py` gets a second measurement: the share of offspring whose plan equals the plan
+   of the parent, for the cycle mutation (selected k) and for `swap_scaled` with the tuned strength 0.0837,
+   on random parents of the instances the script already uses (uniform 5x5 to 100x100, structured 20x20 and
+   50x50), with the number of pivots that had theta = 0.
+
+**8.2 Choice of k (no long tuning).** Variants GA-rand-cycle and GA-cost-cycle: every parameter of
+GA-rand-tuned and GA-cost-tuned (`experiments/tuned-v2.yaml`), only the mutation operator is replaced.
+Mutation probability as in the tuned configurations: `swap_scaled` and `swap_count` mutate every offspring,
+so the cycle mutation is applied to every offspring (decision). Grid: k in {1, 2, 4, round(0.05 (m + n))}
+(at least 1). Training instances: uniform 20x20 and 50x50 of the tuning set (`u20x20-00..03-train`,
+`u50x50-00..03-train`, the same generator and seeds as in `paper_artifacts_v2/instances_train`), seeds
+r = 0, 1, 2 (base 20261116), budget 200 m n, budget-only stop. For each variant separately (decision) the k
+with the smallest mean normalised gap over the 8 instances and 3 seeds is taken; on a tie the smaller k,
+with round(0.05 (m + n)) counted as the largest. Time limit 8 minutes: one run of each variant on
+`u50x50-00-train` with k = round(0.05 (m + n)) is timed first; if the estimate of the whole grid (sum of run
+times, 50x50 runs at the measured time and 20x20 runs at 0.16 of it, divided by 20 parallel runs) is above
+8 minutes, only the first two training instances of each size are used.
+
+**8.3 Linear problem, one protocol.** Instances and seeds of `experiments/paper-v2-quick.yaml`: uniform 5x5,
+10x10, 20x20, 30x30, 50x50 and structured 20x20, 10 instances each (the first instances of the v0.4 plan).
+Added: 10 uniform instances 100x100 from the same generator with new seeds 20290000 + i, i = 0..9
+(`v3u100x100-00..09`; not instances of the v0.4 plan). Methods: VAM, RS, GA-rand-tuned, GA-cost-tuned,
+SA-rand-tuned, SA-cost-tuned, GA-rand-cycle, GA-cost-cycle. 10 runs per instance (seeds 20261116 + r,
+r = 0..9, common to all methods), budget B = 200 m n decoder calls, no stagnation limit. Reference: LP
+optimum (HiGHS) and Z_rand (1000 random permutations) as in v0.4. Outcomes: gap, normalised gap, run time.
+
+* Pilot and reduction rule: one run (seed r = 0) of every stochastic method on the first instance of every
+  size; these are planned runs and are kept. Estimated total time = sum over all planned runs of the pilot
+  time of their (method, size), divided by 20 (24 logical processors, 16 of them efficiency cores with the
+  speed ratio 1.32 of the v0.4 pilot). If the estimate is above 30 minutes, the 100x100 set is reduced to its
+  first 5 instances (`v3u100x100-00..04`). Nothing else is reduced; the run then starts whatever the
+  estimate.
+
+**8.4 Fixed-charge problem (FCTP).** Minimise sum c_ij x_ij + sum f_ij [x_ij > 0] over the plans of the
+balanced transportation polytope.
+
+* Generator: supplies and demands as in the uniform set (supplies U{20..100}, demands 1 + multinomial);
+  c_ij ~ U{1..100}; f_ij ~ U{1..F}, F = round(2 rho c_mean S / (m + n - 1)), S = total supply, c_mean = mean
+  of the generated c_ij, rho in {0.2, 1.0}. Sizes 10x10, 15x15, 20x20, 30x30; 5 instances per (size, rho),
+  40 in all. Seeds 20300000 + 1000 s + 100 q + i (s = size index, q = rho index, i = 0..4); supplies,
+  demands and costs from `default_rng(seed)`, fixed charges from `default_rng([seed, 1])` (decision).
+* Reference: MIP in HiGHS (x_ij <= M_ij y_ij, M_ij = min(a_i, b_j), y binary), one thread per process, time
+  limit 60 s, relative gap 0 and absolute gap 0.99 (integer data: an absolute gap below 1 proves the
+  optimum). Recorded: status, value, best lower bound, MIP gap, time. The gap of a method is
+  100 (Z - Z_best) / Z_best with Z_best = the optimum when it is proved, otherwise the best known value (the
+  minimum of the MIP solution and of every run of every method). The gap of Z_best to the lower bound is
+  reported separately.
+* Methods: (1) Balinski: LP with costs c_ij + f_ij / M_ij, then the true cost of its plan; (2) VAM on the
+  same linearised costs, true cost of its plan; (3) RS; (4) GA-rand-tuned (`swap_scaled`); (5) GA-rand-cycle;
+  (6) GA-cost-cycle, cost-aware start built from the linearised costs; (7) SA-rand-tuned; (8) GA-hybrid =
+  GA-cost-cycle plus a local search by pivots: after every 10th generation the best individual of the
+  population is decoded (counted as one call, decision), its non-basic arcs are scanned in index order from
+  a random start, every neighbour (one pivot) is evaluated by the true FCTP cost and counts as one call, and
+  the first strictly better neighbour replaces the individual; one such step per application (decision).
+  All stochastic methods minimise the true FCTP cost with the same decoder.
+* Parameters come from the linear tuning (`experiments/tuned-v2.yaml`) and the k of 8.2, without any tuning
+  on FCTP. This is a limitation and is reported as such. Known consequence, stated before the run: with the
+  population of 2700 of GA-cost the budget 200 m n gives 6 generations at 10x10, 15 at 15x15, 28 at 20x20 and
+  65 at 30x30, so the local search of GA-hybrid is applied 0, 1, 2 and 6 times; at 10x10 GA-hybrid and
+  GA-cost-cycle are the same algorithm.
+* 10 runs per instance (seeds 20261116 + r), budget 200 m n evaluations.
+
+**8.5 External benchmark.** At most 10 minutes of search for a public FCTP set with published optimal
+values. If a set with a stable link and known optima is found, the methods of 8.4 are run on its instances
+up to 30x30 with the same rules and the source is cited. If not, this part is left out and the report says
+so.
+
+**8.6 Statistics.** As in section 5: the unit is the instance (median over its 10 seeds); two-sided
+Wilcoxon signed-rank test, Holm correction, matched-pairs rank-biserial r, wins/ties/losses.
+
+* Linear problem, per (set, size), one Holm family of five pairs: GA-rand-cycle against VAM, GA-rand-tuned
+  and GA-cost-tuned; GA-cost-cycle against GA-cost-tuned and VAM. On gap; the normalised gap is reported for
+  every method. With 5 instances (reduced 100x100) the smallest possible two-sided p is 0.0625; this is
+  stated next to the result.
+* FCTP, one Holm family of four pairs: GA-hybrid and GA-rand-cycle, each against Balinski and against
+  GA-rand-tuned. A cell (size, rho) has 5 instances, so the tests are made on the 40 instances together and
+  for each rho (20 instances) (decision); per cell only the median gap and wins/ties/losses are given.
+* No result of this amendment is used to choose anything in the v0.4 plan.
