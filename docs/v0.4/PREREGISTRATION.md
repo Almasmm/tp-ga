@@ -346,3 +346,37 @@ with these amendments; where they differ, the amendment applies.
   and the decoder call at which the best plan was found; `T0` gives the share of feasible plans; the English
   figures are also written to `figures/final_en` (600 dpi JPG and PDF); `PROGRESS.md` lists the finished
   phases.
+
+### Run record (2026-11-18): stops, restarts and process priority (procedure, no change of the plan)
+
+Written on 2026-11-18 while the main run was stopped, with `reference` and `representation` finished and
+350 of 23 600 runs of `main` on disk (uniform 200x200, instances 00-06, 10 seeds, five methods). Nothing in
+the plan, the methods, the parameters, the seeds, the budgets or the tests is changed by this record. All
+times are +05:00; the source is `paper_artifacts_v2/logs/main-run.log` and `logs/errors.jsonl`.
+
+* 01:00:37, first start (`scripts/run_main.py`, all phases, priority `above_normal` from the configuration).
+  The process ended without any message before the first run was recorded. The cause was not found.
+* 01:01:27, start of the phase `reference` alone: 712 runs, done at 01:01:39.
+* 01:02:31, start of all phases. `representation` ended with an error twice (01:13:24 and 01:24:30,
+  `PermissionError` on the state file of the monitor) and was started again by the script; it was done at
+  01:44:05. `main` started at 01:44:09.
+* Code after the tag `v0.4.0-run2` (e3a8fb6): commits 298b313 and 74f0caf (01:12) and dd20843 (01:24) change
+  the report on a partial run, the import order of `scripts/run_main.py` and the monitor (a locked state file
+  no longer stops a phase). They do not touch the methods, the decoder, the seeds, the task list or the
+  records.
+* 10:55, stop: the author restarted the laptop. The last record is from 10:50:01. The 24 runs in progress
+  were lost.
+* 12:52:42, restart with the same command and the same priority; `main` had 23 250 runs to do.
+* 12:58, stop by the author. No run finished between 12:52 and 12:58; the 19 runs in progress were lost.
+* Runs lost at a stop left no record. They are listed in `logs/errors.jsonl` (43 entries, all
+  `BrokenProcessPool`, phase `main`) and are run again from the start with the same seed, as every run that
+  is not on disk. After both stops the records were checked: 2 952 run records, no unreadable line, no
+  repeated key, every `main` run has its convergence curve.
+* Priority. Up to 12:58 the runs had the priority `above_normal`. From the next start they have `normal`,
+  at the request of the author, because the laptop was hard to use during the run. `scripts/run_main.py` has
+  the option `--priority` (default `normal`), which replaces the value of the configuration; the commit with
+  this record adds it together with a test. The priority does not enter any result that is counted in
+  decoder calls (gap, best plan, convergence curve). The field `time_s` of the phases before `timing` is
+  therefore measured under two priorities and in several sessions.
+* Command of every further start:
+  `python scripts/run_main.py --config experiments/paper-v2.yaml --priority normal`.

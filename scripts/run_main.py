@@ -9,6 +9,9 @@ runs alone. The script keeps the machine awake while it runs and writes ``logs/m
 
     python scripts/run_main.py --config experiments/paper-v2.yaml
 
+``--priority`` is the process priority of the runs: ``normal`` (default, the machine stays usable) or
+``above_normal``. It is passed to every ``tpga-exp run`` and replaces the ``priority`` of the configuration.
+
 Start it again with the same command after a crash or a reboot: finished runs are not repeated.
 """
 
@@ -71,6 +74,12 @@ def main() -> int:
     ap.add_argument("--config", required=True)
     ap.add_argument("--phase", action="append", choices=PHASES, help="default: every phase, in the run order")
     ap.add_argument("--retries", type=int, default=3)
+    ap.add_argument(
+        "--priority",
+        choices=["normal", "above_normal"],
+        default="normal",
+        help="process priority of the runs; replaces the value of the configuration (default: normal)",
+    )
     args = ap.parse_args()
     cfg = ConfigV2.load(args.config)
     log_dir = cfg.output / "logs"
@@ -84,7 +93,7 @@ def main() -> int:
             f.write(line + "\n")
 
     phases = args.phase or list(PHASES)
-    say(f"main run started: phases {', '.join(phases)}")
+    say(f"main run started: phases {', '.join(phases)}; priority {args.priority}")
     report: subprocess.Popen | None = None
     failed: list[str] = []
     with keep_awake():
@@ -99,7 +108,17 @@ def main() -> int:
                 attempt += 1
                 console = (log_dir / f"run-{phase}-console.txt").open("a", encoding="utf-8")
                 code = subprocess.call(
-                    [exe("tpga-exp"), "run", "--config", args.config, "--phase", phase, "--plain"],
+                    [
+                        exe("tpga-exp"),
+                        "run",
+                        "--config",
+                        args.config,
+                        "--phase",
+                        phase,
+                        "--plain",
+                        "--priority",
+                        args.priority,
+                    ],
                     stdout=console,
                     stderr=subprocess.STDOUT,
                 )

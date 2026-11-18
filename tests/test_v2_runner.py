@@ -608,3 +608,36 @@ def test_select_tuned_takes_the_best_trial_of_both_rounds(tmp_path) -> None:
     assert chosen["GA-rand"]["best_mean_gap_by_round"] == {"round1": 1.0, "round2": 5.0}
     with pytest.raises(SystemExit):
         select_tuned.select(tmp_path, 100)  # an unfinished round is refused
+
+
+@pytest.mark.parametrize(("extra", "expected"), [([], "normal"), (["--priority", "above_normal"], "above_normal")])
+def test_run_main_passes_the_priority_to_every_phase(tmp_path, monkeypatch, extra, expected) -> None:
+    """The priority of ``run_main`` replaces the one of the configuration; the default is normal."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    try:
+        import run_main
+    finally:
+        sys.path.pop(0)
+    path = make_config(tmp_path)
+    assert "priority: normal" in path.read_text(encoding="utf-8")
+    path.write_text(
+        path.read_text(encoding="utf-8").replace("priority: normal", "priority: above_normal"), encoding="utf-8"
+    )
+    commands: list[list[str]] = []
+    left = iter([1, 0])
+
+    class Report:
+        returncode = 0
+
+        def wait(self) -> int:
+            return 0
+
+    monkeypatch.setattr(run_main.subprocess, "call", lambda cmd, **kw: commands.append(cmd) or 0)
+    monkeypatch.setattr(run_main, "remaining", lambda cfg, phase: next(left))
+    monkeypatch.setattr(run_main, "start_report", lambda config, log_dir, phase: Report())
+    monkeypatch.setattr(sys, "argv", ["run_main.py", "--config", str(path), "--phase", "reference", *extra])
+    assert run_main.main() == 0
+    assert len(commands) == 1
+    assert commands[0][commands[0].index("--priority") + 1] == expected
+    log = (tmp_path / "out" / "logs" / "main-run.log").read_text(encoding="utf-8")
+    assert f"priority {expected}" in log
