@@ -1,0 +1,15 @@
+2026-11-18 22:45:59 main run started: phases reference, representation, main; priority normal
+2026-11-18 22:45:59 phase reference: 240 runs to do
+2026-11-18 22:46:08 phase reference: attempt 1 ended with code 0, 0 runs left
+2026-11-18 22:46:08 phase reference: done
+2026-11-18 22:46:08 report started after reference (idle priority, one processor)
+2026-11-18 22:46:09 phase representation: 1260 runs to do
+2026-11-18 22:49:26 phase representation: attempt 1 ended with code 0, 0 runs left
+2026-11-18 22:49:26 phase representation: done
+2026-11-18 22:49:30 report started after representation (idle priority, one processor)
+2026-11-18 22:49:32 phase main: 3000 runs to do
+2026-11-18 22:53:00 phase main: attempt 1 ended with code 0, 0 runs left
+2026-11-18 22:53:00 phase main: done
+2026-11-18 22:53:04 report started after main (idle priority, one processor)
+2026-11-18 22:53:24 final report ended with code 0
+2026-11-18 22:53:24 main run finished; every phase is done

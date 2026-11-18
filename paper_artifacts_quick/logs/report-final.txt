@@ -1,0 +1,78 @@
+Running HiGHS 1.16.0 (git hash: f3f113d): Copyright (c) 2026 under MIT licence terms
+Includes third-party software components, see THIRD_PARTY_NOTICES.md for full details
+{
+ "runs": 4500,
+ "curve_rows": 231265,
+ "tables": {
+  "T1_instances": 6,
+  "T2_gap": 54,
+  "T3_time": 0,
+  "T3_fits": 0,
+  "T4_factorial": 0,
+  "T4_tests": 0,
+  "T5_methods_gap": 30,
+  "T5_methods_gap_norm": 30,
+  "T6_initialisation": 0,
+  "T7_stopping": 0,
+  "T8_lp_scaling": 0,
+  "T8_lp_disagreement": 0,
+  "A1_methods_pooled": 10,
+  "T10_applied_instances": 0,
+  "T10_applied_summary": 0,
+  "T0_checks": 4,
+  "T0_example1": 6,
+  "representation": 2658
+ },
+ "figures": [
+  "en/boxplot_gap.png",
+  "en/boxplot_gap.pdf",
+  "final_en/boxplot_gap.jpg",
+  "final_en/boxplot_gap.pdf",
+  "ru/boxplot_gap.png",
+  "ru/boxplot_gap.pdf",
+  "en/boxplot_gap_norm.png",
+  "en/boxplot_gap_norm.pdf",
+  "final_en/boxplot_gap_norm.jpg",
+  "final_en/boxplot_gap_norm.pdf",
+  "ru/boxplot_gap_norm.png",
+  "ru/boxplot_gap_norm.pdf",
+  "en/convergence.png",
+  "en/convergence.pdf",
+  "final_en/convergence.jpg",
+  "final_en/convergence.pdf",
+  "ru/convergence.png",
+  "ru/convergence.pdf",
+  "en/representation_neutrality.png",
+  "en/representation_neutrality.pdf",
+  "final_en/representation_neutrality.jpg",
+  "final_en/representation_neutrality.pdf",
+  "ru/representation_neutrality.png",
+  "ru/representation_neutrality.pdf"
+ ],
+ "phases": {
+  "main": 3000,
+  "reference": 240,
+  "representation": 1260
+ },
+ "reachability": {
+  "description": "Random balanced integer instances; HiGHS dual simplex (scipy linprog method='highs-ds') gives an optimal vertex; a permutation is built by removing leaves of the vertex's support forest and is decoded by the greedy decoder. 'reproduced' means the decoded plan equals the vertex exactly and its cost equals the LP optimum within the tolerance. Empirical check, not a proof.",
+  "generator": {
+   "min_size": 2,
+   "max_size": 30,
+   "max_supply": 20,
+   "max_cost": 100
+  },
+  "seed": 20261117,
+  "tolerance": 1e-09,
+  "instances": 1000,
+  "reproduced": 1000,
+  "not_reproduced": 0,
+  "integral_vertices": 1000,
+  "basic_vertices": 1000,
+  "degenerate_vertices": 693,
+  "degenerate_reproduced": 693,
+  "arcs_min": 4,
+  "arcs_max": 870
+ },
+ "progress": "PROGRESS.md"
+}
