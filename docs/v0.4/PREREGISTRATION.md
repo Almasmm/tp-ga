@@ -490,3 +490,56 @@ Wilcoxon signed-rank test, Holm correction, matched-pairs rank-biserial r, wins/
   GA-rand-tuned. A cell (size, rho) has 5 instances, so the tests are made on the 40 instances together and
   for each rho (20 instances) (decision); per cell only the median gap and wins/ties/losses are given.
 * No result of this amendment is used to choose anything in the v0.4 plan.
+
+### Record of amendment 8 (2026-11-19): what the rules gave and what differs from the text above
+
+Written after the runs, from the files of `paper_artifacts_v3/`. Order of the commits: 7aa163b (amendment 8),
+ab93a13 (code, tests, configurations; no run), the runs of 8.2 and 8.3, 01f5af2 (see "Stop of the MIP phase"),
+the runs of 8.4 and 8.5. `paper_artifacts_v3/run_manifest.json` gives the commit of every command; the
+working tree was clean at each of them.
+
+* 8.2, choice of k (`kselect/selected.json`, `kselect/kselect.csv`): probe times 9.6 s and 12.1 s, estimate
+  60 s against the limit of 480 s, so all 8 training instances were used; the grid took 79 s. Chosen:
+  GA-rand-cycle k = 2 (mean normalised gap 0.0102; k = 1: 0.0213, k = 4: 0.0180, round(0.05 (m + n)): 0.0164),
+  GA-cost-cycle k = 1 (0.00375; k = 2: 0.00385, k = 4: 0.00667, round(0.05 (m + n)): 0.00637). No tie.
+  The training instances have the SHA-256, the seeds and the Z_rand of `paper_artifacts_v2/instances_train`.
+* 8.3, pilot and reduction (`linear/pilot.json`): 49 pilot runs, estimate 3132 s (52.2 min) against the limit
+  of 30 min, so the 100x100 set is `v3u100x100-00..04` (5 instances). The estimate after the rule was 28.5 min;
+  the run took 47.0 min (4615 records with the pilot runs, no failed run). At 100x100 a test has 5 pairs and
+  its smallest possible two-sided p is 0.0625, so no comparison at that size can pass the Holm correction.
+* Check of the protocol: the 3060 runs that this protocol shares with `paper_artifacts_quick/` (same
+  instance, method and seed: VAM, RS and the four tuned methods up to 50x50 and structured 20x20) have the
+  same cost, the same Z* and the same Z_rand in both sets of records.
+* Stop of the MIP phase (8.4). The first start of the FCTP configuration stopped in the MIP phase: on
+  `f10x10-r1-00` and `f10x10-r1-02` HiGHS returned amounts 1e-7 away from a vertex and the feasibility check
+  of the runner (tolerance 1e-9) refused the plan. No FCTP method had been run. Commit 01f5af2 rounds the MIP
+  plan when supplies and demands are integer and the rounded plan satisfies the constraints exactly, and
+  checks the MIP plan with the tolerance of the solver. The 38 MIP records written before the stop were set
+  aside and all 40 MIP runs were made again; that failed start is not in `run_manifest.json`. No method,
+  parameter, budget, seed or rule was changed.
+* 8.4, MIP reference (`fctp/tables/F1_mip_summary`): the optimum was proved for all 30 instances of 10x10,
+  15x15 and 20x20; all 10 instances of 30x30 reached the limit of 60 s with a MIP gap of 1.8 % (rho = 1) and
+  2.4 % (rho = 0.2) in the median, at most 3.4 %. On every 30x30 instance the best known value is the MIP
+  solution, not a heuristic run.
+* 8.4, GA-hybrid: the local search was applied 0, 1, 2 and 6 times per run at 10x10, 15x15, 20x20 and 30x30,
+  as stated in advance, and improved the best individual in 0.8, 1.6 and 3.0 of those applications on
+  average (`fctp/tables/F2_gap`). The median gap over runs of GA-hybrid and of GA-cost-cycle differs by at
+  most 0.25 percentage points in every cell (the median of instance medians by at most 1.1, in either
+  direction); the comparisons of GA-hybrid in `F3_tests` are therefore in effect comparisons of GA-cost-cycle.
+  At 5x5 of the linear protocol the budget of 5000 calls is below one generation of the population of 2700,
+  so GA-cost-tuned and GA-cost-cycle are both the cost-aware start and give identical results there.
+* 8.5, external benchmark: found. MIPLIB 2017 (https://miplib.zib.de) has three pure fixed-charge
+  transportation problems up to 30x30: `gr4x6` (4x6), `ran13x13`, `ran12x21`, with the objective values
+  202.35, 3252 and 3664 listed on their pages (status "easy"). The other `ran*` instances of older MIPLIB
+  versions are not in MIPLIB 2017 and were not looked for elsewhere; `ran14x18-disj-8` has additional
+  constraints and is left out. Decisions made when the set was found: the reference is the listed value;
+  our MIP is also run (it proves the same three values); `gr4x6` has non-integer costs, so the MIP of this
+  part uses an absolute gap of 1e-6 instead of 0.99. Three instances: no test.
+* 8.1, item 6: `scripts/neutrality_check.py` is the script of the branch `main` with the second measurement
+  added (`--operators`); its first measurement is unchanged. Because the two variants got different k, the
+  cycle mutation is measured with k = 2 and with k = 1.
+* Finding that limits 8.1: on random parents 2 to 10 % of the pivots have theta = 0, but inside the GA runs
+  the share is 1.6 to 74 % and grows with the size (`linear/tables/T4_cycle_counters`: at 100x100, 74 % of the
+  pivots of GA-rand-cycle and 65 % of those of GA-cost-cycle; 56 % and 65 % of the offspring keep the decoded
+  plan). The cycle mutation removes the neutrality of the swap on non-degenerate plans, not on the
+  degenerate plans that the search produces.
