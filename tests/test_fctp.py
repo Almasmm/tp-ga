@@ -100,15 +100,22 @@ def test_mip_bounds_and_the_linearisation_heuristics() -> None:
     assert mip.nodes >= 0 and mip.time_s >= 0 and isinstance(mip.version, str)
 
 
-def test_mip_time_limit_reports_a_bound_without_proof() -> None:
+def test_mip_time_limit_reports_no_proof() -> None:
+    """At the time limit the result is not a proof. How far HiGHS gets in a short time depends on the machine:
+    there may be no plan yet, and no finite bound before the root relaxation is solved."""
     fcp = small(5, 15, 15)
     mip = solve_mip(fcp, time_limit=0.05)
     assert not mip.proved
     assert mip.status != "Optimal"
-    assert np.isfinite(mip.bound)
-    if mip.cost is not None:  # a feasible plan was found before the limit
-        assert mip.bound <= mip.cost + 1e-6 and 0 <= mip.gap <= 1
+    if mip.cost is None:
+        assert mip.x is None and mip.gap is None
+    else:
+        assert mip.bound <= mip.cost + 1e-6
         assert check_plan(fcp.problem, mip.x).feasible
+        assert mip.gap is None if not np.isfinite(mip.bound) else 0 <= mip.gap <= 1
+    stopped = solve_mip(fcp, time_limit=0.0)  # stopped at once: no plan, no bound
+    assert not stopped.proved and stopped.x is None and stopped.cost is None and stopped.gap is None
+    assert stopped.bound == -np.inf
 
 
 @pytest.mark.parametrize("engine", ["numba", "python"])
