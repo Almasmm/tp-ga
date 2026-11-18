@@ -1,0 +1,38 @@
+{
+ "selected": {
+  "GA-rand-cycle": {
+   "mode": "cycle",
+   "strength": 2,
+   "k": "2"
+  },
+  "GA-cost-cycle": {
+   "mode": "cycle",
+   "strength": 1,
+   "k": "1"
+  }
+ },
+ "probe_times_s": {
+  "GA-rand-cycle": 9.649960299997474,
+  "GA-cost-cycle": 12.06655939999473
+ },
+ "estimate_s": 60.45879084477831,
+ "limit_s": 480.0,
+ "reduced_training_set": false,
+ "instances": [
+  "u20x20-00-train",
+  "u20x20-01-train",
+  "u20x20-02-train",
+  "u20x20-03-train",
+  "u50x50-00-train",
+  "u50x50-01-train",
+  "u50x50-02-train",
+  "u50x50-03-train"
+ ],
+ "seeds": [
+  20261116,
+  20261117,
+  20261118
+ ],
+ "wall_s": 61.5027277469635,
+ "rule": "smallest mean normalised gap over training instances and seeds; ties: the earlier grid entry"
+}
