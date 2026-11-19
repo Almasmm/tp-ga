@@ -22,3 +22,7 @@ Thumbs.db
 # local platform data (run history database, server logs)
 platform/data/
 .venv-gpu/
+
+# public FCTP instances without a stated licence: downloaded by the command public (amendment 10.3 a)
+paper_artifacts_v3/review/public/source/
+paper_artifacts_v3/review/public/instances/

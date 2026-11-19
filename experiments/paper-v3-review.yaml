@@ -1,0 +1,113 @@
+# Additional experiment v3, answers to a review.
+# Plan: docs/v0.4/PREREGISTRATION.md, amendment 10, written after the results of amendments 8 and 9 were seen.
+# Every result of this configuration is exploratory. Output: paper_artifacts_v3/review/.
+#
+#   python -m tpga.experiments.v3 pilot      --config experiments/paper-v3-review.yaml   # times for the rules
+#   python -m tpga.experiments.v3 tune       --config experiments/paper-v3-review.yaml   # grids of Tabu and ILS
+#   python -m tpga.experiments.v3 rivals     --config experiments/paper-v3-review.yaml   # 10.1 on 60 instances
+#   python -m tpga.experiments.v3 generator  --config experiments/paper-v3-review.yaml   # 10.3 b
+#   python -m tpga.experiments.v3 degenerate --config experiments/paper-v3-review.yaml   # 10.5
+#   python -m tpga.experiments.v3 public     --config experiments/paper-v3-review.yaml   # 10.3 a (downloads files)
+#   python -m tpga.experiments.v3 timing     --config experiments/paper-v3-review.yaml   # 10.4, one run at a time
+#   python -m tpga.experiments.v3 mipdefault --config experiments/paper-v3-review.yaml [--minutes N]   # 10.2
+#   python -m tpga.experiments.v3 report     --config experiments/paper-v3-review.yaml
+
+name: paper-v3-review
+problem: fctp
+review: true
+base: experiments/paper-v3-fctp-ext.yaml     # FCTP instances, methods and runs of amendments 8.4 and 9
+linear: experiments/paper-v3-cycle.yaml      # linear set and runs of amendments 8.3 and 9.1
+output: paper_artifacts_v3
+base_seed: 20261116
+runs: 10
+workers: 20
+budget_factor: 200             # B = 200 m n evaluations
+tuned_parameters: experiments/tuned-v2.yaml
+selected_k: paper_artifacts_v3/kselect/selected.json
+
+mip: {time_limit_s: 60, threads: 1, rel_gap: 0.0, abs_gap: 0.99}
+
+# 10.0 and 10.9: time limit of all run commands and the allowance of each, in minutes; a command may use the
+# allowances up to and including its own minus the time already used; the last one stops final_margin_min
+# before the limit
+limit_min: 90
+final_margin_min: 2
+allowance_min: {pilot: 2, tune: 2, rivals: 3, generator: 11, degenerate: 15, public: 5, timing: 10, mipdefault: 36}
+safety: 1.25
+
+pilot:
+  instances: {seed_base: 20340000, sizes: [[20, 20], [30, 30], [50, 50], [70, 70]], rho: [1.0], count: 1,
+              cost: [1, 100], supply: [20, 100]}
+  ga: GA-cost-cycle
+  linear_instance: u50x50-00-train
+
+# 10.1: order of the lists = order of the tie rule, the first list outermost
+rivals:
+  Tabu: {kind: tabu, grid: {sample: [1.0, 0.25, 0.05], tenure: [5, 10, 20]}}
+  ILS:  {kind: ils,  grid: {perturbation: [2, 4, 8, 16], acceptance: [better, always]}}
+tune_runs: 3
+reference_ga: GA-cost-cycle
+pairs:
+  - [GA-cost-cycle, Tabu]
+  - [GA-cost-cycle, ILS]
+
+# 10.2
+mip_default: {time_limit_s: 300, threads: 0, rel_gap: 0.0, abs_gap: 0.99}
+
+# 10.3 b
+generator:
+  sizes: [[20, 20], [30, 30], [50, 50]]
+  count: 5
+  cost: [1, 100]
+  supply: [20, 100]
+  uniform:      {seed_base: 20320000, rho: [0.05, 5.0], prefix: g}
+  concentrated: {seed_base: 20330000, rho: [0.05, 0.2, 1.0, 5.0], prefix: c,
+                 mean_supply: 60, large_fraction: 0.1, large_share: 0.8}
+  methods: [Balinski, Tabu, ILS, GA-cost-cycle]
+
+# 10.3 a: files of a third-party repository without a stated licence; they are downloaded, not stored in git
+public:
+  source: "Subset of the test problems of Sun, Aronson, McKeown and Drinka (1998) used by Glover, Amini and
+    Kochenberger (2005); files of https://github.com/Tybirk/RL-FCTP, directory Java/Glover, commit
+    1ab1ba073363c7b650fab7ef1f93b8a7755ba2cb. Published values: Glover, Amini, Kochenberger, Journal of
+    Heuristics 11 (2005) 307-336, Table 3."
+  base_url: "https://raw.githubusercontent.com/Tybirk/RL-FCTP/1ab1ba073363c7b650fab7ef1f93b8a7755ba2cb/Java/Glover/"
+  methods: [Balinski, Tabu, ILS, GA-cost-cycle]
+  instances:
+    - {id: N104,  sha256: 8198b0c55984da4c80adaad163d284050e46695a04727cd6fb3f207e8943d129,
+       published: {cplex9: 40258, sun_tabu: 40258, ghost_image: 40258}, barr2021: 40255}
+    - {id: N107,  sha256: aeed879d1dd4dd137b1a794922ecaddad175fb3f97d5487dc2262a3b113b50f8,
+       published: {cplex9: 42029, sun_tabu: 42029, ghost_image: 42029}, barr2021: 42026}
+    - {id: N204,  sha256: 4fe9fdd8d5832a98f36c9481bb1b1c9202d6f4742f39d4d04bb14354839dd000,
+       published: {cplex9: 54502, sun_tabu: 54502, ghost_image: 54502}, barr2021: 54497}
+    - {id: N207,  sha256: 4246b595d66cf132a609a3f0ee536cf90b79333a72c7cdd45dd110fd015d7038,
+       published: {cplex9: 53596, sun_tabu: 53601, ghost_image: 53601}, barr2021: 53591}
+    - {id: N304,  sha256: b8df31f61f1cf3d6c2354ebe34274a077e7449f46347b5945eff763dcbbadda1,
+       published: {cplex9: 56366, sun_tabu: 56391, ghost_image: 56366}, barr2021: 56361}
+    - {id: N307,  sha256: 5f0f8cfdc693146f35ccfd86bf673960893aeb7472a2feea048b8c71ed59554b,
+       published: {cplex9: 49742, sun_tabu: 49742, ghost_image: 49742}, barr2021: 49737}
+    - {id: N504,  sha256: 165b6f2dcab69fc0d7a3c7301aab94b3499e9023b499dc3eca4d135660742357,
+       published: {cplex9: 57130, sun_tabu: 57130, ghost_image: 57130}, barr2021: 56883}
+    - {id: N507,  sha256: 2f55cc7f404dafab4ab3c25e885391137a6046de91ee65ab4e360772276fcc5f,
+       published: {cplex9: 52903, sun_tabu: 52977, ghost_image: 52903}, barr2021: 52898}
+    - {id: N1004, sha256: 5179fbd2d61b8c2b6bba82df0ed01683d25131b91f4ff1198b3e726c53e1a2e5,
+       published: {cplex9: 163599, sun_tabu: 163793, ghost_image: 163585}, barr2021: 162863}
+    - {id: N1007, sha256: 91e798b38cebea3491f3d0ab6bc05048335be31f506fe5c2d373d6b8472477f2,
+       published: {cplex9: 162300, sun_tabu: 162313, ghost_image: 162237}, barr2021: 161186}
+
+# 10.4
+timing: {cpu: 2, instances_per_cell: 3, runs: 5, methods: [GA-cost-cycle, Tabu, ILS], factor: 1.15}
+
+# 10.5
+degenerate:
+  variants: {GA-rand-cycle-nd: GA-rand-cycle, GA-cost-cycle-nd: GA-cost-cycle}
+  reduce_size: "100x100"
+  counts: [10, 5, 3, 2, 1, 0]
+  trace: {set: uniform, sizes: ["20x20", "50x50", "100x100"], instances: 3, runs: 5}
+
+# 10.6
+bootstrap: {resamples: 10000, seed: 20261120}
+
+# 10.7
+figure_linear: [VAM, GA-rand-tuned, GA-cost-tuned, GA-rand-cycle, GA-cost-cycle]
+figure_fctp: [Balinski, Tabu, ILS, GA-cost-cycle, "MIP, time of the GA"]

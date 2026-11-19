@@ -18,7 +18,7 @@ exactly (same random numbers, same result); the existing GA is not changed.
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 import numpy as np
@@ -175,6 +175,11 @@ class GAXConfig:
     * ``cycle``: cycle mutation with ``round(mutation_strength)`` pivots;
     * ``cycle_scaled``: cycle mutation with ``max(1, round(mutation_strength (m + n)))`` pivots.
 
+    ``entering`` is the rule for the entering arc of a pivot of the cycle mutation: ``uniform`` among all
+    non-basic arcs, or ``nondegenerate`` (amendment 10.5): uniform among the non-basic arcs whose cycle has
+    no arc with zero flow on a minus position, so that ``theta > 0``; when there is no such arc the uniform
+    rule is used for that pivot. The same uniform number chooses the arc under both rules.
+
     ``local_search_every = g > 0``: after every ``g``-th generation one step of the pivot local search on the
     best individual of the population (its decoding and every neighbour count as evaluations).
     """
@@ -190,10 +195,15 @@ class GAXConfig:
     seed: int | None = None
     local_search_every: int = 0
     decoder_tol: float = DECODER_TOL
+    entering: Literal["uniform", "nondegenerate"] = "uniform"
 
     def __post_init__(self) -> None:
         if self.mutation_mode not in X_MODES:
             raise ValueError(f"mutation_mode must be one of {list(X_MODES)}")
+        if self.entering not in ("uniform", "nondegenerate"):
+            raise ValueError("entering must be uniform or nondegenerate")
+        if self.entering == "nondegenerate" and self.mutation_mode not in ("cycle", "cycle_scaled"):
+            raise ValueError("the rule nondegenerate belongs to the cycle mutation")
         if self.mutation_mode in ("swap_count", "cycle") and round(self.mutation_strength) < 1:
             raise ValueError("mutation_strength must be at least 1 (moves per offspring)")
         if self.mutation_strength <= 0:
@@ -224,7 +234,9 @@ class GAXConfig:
 
 @dataclass
 class GAXResult(GAResult):
-    """:class:`tpga.ga.GAResult` plus the counters of the cycle mutation and of the local search."""
+    """:class:`tpga.ga.GAResult` plus the counters of the cycle mutation and of the local search.
+    ``fallback_pivots``: pivots of the rule ``nondegenerate`` that the uniform rule chose; ``pivot_trace``:
+    (pivots, pivots with theta = 0) summed up to the end of every generation."""
 
     pivots: int = 0
     zero_pivots: int = 0
@@ -232,6 +244,8 @@ class GAXResult(GAResult):
     local_search_calls: int = 0
     local_search_evaluations: int = 0
     local_search_improvements: int = 0
+    fallback_pivots: int = 0
+    pivot_trace: list[tuple[int, int]] = field(default_factory=list)
 
 
 def run_ga_x(
@@ -284,11 +298,13 @@ def run_ga_x(
     offspring = size - cfg.elite
     width = uniforms_per_child(cfg.tournament)
     cycle = 1 if cfg.mutation_mode in ("cycle", "cycle_scaled") else 0
+    mode = 2 if cycle and cfg.entering == "nondegenerate" else cycle
+    trace: list[tuple[int, int]] = []
     moves = cfg.moves(m, n)
     per_move = 1 if cycle else 2
     counts = np.full(max(offspring, 1), moves, dtype=np.int64)
     offsets = (per_move * moves * np.arange(max(offspring, 1))).astype(np.int64)
-    stats = np.zeros(3, dtype=np.int64)
+    stats = np.zeros(4, dtype=np.int64)
     ls_calls = ls_evals = ls_improved = 0
     work = _work(m, n, length)
     generation, stop_reason = 0, "budget"
@@ -317,7 +333,7 @@ def run_ga_x(
                 new_fit,
                 scratch,
                 kept,
-                cycle,
+                mode,
                 counts,
                 offsets,
                 extra_u,
@@ -326,6 +342,8 @@ def run_ga_x(
             pop, new_pop = new_pop, pop
             fit, new_fit = new_fit, fit
             generation += 1
+            if cycle:
+                trace.append((int(stats[0]), int(stats[1])))
             child = cfg.elite + int(np.argmin(fit[cfg.elite :]))
             if fit[child] < best_cost:
                 best_cost = float(fit[child])
@@ -384,4 +402,6 @@ def run_ga_x(
         local_search_calls=ls_calls,
         local_search_evaluations=ls_evals,
         local_search_improvements=ls_improved,
+        fallback_pivots=int(stats[3]),
+        pivot_trace=trace,
     )

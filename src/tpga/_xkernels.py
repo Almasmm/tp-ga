@@ -438,8 +438,10 @@ def _next_generation_x_py(
     """One generation with the fixed-charge cost. Selection and crossover are those of ``_next_generation``
     (same columns of ``uniforms``). ``cycle = 0``: offspring ``c`` gets ``counts[c]`` swaps of two positions,
     swap ``s`` from ``extra_u[offsets[c] + 2 s]`` and the next number, and one decoding. ``cycle = 1``: cycle
-    mutation with ``counts[c]`` pivots from ``extra_u[offsets[c] + p]``. ``stats`` accumulates the pivots, the
-    pivots with theta = 0 and the offspring whose pivots all had theta = 0. Returns the decoder calls.
+    mutation with ``counts[c]`` pivots from ``extra_u[offsets[c] + p]`` (``cycle = 2``: with the rule
+    ``nondegenerate``, and ``stats[3]`` counts the pivots left to the uniform rule). ``stats`` accumulates the
+    pivots, the pivots with theta = 0 and the offspring whose pivots all had theta = 0. Returns the decoder
+    calls.
     """
     size, length = pop.shape
     m = supply.size
@@ -472,6 +474,16 @@ def _next_generation_x_py(
             stats[1] += zero
             if done > 0 and zero == done:
                 stats[2] += 1
+        elif cycle == 2:  # the rule ``nondegenerate`` for the entering arc (amendment 10.5)
+            total, done, zero, fallback = _cycle_mutation_nd(
+                child, supply, demand, cost, fixed, n, eps, counts[c], extra_u, offsets[c], a, b, flows, iw, in_basis
+            )
+            new_fit[elite + c] = total
+            stats[0] += done
+            stats[1] += zero
+            if done > 0 and zero == done:
+                stats[2] += 1
+            stats[3] += fallback
         else:
             if length >= 2:
                 off = offsets[c]
@@ -544,6 +556,215 @@ def _anneal_fc_py(
     return current, best, temperature, evaluations, best_evaluation, n_imp
 
 
+# --- amendment 10: second rule for the entering arc, tabu search and iterated local search ------
+
+
+def _nd_search_py(i0, m, nodes, flows, eps, off, adj_node, adj_slot, depth, queue):
+    """Search of the tree from source ``i0`` that never crosses an arc with zero flow from its source to its
+    destination (the minus positions of the cycles that start at ``i0``). Fills ``depth`` (-1: not reached)
+    and returns the number of destinations reached at depth 3 or more: each closes a cycle with theta > 0."""
+    for v in range(nodes):
+        depth[v] = -1
+    depth[i0] = 0
+    queue[0] = i0
+    head = 0
+    tail = 1
+    count = 0
+    while head < tail:
+        v = queue[head]
+        head += 1
+        for c in range(off[v], off[v + 1]):
+            w = adj_node[c]
+            if depth[w] >= 0:
+                continue
+            if v < m and flows[adj_slot[c]] <= eps:
+                continue
+            depth[w] = depth[v] + 1
+            queue[tail] = w
+            tail += 1
+            if w >= m and depth[w] >= 3:
+                count += 1
+    return count
+
+
+def _nd_entering_py(u, m, n, flows, eps, off, adj_node, adj_slot, depth, queue, cnt):
+    """Entering arc of the rule ``nondegenerate``: the ``floor(u A)``-th, in index order, of the ``A``
+    non-basic arcs whose cycle has no arc with zero flow on a minus position; -1 when there is none."""
+    nodes = m + n
+    total = 0
+    for i0 in range(m):
+        cnt[i0] = _nd_search(i0, m, nodes, flows, eps, off, adj_node, adj_slot, depth, queue)
+        total += cnt[i0]
+    if total == 0:
+        return -1
+    r = min(int(u * total), total - 1)
+    i0 = 0
+    while r >= cnt[i0]:
+        r -= cnt[i0]
+        i0 += 1
+    _nd_search(i0, m, nodes, flows, eps, off, adj_node, adj_slot, depth, queue)
+    for j in range(n):
+        if depth[m + j] >= 3:
+            if r == 0:
+                return i0 * n + j
+            r -= 1
+    return -1
+
+
+def _cycle_mutation_nd_py(
+    child, supply, demand, cost, fixed, n, eps, pivots, pivot_u, u_off, a, b, flows, iw, in_basis
+):
+    """``_cycle_mutation`` with the rule ``nondegenerate`` for the entering arc; the same uniform number is
+    used when the rule finds no arc and the uniform choice among all non-basic arcs takes over. Returns
+    (cost, pivots done, pivots with theta = 0, pivots chosen by the uniform rule)."""
+    m = supply.size
+    size = m + n - 1
+    arcs = iw[0]
+    count = _decode_arcs(child, supply, demand, n, eps, a, b, arcs, flows)
+    _complete_basis(arcs, flows, count, m, n, iw[1])
+    nonbasic = m * n - size
+    done = 0
+    zero = 0
+    fallback = 0
+    if nonbasic > 0 and pivots > 0:
+        sorted_basis = iw[2]
+        for s in range(size):
+            sorted_basis[s] = arcs[s]
+        sorted_basis[:size].sort()
+        for p in range(pivots):
+            _adjacency(arcs, size, m, n, iw[3], iw[4], iw[5], iw[6])
+            entering = _nd_entering(pivot_u[u_off + p], m, n, flows, eps, iw[3], iw[4], iw[5], iw[6], iw[8], iw[9])
+            if entering < 0:
+                r = min(int(pivot_u[u_off + p] * nonbasic), nonbasic - 1)
+                entering = _nonbasic(sorted_basis, size, r)
+                fallback += 1
+            _tree_path(entering, m, n, iw[3], iw[4], iw[5], iw[6], iw[7], iw[8])
+            theta, leaving = _path_theta(entering, m, n, flows, iw[6], iw[7])
+            old = _path_apply(entering, m, n, arcs, flows, iw[6], iw[7], theta, leaving)
+            _replace_sorted(sorted_basis, size, old, entering)
+            done += 1
+            if theta <= eps:
+                zero += 1
+    _encode(child, arcs, size, m, n, iw[9], iw[1], iw[8], in_basis)
+    return _plan_cost(arcs, flows, size, cost, fixed, eps), done, zero, fallback
+
+
+def _tabu_iteration_py(
+    arcs,
+    flows,
+    m,
+    n,
+    cost,
+    fixed,
+    eps,
+    current,
+    best,
+    sample_u,
+    n_sample,
+    start_u,
+    expiry,
+    iteration,
+    tenure,
+    max_evals,
+    iw,
+):
+    """One iteration of the tabu search over pivots on the basis ``arcs``/``flows`` (``iw[2]`` holds the
+    sorted basic arcs). ``n_sample = 0``: every non-basic arc is a candidate, in index order from a random
+    start; otherwise ``n_sample`` candidates are drawn by ``sample_u``. A candidate is tabu while
+    ``expiry`` of its entering or leaving arc is above ``iteration``, unless it gives a cost below ``best``.
+    The admitted candidate with the smallest change is applied. Returns (neighbour evaluations, cost after
+    the iteration, 1 if a move was made)."""
+    size = m + n - 1
+    nonbasic = m * n - size
+    sorted_basis = iw[2]
+    _adjacency(arcs, size, m, n, iw[3], iw[4], iw[5], iw[6])
+    count = nonbasic if n_sample == 0 else n_sample
+    start = min(int(start_u * nonbasic), nonbasic - 1)
+    tol = 1e-9 * max(1.0, abs(best))
+    best_delta = np.inf
+    chosen = -1
+    evals = 0
+    for q in range(count):
+        if evals >= max_evals:
+            break
+        if n_sample == 0:
+            r = start + q
+            if r >= nonbasic:
+                r -= nonbasic
+        else:
+            r = min(int(sample_u[q] * nonbasic), nonbasic - 1)
+        entering = _nonbasic(sorted_basis, size, r)
+        _tree_path(entering, m, n, iw[3], iw[4], iw[5], iw[6], iw[7], iw[8])
+        theta, leaving = _path_theta(entering, m, n, flows, iw[6], iw[7])
+        delta = _path_delta(entering, m, n, arcs, flows, cost, fixed, iw[6], iw[7], theta, eps)
+        evals += 1
+        tabu = expiry[entering] > iteration or expiry[arcs[leaving]] > iteration
+        if tabu and not current + delta < best - tol:
+            continue
+        if delta < best_delta:
+            best_delta = delta
+            chosen = entering
+    if chosen < 0:
+        return evals, current, 0
+    _tree_path(chosen, m, n, iw[3], iw[4], iw[5], iw[6], iw[7], iw[8])
+    theta, leaving = _path_theta(chosen, m, n, flows, iw[6], iw[7])
+    old = _path_apply(chosen, m, n, arcs, flows, iw[6], iw[7], theta, leaving)
+    _replace_sorted(sorted_basis, size, old, chosen)
+    expiry[chosen] = iteration + tenure + 1
+    expiry[old] = iteration + tenure + 1
+    return evals, current + best_delta, 1
+
+
+def _descent_py(arcs, flows, m, n, cost, fixed, eps, current, start_u, max_evals, iw):
+    """First-improvement descent over pivots: the non-basic arcs are scanned cyclically from a random
+    position, an improving pivot is applied at once, and the descent ends after a full round without an
+    improvement or with the budget. Returns (neighbour evaluations, cost)."""
+    size = m + n - 1
+    nonbasic = m * n - size
+    if nonbasic <= 0:
+        return 0, current
+    sorted_basis = iw[2]
+    _adjacency(arcs, size, m, n, iw[3], iw[4], iw[5], iw[6])
+    r = min(int(start_u * nonbasic), nonbasic - 1)
+    since = 0
+    evals = 0
+    while since < nonbasic and evals < max_evals:
+        entering = _nonbasic(sorted_basis, size, r)
+        _tree_path(entering, m, n, iw[3], iw[4], iw[5], iw[6], iw[7], iw[8])
+        theta, leaving = _path_theta(entering, m, n, flows, iw[6], iw[7])
+        delta = _path_delta(entering, m, n, arcs, flows, cost, fixed, iw[6], iw[7], theta, eps)
+        evals += 1
+        if delta < -1e-9 * max(1.0, abs(current)):
+            old = _path_apply(entering, m, n, arcs, flows, iw[6], iw[7], theta, leaving)
+            _replace_sorted(sorted_basis, size, old, entering)
+            _adjacency(arcs, size, m, n, iw[3], iw[4], iw[5], iw[6])
+            current += delta
+            since = 0
+        else:
+            since += 1
+        r += 1
+        if r >= nonbasic:
+            r = 0
+    return evals, current
+
+
+def _perturb_py(arcs, flows, m, n, cost, fixed, eps, current, pivot_u, count, iw):
+    """``count`` pivots with entering arcs drawn uniformly among the non-basic arcs; returns the new cost."""
+    size = m + n - 1
+    nonbasic = m * n - size
+    sorted_basis = iw[2]
+    for p in range(count):
+        r = min(int(pivot_u[p] * nonbasic), nonbasic - 1)
+        entering = _nonbasic(sorted_basis, size, r)
+        _adjacency(arcs, size, m, n, iw[3], iw[4], iw[5], iw[6])
+        _tree_path(entering, m, n, iw[3], iw[4], iw[5], iw[6], iw[7], iw[8])
+        theta, leaving = _path_theta(entering, m, n, flows, iw[6], iw[7])
+        current += _path_delta(entering, m, n, arcs, flows, cost, fixed, iw[6], iw[7], theta, eps)
+        old = _path_apply(entering, m, n, arcs, flows, iw[6], iw[7], theta, leaving)
+        _replace_sorted(sorted_basis, size, old, entering)
+    return current
+
+
 # --- engine tables -------------------------------------------------------------------------
 # The plain functions call each other through the module-level names below, which ``table`` binds to the
 # compiled kernels (engine "numba") or to the plain ones (engine "python", for the tests).
@@ -567,6 +788,12 @@ _PLAIN = {
     "_next_generation_x": _next_generation_x_py,
     "_random_batch_cost_fc": _random_batch_cost_fc_py,
     "_anneal_fc": _anneal_fc_py,
+    "_nd_search": _nd_search_py,
+    "_nd_entering": _nd_entering_py,
+    "_cycle_mutation_nd": _cycle_mutation_nd_py,
+    "_tabu_iteration": _tabu_iteration_py,
+    "_descent": _descent_py,
+    "_perturb": _perturb_py,
 }
 _COMPILED: dict = {}
 _BORROWED = ("_tournament", "_two_positions", "_order_crossover", "_shuffle")
@@ -590,6 +817,12 @@ _first_improvement = _first_improvement_py
 _next_generation_x = _next_generation_x_py
 _random_batch_cost_fc = _random_batch_cost_fc_py
 _anneal_fc = _anneal_fc_py
+_nd_search = _nd_search_py
+_nd_entering = _nd_entering_py
+_cycle_mutation_nd = _cycle_mutation_nd_py
+_tabu_iteration = _tabu_iteration_py
+_descent = _descent_py
+_perturb = _perturb_py
 _tournament: Any = None
 _two_positions: Any = None
 _order_crossover: Any = None

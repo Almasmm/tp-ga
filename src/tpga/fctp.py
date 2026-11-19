@@ -101,6 +101,43 @@ def generate(m: int, n: int, seed: int, rho: float, spec: dict[str, Any] | None 
     return {**data, "fixed": fixed.tolist(), "rho": rho, "fixed_high": top, "cost_mean": c_mean, "seed": seed}
 
 
+def generate_concentrated(m: int, n: int, seed: int, rho: float, spec: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Random FCTP instance with a few large suppliers and many small customers (amendment 10.3).
+
+    The total is ``S = mean_supply * m``. ``h = max(2, round(large_fraction * m))`` suppliers (the first
+    rows) share ``round(large_share * S)`` and the other ``m - h`` suppliers share the rest, each group as
+    ``1 + multinomial(amount - group size, equal shares)``; demands ``1 + multinomial(S - n, equal shares)``;
+    costs ``U{cost_low..cost_high}``; all from ``default_rng(seed)`` in this order. Fixed charges as in
+    :func:`generate`.
+    """
+    s = {"cost": [1, 100], "mean_supply": 60, "large_fraction": 0.1, "large_share": 0.8, **(spec or {})}
+    rng = np.random.default_rng(seed)
+    total = int(s["mean_supply"]) * m
+    h = max(2, int(round(float(s["large_fraction"]) * m)))
+    large_total = int(round(float(s["large_share"]) * total))
+    if h >= m or large_total < h or total - large_total < m - h or total < n:
+        raise ValueError("the sizes do not allow the two groups of suppliers")
+    large = 1 + rng.multinomial(large_total - h, np.full(h, 1 / h))
+    small = 1 + rng.multinomial(total - large_total - (m - h), np.full(m - h, 1 / (m - h)))
+    demand = 1 + rng.multinomial(total - n, np.full(n, 1 / n))
+    lo, hi = s["cost"]
+    cost = rng.integers(int(lo), int(hi) + 1, size=(m, n))
+    c_mean = float(np.mean(cost))
+    top = max(1, int(round(2.0 * rho * c_mean * total / (m + n - 1))))
+    fixed = np.random.default_rng([seed, 1]).integers(1, top + 1, size=(m, n))
+    return {
+        "supply": [*large.tolist(), *small.tolist()],
+        "demand": demand.tolist(),
+        "cost": cost.tolist(),
+        "fixed": fixed.tolist(),
+        "rho": rho,
+        "fixed_high": top,
+        "cost_mean": c_mean,
+        "seed": seed,
+        "large_suppliers": h,
+    }
+
+
 @dataclass
 class MIPResult:
     """Outcome of the HiGHS mixed-integer model: ``cost`` is the true cost of ``x`` recomputed from the plan,
