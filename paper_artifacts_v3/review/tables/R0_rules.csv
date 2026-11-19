@@ -1,0 +1,10 @@
+command,started,allowance_s,wall_s,beyond_limit,rule_gave
+pilot,2026-11-20T01:18:34,120.0,30.389516353607178,False,16 single runs
+tune,2026-11-20T01:19:09,209.61048364639282,2.9774935245513916,False,grids complete
+rivals,2026-11-20T01:19:16,386.63299012184143,10.462725400924683,False,"5 instances per cell at 70x70, 5 at 50x50"
+generator,2026-11-20T01:19:31,1036.1702647209167,358.7849519252777,False,5 instances per new cell
+degenerate,2026-11-20T01:25:34,1577.385312795639,694.6549422740936,False,"0 instances at 100x100 for 10.5 b, 3 for 10.5 a"
+public,2026-11-20T01:37:13,1182.7303705215454,79.87231302261353,False,"10 instances, 0 left out"
+timing,2026-11-20T01:38:37,1702.8580574989319,1349.9265344142914,False,3 round(s) of one instance per cell; sizes left out: []
+mipdefault,2026-11-20T02:01:12,2752.9315230846405,2518.947317838669,False,see R4_mip_instances
+all commands within the limit,,5400.0,5046.015794754028,,"MIP in its usual setting: 40 run in the last start, 20 not run (time rule)"

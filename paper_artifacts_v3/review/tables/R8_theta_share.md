@@ -1,0 +1,66 @@
+# Linear problem: share of pivots with theta > 0 along the budget (amendment 10.5 a)
+
+Exploratory (amendment 10, written after the results of amendments 8 and 9 were seen). Runs of GA-rand-cycle and GA-cost-cycle of 8.3 repeated with a record of the pivots of every generation (same seeds; their costs equal the recorded ones). A generation belongs to the tenth of the budget in which its last evaluation falls (the first tenth includes the start population, which makes no pivot). Median, smallest and largest share over the runs of a size.
+
+| method | size | budget_from_percent | budget_to_percent | instances | runs | share_theta_positive_median | share_theta_positive_min | share_theta_positive_max |
+|---|---|---|---|---|---|---|---|---|
+| GA-rand-cycle | 20x20 | 0 | 10 | 3 | 15 | 0.9072 | 0.7289 | 0.9487 |
+| GA-rand-cycle | 20x20 | 10 | 20 | 3 | 15 | 0.8268 | 0.4613 | 0.9471 |
+| GA-rand-cycle | 20x20 | 20 | 30 | 3 | 15 | 0.7297 | 0.3328 | 0.9177 |
+| GA-rand-cycle | 20x20 | 30 | 40 | 3 | 15 | 0.7623 | 0.3288 | 0.8816 |
+| GA-rand-cycle | 20x20 | 40 | 50 | 3 | 15 | 0.6826 | 0.2845 | 0.8999 |
+| GA-rand-cycle | 20x20 | 50 | 60 | 3 | 15 | 0.6431 | 0.3944 | 0.9097 |
+| GA-rand-cycle | 20x20 | 60 | 70 | 3 | 15 | 0.6816 | 0.3622 | 0.8697 |
+| GA-rand-cycle | 20x20 | 70 | 80 | 3 | 15 | 0.6359 | 0.3604 | 0.907 |
+| GA-rand-cycle | 20x20 | 80 | 90 | 3 | 15 | 0.6536 | 0.3669 | 0.9608 |
+| GA-rand-cycle | 20x20 | 90 | 100 | 3 | 15 | 0.6505 | 0.37 | 0.9575 |
+| GA-rand-cycle | 50x50 | 0 | 10 | 3 | 15 | 0.6405 | 0.4328 | 0.7014 |
+| GA-rand-cycle | 50x50 | 10 | 20 | 3 | 15 | 0.4671 | 0.3064 | 0.5336 |
+| GA-rand-cycle | 50x50 | 20 | 30 | 3 | 15 | 0.4322 | 0.3052 | 0.586 |
+| GA-rand-cycle | 50x50 | 30 | 40 | 3 | 15 | 0.4231 | 0.2416 | 0.5551 |
+| GA-rand-cycle | 50x50 | 40 | 50 | 3 | 15 | 0.4251 | 0.2588 | 0.5757 |
+| GA-rand-cycle | 50x50 | 50 | 60 | 3 | 15 | 0.4171 | 0.2578 | 0.5359 |
+| GA-rand-cycle | 50x50 | 60 | 70 | 3 | 15 | 0.4217 | 0.2504 | 0.5355 |
+| GA-rand-cycle | 50x50 | 70 | 80 | 3 | 15 | 0.4193 | 0.2463 | 0.5214 |
+| GA-rand-cycle | 50x50 | 80 | 90 | 3 | 15 | 0.4548 | 0.3433 | 0.5775 |
+| GA-rand-cycle | 50x50 | 90 | 100 | 3 | 15 | 0.4669 | 0.3019 | 0.5696 |
+| GA-rand-cycle | 100x100 | 0 | 10 | 3 | 15 | 0.357 | 0.2981 | 0.4178 |
+| GA-rand-cycle | 100x100 | 10 | 20 | 3 | 15 | 0.2251 | 0.1321 | 0.2971 |
+| GA-rand-cycle | 100x100 | 20 | 30 | 3 | 15 | 0.2323 | 0.135 | 0.3688 |
+| GA-rand-cycle | 100x100 | 30 | 40 | 3 | 15 | 0.2479 | 0.1296 | 0.3858 |
+| GA-rand-cycle | 100x100 | 40 | 50 | 3 | 15 | 0.249 | 0.1296 | 0.3975 |
+| GA-rand-cycle | 100x100 | 50 | 60 | 3 | 15 | 0.2529 | 0.144 | 0.3727 |
+| GA-rand-cycle | 100x100 | 60 | 70 | 3 | 15 | 0.25 | 0.1384 | 0.3515 |
+| GA-rand-cycle | 100x100 | 70 | 80 | 3 | 15 | 0.2446 | 0.1435 | 0.3689 |
+| GA-rand-cycle | 100x100 | 80 | 90 | 3 | 15 | 0.2712 | 0.1398 | 0.4206 |
+| GA-rand-cycle | 100x100 | 90 | 100 | 3 | 15 | 0.2706 | 0.1283 | 0.361 |
+| GA-cost-cycle | 20x20 | 0 | 10 | 3 | 15 | 0.9662 | 0.9002 | 0.9807 |
+| GA-cost-cycle | 20x20 | 10 | 20 | 3 | 15 | 0.9487 | 0.8541 | 0.9745 |
+| GA-cost-cycle | 20x20 | 20 | 30 | 3 | 15 | 0.9302 | 0.6579 | 0.9932 |
+| GA-cost-cycle | 20x20 | 30 | 40 | 3 | 15 | 0.8999 | 0.504 | 0.9894 |
+| GA-cost-cycle | 20x20 | 40 | 50 | 3 | 15 | 0.8375 | 0.4308 | 0.9698 |
+| GA-cost-cycle | 20x20 | 50 | 60 | 3 | 15 | 0.7975 | 0.4354 | 0.9843 |
+| GA-cost-cycle | 20x20 | 60 | 70 | 3 | 15 | 0.7932 | 0.4751 | 0.9955 |
+| GA-cost-cycle | 20x20 | 70 | 80 | 3 | 15 | 0.7615 | 0.3253 | 0.9989 |
+| GA-cost-cycle | 20x20 | 80 | 90 | 3 | 15 | 0.6842 | 0.3123 | 0.9989 |
+| GA-cost-cycle | 20x20 | 90 | 100 | 3 | 15 | 0.7607 | 0.3165 | 0.9994 |
+| GA-cost-cycle | 50x50 | 0 | 10 | 3 | 15 | 0.8222 | 0.673 | 0.9219 |
+| GA-cost-cycle | 50x50 | 10 | 20 | 3 | 15 | 0.6048 | 0.4932 | 0.8302 |
+| GA-cost-cycle | 50x50 | 20 | 30 | 3 | 15 | 0.482 | 0.3464 | 0.6635 |
+| GA-cost-cycle | 50x50 | 30 | 40 | 3 | 15 | 0.4758 | 0.1963 | 0.6161 |
+| GA-cost-cycle | 50x50 | 40 | 50 | 3 | 15 | 0.4155 | 0.1432 | 0.6064 |
+| GA-cost-cycle | 50x50 | 50 | 60 | 3 | 15 | 0.407 | 0.1391 | 0.6055 |
+| GA-cost-cycle | 50x50 | 60 | 70 | 3 | 15 | 0.3961 | 0.1424 | 0.6058 |
+| GA-cost-cycle | 50x50 | 70 | 80 | 3 | 15 | 0.3957 | 0.2015 | 0.6082 |
+| GA-cost-cycle | 50x50 | 80 | 90 | 3 | 15 | 0.3941 | 0.2137 | 0.6029 |
+| GA-cost-cycle | 50x50 | 90 | 100 | 3 | 15 | 0.4107 | 0.2138 | 0.5992 |
+| GA-cost-cycle | 100x100 | 0 | 10 | 3 | 15 | 0.5041 | 0.4249 | 0.6651 |
+| GA-cost-cycle | 100x100 | 10 | 20 | 3 | 15 | 0.3321 | 0.2358 | 0.5321 |
+| GA-cost-cycle | 100x100 | 20 | 30 | 3 | 15 | 0.3222 | 0.1956 | 0.5208 |
+| GA-cost-cycle | 100x100 | 30 | 40 | 3 | 15 | 0.3088 | 0.1923 | 0.5189 |
+| GA-cost-cycle | 100x100 | 40 | 50 | 3 | 15 | 0.3205 | 0.1918 | 0.4423 |
+| GA-cost-cycle | 100x100 | 50 | 60 | 3 | 15 | 0.3083 | 0.1921 | 0.6134 |
+| GA-cost-cycle | 100x100 | 60 | 70 | 3 | 15 | 0.2756 | 0.1934 | 0.6494 |
+| GA-cost-cycle | 100x100 | 70 | 80 | 3 | 15 | 0.2772 | 0.1902 | 0.6524 |
+| GA-cost-cycle | 100x100 | 80 | 90 | 3 | 15 | 0.3071 | 0.1919 | 0.65 |
+| GA-cost-cycle | 100x100 | 90 | 100 | 3 | 15 | 0.308 | 0.1924 | 0.6517 |

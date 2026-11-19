@@ -1,0 +1,62 @@
+# Linear problem: median gap of every method by cell with a bootstrap interval (amendment 10.6)
+
+Exploratory (amendment 10, written after the results of amendments 8 and 9 were seen). Gap to Z* in percent. `gap_instance_median`: median over the instances of the median over the seeds; `ci95_*`: percentile bootstrap over the instances of the cell (10 000 resamples).
+
+| set | size | method | instances | runs | gap_instance_median | ci95_low | ci95_high | gap_min | gap_max |
+|---|---|---|---|---|---|---|---|---|---|
+| uniform | 5x5 | VAM | 10 | 10 | 1.067 | 0 | 3.162 | 0 | 17.6 |
+| uniform | 5x5 | RS | 10 | 100 | 1.097 | 0 | 1.521 | 0 | 7.65 |
+| uniform | 5x5 | GA-rand-tuned | 10 | 100 | 0 | 0 | 0 | 0 | 1.401 |
+| uniform | 5x5 | GA-cost-tuned | 10 | 100 | 0 | 0 | 0.3504 | 0 | 1.396 |
+| uniform | 5x5 | SA-rand-tuned | 10 | 100 | 0 | 0 | 0 | 0 | 0.7007 |
+| uniform | 5x5 | SA-cost-tuned | 10 | 100 | 0 | 0 | 0 | 0 | 0.7007 |
+| uniform | 5x5 | GA-rand-cycle | 10 | 100 | 0 | 0 | 0 | 0 | 0 |
+| uniform | 5x5 | GA-cost-cycle | 10 | 100 | 0 | 0 | 0.3504 | 0 | 1.396 |
+| uniform | 10x10 | VAM | 10 | 10 | 8.377 | 3.86 | 16.57 | 0 | 35.01 |
+| uniform | 10x10 | RS | 10 | 100 | 57 | 42.44 | 67.41 | 28.68 | 90.08 |
+| uniform | 10x10 | GA-rand-tuned | 10 | 100 | 1.547 | 0.4792 | 3.23 | 0 | 18.93 |
+| uniform | 10x10 | GA-cost-tuned | 10 | 100 | 1.382 | 0.4836 | 2.697 | 0 | 5.291 |
+| uniform | 10x10 | SA-rand-tuned | 10 | 100 | 0.7732 | 0.3467 | 1.236 | 0 | 20.38 |
+| uniform | 10x10 | SA-cost-tuned | 10 | 100 | 0.134 | 0 | 0.5718 | 0 | 6.397 |
+| uniform | 10x10 | GA-rand-cycle | 10 | 100 | 0 | 0 | 0.142 | 0 | 4.721 |
+| uniform | 10x10 | GA-cost-cycle | 10 | 100 | 0.2654 | 0.02718 | 0.6163 | 0 | 1.972 |
+| uniform | 20x20 | VAM | 10 | 10 | 22.73 | 13.32 | 32.21 | 3.508 | 42.47 |
+| uniform | 20x20 | RS | 10 | 100 | 233.7 | 214 | 295.3 | 165 | 347.7 |
+| uniform | 20x20 | GA-rand-tuned | 10 | 100 | 14.03 | 12.67 | 23.09 | 2.436 | 53.06 |
+| uniform | 20x20 | GA-cost-tuned | 10 | 100 | 4.793 | 3.189 | 6.354 | 0.4223 | 11.05 |
+| uniform | 20x20 | SA-rand-tuned | 10 | 100 | 15.21 | 11.65 | 17.73 | 3.377 | 53.04 |
+| uniform | 20x20 | SA-cost-tuned | 10 | 100 | 6.055 | 3.867 | 6.721 | 0.397 | 16.17 |
+| uniform | 20x20 | GA-rand-cycle | 10 | 100 | 1.766 | 0.8564 | 3.477 | 0 | 15.29 |
+| uniform | 20x20 | GA-cost-cycle | 10 | 100 | 0.7617 | 0.3414 | 2.29 | 0 | 4.705 |
+| uniform | 30x30 | VAM | 10 | 10 | 25.62 | 17.86 | 30.69 | 8.227 | 43.27 |
+| uniform | 30x30 | RS | 10 | 100 | 422.6 | 377.6 | 457.1 | 275.9 | 517.9 |
+| uniform | 30x30 | GA-rand-tuned | 10 | 100 | 33.57 | 30.3 | 37.37 | 3.082 | 62.63 |
+| uniform | 30x30 | GA-cost-tuned | 10 | 100 | 5.636 | 3.381 | 6.997 | 1.886 | 11.35 |
+| uniform | 30x30 | SA-rand-tuned | 10 | 100 | 33.15 | 27.47 | 36.84 | 10.28 | 52.81 |
+| uniform | 30x30 | SA-cost-tuned | 10 | 100 | 9.379 | 5.919 | 11.1 | 2.122 | 19.22 |
+| uniform | 30x30 | GA-rand-cycle | 10 | 100 | 6.98 | 5.383 | 7.953 | 0.3969 | 23.9 |
+| uniform | 30x30 | GA-cost-cycle | 10 | 100 | 2.703 | 1.443 | 3.376 | 0.3862 | 10.15 |
+| uniform | 50x50 | VAM | 10 | 10 | 31.47 | 20.2 | 47.93 | 17.44 | 68.14 |
+| uniform | 50x50 | RS | 10 | 100 | 740.4 | 717 | 793.6 | 618.7 | 856.7 |
+| uniform | 50x50 | GA-rand-tuned | 10 | 100 | 55.2 | 52.72 | 59.81 | 25.42 | 102.7 |
+| uniform | 50x50 | GA-cost-tuned | 10 | 100 | 11.86 | 9.138 | 13.78 | 3.365 | 20.61 |
+| uniform | 50x50 | SA-rand-tuned | 10 | 100 | 83 | 79.52 | 94.58 | 42.76 | 121.1 |
+| uniform | 50x50 | SA-cost-tuned | 10 | 100 | 14.8 | 13.44 | 16.54 | 4.769 | 26.88 |
+| uniform | 50x50 | GA-rand-cycle | 10 | 100 | 11.87 | 11.53 | 13.04 | 2.586 | 27.66 |
+| uniform | 50x50 | GA-cost-cycle | 10 | 100 | 7.31 | 5.23 | 9.715 | 0.2352 | 17.31 |
+| uniform | 100x100 | VAM | 10 | 10 | 41.7 | 36.13 | 49.39 | 30.03 | 56.69 |
+| uniform | 100x100 | RS | 10 | 100 | 1510 | 1479 | 1606 | 1245 | 1693 |
+| uniform | 100x100 | GA-rand-tuned | 10 | 100 | 111.3 | 102.5 | 113.6 | 66.35 | 156.6 |
+| uniform | 100x100 | GA-cost-tuned | 10 | 100 | 21.24 | 17.96 | 22.42 | 10.74 | 31.49 |
+| uniform | 100x100 | SA-rand-tuned | 10 | 100 | 247.2 | 230.7 | 253.8 | 156.2 | 321.8 |
+| uniform | 100x100 | SA-cost-tuned | 10 | 100 | 26.35 | 24.12 | 29.56 | 11.9 | 48.26 |
+| uniform | 100x100 | GA-rand-cycle | 10 | 100 | 33.23 | 30.43 | 37.37 | 12.81 | 63.16 |
+| uniform | 100x100 | GA-cost-cycle | 10 | 100 | 14.56 | 10.4 | 16.42 | 4.928 | 22.19 |
+| structured | 20x20 | VAM | 10 | 10 | 8.357 | 6.934 | 10.57 | 4.503 | 18.9 |
+| structured | 20x20 | RS | 10 | 100 | 59.37 | 48.18 | 71.88 | 30.96 | 118 |
+| structured | 20x20 | GA-rand-tuned | 10 | 100 | 1.522 | 0.6885 | 2.203 | 0.007092 | 12 |
+| structured | 20x20 | GA-cost-tuned | 10 | 100 | 0.9751 | 0.3699 | 1.004 | 0.1007 | 2.637 |
+| structured | 20x20 | SA-rand-tuned | 10 | 100 | 1.232 | 0.9778 | 1.565 | 0.1043 | 6.713 |
+| structured | 20x20 | SA-cost-tuned | 10 | 100 | 0.3614 | 0.2376 | 0.6068 | 0 | 2.592 |
+| structured | 20x20 | GA-rand-cycle | 10 | 100 | 0.2483 | 0.1511 | 0.3932 | 0 | 2.004 |
+| structured | 20x20 | GA-cost-cycle | 10 | 100 | 0.3373 | 0.1455 | 0.498 | 0 | 1.853 |

@@ -1,0 +1,36 @@
+{
+ "selected": {
+  "Tabu": {
+   "params": {
+    "sample": 0.25,
+    "tenure": 5
+   },
+   "config": "tabu-s0.25-T5",
+   "mean_gap": 3.113046419687181
+  },
+  "ILS": {
+   "params": {
+    "perturbation": 8,
+    "acceptance": "better"
+   },
+   "config": "ils-p8-better",
+   "mean_gap": 1.789030912998541
+  }
+ },
+ "instances": [
+  "t20x20-r0.2-00",
+  "t20x20-r0.2-01",
+  "t20x20-r1-00",
+  "t20x20-r1-01",
+  "t30x30-r0.2-00",
+  "t30x30-r0.2-01",
+  "t30x30-r1-00",
+  "t30x30-r1-01"
+ ],
+ "seeds": [
+  20261116,
+  20261117,
+  20261118
+ ],
+ "rule": "smallest mean gap over the training instances and seeds; ties: the earlier grid entry"
+}

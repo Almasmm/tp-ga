@@ -1,0 +1,52 @@
+{
+ "instances": {
+  "p20x20-r1-00": {
+   "id": "p20x20-r1-00",
+   "set": "fctp",
+   "m": 20,
+   "n": 20,
+   "rho": 1.0,
+   "seed": 20340000,
+   "fixed_high": 2823,
+   "file": "p20x20-r1-00.json",
+   "sha256": "8d8882226817d701fa492eb2e94fdc22b5d15ff42d4fcdadc3c9b306da3207b1",
+   "generator": "tpga.fctp.generate"
+  },
+  "p30x30-r1-00": {
+   "id": "p30x30-r1-00",
+   "set": "fctp",
+   "m": 30,
+   "n": 30,
+   "rho": 1.0,
+   "seed": 20341000,
+   "fixed_high": 2748,
+   "file": "p30x30-r1-00.json",
+   "sha256": "1829526c81309d9fd9f29a315a976c7a9932c1723d71d6810f48dcd5a0bf08d1",
+   "generator": "tpga.fctp.generate"
+  },
+  "p50x50-r1-00": {
+   "id": "p50x50-r1-00",
+   "set": "fctp",
+   "m": 50,
+   "n": 50,
+   "rho": 1.0,
+   "seed": 20342000,
+   "fixed_high": 3399,
+   "file": "p50x50-r1-00.json",
+   "sha256": "f61a83fbb3ffa94af82e91547e78776514a7e1551dacd2f81f1bda6d7c038464",
+   "generator": "tpga.fctp.generate"
+  },
+  "p70x70-r1-00": {
+   "id": "p70x70-r1-00",
+   "set": "fctp",
+   "m": 70,
+   "n": 70,
+   "rho": 1.0,
+   "seed": 20343000,
+   "fixed_high": 3173,
+   "file": "p70x70-r1-00.json",
+   "sha256": "c5df5d977de50a90afaabaa5f1ce415d6f5f7af259e9395d19806195533316bb",
+   "generator": "tpga.fctp.generate"
+  }
+ }
+}
