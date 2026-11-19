@@ -17,6 +17,7 @@ from tpga.experiments.v3.core import (
     build_benchmark,
     build_fctp,
     build_linear,
+    extended,
     key_of,
     linear_groups,
     plan_tasks,
@@ -120,9 +121,11 @@ def paired_rows(
 
 
 def linear_rows(cfg: ConfigV3) -> tuple[list[Row], list[Row]]:
-    """Records of the plan in force (after the reduction rule) and the instances of that plan."""
+    """Records of the plan in force and the instances of that plan: the plan after the reduction rule of the
+    pilot, or every instance once the command ``extend`` has completed it (amendment 9.1)."""
     pilot = json.loads((cfg.area / "pilot.json").read_text(encoding="utf-8"))
-    items = build_linear(cfg, linear_groups(cfg, bool(pilot["reduced"])), cfg.area / "instances")
+    reduced = bool(pilot["reduced"]) and not extended(cfg)
+    items = build_linear(cfg, linear_groups(cfg, reduced), cfg.area / "instances")
     plan = {key_of(t) for t in plan_tasks(cfg, "main", items, list(cfg.raw["methods"]), cfg.seeds())}
     rows = [r for r in records(cfg.area / "raw" / "runs.jsonl", "main") if key_of(r) in plan]
     if len(rows) != len(plan):
@@ -225,8 +228,42 @@ def report_linear(cfg: ConfigV3) -> dict[str, Any]:
         "pivots all had theta = 0 (their plan is the plan decoded before the mutation).",
         t4,
     )
+    split = extension_tests(cfg, items, gap_med)
+    if split:
+        _both(
+            tables,
+            "T2_tests_extension",
+            "Linear problem: tests on the groups completed by amendment 9.1",
+            "The same pairs, test and Holm family as in T2_tests, on three sets of instances of a group that the "
+            "pilot rule had reduced: the instances of the reduced plan (reported before the extension), the "
+            "instances added by amendment 9.1 alone (not seen when the amendment was written), and all of them. "
+            "The test on all instances includes the instances that had been seen.",
+            split,
+        )
     figure_linear(cfg, t1, cells, methods)
-    return {"records": len(rows), "cells": len(cells), "tests": len(tests)}
+    return {"records": len(rows), "cells": len(cells), "tests": len(tests), "extension_tests": len(split)}
+
+
+def extension_tests(cfg: ConfigV3, items: list[Row], gap_med: dict[tuple[str, str], float]) -> list[Row]:
+    """Tests on the first instances, on the added instances and on all instances of every group that the
+    pilot rule had reduced and the command ``extend`` completed."""
+    pilot = json.loads((cfg.area / "pilot.json").read_text(encoding="utf-8"))
+    if not (pilot["reduced"] and extended(cfg)):
+        return []
+    out: list[Row] = []
+    for g in cfg.raw["instances"]:
+        if "reduced_count" not in g:
+            continue
+        size = f"{g['size'][0]}x{g['size'][1]}"
+        ids = [i["id"] for i in items if i["set"] == g["set"] and i["size"] == size]  # in the order of the seeds
+        cut = int(g["reduced_count"])
+        for label, part in (
+            (f"first {cut} (plan after the pilot rule)", ids[:cut]),
+            (f"added {len(ids) - cut} (amendment 9.1)", ids[cut:]),
+            (f"all {len(ids)}", ids),
+        ):
+            out += paired_rows(gap_med, part, cfg.raw["pairs"], {"set": g["set"], "size": size, "instances": label})
+    return out
 
 
 # --- fixed-charge problem ------------------------------------------------------------------

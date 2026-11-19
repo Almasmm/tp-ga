@@ -651,6 +651,30 @@ def run(cfg: ConfigV3) -> dict[str, Any]:
     return {"mip": first, "main": second, "wall_s": first["wall_s"] + second["wall_s"]}
 
 
+def extend(cfg: ConfigV3) -> dict[str, Any]:
+    """Amendment 9.1: the instances that the reduction rule of 8.3 left out, with the plan of 8.3 otherwise.
+    Writes ``linear/extension.json``; from then on the report uses every instance of every group."""
+    if not (cfg.area / "pilot.json").exists():
+        raise RuntimeError("run the commands pilot and run first: extend completes their plan")
+    items = build_linear(cfg, linear_groups(cfg, reduced=False), cfg.area / "instances")
+    tasks = plan_tasks(cfg, "main", items, list(cfg.raw["methods"]), cfg.seeds())
+    summary = run_tasks(cfg, tasks, cfg.area / "raw" / "runs.jsonl", "linear extension")
+    write_atomic(
+        cfg.area / "extension.json",
+        {
+            "amendment": "9.1",
+            "plan": "every instance of every group; the reduction of the pilot rule is lifted",
+            "instances": len(items),
+            "planned_runs": len(tasks),
+        },
+    )
+    return summary
+
+
+def extended(cfg: ConfigV3) -> bool:
+    return (cfg.area / "extension.json").exists()
+
+
 # --- external benchmark (amendment 8.5) ----------------------------------------------------
 
 
@@ -775,13 +799,39 @@ def _relative(path: Path, root: Path) -> str:
         return path.as_posix()
 
 
-def record_invocation(cfg: ConfigV3, command: str, started: float, result: dict[str, Any]) -> None:
-    """Append the command, its time, the software and the machine to ``run_manifest.json``."""
+def code_state(cfg: ConfigV3) -> dict[str, Any]:
+    """Commit and state of the code, taken when a command starts (amendment 9.5). The output directory is not
+    counted as a change: the commands append to tracked files there."""
+    import subprocess
+
+    def git(*args: str) -> str:
+        try:
+            done = subprocess.run(
+                ["git", "-C", str(cfg.root), *args], capture_output=True, text=True, timeout=60, check=False
+            )
+        except (OSError, subprocess.SubprocessError):
+            return ""
+        return done.stdout.strip() if done.returncode == 0 else ""
+
+    spec = [".", ":!paper_artifacts"]
+    output, root = cfg.output.resolve(), cfg.root.resolve()
+    if output.is_relative_to(root):  # not so in the tests: their output directory is outside the repository
+        spec.append(f":!{output.relative_to(root).as_posix()}")
+    status = git("status", "--porcelain", "--untracked-files=no", "--", *spec)
+    return {"git_commit": git("rev-parse", "HEAD") or None, "git_dirty": bool(status), "git_state_taken": "start"}
+
+
+def record_invocation(
+    cfg: ConfigV3, command: str, started: float, result: dict[str, Any], state: dict[str, Any] | None = None
+) -> None:
+    """Append the command, its time, the software and the machine to ``run_manifest.json``. ``state`` is the
+    result of :func:`code_state` taken before the command."""
     from tpga.experiments.v2.manifest import versions
 
     path = cfg.output / "run_manifest.json"
     manifest = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"invocations": []}
     info = environment.describe(cfg.root)
+    info.update(state or {})
     info.update(
         command=command,
         config={"path": _relative(cfg.path, cfg.root), "sha256": cfg.sha256},

@@ -215,6 +215,9 @@ def test_fctp_run_and_report(finished) -> None:
     manifest = json.loads((cfg.output / "run_manifest.json").read_text(encoding="utf-8"))
     assert [i["command"] for i in manifest["invocations"]] == ["kselect", "pilot", "run", "report", "run", "report"]
     assert manifest["invocations"][0]["config"]["path"].endswith("cycle.yaml")
+    assert all(i["git_state_taken"] == "start" and len(i["git_commit"]) == 40 for i in manifest["invocations"])
+    state = core.code_state(core.ConfigV3.load(ROOT / "experiments" / "paper-v3-cycle.yaml"))
+    assert state["git_commit"] == manifest["invocations"][-1]["git_commit"] and isinstance(state["git_dirty"], bool)
 
 
 def test_a_second_start_runs_nothing_and_the_pool_gives_the_same_records(finished, tmp_path, capsys) -> None:
@@ -245,8 +248,24 @@ def test_reduction_rules_apply_when_the_estimate_is_above_the_limit(finished, tm
     rows, items = report.linear_rows(cfg)
     assert sorted(i["id"] for i in items if i["size"] == "5x4") == ["v3u5x4-00", "v3u5x4-01"]
     assert len(rows) == 6 * (1 + 7 * 2)
-    assert report.report(cfg)["neutrality_figure"] is False
+    first = report.report(cfg)
+    assert first["neutrality_figure"] is False and first["extension_tests"] == 0
+    assert not (cfg.area / "tables" / "T2_tests_extension.csv").exists()
     assert len(report.linear_rows(done)[1]) == 7  # the other configuration keeps its full plan
+    # amendment 9.1: the command extend runs the instance that the rule left out; the tests are given three times
+    assert core.extend(cfg)["ran"] == 1 + 7 * 2 and core.extended(cfg)
+    rows, items = report.linear_rows(cfg)
+    assert len(items) == 7 and len(rows) == 7 * (1 + 7 * 2)
+    assert report.report(cfg)["extension_tests"] == 3 * 5
+    split = read_csv(cfg.area / "tables" / "T2_tests_extension.csv")
+    assert [(r["instances"], int(r["n"])) for r in split[::5]] == [
+        ("first 2 (plan after the pilot rule)", 2),
+        ("added 1 (amendment 9.1)", 1),
+        ("all 3", 3),
+    ]
+    assert {r["size"] for r in split} == {"5x4"}
+    assert core.extend(cfg)["ran"] == 0
+    assert report.extension_tests(done, report.linear_rows(done)[1], {}) == []  # nothing was reduced there
 
 
 def test_errors_and_command_line(finished, tmp_path, capsys) -> None:
@@ -264,6 +283,10 @@ def test_errors_and_command_line(finished, tmp_path, capsys) -> None:
     (tmp_path / "out" / "kselect" / "selected.json").write_text(cfg.selected_path.read_text(encoding="utf-8"))
     with pytest.raises(RuntimeError, match="pilot first"):
         core.run(fresh)
+    with pytest.raises(RuntimeError, match="extend completes"):
+        core.extend(fresh)
+    with pytest.raises(SystemExit):
+        main(["extend", "--config", str(fctp.path)])
     # a failing run is recorded and reported, the others are kept
     inst = core.build_linear(fresh, core.linear_groups(fresh, False), fresh.area / "instances")[:1]
     tasks = core.plan_tasks(fresh, "main", inst, ["VAM", "RS"], fresh.seeds(1))
