@@ -543,3 +543,85 @@ working tree was clean at each of them.
   pivots of GA-rand-cycle and 65 % of those of GA-cost-cycle; 56 % and 65 % of the offspring keep the decoded
   plan). The cycle mutation removes the neutrality of the swap on non-degenerate plans, not on the
   degenerate plans that the search produces.
+
+### Amendment 9 (2026-11-19, 14:15 +05:00): extension of experiment v3 after its results were seen
+
+Written and committed before any code of this amendment and before any run of it. Everything below was
+decided **after** the results of amendment 8 were read (`paper_artifacts_v3/` at commit 923773b), in answer to
+four limits of those results: (1) on every FCTP instance up to 30x30 the MIP solver with 60 s gives a plan at
+least as good as any heuristic run; (2) the 100x100 set has 5 instances, so no test there can pass;
+(3) nothing was tuned on FCTP; (4) the local search of GA-hybrid is applied 0 to 6 times per run. None of
+this is confirmatory. The fifth limit (pivots with theta = 0 inside the GA runs) is not addressed: no operator
+is changed by this amendment. Results stay in `paper_artifacts_v3/`; the raw records and the tables of
+amendment 8 are not rewritten, except the linear tables named in 9.1. Decisions are marked "(decision)".
+
+**9.1 Linear problem: the 100x100 set with all 10 instances.** The five instances `v3u100x100-05..09` that
+the reduction rule of 8.3 left out are run with the methods, seeds, budget and reference of 8.3. The
+instances were fixed by 8.3 (seeds 20290005..20290009); nothing is chosen. The record of 8.3 stands: the
+rule gave 5 instances; this run is made because the time is now accepted.
+
+* The linear tables are rebuilt with 10 instances at 100x100. The tests at 100x100 are given three times in
+  a separate table: on the first five instances (the plan of 8.3 after its rule, as already reported), on the
+  five new instances alone (not seen when this amendment was written; 5 pairs, smallest possible two-sided
+  p = 0.0625, so wins/ties/losses and medians are what can be read), and on all ten (smallest possible
+  p = 0.002; the same Holm family of five pairs as in 8.6). The test on ten instances includes five that
+  had been seen; this is stated next to it.
+* Expected time: about 45 minutes with 20 runs at once.
+
+**9.2 FCTP: a small grid on training instances for the cost-aware variant and its local search.**
+
+* Training instances: generator of 8.4, sizes 20x20 and 30x30, rho in {0.2, 1.0}, 2 instances per
+  (size, rho), 8 in all, seeds 20310000 + 1000 s + 100 q + i (s = 0 for 20x20, 1 for 30x30; q = rho index;
+  i = 0, 1); ids `t<m>x<n>-r<rho>-<i>`. They are not test instances. Reference of a training instance: the
+  MIP of 8.4 (60 s); the training gap is 100 (Z - Z_ref) / Z_ref with Z_ref the smaller of the MIP solution
+  and the best run of the grid.
+* Grid (decision): population P in {2700, 900, 300, 100}, pivots k in {1, 2, 4}, local search after every
+  g-th generation with g in {0 (none), 10, 3, 1}; 48 configurations. Everything else as in GA-cost-cycle
+  (cost-aware start from the linearised costs, crossover rate, tournament 8, elite 5 of GA-cost in
+  `experiments/tuned-v2.yaml`). Seeds r = 0, 1, 2, budget 200 m n, budget-only stop; the local search is
+  that of 8.4 without change (its decoding and every neighbour are counted).
+* Rule: **GA-cost-cycle-ft** is the configuration with g = 0 that has the smallest mean training gap over
+  the 8 instances and 3 seeds; **GA-hybrid-ft** is the configuration with g > 0 that has the smallest mean
+  training gap. Ties: the earlier configuration in the order P = 2700, 900, 300, 100, then k = 1, 2, 4, then
+  g = 10, 3, 1 (the one closest to the configuration of 8.4).
+* Test: both variants on the 40 instances of 8.4, seeds 20261116 + r, r = 0..9, budget 200 m n. Z_best of
+  an instance follows the rule of 8.4 and now includes these runs; if a new run is below the MIP solution of
+  an instance without a proved optimum, the gaps of all methods on that instance change and this is reported.
+* One Holm family of three pairs, on the 40 instances and for each rho (as in 8.6): GA-cost-cycle-ft against
+  GA-cost-cycle (does the grid on FCTP help); GA-hybrid-ft against GA-cost-cycle-ft (does the local search
+  help when it is applied often); GA-hybrid-ft against GA-hybrid.
+* Limits stated in advance: only P, k and g of one variant are chosen, on a grid, not by a full tuning; the
+  other methods are not tuned on FCTP, so no test compares the `-ft` variants with them. If the rule returns
+  the configuration of 8.4 (P = 2700, k = 1) for g = 0, GA-cost-cycle-ft is GA-cost-cycle and the first pair
+  is reported as identical.
+
+**9.3 FCTP: the MIP solver with the time of the GA.** For every instance i, T_i is the median run time of
+GA-cost-cycle (the variant of 8.4) over its 10 runs on that instance, as recorded (20 runs at once). The MIP
+of 8.4 (one thread, same options) is run with the time limit T_i and, on the 40 instances of 8.4, also with
+10 T_i (decision), with 20 runs at once. Recorded: status, whether a plan was found, its cost, the bound, the
+time actually used. Reported per (size, rho): the number of instances where the MIP has no plan at the
+limit, and where its plan is better than, equal to or worse than the median cost of GA-cost-cycle over the
+seeds (no plan counts as worse); the gap of the MIP plan to Z_best. No test is made: the comparison depends
+on the machine, on the load and on two different kinds of code (Numba kernels, a compiled solver), and is
+descriptive.
+
+**9.4 FCTP: sizes above 30x30.** Generator and seed rule of 8.4 continued (decision): sizes 50x50 (size
+index s = 4) and 70x70 (s = 5), rho in {0.2, 1.0}, 5 instances per (size, rho), 20 in all, seeds
+20300000 + 1000 s + 100 q + i; ids `f50x50-...`, `f70x70-...`.
+
+* Methods: MIP of 8.4 with 60 s; MIP with the limit T_i of 9.3; Balinski; VAM-lin; GA-cost-cycle
+  (parameters of 8.4); GA-cost-cycle-ft and GA-hybrid-ft (parameters of 9.2). 10 runs per instance, budget
+  200 m n. RS, SA and the GA with a random start are left out to keep the time (decision).
+* Z_best and gap as in 8.4. One Holm family of three pairs: GA-cost-cycle, GA-cost-cycle-ft and GA-hybrid-ft,
+  each against the MIP with 60 s, on the cost; unit: the instance (median over the seeds against the one MIP
+  value); on the 20 instances and for each size (10 instances). An instance where the MIP has no plan at
+  60 s is counted as a win of the GA and is left out of the Wilcoxon test.
+* Expected time: about 20 minutes (a 70x70 run about 45 s). No reduction rule: the run is made whatever the
+  time.
+* The outcome is open: the MIP solution may stay better at these sizes as well. It is reported either way.
+
+**9.5 Order and records.** Order: this amendment; the code of 9.1; the run of 9.1; the code of 9.2-9.4; the
+grid of 9.2; the test runs of 9.2; the runs of 9.4; the runs of 9.3. Every command is written to
+`paper_artifacts_v3/run_manifest.json` with the commit of the code. The state of the code is taken when a
+command starts and the output directory is not counted as a change, because the commands themselves append
+to tracked files there.
