@@ -625,3 +625,17 @@ grid of 9.2; the test runs of 9.2; the runs of 9.4; the runs of 9.3. Every comma
 `paper_artifacts_v3/run_manifest.json` with the commit of the code. The state of the code is taken when a
 command starts and the output directory is not counted as a change, because the commands themselves append
 to tracked files there.
+
+**9.6 Corrections made with the code, before any run of 9.2-9.4 (2026-11-19, 14:25 +05:00).** The run of
+9.1 was in progress and no result of it had been read.
+
+* 9.4, test against the MIP: made on the gap to Z_best in percent, not on the raw cost. The two values of a
+  pair are divided by the same Z_best, so wins, ties and losses are those of the cost; the ranks of the
+  Wilcoxon test are then not dominated by the 70x70 instances, whose costs are larger.
+* Z_best of an instance (9.2, 9.4) is the smallest value among the MIP solution with 60 s, every run of
+  every method and the MIP plans of 9.3; a proved optimum stays the reference.
+* 9.3: the comparison with the MIP at 60 s is added to the same table from the records that already exist
+  (no new run), next to the limits T_i and 10 T_i.
+* A MIP run that ends before the root relaxation has no lower bound; it is recorded as no bound.
+* Configuration: `experiments/paper-v3-fctp-ext.yaml`; commands `tune`, `run`, `report`; tables `E1` to `E7`
+  and the figure `fctp_gap_sizes` in `paper_artifacts_v3/fctp/`.

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from tpga.experiments.v3 import core, report
+from tpga.experiments.v3 import core, ext, report
 from tpga.experiments.v3.__main__ import main
 from tpga.ga import GAConfig, run_ga
 from tpga.model import TransportProblem
@@ -383,4 +383,120 @@ def test_external_benchmark_reader_run_and_table(finished, tmp_path, capsys) -> 
     assert all(int(r["runs"]) == (1 if r["method"] in ("Balinski", "VAM-lin") else 2) for r in table)
     manifest = json.loads((cfg.area / "benchmark" / "instances" / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["source"] == "test files." and len(manifest["instances"]["a"]["source_sha256"]) == 64
+    capsys.readouterr()
+
+
+def ext_config(tmp: Path, base: Path) -> Path:
+    data = yaml.safe_load((ROOT / "experiments" / "paper-v3-fctp-ext.yaml").read_text(encoding="utf-8"))
+    b = yaml.safe_load(base.read_text(encoding="utf-8"))
+    data.update({k: b[k] for k in ("root", "output", "tuned_parameters", "selected_k", "runs", "budget_factor", "mip")})
+    data.update(base=str(base), workers=1)
+    data["tune"]["instances"].update(sizes=[[3, 3], [4, 4]], count=1)
+    data["tune"].update(runs=2, grid={"population": [16, 8], "pivots": [1, 2], "local_search_every": [0, 2, 1]})
+    data["large"]["instances"].update(sizes=[[5, 5]], count=2, first_size_index=2)
+    path = tmp / "fctp-ext.yaml"
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    return path
+
+
+def test_fctp_extension_grid_runs_and_tables(finished, tmp_path, capsys) -> None:
+    """Amendment 9.2-9.4 on tiny instances: the grid and its rule, the chosen variants, the larger sizes and
+    the MIP with the time of the GA."""
+    _, linear, _ = finished
+    base_path = fctp_config(tmp_path)
+    (tmp_path / "tuned.yaml").write_text(yaml.safe_dump(TUNED), encoding="utf-8")
+    (tmp_path / "out" / "kselect").mkdir(parents=True)
+    (tmp_path / "out" / "kselect" / "selected.json").write_text(linear.selected_path.read_text(encoding="utf-8"))
+    assert main(["run", "--config", str(base_path)]) == 0
+    path = ext_config(tmp_path, base_path)
+    cfg = core.ConfigV3.load(path)
+    with pytest.raises(RuntimeError, match="tune first"):
+        ext.run(cfg)
+    with pytest.raises(SystemExit):
+        main(["benchmark", "--config", str(path)])
+    with pytest.raises(SystemExit):
+        main(["tune", "--config", str(base_path)])
+    for command in ("tune", "run", "report"):
+        assert main([command, "--config", str(path)]) == 0
+    area = cfg.area
+
+    # the grid: 2 x 2 x 3 configurations, 4 training instances, 2 seeds; the rule and its tie order
+    grid = read_csv(area / "tune" / "grid.csv")
+    assert len(grid) == 12 and all(int(r["runs"]) == 4 * 2 for r in grid)
+    assert [(r["population"], r["pivots"], r["local_search_every"]) for r in grid[:4]] == [
+        ("16", "1", "0"),
+        ("16", "1", "2"),
+        ("16", "1", "1"),
+        ("16", "2", "0"),
+    ]
+    chosen = json.loads((area / "tune" / "selected.json").read_text(encoding="utf-8"))
+    assert chosen["instances"] == ["t3x3-r0.2-00", "t3x3-r1-00", "t4x4-r0.2-00", "t4x4-r1-00"]
+    for name, with_search in (("GA-cost-cycle-ft", False), ("GA-hybrid-ft", True)):
+        pool = [r for r in grid if (int(r["local_search_every"]) > 0) == with_search]
+        best = min(pool, key=lambda r: (float(r["mean_gap"]), int(r["rank"])))
+        assert best["selected_as"] == name and chosen["selected"][name]["config"] == best["config"]
+        assert ext.method(cfg, name)["config"] == best["config"]
+        assert ext.method(cfg, name)["params"]["population"] == int(best["population"])
+    assert all(float(r["mean_gap"]) >= -1e-9 for r in grid)
+    assert [r["selected_as"] for r in grid].count("") == 10
+    train = json.loads((area / "tune" / "instances" / "manifest.json").read_text(encoding="utf-8"))["instances"]
+    assert train["t4x4-r1-00"]["seed"] == 20310000 + 1000 + 100
+    # the first configuration of the grid is GA-cost-cycle of the base configuration
+    assert ext.method(cfg, "GA-cost-cycle", ext.grid(cfg)[0])["config"] == ext.method(cfg, "GA-cost-cycle")["config"]
+
+    # 9.2: the chosen variants on the instances of the base configuration
+    tuned = core.records(area / "raw" / "runs_ft.jsonl", "main")
+    assert len(tuned) == 8 * 2 * 2 and {r["method"] for r in tuned} == {"GA-cost-cycle-ft", "GA-hybrid-ft"}
+    e2 = read_csv(area / "tables" / "E2_gap_tuned.csv")
+    assert len(e2) == 4 * 4 and all(float(r["gap_min"]) >= -1e-9 for r in e2)
+    assert [r["method"] for r in e2[:4]] == ["GA-cost-cycle", "GA-hybrid", "GA-cost-cycle-ft", "GA-hybrid-ft"]
+    assert all(float(r["local_search_calls_mean"]) >= 1 for r in e2 if r["method"] == "GA-hybrid-ft")
+    e3 = read_csv(area / "tables" / "E3_tests_tuned.csv")
+    assert [r["scope"] for r in e3] == ["all instances"] * 3 + ["rho = 0.2"] * 3 + ["rho = 1"] * 3
+    assert int(e3[0]["n"]) == 8 and all(0 <= float(r["p"]) <= float(r["p_holm"]) <= 1 for r in e3)
+
+    # 9.4: larger sizes with the continued seed rule, and the tests against the MIP plan
+    large = json.loads((area / "large" / "instances" / "manifest.json").read_text(encoding="utf-8"))["instances"]
+    assert sorted(large) == ["f5x5-r0.2-00", "f5x5-r0.2-01", "f5x5-r1-00", "f5x5-r1-01"]
+    assert large["f5x5-r1-01"]["seed"] == 20300000 + 2000 + 100 + 1
+    assert len(core.records(area / "raw" / "large.jsonl", "large")) == 4 * (2 + 3 * 2)
+    e5 = read_csv(area / "tables" / "E5_large_mip.csv")
+    assert [int(r["proved_optimal"]) for r in e5] == [2, 2] and all(r["z_best_from_heuristic"] == "0" for r in e5)
+    e6 = read_csv(area / "tables" / "E6_large_gap.csv")
+    assert len(e6) == 2 * 6 and {r["method"] for r in e6} >= {"MIP-60s", "Balinski", "GA-hybrid-ft"}
+    assert all(float(r["gap_median"]) == 0 for r in e6 if r["method"] == "MIP-60s")
+    e7 = read_csv(area / "tables" / "E7_large_tests.csv")
+    assert [r["scope"] for r in e7] == ["all instances"] * 3 + ["size 5x5"] * 3
+    assert all(r["method_b"] == "MIP-60s" and int(r["n"]) == 4 and int(r["wins_a"]) == 0 for r in e7)
+    assert all(r["mip_without_plan_counted_as_wins_a"] == "0" for r in e7)
+
+    # 9.3: one MIP run per instance and limit; the limit is the recorded median time of the GA
+    timed = core.records(area / "raw" / "mip_time.jsonl", "mip-time")
+    assert len(timed) == 8 * 2 + 4 and {r["config"] for r in timed} == {"x1", "x10"}
+    runs = [r for r in core.records(area / "raw" / "runs.jsonl", "main") if r["method"] == "GA-cost-cycle"]
+    one = next(r for r in timed if r["config"] == "x10" and r["instance"] == "f4x4-r1-00")
+    times = sorted(r["time_s"] for r in runs if r["instance"] == "f4x4-r1-00")
+    assert one["time_limit_s"] == pytest.approx(10 * (times[0] + times[1]) / 2)
+    assert all(r["bound"] is None or r["bound"] <= r["cost"] + 1e-6 for r in timed if r["cost"] is not None)
+    e4 = read_csv(area / "tables" / "E4_mip_equal_time.csv")
+    assert len(e4) == 4 * 3 + 2 * 2
+    assert [r["limit"] for r in e4[:3]] == ["T (time of the GA)", "10 T", "20 s"]
+    for r in e4:
+        assert int(r["mip_better"]) + int(r["equal"]) + int(r["ga_better_or_no_plan"]) == int(r["instances"])
+        assert int(r["mip_no_plan"]) <= int(r["ga_better_or_no_plan"])
+    assert all(int(r["mip_proved"]) == 2 and int(r["mip_no_plan"]) == 0 for r in e4 if r["limit"] == "20 s")
+    assert (area / "figures" / "fctp_gap_sizes.pdf").stat().st_size > 1000
+    assert (area / "tables" / "E1_tuning.md").read_text(encoding="utf-8").startswith("# FCTP: grid")
+
+    # a second start runs nothing; the tables of the base configuration are still built from its own records
+    again = ext.run(cfg)
+    assert all(again[part]["ran"] == 0 for part in ("tuned", "large_mip", "large", "mip_time"))
+    assert main(["report", "--config", str(base_path)]) == 0
+    assert len(read_csv(area / "tables" / "F2_gap.csv")) == 4 * 8
+    # the extension must agree with its base configuration
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    data["budget_factor"] = 61
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    with pytest.raises(ValueError, match="budget_factor"):
+        ext.base(core.ConfigV3.load(path))
     capsys.readouterr()
