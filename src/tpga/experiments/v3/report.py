@@ -107,6 +107,9 @@ def paired_rows(
                 p=res["p"],
                 rank_biserial_r=res["rank_biserial_r"],
                 hl_shift=res["hl_shift"],
+                hl_ci_low=res["hl_ci_low"],  # 95 % interval of the shift (amendment 10.6)
+                hl_ci_high=res["hl_ci_high"],
+                hl_ci_method=res["hl_method"],
                 smallest_possible_p=2.0 / 2 ** res["n"],
             )
         out.append(row)

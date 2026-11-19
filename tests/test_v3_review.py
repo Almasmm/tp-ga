@@ -62,6 +62,9 @@ def reviewed(tmp_path_factory):
     path = review_config(tmp, extension, cycle)
     for command in ("pilot", "tune", "rivals", "generator", "degenerate", "public", "timing"):
         assert main([command, "--config", str(path)]) == 0
+    assert main(["mipdefault", "--config", str(path), "--minutes", "0.15"]) == 0
+    for config in (cycle, fctp, extension, path):  # the earlier reports give the intervals of their tests
+        assert main(["report", "--config", str(config)]) == 0
     return tmp, core.ConfigV3.load(path)
 
 
@@ -69,8 +72,8 @@ def test_runs_of_the_review(reviewed) -> None:
     tmp, cfg = reviewed
     out = rev.area(cfg)
     spent = json.loads((out / "budget.json").read_text(encoding="utf-8"))["commands"]
-    assert [c["command"] for c in spent] == ["pilot", "tune", "rivals", "generator", "degenerate", "public", "timing"]
-    assert rev.used_s(cfg) == pytest.approx(sum(c["wall_s"] for c in spent))
+    assert [c["command"] for c in spent] == [*rev.ORDER]
+    assert rev.used_s(cfg) == pytest.approx(sum(c["wall_s"] for c in spent[:-1]))
     times = rev.pilot_times(cfg)
     assert {"Tabu|3x3", "ILS|5x5", "GA-cost-cycle|5x5", "GA-rand-cycle-nd|5x5", "GA-rand-cycle|5x5"} <= set(times)
 
@@ -135,7 +138,6 @@ def test_time_rules(reviewed) -> None:
     _, cfg = reviewed
     # the MIP in its usual setting stops starting runs when the allowance is below one time limit
     assert len(rev.mip_default_order(cfg)) == 12
-    assert main(["mipdefault", "--config", str(cfg.path), "--minutes", "0.15"]) == 0
     state = json.loads((rev.area(cfg) / "mip_default.json").read_text(encoding="utf-8"))
     assert 1 <= len(state["ran"]) < 12 and state["ran"] == state["order"][: len(state["ran"])]
     assert state["not_run_time_rule"] == state["order"][len(state["ran"]) :]
@@ -152,3 +154,82 @@ def test_time_rules(reviewed) -> None:
     assert rev.allowance_s(cfg, "timing") == 0
     with pytest.raises(RuntimeError, match="do not fit"):
         rev.rivals.__wrapped__(cfg, 0.0)
+
+
+def test_tables_and_figures_of_the_review(reviewed) -> None:
+    tmp, cfg = reviewed
+    out = rev.area(cfg)
+    tables = out / "tables"
+    names = "R0_rules R1_tuning R2_gap R2_z_best_lowered R3_tests R4_mip_instances R4_mip_summary R5_generator_gap"
+    names += " R5_generator_tests R6_public R7_timing R8_theta_share R9_entering_rule R9_entering_tests S1_pairs"
+    names += " S2_bootstrap_linear S3_normalisation"
+    for name in names.split():
+        assert (tables / f"{name}.csv").exists() and (tables / f"{name}.md").read_text(encoding="utf-8").startswith(
+            "# "
+        )
+    for name in ("linear_gap_sizes", "fctp_gap_rivals", "theta_share"):
+        assert (out / "figures" / f"{name}.pdf").stat().st_size > 1000
+        assert (out / "figures" / f"{name}.jpg").stat().st_size > 1000
+
+    r2 = read_csv(tables / "R2_gap.csv")
+    assert {r["method"] for r in r2} >= {"Balinski", "Tabu", "ILS", "GA-cost-cycle", "MIP-60s", "MIP, time of the GA"}
+    assert len([r for r in r2 if r["method"] == "Tabu"]) == 6
+    for r in r2:
+        assert float(r["gap_min"]) >= -1e-9
+        assert float(r["ci95_low"]) <= float(r["gap_instance_median"]) <= float(r["ci95_high"])
+    r3 = read_csv(tables / "R3_tests.csv")
+    assert [r["scope"] for r in r3][:2] == ["all instances"] * 2 and len(r3) == 2 * (1 + 2 + 3)
+    assert int(r3[0]["n"]) == 12 and (r3[0]["method_a"], r3[1]["method_b"]) == ("GA-cost-cycle", "ILS")
+    for r in r3:
+        assert int(r["wins_a"]) + int(r["ties"]) + int(r["losses_a"]) == int(r["n"])
+        assert 0 <= float(r["p"]) <= float(r["p_holm"]) <= 1 and -1 <= float(r["rank_biserial_r"]) <= 1
+        assert r["hl_ci_method"].startswith("exact")
+
+    r4 = read_csv(tables / "R4_mip_instances.csv")
+    state = json.loads((out / "mip_default.json").read_text(encoding="utf-8"))
+    assert len(r4) == 12 and [r["instance"] for r in r4] == state["order"]
+    assert sum(r["status_all_threads_300s"] == "not run (time rule)" for r in r4) == len(state["not_run_time_rule"])
+    summary = read_csv(tables / "R4_mip_summary.csv")
+    assert sum(int(r["run_all_threads_300s"]) for r in summary) == len(state["ran"])
+
+    r5 = read_csv(tables / "R5_generator_gap.csv")
+    assert {(r["class"], r["rho"]) for r in r5} == {
+        ("uniform", "0.05"), ("uniform", "0.2"), ("uniform", "1.0"), ("uniform", "5.0"),
+        ("concentrated", "0.05"), ("concentrated", "0.2"), ("concentrated", "1.0"), ("concentrated", "5.0"),
+    }  # fmt: skip
+    assert len(read_csv(tables / "R5_generator_tests.csv")) == 8 * 2
+    r6 = read_csv(tables / "R6_public.csv")
+    assert len(r6) == 1 and r6[0]["published_cplex9"] == "1.0" and r6[0]["mip_proved"] == "True"
+    assert float(r6[0]["Tabu_best"]) >= float(r6[0]["mip_cost"]) == float(r6[0]["z_ref"])
+    r7 = read_csv(tables / "R7_timing.csv")
+    assert len(r7) == 6 * 4
+    for r in r7:
+        if r["method"] in ("Tabu", "ILS"):
+            assert float(r["decoder_or_start_evaluations"]) == 1 and float(r["neighbour_evaluations"]) > 1
+        if r["method"] == "GA-cost-cycle":
+            assert float(r["neighbour_evaluations"]) == 0
+            assert int(r["better_than_mip"]) + int(r["equal_to_mip"]) + int(r["worse_than_mip"]) == 1
+
+    r8 = read_csv(tables / "R8_theta_share.csv")
+    assert {r["method"] for r in r8} == {"GA-rand-cycle", "GA-cost-cycle"} and {r["size"] for r in r8} == {"3x3", "5x4"}
+    assert all(0 <= float(r["share_theta_positive_min"]) <= float(r["share_theta_positive_max"]) <= 1 for r in r8)
+    r9 = read_csv(tables / "R9_entering_rule.csv")
+    assert len(r9) == 3 * 4
+    for r in r9:
+        if r["method"].endswith("-nd"):
+            assert float(r["pivots_theta_zero_share"]) <= float(r["pivots_left_to_uniform_rule_share"]) + 1e-12
+    r9t = read_csv(tables / "R9_entering_tests.csv")
+    assert [r["scope"] for r in r9t][-2:] == ["all instances"] * 2 and int(r9t[-1]["n"]) == 7
+
+    s1 = read_csv(tables / "S1_pairs.csv")
+    assert len({r["comparison"] for r in s1}) >= 7 and all(r["hl_ci_method"] for r in s1)
+    assert "hl_ci_low" in read_csv(tmp / "out" / "linear" / "tables" / "T2_tests.csv")[0]
+    s2 = read_csv(tables / "S2_bootstrap_linear.csv")
+    assert len(s2) == 3 * 8 and all(float(r["ci95_low"]) <= float(r["ci95_high"]) for r in s2)
+    s3 = read_csv(tables / "S3_normalisation.csv")
+    assert len(s3) == 3 * 8 and {r["same_order_in_cell"] for r in s3} <= {"True", "False"}
+    for r in s3:  # both normalisations are zero at the optimum and positive above it
+        assert (float(r["norm_rand_median"]) == 0) == (float(r["norm_nwc_median"]) == 0)
+    rules = read_csv(tables / "R0_rules.csv")
+    assert [r["command"] for r in rules] == [*rev.ORDER, "all commands within the limit"]
+    assert float(rules[-1]["wall_s"]) == pytest.approx(rev.used_s(cfg))
