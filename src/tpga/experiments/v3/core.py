@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import signal
 import statistics
 import time
@@ -168,19 +169,26 @@ def build_linear(cfg: ConfigV3, groups: list[dict[str, Any]], root: Path) -> lis
 
 def build_fctp(cfg: ConfigV3) -> list[dict[str, Any]]:
     """Generate (or verify) the fixed-charge instances of amendment 8.4."""
-    spec = cfg.raw["instances"]
-    root = cfg.area / "instances"
+    return fctp_instances(cfg.raw["instances"], cfg.area / "instances")
+
+
+def fctp_instances(
+    spec: dict[str, Any], root: Path, prefix: str = "f", first_size_index: int = 0
+) -> list[dict[str, Any]]:
+    """Fixed-charge instances of a specification ``{seed_base, sizes, rho, count, cost, supply}`` in ``root``:
+    seed = seed_base + 1000 (size index) + 100 (rho index) + i, the size index counted from
+    ``first_size_index``; ids ``<prefix><m>x<n>-r<rho>-<i>``."""
     base = int(spec["seed_base"])
     lo, hi = spec["cost"]
     s_lo, s_hi = spec["supply"]
     gen = {"cost_low": lo, "cost_high": hi, "supply_low": s_lo, "supply_high": s_hi}
     entries = {}
     out = []
-    for s, (m, n) in enumerate(spec["sizes"]):
+    for s, (m, n) in enumerate(spec["sizes"], start=first_size_index):
         for q, rho in enumerate(spec["rho"]):
             for i in range(int(spec["count"])):
                 seed = base + 1000 * s + 100 * q + i
-                iid = f"f{m}x{n}-r{rho:g}-{i:02d}"
+                iid = f"{prefix}{m}x{n}-r{rho:g}-{i:02d}"
                 path = root / f"{iid}.json"
                 data = generate(int(m), int(n), seed, float(rho), gen)
                 digest = _write_instance(path, data)
@@ -368,10 +376,11 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
             record.update(
                 cost=mip.cost,
                 objective=mip.objective,
-                bound=mip.bound,
+                bound=mip.bound if math.isfinite(mip.bound) else None,  # none before the root relaxation
                 mip_gap=mip.gap,
                 status=mip.status,
                 proved=mip.proved,
+                time_limit_s=float(opts.get("time_limit_s", 60)),
                 time_s=mip.time_s,
                 nodes=mip.nodes,
                 highs_version=mip.version,

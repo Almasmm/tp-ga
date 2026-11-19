@@ -1,0 +1,82 @@
+# Additional experiment v3, extension on the fixed-charge problem.
+# Plan: docs/v0.4/PREREGISTRATION.md, amendment 9.2-9.4, written after the results of amendment 8 were seen.
+# The instances, the MIP reference and the runs of experiments/paper-v3-fctp.yaml are used as they are.
+#
+#   python -m tpga.experiments.v3 tune   --config experiments/paper-v3-fctp-ext.yaml   # grid on training instances
+#   python -m tpga.experiments.v3 run    --config experiments/paper-v3-fctp-ext.yaml   # 9.2 test, 9.4, 9.3
+#   python -m tpga.experiments.v3 report --config experiments/paper-v3-fctp-ext.yaml   # tables E1-E7
+
+name: paper-v3-fctp-ext
+problem: fctp
+extension: true
+base: experiments/paper-v3-fctp.yaml
+output: paper_artifacts_v3
+base_seed: 20261116            # as in the base configuration
+runs: 10
+workers: 20
+budget_factor: 200             # B = 200 m n evaluations
+tuned_parameters: experiments/tuned-v2.yaml
+selected_k: paper_artifacts_v3/kselect/selected.json
+
+mip: {time_limit_s: 60, threads: 1, rel_gap: 0.0, abs_gap: 0.99}
+
+# 9.2: grid on 8 training instances (not test instances), 3 seeds. Order of the lists = order of the tie
+# rule: the first configuration (2700, 1, 0) is GA-cost-cycle of amendment 8.4.
+tune:
+  instances:
+    seed_base: 20310000        # seed = seed_base + 1000 * size index + 100 * rho index + i
+    prefix: t
+    sizes: [[20, 20], [30, 30]]
+    rho: [0.2, 1.0]
+    count: 2
+    cost: [1, 100]
+    supply: [20, 100]
+  runs: 3
+  template: GA-cost-cycle      # cost-aware start, crossover rate, tournament and elite of GA-cost
+  grid:
+    population: [2700, 900, 300, 100]
+    pivots: [1, 2, 4]
+    local_search_every: [0, 10, 3, 1]    # 0: no local search
+  select:
+    GA-cost-cycle-ft: {local_search: false}
+    GA-hybrid-ft:     {local_search: true}
+
+methods:
+  Balinski:         {kind: balinski}
+  VAM-lin:          {kind: vam_lin}
+  GA-cost-cycle:    {kind: gax, initialization: cost-aware, tuned: GA-cost, mutation: selected}   # as in 8.4
+  GA-cost-cycle-ft: {kind: gax, initialization: cost-aware, tuned: GA-cost, grid_selected: true}
+  GA-hybrid-ft:     {kind: gax, initialization: cost-aware, tuned: GA-cost, grid_selected: true}
+
+# 9.2: the chosen variants on the 40 instances of the base configuration; one Holm family, tested on all
+# instances and for each rho. GA-cost-cycle and GA-hybrid are the runs of the base configuration.
+test_methods: [GA-cost-cycle-ft, GA-hybrid-ft]
+pairs:
+  - [GA-cost-cycle-ft, GA-cost-cycle]
+  - [GA-hybrid-ft, GA-cost-cycle-ft]
+  - [GA-hybrid-ft, GA-hybrid]
+
+# 9.3: MIP with the limit T_i = median run time of the reference method on instance i, and with 10 T_i on
+# the instances of the base configuration.
+mip_time:
+  reference_method: GA-cost-cycle
+  factors: [1, 10]
+  factors_large: [1]
+
+# 9.4: sizes above 30x30; the seed rule of 8.4 continued (size indices 4 and 5).
+large:
+  instances:
+    seed_base: 20300000
+    first_size_index: 4
+    sizes: [[50, 50], [70, 70]]
+    rho: [0.2, 1.0]
+    count: 5
+    cost: [1, 100]
+    supply: [20, 100]
+  methods: [Balinski, VAM-lin, GA-cost-cycle, GA-cost-cycle-ft, GA-hybrid-ft]
+  pairs:                       # one Holm family, on the 20 instances and for each size
+    - [GA-cost-cycle, MIP-60s]
+    - [GA-cost-cycle-ft, MIP-60s]
+    - [GA-hybrid-ft, MIP-60s]
+
+figure_methods: [Balinski, GA-cost-cycle, GA-cost-cycle-ft, GA-hybrid-ft, "MIP, time of the GA", MIP-60s]
