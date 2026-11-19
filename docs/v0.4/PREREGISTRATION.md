@@ -689,3 +689,226 @@ failed. Total run time 57 minutes (9.1: 42.8 min; grid 2.2 min; 9.2-9.4: 11.9 mi
 * Not planned and noticed in the records: GA-hybrid-ft runs 3 to 6 times shorter than GA-cost-cycle-ft at
   50x50 and 70x70 (3.1 s against 10.5 s; 7 s against 39 s) because 70 % and 82 % of its budget are local-search
   neighbours, which cost less time than a decoder call. The budget counts evaluations, not time.
+
+### Amendment 10 (2026-11-20, 01:30 +05:00): answers to a review - rivals on FCTP, MIP in its usual setting, more instance classes, one measure of effort, degenerate pivots, more statistics
+
+Written and committed before any code of this amendment and before any run of it. **It is written after the
+results of amendments 8 and 9 were read** (`paper_artifacts_v3/` at commit aa743c1), in answer to the remarks
+of a review of the article draft (numbers of the remarks in brackets). **Every result of this amendment is
+exploratory; nothing here is confirmatory.** The raw records and the tables of amendments 8 and 9 are not
+rewritten. New files go to `paper_artifacts_v3/review/`. Decisions are marked "(decision)". Configuration:
+`experiments/paper-v3-review.yaml`; commands `python -m tpga.experiments.v3 <command> --config` that file.
+
+**10.0 Time limit and the reduction rules.** The sum of the wall-clock times of all run commands of this
+amendment (pilot included, report excluded) is at most **90 minutes**. The commands run in the order of the
+table; each has an allowance. Before a command starts, the time already used is read from
+`review/budget.json`; its allowance is cut to `90 min - used` when that is smaller.
+
+| order | command | content | allowance | at once |
+|---|---|---|---|---|
+| 1 | `pilot` | times of single runs, used only for the estimates below | 2 min | 20 |
+| 2 | `tune` | grids of Tabu and ILS on the 8 training instances of 9.2 | 2 min | 20 |
+| 3 | `rivals` | Tabu and ILS on the 60 FCTP instances of 8.4 and 9.4 | 3 min | 20 |
+| 4 | `generator` | new instance classes: MIP reference and the methods | 11 min | 20 |
+| 5 | `degenerate` | share of pivots with theta > 0 by generation; the second rule for the entering arc | 15 min | 20 |
+| 6 | `public` | public instance sets, if the search of 10.3 finds any | 5 min | 20 |
+| 7 | `timing` | times on one processor, one run at a time | 10 min | 1 |
+| 8 | `mipdefault` | MIP with all threads and 300 s | 36 min | 1 |
+
+The allowances sum to 84 minutes. The pilot runs, with at most 20 at once: Tabu and ILS with the first entry of
+their grids and GA-cost-cycle, seed `base_seed`, on four pilot FCTP instances (20x20, 30x30, 50x50, 70x70,
+rho = 1, generator of 8.4, seeds 20340000 + 1000 s; they are used for nothing else), and GA-rand-cycle and
+GA-cost-cycle with both rules for the entering arc (10.5) on the training instance `u50x50-00-train` of 8.2.
+Only the times of the pilot runs are used. The estimate of a command with 20 runs at once is
+`1.25 * (sum of the estimated times of its runs) / 20`, plus the longest estimated run for the command
+`degenerate`. The estimated time of a run is the pilot time of its method at its size (sizes below 20x20 use
+the time at 20x20; 50x50 serves for sizes up to 50x50 that the pilot does not have); a MIP run of the
+reference counts with its limit (60 s); a linear run with the present mutation counts with the median time of
+the same method and size in the records of amendments 8 and 9; a linear run with the second rule counts with
+that median times the ratio (pilot time with the second rule) / (pilot time with the present rule) of its
+method. When the estimate is above the allowance, **the number of instances is reduced, never the seeds, the
+budget or the limits** (decision):
+
+* `rivals`: the cells 70x70, then also 50x50, use their first k instances, k the largest of 5, 3, 2, 1 that
+  fits.
+* `generator`: every new cell uses its first k instances, k the largest of 5, 4, 3, 2, 1 that fits.
+* `degenerate`: the group 100x100 of the comparison of 10.5 b uses its first k instances, k the largest of
+  10, 5, 3, 2, 1, 0 that fits; the other groups keep their 10 instances. If k = 0 does not fit, the runs of
+  10.5 a at 100x100 use 2 instances, then 1.
+* `public`: the instances are taken in the order (size, name) while they fit.
+* `timing` is run in rounds; round q (q = 0, 1, 2) is instance q of every cell with all its runs. A round
+  starts only if its estimate (pilot times, factor 1.15) fits in what is left of the allowance. If round 0
+  does not fit, the largest size is left out, then the next, until it fits.
+* `mipdefault` runs one instance at a time in this order: first the instances whose reference run of 8.4
+  proved the optimum (by size, rho, index), then the others in rounds, round q = instance q of every cell
+  (by size, then rho). A run starts only if what is left of the allowance is at least its time limit.
+  Instances that were not started are listed as "not run (time rule)". The command takes `--minutes N`: a
+  later start with more time continues the same order and completes the plan of 60 instances; whatever is
+  added that way is reported as added after this amendment.
+
+A cell with fewer instances is reported with its number of instances; a test uses the instances that both
+methods have. What each rule gave is written in the record of this amendment.
+
+**10.1 Rivals for FCTP (remark 6).** Two local-search methods work on the basic plan (a spanning tree of
+m + n - 1 arcs) with the true FCTP cost. Both start from the plan of Balinski's linearisation (the plan of
+the method `Balinski` of 8.4), completed to a spanning tree with zero arcs in index order. A *neighbour* of a
+plan is the plan after one pivot: a non-basic arc enters, theta is moved along its cycle, the first arc on a
+minus position with the smallest amount leaves. A *neighbour evaluation* computes theta and the change of the
+true cost (variable cost and fixed charges) of one neighbour, without building the plan. Budget: the cost of
+the start plan counts as one evaluation and every neighbour evaluation as one, the sum is
+B = 200 m n as for the GA; both counters are recorded separately. The result of a run is the best plan met.
+
+a) **Tabu** (tabu search over basis pivots). In every iteration a set of candidate non-basic arcs is
+evaluated: all N' = m n - (m + n - 1) of them (phi = 1), or s = max(1, round(phi N')) arcs drawn uniformly
+with replacement (phi < 1). A candidate is tabu when its entering arc or its leaving arc is on the tabu list;
+an arc that entered or left the basis stays on the list for the next T iterations. Aspiration: a tabu
+candidate is admitted when it gives a cost below the best cost found so far. The admitted candidate with
+the smallest change is applied, also when the change is zero or positive (the first one met on ties); with no
+admitted candidate the iteration makes no move. Grid: phi in {1, 0.25, 0.05} x T in {5, 10, 20}.
+
+b) **ILS** (iterated local search). Descent: the non-basic arcs are scanned in index order, cyclically from a
+random start; the first neighbour with a lower cost is applied and the scan goes on from the next position of the
+list of non-basic arcs; the
+descent ends when N' neighbours in a row give no improvement. Perturbation: p pivots whose entering arcs are
+drawn uniformly among the non-basic arcs (the pivot of the cycle mutation); each counts as one neighbour
+evaluation. Acceptance after the next descent: `better` - the search goes on from the new local optimum if
+its cost is not above the cost of the previous one, otherwise it returns to the previous one; `always` - it
+goes on from the new one. Grid: p in {2, 4, 8, 16} x acceptance in {better, always}.
+
+* Parameters: each grid is run on the 8 training instances of 9.2 with 3 seeds (`base_seed + r`), with the
+  rule of 9.2: the smallest mean gap to the training Z_best (the MIP value of 9.2, or a smaller value found
+  by a run of the grid of 9.2 or of these two grids); ties go to the earlier grid entry (order of the lists above, the first list
+  outermost). The chosen configurations are fixed before the test instances are run.
+* Test: Tabu and ILS, 10 seeds each, on the 40 instances of 8.4 and the 20 instances of 9.4.
+  Gap = 100 (Z - Z_best) / Z_best with Z_best of this amendment: the proved optimum if a MIP run proved one,
+  otherwise the smallest cost over all MIP runs and all heuristic runs on disk, including the runs of this
+  amendment. The tables of amendments 8 and 9 keep their Z_best; the instances where Z_best becomes smaller
+  are listed. Pairs: [GA-cost-cycle, Tabu], [GA-cost-cycle, ILS]; unit = instance, median over the seeds;
+  two-sided Wilcoxon test, Holm over the two pairs within a scope; scopes: all 60 instances, each rho, each
+  size. Reported with wins/ties/losses, the Hodges-Lehmann shift with its 95 % interval and the
+  rank-biserial r.
+* Tabu is **not a reproduction** of the tabu search of Sun, Aronson, McKeown and Drinka (EJOR 106, 1998,
+  441-456), and ILS is not the method of Buson, Roberti and Toth (Operations Research 62, 2014). What is
+  known to differ is written in 10.1 c below.
+
+c) What is known about the published methods. The full text of Sun et al. (1998) is closed and no open copy
+was found (search of 2026-11-20), so its rules (tenures, memory structures, candidate lists, stopping rule,
+parameter values) are not known to this work and none of them is copied. Our Tabu has a short tabu list and an
+aspiration rule only: no intermediate-term or long-term memory, no restarts, a random candidate sample, its own
+grid for two parameters and a budget in evaluations instead of time. The paper of Buson, Roberti and Toth is
+closed as well; our ILS uses no reduced costs and no other LP information after the start plan. If the plan of
+the linearisation were not basic (its positive cells contain a cycle), the run stops with an error; on the 68
+existing FCTP instances it is basic (checked before this amendment with the existing code, no new run of a
+method).
+
+**10.2 MIP in its usual setting (remark 7).** The model of 8.4 (x_ij <= M_ij y_ij with
+M_ij = min(a_i, b_j)) is solved again by HiGHS with `threads = 0` (the solver's automatic choice: all
+processors of the machine are offered), a limit of 300 s, and the other options as in 8.4 (relative gap 0,
+absolute gap 0.99, so that "optimal" means a proved optimum for integer data in both settings; this is the
+only change from the defaults of the solver). One run per instance, one at a time, nothing else running;
+each run in a fresh process. Planned for all 60 FCTP instances; the rule of 10.0 decides how many are run.
+Recorded: status, cost, bound, gap, wall time, processor time of the process (it shows how much the solver
+really ran in parallel), nodes. The table gives the same instances in both settings: 1 thread and 60 s (the
+records of 8.4 and 9.4, made with 20 runs at once) and all threads and 300 s.
+
+**10.3 Instance sets (remarks 8 and 17).**
+
+a) Public sets. A search of at most 15 minutes for public FCTP instance sets with published values (Sun et
+al.; Buson, Roberti, Toth; Roberti, Bartolini, Mingozzi; others). The MIPLIB instances of 8.5 are already
+used. Result of the search (9 minutes, 2026-11-20, before any code):
+
+* Found with a link: the subset of the test problems of Sun et al. (1998) that Glover, Amini and Kochenberger
+  (Journal of Heuristics 11, 2005, 307-336) used, as 132 files `N*.FCTP` in the third-party repository
+  https://github.com/Tybirk/RL-FCTP (directory `Java/Glover`, commit
+  1ab1ba073363c7b650fab7ef1f93b8a7755ba2cb of 2020-11-26). The repository states no licence and the original
+  source of the files could not be confirmed. Ten instances have m, n <= 70: N104, N107 (10x10), N204, N207
+  (15x15), N304, N307 (10x20), N504, N507 (10x30), N1004, N1007 (50x50). Published values: Table 3 of Glover
+  et al. (2005) (author copy: https://leeds-faculty.colorado.edu/glover/fred%20pubs/354%20-%20parametric%20ghost%20image%20fixed%20charge%20%28GIP%29.pdf)
+  with the columns CPLEX 9.0, tabu search of Sun et al. and parametric ghost image process. Barr et al.
+  (Networks, 2021, Table 2) list values that are 3 to 5 units lower for seven of the eight small instances and
+  247 lower for N504; the cause is not known to us. The values of Glover et al. are used and the difference is
+  reported.
+* Not found with a public link: the sets of Agarwal and Aneja (2012), of Roberti, Bartolini and Mingozzi
+  (2015) and of Buson, Roberti and Toth (2014). Found without published values and therefore not used:
+  https://github.com/gjleroux/PhD (150 instances).
+* Rule (decision): the ten instances are run. Because no licence is stated, the files are not copied into
+  this repository: the command `public` downloads them from the commit named above, checks the SHA-256 values
+  written in the configuration before the first run, and keeps them in a directory that git ignores. The data
+  are used as they are (line 1: m n; supplies; demands; m lines of costs; m lines of fixed charges).
+  Reference: the MIP of 8.4 (1 thread, 60 s). Methods: Balinski, Tabu, ILS, GA-cost-cycle, 10 seeds,
+  B = 200 m n. Reported for every instance: the three published values, the MIP result and its status, the
+  median and the best cost of every method, and the gap to Z_ref = the optimum proved by our MIP, otherwise
+  the smallest of the published values and of all our values.
+
+b) Generator. New cells with the sizes 20x20, 30x30, 50x50 and 5 instances per cell:
+
+* class `uniform` (generator of 8.4) with rho = 0.05 and rho = 5: seed = 20320000 + 1000 s + 100 q + i
+  (s = 0, 1, 2 for the sizes, q = 0 for rho = 0.05, q = 1 for rho = 5); ids `g<m>x<n>-r<rho>-<i>`. The
+  cells of this class with rho = 0.2 and rho = 1 are the instances of 8.4 and 9.4 at these sizes.
+* class `concentrated` (few large suppliers, many small customers) with rho in {0.05, 0.2, 1, 5}:
+  S = 60 m; h = max(2, round(0.1 m)) large suppliers share round(0.8 S), the other m - h suppliers share the
+  rest, each group by `1 + multinomial(amount - group size, equal shares)`; demands
+  `1 + multinomial(S - n, equal shares)`; costs U{1..100}; all from `default_rng(seed)` in this order (large
+  suppliers, small suppliers, demands, costs); fixed charges as in 8.4 (U{1..F},
+  F = round(2 rho c_mean S / (m + n - 1)), from `default_rng([seed, 1])`);
+  seed = 20330000 + 1000 s + 100 q + i (q = 0..3 in the order of the list); ids `c<m>x<n>-r<rho>-<i>`.
+
+Reference: the MIP of 8.4 (1 thread, 60 s). Methods: Balinski, Tabu, ILS (chosen configurations of 10.1) and
+GA-cost-cycle of 8.4, 10 seeds, B = 200 m n. Reported: median gap to Z_best by class, rho and size, with
+the pairs of 10.1 in the scopes: each class with each rho. Nothing is tuned on these instances.
+
+**10.4 One measure of effort (remark 13).** The budget stays in evaluations. Next to it the time is
+measured with one run at a time, the process bound to one logical processor (number 2; the affinity of the
+process is set, no system setting is changed) and no other run of the experiment active; other activity of
+the machine is not controlled. Subsample: the first 3 instances of each of the 12 cells of 8.4 and 9.4
+(size x rho), 5 seeds (`base_seed + r`, r = 0..4); methods GA-cost-cycle, Tabu, ILS; then one MIP run
+(1 thread) per instance whose limit is the median time of the 5 GA-cost-cycle runs of this block on that
+instance. Reported by cell: median time of each method, decoder calls, neighbour evaluations (a separate
+counter, as in 10.1), the limit and the result of the MIP run, and how each method stands against that MIP
+plan.
+
+**10.5 Degenerate pivots (remark 14).**
+
+a) GA-rand-cycle and GA-cost-cycle of 8.3 are run again with a record, for every generation, of the number
+of pivots and of pivots with theta = 0: the first 3 instances of the uniform sets 20x20, 50x50 and 100x100,
+seeds `base_seed + r`, r = 0..4. The runs repeat runs of amendments 8 and 9 (same seeds); their costs must
+be equal to the recorded ones, which is checked. Reported: share of pivots with theta > 0 in each tenth of
+the budget (median over the runs of a size, with the smallest and the largest value), and a figure.
+
+b) A second rule for the entering arc (`entering: nondegenerate`): the entering arc is drawn uniformly among
+the non-basic arcs whose cycle has no basic arc with zero amount on a minus position (then theta > 0); when
+there is no such arc, the present rule is used (uniform among all non-basic arcs). The same uniform number
+chooses the arc under both rules, so the random numbers of a run are used in the same way. The present
+operator is not changed. GA-rand-cycle-nd and GA-cost-cycle-nd (the parameters and k of GA-rand-cycle and
+GA-cost-cycle, nothing tuned again) are run on the linear set of 8.3 (all groups, 10 seeds, the seeds of
+8.3) and compared with the recorded runs of GA-rand-cycle and GA-cost-cycle: gap to Z* in percent, unit =
+instance, pairs [GA-rand-cycle-nd, GA-rand-cycle] and [GA-cost-cycle-nd, GA-cost-cycle], Holm over the two
+pairs within a scope, scopes: every group, and all instances. Also reported: share of pivots with theta = 0,
+how often the present rule had to be used, and the time. The runs of this point record the pivots by
+generation as in a).
+
+**10.6 Statistics (remarks 12 and 15).** No new runs. The test tables of amendments 8 and 9 are rebuilt by
+their own reports with the interval of the Hodges-Lehmann shift as new columns; their other numbers must not
+change, which is checked. For every paired comparison of experiment v3 (the
+pairs of 8.6 for the linear problem with the scopes of 9.1, the pairs of 8.4, 9.2 and 9.4 for FCTP, and the
+pairs of 10.1 and 10.5): wins/ties/losses, the Wilcoxon p and its Holm value as already reported, the
+Hodges-Lehmann shift with its 95 % interval (Walsh averages, exact distribution; with too few pairs for the
+level this is said) and the rank-biserial r. For every method in every cell (linear: set and size; FCTP:
+size and rho; cells of 10.3 b): the median over the instances of the per-instance median gap, with a
+bootstrap interval: 10 000 resamples of the instances of the cell with replacement, percentile interval
+2.5 %-97.5 %, generator seed 20261120. Second normalisation for the linear problem:
+(Z - Z*) / (Z_NWC - Z*) with Z_NWC the cost of the north-west corner plan, next to the normalisation of 8.3
+with Z_rand; reported for every cell: the two medians of every method, the order of the methods under each,
+and whether the order is the same.
+
+**10.7 Figures (remark 22).** (1) Linear problem: median gap by size (uniform sets 5x5 to 100x100) for VAM,
+GA-rand-tuned, GA-cost-tuned, GA-rand-cycle and GA-cost-cycle with the bootstrap intervals of 10.6.
+(2) FCTP: gap to Z_best by size from 10x10 to 70x70, one panel per rho, for Balinski, Tabu, ILS,
+GA-cost-cycle and the MIP with the time of the GA (the runs of 9.3 with the limit T), with the intervals.
+(3) The figure of 10.5 a. JPG with 600 dpi and PDF, a serif font, English labels.
+
+**10.8 Archive (remark 25).** After the results are committed: `.zenodo.json`, `CITATION.cff` with the
+version `0.4.0-paper`, a workflow that builds a GitHub release for a tag `v*.*.*-paper` with one archive of
+the tracked files of `paper_artifacts_v2/` (the raw records of the main run of v0.4 are not tracked and the
+run is not finished, so they are not in it), `paper_artifacts_quick/` and `paper_artifacts_v3/`, and the tag
+`v0.4.0-paper` on the final commit. Existing tags are not moved. No DOI is requested by this work.
