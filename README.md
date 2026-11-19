@@ -108,13 +108,16 @@ Branch `work/v0.4` also holds an experiment that was planned in amendment 8 of
 [`docs/v0.4/PREREGISTRATION.md`](docs/v0.4/PREREGISTRATION.md) before its code was written: a mutation that
 makes random simplex pivots on the decoded plan (`tpga.cycle`), one protocol for the linear problem up to
 100x100, and the fixed-charge transportation problem (`tpga.fctp`) with a MIP reference and three MIPLIB
-instances. Commands, tables and limits are in [`paper_artifacts_v3/README.md`](paper_artifacts_v3/README.md);
-the whole experiment takes about an hour on 24 logical processors:
+instances. Amendment 9 extends it after its results were seen: the 100x100 set with all 10 instances, a grid
+on FCTP training instances, the MIP solver with the run time of the GA as its limit, and FCTP sizes 50x50 and
+70x70. Commands, tables and limits are in [`paper_artifacts_v3/README.md`](paper_artifacts_v3/README.md);
+the experiment of amendment 8 takes about an hour on 24 logical processors and the extension another hour:
 
 ```bash
 pip install -e ".[runner]"
-python -m tpga.experiments.v3 kselect --config experiments/paper-v3-cycle.yaml   # then pilot, run, report
-python -m tpga.experiments.v3 run     --config experiments/paper-v3-fctp.yaml    # then benchmark, report
+python -m tpga.experiments.v3 kselect --config experiments/paper-v3-cycle.yaml      # then pilot, run, extend, report
+python -m tpga.experiments.v3 run     --config experiments/paper-v3-fctp.yaml       # then benchmark, report
+python -m tpga.experiments.v3 tune    --config experiments/paper-v3-fctp-ext.yaml   # then run, report
 ```
 
 ## Project structure

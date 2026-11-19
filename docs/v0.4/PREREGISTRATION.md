@@ -639,3 +639,53 @@ to tracked files there.
 * A MIP run that ends before the root relaxation has no lower bound; it is recorded as no bound.
 * Configuration: `experiments/paper-v3-fctp-ext.yaml`; commands `tune`, `run`, `report`; tables `E1` to `E7`
   and the figure `fctp_gap_sizes` in `paper_artifacts_v3/fctp/`.
+
+### Record of amendment 9 (2026-11-19): what the runs gave
+
+Written after the runs, from the files of `paper_artifacts_v3/`. Order of the commits: 8faa6e6 (amendment 9),
+8db4537 (code of 9.1), the run of 9.1, 4ff8499 (code of 9.2-9.4 and the corrections 9.6, committed while the
+run of 9.1 was in progress), the grid of 9.2, the runs of 9.2, 9.4 and 9.3, the reports, 3a3cf0b (the new
+figure only: its shared axis cut off the largest values; no table changed), the report again.
+`run_manifest.json` gives the commit of every command; the code was unchanged at the start of each. No run
+failed. Total run time 57 minutes (9.1: 42.8 min; grid 2.2 min; 9.2-9.4: 11.9 min).
+
+* 9.1 (`linear/tables/T2_tests_extension`, `T1_gap`). 355 new runs; the 4615 earlier records are unchanged.
+  On the five added instances alone every pair has the direction it had on the first five (GA-rand-cycle
+  against VAM 5 wins of 5 where the first five gave 3 of 5). On all ten instances the five pairs pass the Holm
+  correction: GA-cost-cycle below GA-cost-tuned and below VAM on 10 of 10 (p_Holm = 0.0098), GA-rand-cycle
+  below GA-rand-tuned on 10 of 10 (0.0098) and below VAM on 8 of 10 (0.014), GA-rand-cycle above GA-cost-tuned
+  on 10 of 10 (0.0098; the cycle mutation with a random start loses to the tuned GA with the cost-aware
+  start). Median gap over runs at 100x100: GA-cost-cycle 14.0 %, GA-cost-tuned 20.5 %, GA-rand-cycle 34.3 %,
+  VAM 41.7 % (with five instances: 10.3, 18.3, 30.4, 36.1). The share of pivots with theta = 0 is 66 % and
+  75 %, as before.
+* 9.2, grid (`fctp/tables/E1_tuning`): the MIP proved the optimum on 5 of the 8 training instances. Chosen
+  without the local search: P = 300, k = 2 (mean training gap 5.57 %; the configuration of 8.4, P = 2700,
+  k = 1: 5.96 %). Chosen with the local search: P = 300, k = 2, every 3rd generation (5.66 %). The 48 means
+  lie between 5.57 % and 8.55 %. No tie.
+* 9.2, test on the 40 instances (`E2_gap_tuned`, `E3_tests_tuned`): none of the three comparisons is
+  significant. GA-cost-cycle-ft against GA-cost-cycle: 19 wins, 3 ties, 18 losses, p = 0.72. GA-hybrid-ft
+  against GA-cost-cycle-ft: 11, 11, 18, p = 0.72. GA-hybrid-ft against GA-hybrid: 20, 4, 16, p = 0.41. The
+  chosen population helps at 10x10 (median gap 0 instead of 0.8 % and 1.1 %; 66 generations instead of 6) and
+  not from 15x15 on. The local search of GA-hybrid-ft is applied 20, 42, 66 and 110 times per run at 10x10 to
+  30x30 and takes up to 45 % of the budget at 30x30; it does not lower the gap. The answer to limits (3) and
+  (4) is therefore negative: a grid on FCTP and a local search that is applied often do not change the
+  result of 8.4.
+* Z_best was lowered on one instance, `f30x30-r1-03`: the MIP run with the limit 10 T (16 s) returned 55455,
+  below the 55569 of the MIP run with 60 s. HiGHS under a time limit does not repeat the same search, so a
+  shorter run can end with a better plan. No heuristic run is below a MIP plan on any instance.
+* 9.3 (`E4_mip_equal_time`), 40 instances of 8.4: with the limit T (0.07 s at 10x10 to 1.6 s at 30x30) the
+  MIP has a plan on every instance; the median GA-cost-cycle cost is lower on 38 instances and equal on 2
+  (both 10x10); the median gap of the MIP plan is 2.2 to 20.9 % against 0.8 to 7.3 % of the GA. At 15x15 to
+  30x30 with rho = 0.2 the MIP plan at T has the gap of the Balinski plan. With 10 T the MIP is better on 34,
+  equal on 3, worse on 3; with 60 s better on 37 and equal on 3.
+* 9.4 (`E5_large_mip`, `E6_large_gap`, `E7_large_tests`): at 50x50 and 70x70 the MIP proves no optimum in
+  60 s (MIP gap 4.4 to 7.4 % in the median) and has a plan on all 20 instances. Its plan is better than the
+  median of every GA variant on 20 of 20 (p_Holm < 0.001; per size 10 of 10, p_Holm = 0.006). Median gap to
+  the MIP plan: GA-cost-cycle 7.8 to 11.1 %, GA-cost-cycle-ft 6.6 to 9.3 %, GA-hybrid-ft 8.2 to 11.9 %,
+  Balinski 16.0 to 19.2 %. With the limit T (11 s at 50x50, 40 s at 70x70) the MIP is better than
+  GA-cost-cycle on 19 of 20 instances. Limit (1) therefore stands and is wider than stated: the GA is ahead
+  of the MIP solver only at the same short time up to 30x30 (at most 1.8 s); from 50x50 on the MIP solver
+  is ahead at the same time as well.
+* Not planned and noticed in the records: GA-hybrid-ft runs 3 to 6 times shorter than GA-cost-cycle-ft at
+  50x50 and 70x70 (3.1 s against 10.5 s; 7 s against 39 s) because 70 % and 82 % of its budget are local-search
+  neighbours, which cost less time than a decoder call. The budget counts evaluations, not time.

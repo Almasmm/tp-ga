@@ -1,0 +1,100 @@
+{
+ "instances": {
+  "t20x20-r0.2-00": {
+   "id": "t20x20-r0.2-00",
+   "set": "fctp",
+   "m": 20,
+   "n": 20,
+   "rho": 0.2,
+   "seed": 20310000,
+   "fixed_high": 621,
+   "file": "t20x20-r0.2-00.json",
+   "sha256": "a3cbe4bf1ffe5aaeb3da992830aa78c4c917b8f70fa482d5d176611a8375406e",
+   "generator": "tpga.fctp.generate"
+  },
+  "t20x20-r0.2-01": {
+   "id": "t20x20-r0.2-01",
+   "set": "fctp",
+   "m": 20,
+   "n": 20,
+   "rho": 0.2,
+   "seed": 20310001,
+   "fixed_high": 662,
+   "file": "t20x20-r0.2-01.json",
+   "sha256": "09609462736c1291f2d10d2ef07ddd45090397f84fb11e55b14319f311a8db01",
+   "generator": "tpga.fctp.generate"
+  },
+  "t20x20-r1-00": {
+   "id": "t20x20-r1-00",
+   "set": "fctp",
+   "m": 20,
+   "n": 20,
+   "rho": 1.0,
+   "seed": 20310100,
+   "fixed_high": 3451,
+   "file": "t20x20-r1-00.json",
+   "sha256": "f75d868210d04c848b950d1b558a44af4f0a2f71f2980e4468103c8591a3b1b4",
+   "generator": "tpga.fctp.generate"
+  },
+  "t20x20-r1-01": {
+   "id": "t20x20-r1-01",
+   "set": "fctp",
+   "m": 20,
+   "n": 20,
+   "rho": 1.0,
+   "seed": 20310101,
+   "fixed_high": 3194,
+   "file": "t20x20-r1-01.json",
+   "sha256": "e2f3a9662f7fa7c64023ad4f04888c733004478b509aab7696515734562b32c3",
+   "generator": "tpga.fctp.generate"
+  },
+  "t30x30-r0.2-00": {
+   "id": "t30x30-r0.2-00",
+   "set": "fctp",
+   "m": 30,
+   "n": 30,
+   "rho": 0.2,
+   "seed": 20311000,
+   "fixed_high": 713,
+   "file": "t30x30-r0.2-00.json",
+   "sha256": "467377d68d49c4c90e10df7c40d4d4279d6bee3dd88e83c93b49b93b688f2098",
+   "generator": "tpga.fctp.generate"
+  },
+  "t30x30-r0.2-01": {
+   "id": "t30x30-r0.2-01",
+   "set": "fctp",
+   "m": 30,
+   "n": 30,
+   "rho": 0.2,
+   "seed": 20311001,
+   "fixed_high": 578,
+   "file": "t30x30-r0.2-01.json",
+   "sha256": "db44c505aa3db1332e6b02c0135663074e7de86be2bc801f16e769c265e9a34b",
+   "generator": "tpga.fctp.generate"
+  },
+  "t30x30-r1-00": {
+   "id": "t30x30-r1-00",
+   "set": "fctp",
+   "m": 30,
+   "n": 30,
+   "rho": 1.0,
+   "seed": 20311100,
+   "fixed_high": 3138,
+   "file": "t30x30-r1-00.json",
+   "sha256": "08893120dc7055754e8a81f25a62af3468fbf9b5a741f6cfb7077aaf558ea8ac",
+   "generator": "tpga.fctp.generate"
+  },
+  "t30x30-r1-01": {
+   "id": "t30x30-r1-01",
+   "set": "fctp",
+   "m": 30,
+   "n": 30,
+   "rho": 1.0,
+   "seed": 20311101,
+   "fixed_high": 2605,
+   "file": "t30x30-r1-01.json",
+   "sha256": "f4966759bcbf78d12fdc07c2489f3d56c0496390c5f0f0b6639d2e47c39e1f1d",
+   "generator": "tpga.fctp.generate"
+  }
+ }
+}
