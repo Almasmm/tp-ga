@@ -13,7 +13,7 @@ Pivots made by the cycle mutation in the main runs, the pivots with theta = 0 an
 | uniform | 30x30 | GA-cost-cycle | P2700-pc0.965569-t8-e5-cycle:1-cost-aware-budget | 100 | 17517500 | 17517500 | 4695280 | 0.268 | 4695280 | 0.268 |
 | uniform | 50x50 | GA-rand-cycle | P143-pc0.97724-t5-e1-cycle:2-random-budget | 100 | 49984000 | 99968000 | 54561837 | 0.5458 | 16482933 | 0.3298 |
 | uniform | 50x50 | GA-cost-cycle | P2700-pc0.965569-t8-e5-cycle:1-cost-aware-budget | 100 | 49588000 | 49588000 | 22403612 | 0.4518 | 22403612 | 0.4518 |
-| uniform | 100x100 | GA-rand-cycle | P143-pc0.97724-t5-e1-cycle:2-random-budget | 50 | 99989300 | 199978600 | 147043774 | 0.7353 | 55979344 | 0.5599 |
-| uniform | 100x100 | GA-cost-cycle | P2700-pc0.965569-t8-e5-cycle:1-cost-aware-budget | 50 | 99849750 | 99849750 | 64903840 | 0.65 | 64903840 | 0.65 |
+| uniform | 100x100 | GA-rand-cycle | P143-pc0.97724-t5-e1-cycle:2-random-budget | 100 | 199978600 | 399957200 | 298022148 | 0.7451 | 114826669 | 0.5742 |
+| uniform | 100x100 | GA-cost-cycle | P2700-pc0.965569-t8-e5-cycle:1-cost-aware-budget | 100 | 199699500 | 199699500 | 131338094 | 0.6577 | 131338094 | 0.6577 |
 | structured | 20x20 | GA-rand-cycle | P143-pc0.97724-t5-e1-cycle:2-random-budget | 100 | 7980400 | 15960800 | 3498230 | 0.2192 | 700404 | 0.08777 |
 | structured | 20x20 | GA-cost-cycle | P2700-pc0.965569-t8-e5-cycle:1-cost-aware-budget | 100 | 7546000 | 7546000 | 1311767 | 0.1738 | 1311767 | 0.1738 |
