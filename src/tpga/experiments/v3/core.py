@@ -38,6 +38,7 @@ from tpga.fctp import (
     vogel_linearised,
 )
 from tpga.ga import run_ga, run_random_search
+from tpga.localsearch import ILSConfig, TabuConfig, run_ils, run_tabu
 from tpga.model import TransportProblem
 from tpga.sa import SAConfig, run_sa
 from tpga.verify import check_plan
@@ -45,7 +46,7 @@ from tpga.verify import check_plan
 KEY_FIELDS = ("phase", "instance", "method", "config", "seed")
 TOLERANCE = 1e-9
 DECODER_TOL = 1e-12
-STOCHASTIC = ("rs", "ga", "sa", "gax")
+STOCHASTIC = ("rs", "ga", "sa", "gax", "tabu", "ils")
 
 
 def key_of(row: dict[str, Any]) -> str:
@@ -294,6 +295,7 @@ def _gax_config(task: dict[str, Any]) -> GAXConfig:
         seed=int(task["seed"]),
         local_search_every=int(task.get("local_search_every", 0)),
         decoder_tol=float(task["decoder_tol"]),
+        entering=task.get("entering") or "uniform",
     )
 
 
@@ -312,6 +314,11 @@ def _run_fields(result: Any) -> dict[str, Any]:
         "local_search_calls",
         "local_search_evaluations",
         "local_search_improvements",
+        "fallback_pivots",
+        "full_evaluations",
+        "neighbour_evaluations",
+        "moves",
+        "start_cost",
     ):
         if hasattr(result, name):
             out[name] = getattr(result, name)
@@ -335,6 +342,8 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
     label = f"{task['method']} on {task['instance']} seed {task['seed']}"
     if task["problem"] == "linear":
         problem = v2_methods.load(task["path"])
+        res: Any
+        extra: dict[str, Any]
         if kind == "classical":
             t0 = time.perf_counter()
             out = vogel(problem)
@@ -349,6 +358,9 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
             else:
                 res = run_ga_x(problem, _gax_config(task))
             x, cost, extra = res.x, res.cost, _run_fields(res)
+            if task.get("trace"):  # pivots and pivots with theta = 0 up to every generation (amendment 10.5)
+                extra["pivot_trace"] = [list(t) for t in res.pivot_trace]
+                extra["offspring"] = int(task["params"]["population"]) - int(task["params"]["elite"])
         z = float(task["z_star"])
         if cost < z - TOLERANCE * max(1.0, abs(z)):
             raise RuntimeError(f"{label} reports {cost} below the optimum {z}")
@@ -366,6 +378,7 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
         fcp = FixedChargeProblem.from_json(task["path"])
         if kind == "mip":
             opts = task.get("mip") or {}
+            cpu0 = time.process_time()
             mip = solve_mip(
                 fcp,
                 time_limit=float(opts.get("time_limit_s", 60)),
@@ -381,7 +394,9 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
                 status=mip.status,
                 proved=mip.proved,
                 time_limit_s=float(opts.get("time_limit_s", 60)),
+                threads=int(opts.get("threads", 1)),
                 time_s=mip.time_s,
+                cpu_s=time.process_time() - cpu0,  # processor time of the process: all threads of the solver
                 nodes=mip.nodes,
                 highs_version=mip.version,
             )
@@ -415,9 +430,22 @@ def execute(task: dict[str, Any]) -> dict[str, Any]:
                     )
                 elif kind == "gax":
                     res = run_ga_x(fcp.problem, _gax_config(task), fixed=fcp.fixed, start_problem=fcp.linearised())
+                elif kind == "tabu":
+                    p = task["params"]
+                    res = run_tabu(
+                        fcp, TabuConfig(int(task["budget"]), float(p["sample"]), int(p["tenure"]), int(task["seed"]))
+                    )
+                elif kind == "ils":
+                    p = task["params"]
+                    res = run_ils(
+                        fcp,
+                        ILSConfig(int(task["budget"]), int(p["perturbation"]), p["acceptance"], int(task["seed"])),
+                    )
                 else:
                     raise ValueError(f"unknown method kind {kind!r} for the fixed-charge problem")
                 x, cost, extra = res.x, res.cost, _run_fields(res)
+            if task.get("cpu") is not None:
+                extra["cpu"] = task["cpu"]
             record.update(extra, cost=cost, max_residual=_feasible(fcp.problem, x, label))
     record["finished"] = time.time()
     return record

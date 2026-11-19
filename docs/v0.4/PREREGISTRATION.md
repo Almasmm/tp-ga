@@ -912,3 +912,21 @@ version `0.4.0-paper`, a workflow that builds a GitHub release for a tag `v*.*.*
 the tracked files of `paper_artifacts_v2/` (the raw records of the main run of v0.4 are not tracked and the
 run is not finished, so they are not in it), `paper_artifacts_quick/` and `paper_artifacts_v3/`, and the tag
 `v0.4.0-paper` on the final commit. Existing tags are not moved. No DOI is requested by this work.
+
+**10.9 Corrections made with the code, before any run of this amendment (2026-11-20).**
+
+* Time left unused passes on (10.0). With the fixed allowances the estimates made from the recorded times of
+  amendments 8 and 9 (no new run) gave k = 0 for the 100x100 group of 10.5 b while the commands before it
+  were expected to use less than half of their allowances, so that about 19 of the 90 minutes would stay
+  unused. Rule now: a command may use the sum of the allowances of the table up to and including its own,
+  minus the time already used. The last command (`mipdefault`) may go on until 88 minutes of total time
+  (the limit minus a margin of 2 minutes for the start of processes and the writing of files). The limit of
+  90 minutes, the order, the reduction rules and the allowances of the table do not change.
+* The runs of 10.5 a and 10.5 b share one file (`review/raw/linear.jsonl`, phases `trace` and `nd`) and one
+  pool of 20 processes, so that the processors are used all the time.
+* Instances of the pilot have the prefix `p`. The pilot time at a size stands for every instance whose larger
+  side is at most that size (this also covers the public instances 10x20 and 10x30).
+* 10.4: before the first timed run each method is run once on the smallest instance without a record, so
+  that the compilation of the kernels is not inside a measured time.
+* 10.2: the processor time of a MIP run is that of its process (`cpu_s`), measured around the call of the
+  solver together with the building of the model.
