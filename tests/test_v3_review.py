@@ -62,7 +62,9 @@ def reviewed(tmp_path_factory):
     path = review_config(tmp, extension, cycle)
     for command in ("pilot", "tune", "rivals", "generator", "degenerate", "public", "timing"):
         assert main([command, "--config", str(path)]) == 0
-    assert main(["mipdefault", "--config", str(path), "--minutes", "0.15"]) == 0
+    # The time limit of a run is 5 s here and a run starts only while at least that much is left, so with 6 s
+    # runs start during the first second only: the first one always, all twelve never (each is a new process).
+    assert main(["mipdefault", "--config", str(path), "--minutes", "0.1"]) == 0
     for config in (cycle, fctp, extension, path):  # the earlier reports give the intervals of their tests
         assert main(["report", "--config", str(config)]) == 0
     return tmp, core.ConfigV3.load(path)
