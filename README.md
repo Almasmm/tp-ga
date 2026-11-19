@@ -118,7 +118,17 @@ pip install -e ".[runner]"
 python -m tpga.experiments.v3 kselect --config experiments/paper-v3-cycle.yaml      # then pilot, run, extend, report
 python -m tpga.experiments.v3 run     --config experiments/paper-v3-fctp.yaml       # then benchmark, report
 python -m tpga.experiments.v3 tune    --config experiments/paper-v3-fctp-ext.yaml   # then run, report
+python -m tpga.experiments.v3 pilot   --config experiments/paper-v3-review.yaml     # amendment 10, see below
 ```
+
+Amendment 10 answers a review and is exploratory as well (`experiments/paper-v3-review.yaml`, results in
+`paper_artifacts_v3/review/`): a tabu search and an iterated local search over basis pivots
+(`tpga.localsearch`) as rivals on the fixed-charge problem, the MIP solver with all threads and 300 s, new
+instance classes and ten public instances, times with one run at a time, the share of pivots with theta > 0,
+a second rule for the entering arc of the cycle mutation (`GAXConfig(entering="nondegenerate")`), effect
+sizes with intervals and three figures. With the same budget of evaluations both local searches are better
+than the GA on the fixed-charge problem. Its commands are `pilot`, `tune`, `rivals`, `generator`,
+`degenerate`, `public`, `timing`, `mipdefault` and `report`, in this order; together they took 84 minutes.
 
 ## Project structure
 
@@ -163,6 +173,9 @@ The [web application](platform/README.md) plans shipments for the Kazakhstan whe
   whose wheel is installed in a clean environment and smoke-tested with the CLI.
 - [`release.yml`](.github/workflows/release.yml) — on a tag `vX.Y.Z`: runs the tests, checks that the tag equals the
   package version, builds the sdist and wheel and publishes them as a **GitHub Release** (continuous delivery).
+- [`paper-release.yml`](.github/workflows/paper-release.yml) — on a tag `vX.Y.Z-paper` (code and data of the
+  article): one archive of the tracked files of `paper_artifacts_v2/`, `paper_artifacts_quick/` and
+  `paper_artifacts_v3/` with the preregistration and the configurations, attached to a **GitHub Release**.
 - [`dependabot.yml`](.github/dependabot.yml) — monthly update pull requests for actions and Python dependencies.
 - `main` is protected: changes arrive through pull requests that must pass CI.
 

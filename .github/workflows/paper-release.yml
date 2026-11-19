@@ -1,0 +1,33 @@
+name: Paper release
+
+on:
+  push:
+    # vX.Y.Z-paper: the code and data of the article. One archive of the tracked paper artifacts is attached
+    # to a GitHub Release (amendment 10.8 of docs/v0.4/PREREGISTRATION.md). Package releases use release.yml.
+    tags: ["v*.*.*-paper"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Archive the paper artifacts and publish a GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the archive of the tracked paper artifacts
+        run: |
+          name="tp-ga-${GITHUB_REF_NAME}-artifacts"
+          git archive --format=zip --prefix="${name}/" -o "${name}.zip" HEAD \
+            paper_artifacts_v2 paper_artifacts_quick paper_artifacts_v3 \
+            docs/v0.4/PREREGISTRATION.md experiments CITATION.cff .zenodo.json LICENSE
+          sha256sum "${name}.zip" > "${name}.zip.sha256"
+          ls -l "${name}.zip" && cat "${name}.zip.sha256"
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          notes="docs/releases/${GITHUB_REF_NAME}.md"
+          test -f "$notes" || notes=CHANGELOG.md
+          gh release create "${GITHUB_REF_NAME}" tp-ga-*.zip tp-ga-*.zip.sha256 \
+            --title "${GITHUB_REF_NAME}" --notes-file "$notes" --verify-tag
