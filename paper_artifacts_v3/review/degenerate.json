@@ -1,0 +1,10 @@
+{
+ "instances_at_reduce_size": 0,
+ "traced_instances_at_reduce_size": 3,
+ "estimate_s": 1057.354231938731,
+ "allowance_s": 1577.385312795639,
+ "time_ratio_second_rule": {
+  "GA-rand-cycle": 3.8608944039638167,
+  "GA-cost-cycle": 2.4975112508111925
+ }
+}

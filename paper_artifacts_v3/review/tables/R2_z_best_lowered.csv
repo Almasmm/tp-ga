@@ -1,0 +1,23 @@
+instance,size,rho,z_best_before,source_before,z_best,source,change_percent
+f30x30-r0.2-00,30x30,0.2,20371.0,MIP (best solution at the time limit),20178.0,MIP (proved optimum),-0.9474252614010112
+f30x30-r0.2-01,30x30,0.2,26942.0,MIP (best solution at the time limit),26796.0,"MIP, all threads, 300 s",-0.5419048326033702
+f30x30-r0.2-02,30x30,0.2,20313.0,MIP (best solution at the time limit),20306.0,ILS,-0.034460690198395115
+f30x30-r0.2-03,30x30,0.2,21289.0,MIP (best solution at the time limit),21256.0,ILS,-0.1550096293860679
+f30x30-r1-01,30x30,1.0,52914.0,MIP (best solution at the time limit),52852.0,MIP (proved optimum),-0.11717125902407681
+f50x50-r0.2-00,50x50,0.2,29817.0,MIP (best solution at the time limit),29326.0,"MIP, all threads, 300 s",-1.6467116074722474
+f50x50-r0.2-01,50x50,0.2,33430.0,MIP (best solution at the time limit),32674.0,"MIP, all threads, 300 s",-2.2614418187256953
+f50x50-r0.2-03,50x50,0.2,29312.0,MIP (best solution at the time limit),28768.0,ILS,-1.8558951965065502
+f50x50-r1-00,50x50,1.0,56689.0,MIP (best solution at the time limit),56602.0,"MIP, all threads, 300 s",-0.15346892695231878
+f50x50-r1-01,50x50,1.0,65383.0,MIP (best solution at the time limit),64003.0,"MIP, all threads, 300 s",-2.110640380527048
+f50x50-r1-03,50x50,1.0,61627.0,MIP (best solution at the time limit),61614.0,ILS,-0.02109465007220861
+f50x50-r1-04,50x50,1.0,66641.0,MIP (best solution at the time limit),66088.0,ILS,-0.8298194804999925
+f70x70-r0.2-00,70x70,0.2,38364.0,MIP (best solution at the time limit),37867.0,"MIP, all threads, 300 s",-1.295485350849755
+f70x70-r0.2-01,70x70,0.2,36614.0,MIP (best solution at the time limit),36022.0,ILS,-1.616867864751188
+f70x70-r0.2-02,70x70,0.2,33833.0,MIP (best solution at the time limit),33427.0,ILS,-1.200011822776579
+f70x70-r0.2-03,70x70,0.2,38739.0,MIP (best solution at the time limit),38568.0,ILS,-0.441415627662046
+f70x70-r0.2-04,70x70,0.2,34147.0,MIP (best solution at the time limit),33295.0,ILS,-2.4950947374586345
+f70x70-r1-00,70x70,1.0,83876.0,MIP (best solution at the time limit),82359.0,"MIP, all threads, 300 s",-1.8086222518956554
+f70x70-r1-01,70x70,1.0,82651.0,MIP (best solution at the time limit),80478.0,ILS,-2.6291272942856105
+f70x70-r1-02,70x70,1.0,80012.0,MIP with the limit x1,79784.0,ILS,-0.2849572564115383
+f70x70-r1-03,70x70,1.0,80750.0,MIP (best solution at the time limit),78805.0,ILS,-2.4086687306501546
+f70x70-r1-04,70x70,1.0,87522.0,MIP (best solution at the time limit),85842.0,ILS,-1.9195173784876944
