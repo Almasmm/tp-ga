@@ -597,21 +597,24 @@ def report_degenerate(cfg: ConfigV3, boot: Boot, tables: Path) -> tuple[Row, lis
         ({"set": s, "size": z}, [i["id"] for i in items if (i["set"], i["size"]) == (s, z) and i["id"] in with_nd])
         for s, z in cells
     ]
+    # A cell left without instances by the time rule of 10.0 (the largest size) has nothing to compare.
+    groups = [(label, ids) for label, ids in groups if ids]
     order = [x for pair in spec["variants"].items() for x in (pair[1], pair[0])]
     r9 = cell_table(groups, order, gaps, times, boot)
     for row in r9:
         ids = next(g for label, g in groups if (label["set"], label["size"]) == (row["set"], row["size"]))
         mine = [r for r in old + nd if r["method"] == row["method"] and r["instance"] in ids]
-        row["pivots_theta_zero_share"] = sum(r["zero_pivots"] for r in mine) / sum(r["pivots"] for r in mine)
+        # a cell in which no run makes a pivot (every run stops on its start plan) has no shares
+        pivots = sum(r["pivots"] for r in mine)
+        row["pivots"] = pivots
+        row["pivots_theta_zero_share"] = sum(r["zero_pivots"] for r in mine) / pivots if pivots else None
         row["pivots_left_to_uniform_rule_share"] = (
-            sum(r["fallback_pivots"] for r in mine) / sum(r["pivots"] for r in mine)
-            if row["method"] in spec["variants"]
-            else None
+            sum(r["fallback_pivots"] for r in mine) / pivots if pivots and row["method"] in spec["variants"] else None
         )
-        row["unchanged_offspring_share"] = sum(r["unchanged_offspring"] for r in mine) / sum(
-            r["evals"]
-            - int(core.method_fields(lin, spec["variants"].get(row["method"], row["method"]))["params"]["population"])
-            for r in mine
+        base = core.method_fields(lin, spec["variants"].get(row["method"], row["method"]))
+        offspring = sum(r["evals"] - int(base["params"]["population"]) for r in mine)
+        row["unchanged_offspring_share"] = (
+            sum(r["unchanged_offspring"] for r in mine) / offspring if offspring else None
         )
     rep._both(
         tables,
@@ -641,6 +644,13 @@ def report_degenerate(cfg: ConfigV3, boot: Boot, tables: Path) -> tuple[Row, lis
     return {"R8": len(r8), "R9": len(r9), "R9_tests": len(r9t)}, r8
 
 
+def _number(column: str, text: str) -> Any:
+    """A cell of a test table read back from its CSV file: counts as integers, the other numbers as floats."""
+    if column in ("method_a", "method_b", "hl_ci_method") or text == "":
+        return text or None
+    return int(text) if column in ("n", "wins_a", "ties", "losses_a") else float(text)
+
+
 def report_statistics(cfg: ConfigV3, boot: Boot, tables: Path) -> tuple[Row, list[Row]]:
     lin = rev.lin_cfg(cfg)
     e = rev.ext_cfg(cfg)
@@ -667,7 +677,7 @@ def report_statistics(cfg: ConfigV3, boot: Boot, tables: Path) -> tuple[Row, lis
                 if "hl_ci_low" not in r:
                     raise RuntimeError(f"{path.name} has no interval of the shift: rebuild the report it belongs to")
                 scope = r.get("scope") or " ".join(x for x in (r.get("set"), r.get("size")) if x)
-                s1.append({"comparison": title, "scope": scope, **{k: r[k] for k in keep}})
+                s1.append({"comparison": title, "scope": scope, **{k: _number(k, r[k]) for k in keep}})
     rep._both(
         tables,
         "S1_pairs",
@@ -880,8 +890,10 @@ def figures(cfg: ConfigV3, s2: list[Row], r2: list[Row], r8: list[Row]) -> list[
         ax.set_title(f"$\\rho$ = {rho:g}", fontsize=9)
         ax.set_xlabel("Problem size")
     axes[0][0].set_ylabel("Gap to the best known value, %")
-    axes[0][-1].legend(fontsize=7)
-    fig.tight_layout()
+    # one legend under both panels: inside a panel it would cover intervals
+    handles, labels = axes[0][0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower center", ncol=len(labels), fontsize=7, frameon=False)
+    fig.tight_layout(rect=(0, 0.06, 1, 1))
     _save(fig, directory, "fctp_gap_rivals")
     plt.close(fig)
 
