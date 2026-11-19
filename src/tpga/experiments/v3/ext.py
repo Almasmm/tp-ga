@@ -588,6 +588,7 @@ def figure(
     rhos = sorted({i["rho"] for i in everything})
     sizes = sorted({i["size"] for i in everything}, key=rep._size_key)
     fig, axes = plt.subplots(1, len(rhos), figsize=(4.4 * len(rhos), 4.2), sharey=True, squeeze=False)
+    top = 0.0
     for ax, rho in zip(axes[0], rhos, strict=True):
         for name in shown:
             xs, ys = [], []
@@ -598,13 +599,14 @@ def figure(
                     xs.append(pos)
                     ys.append(statistics.median(values))
             ax.plot(xs, ys, marker="o", linewidth=1.4, markersize=4, label=name)
+            top = max([top, *ys])
         ax.set_xticks(range(len(sizes)))
         ax.set_xticklabels(sizes)
         ax.set_yscale("symlog", linthresh=0.1)
-        ax.set_ylim(bottom=0)
         ax.set_title(f"rho = {rho:g}", fontsize=9)
         ax.set_xlabel("size")
         ax.grid(True, which="both", linewidth=0.3, alpha=0.6)
+    axes[0][0].set_ylim(0, 1.3 * top if top > 0 else 1.0)  # shared axis: the largest value of both panels
     axes[0][0].set_ylabel("gap to the best known value, %")
     axes[0][-1].legend(fontsize=7)
     fig.tight_layout()
