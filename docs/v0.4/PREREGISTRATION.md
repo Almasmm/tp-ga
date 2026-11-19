@@ -930,3 +930,135 @@ run is not finished, so they are not in it), `paper_artifacts_quick/` and `paper
   that the compilation of the kernels is not inside a measured time.
 * 10.2: the processor time of a MIP run is that of its process (`cpu_s`), measured around the call of the
   solver together with the building of the model.
+
+### Record of amendment 10 (2026-11-20): what the rules and the runs gave
+
+Written after the runs, from the files of `paper_artifacts_v3/review/`. All of it is exploratory: amendment 10
+was written after the results of amendments 8 and 9 were seen. Order of the commits: 855458e (amendment 10),
+978c6f4 (code and the corrections 10.9), the commands `pilot`, `tune`, `rivals`, `generator` and `degenerate`,
+858771a (code of the report only, committed while `degenerate` was running), the commands `public`, `timing`
+and `mipdefault`, e9957da (three corrections of the report, listed below), the reports. No run failed.
+
+**Time and the reduction rules** (`tables/R0_rules`, `budget.json`). All run commands together took 5046 s
+(84.1 minutes) of the 90 minutes.
+
+| command | allowance at its start, s | used, s | what the rule gave |
+|---|---|---|---|
+| `pilot` | 120 | 30.4 | 16 single runs |
+| `tune` | 210 | 3.0 | both grids complete (408 runs) |
+| `rivals` | 387 | 10.5 | estimate 31 s: 5 instances per cell at 70x70 and at 50x50 (1200 runs) |
+| `generator` | 1036 | 358.8 | estimate 573 s: 5 instances per new cell (90 instances, 90 MIP runs, 2790 runs) |
+| `degenerate` | 1577 | 694.7 | estimate 1057 s with **k = 0** at 100x100 for 10.5 b (the next larger k = 1 did not fit) and 3 instances at 100x100 for 10.5 a (1290 runs) |
+| `public` | 1183 | 79.9 | all 10 instances |
+| `timing` | 1703 | 1349.9 | all three rounds, no size left out (540 runs, 36 MIP runs) |
+| `mipdefault` | 2753 | 2518.9 | **40 of the 60 instances run, 20 not run (time rule)** |
+
+The second rule for the entering arc was 2.50 times (GA-cost-cycle) and 3.86 times (GA-rand-cycle) slower
+than the present rule in the pilot at 50x50; this is what left the 100x100 group without the comparison of
+10.5 b. The 20 instances of 10.2 that were not run are the instances 1 to 4 of 70x70 and 2 to 4 of 30x30 and
+50x50 (both rho). `python -m tpga.experiments.v3 mipdefault --config experiments/paper-v3-review.yaml
+--minutes 105` continues the same order and completes them; nothing of that kind has been run.
+
+**What differs from the text of the amendment.**
+
+* The pilot stores its times under the key "method|size". GA-cost-cycle at 50x50 was run twice in the pilot,
+  on the FCTP pilot instance (7.58 s) and on the linear training instance (8.16 s), and the second value
+  replaced the first. The ratio of the two rules of 10.5 uses the linear value, as written. The estimates of
+  the FCTP runs at 50x50 used 8.16 s where 7.58 s was meant, so they were about 8 % too high for this method;
+  every estimate was below its allowance with either value, so no decision of a rule depends on it. The code
+  was not changed, so that the plans can be recomputed from the same files.
+* `degenerate` started while the code of the report (`rev_report.py`, `report.py`, a test file) had
+  uncommitted changes; `run_manifest.json` marks it `git_dirty`. The code that makes runs was that of
+  978c6f4. The later commands started from 858771a with no uncommitted change.
+* The report was corrected after the runs (e9957da): (1) in `R9_entering_rule` a cell in which no run makes a
+  pivot gave a division by zero (GA-cost-cycle at 5x5: every run stops on its start plan, which is optimal);
+  such a cell now has empty shares, and a cell without instances (100x100) is left out; (2) the numbers of
+  `S1_pairs` are written as numbers; (3) the legend of the FCTP figure is below the panels. No raw record and
+  no rule changed.
+* 10.2: the rows "MIP, all threads, 300 s" of `R2_gap` and the columns of setting 2 of `R4_mip_summary` cover
+  only the instances that were run (2 of 5 per cell at 30x30 and 50x50, 1 of 5 at 70x70).
+* 10.4: the limit of a MIP run of the timing block is the median time of the five GA-cost-cycle runs of the
+  same instance in that block (one processor), not the limit T of 9.3.
+* Z_best of amendment 10 is smaller than the value used by the tables of amendments 8 and 9 on 22 of the 60
+  instances (`R2_z_best_lowered`, by 0.02 to 2.6 %): 2 are optima proved by the MIP with all threads, 7 are
+  its plans at the time limit, 13 are plans of ILS. The tables `F*` and `E*` keep their values. On the 10
+  instances from 30x30 up that have a run with 300 s, that run gives Z_best on 9 and confirms the earlier
+  value on 1; on the 20 that have no such run, ILS gives Z_best on 13. The gaps at 30x30 to 70x70 are
+  therefore measured against a value that is weaker on the instances without the 300 s run, by an amount we
+  do not know (where the run exists it lowered the value of the MIP with 60 s by 0 to 2.3 %).
+
+**Results.**
+
+* 10.1, grids (`R1_tuning`). Tabu: phi = 0.25, T = 5 (mean training gap 3.11 %; range of the grid 3.11 to
+  9.26 %). ILS: p = 8, acceptance `better` (1.79 %; range 1.79 to 3.71 %).
+* 10.1, test instances (`R2_gap`, `R3_tests`). Median over the instances of the median gap, by size
+  (10 instances, both rho): GA-cost-cycle 0.96, 1.21, 2.79, 6.36, 10.95, 11.28 %; Tabu 0.82, 1.00, 1.25,
+  1.87, 3.87, 3.96 %; ILS 0, 0, 0.33, 1.01, 1.80, 1.36 % (10x10 to 70x70). GA-cost-cycle against Tabu on the
+  60 instances: 6 wins, 3 ties, 51 losses, p_Holm = 1.9e-9, r = 0.91, Hodges-Lehmann shift 3.40 points
+  (95 % interval 2.39 to 4.34). Against ILS: 2, 3, 55, p_Holm = 1.3e-10, r = 0.99, shift 4.70 (3.41 to
+  5.73). From 30x30 up, 80 of the 300 ILS runs (on 21 of the 30 instances) and 9 of the 300 Tabu runs (on 7
+  instances) are below the plan of the MIP with one thread and 60 s. By rho the same direction (rho = 0.2:
+  2/1/27 and 0/2/28; rho = 1: 4/2/24 and 2/1/27; all
+  p_Holm < 0.001). By size: at 10x10 and 15x15 the GA is not separated from Tabu (3/2/5, p_Holm = 0.74;
+  3/1/6, 0.43) and loses to ILS (0/2/8, p_Holm = 0.016; 2/1/7, 0.078); from 20x20 to 70x70 it loses to both
+  on 10 of 10 instances of every size (p_Holm = 0.0039, the smallest value possible with 10 pairs and two
+  tests), with shifts from 1.3 to 7.1 points against Tabu and 2.3 to 9.6 against ILS. Run time with 20 runs
+  at once: Tabu and ILS 0.007 to 0.53 s, GA-cost-cycle 0.07 to 43 s. With the same budget of evaluations the
+  two local searches are better than the GA and take 7 to 62 times less time (one processor, 10.4).
+* 10.2 (`R4_mip_instances`, `R4_mip_summary`). One thread, 60 s (runs of 8.4 and 9.4): optimum proved on the
+  30 instances up to 20x20 and on none of the 30 from 30x30 up (gap of the solver at the limit, median by
+  cell: 1.8 to 7.4 %). All threads, 300 s: 40 instances run; optimum proved on the 30 up to 20x20 (median
+  time 0.45 to 8.5 s by cell) and on 3 of the 4 run at 30x30 (50 to 149 s; the fourth stops with a gap of
+  0.76 %); none of the 4 at 50x50 (gaps 1.9 to 3.0 %) and none of the 2 at 70x70 (3.8 and 5.0 %). Processor
+  time over wall time 1.3 to 10.5 (median by cell 1.4 to 9.5). On the 10 instances run from 30x30 up the plan with 300 s is better than
+  the plan with one thread and 60 s on 9 (by 0.12 to 2.3 %) and equal on 1.
+* 10.3 a (`R6_public`). Ten instances of the subset of Sun et al. used by Glover, Amini and Kochenberger
+  (2005). Our MIP (1 thread, 60 s) proves the optimum on the 8 instances up to 10x30, and it equals the
+  CPLEX 9.0 value of their Table 3 on all 8; N1004 and N1007 (50x50) stop at the limit. Median gap to the
+  reference: ILS 0 % on the 8 and 0.057 and 0.026 % on the two 50x50; Tabu 0 to 0.11 %; GA-cost-cycle 0.002
+  to 0.62 %; the Balinski plan 0.08 to 0.54 %. On N1007 the best ILS run has the cost 162193, which is 44
+  below the smallest value of that table (162237); the plan was computed again from its seed and checked by
+  hand (row and column sums exact, cost 162193). We do not call it a new best known value: the later
+  literature was not searched, and Barr et al. (2021) print 161186 for this name. Their values are below our
+  proved optima on the other instances as well (by 3 to 5, and by 247 on N504), so their data or their cost
+  differ from the files used here. The fixed charges of this set are small (the Balinski plan is within
+  0.54 % everywhere), so it separates the methods weakly.
+* 10.3 b (`R5_generator_gap`, `R5_generator_tests`). 90 new instances: `uniform` with rho = 0.05 and 5, and
+  `concentrated` with the four rho, sizes 20x20, 30x30, 50x50, 5 per cell. In each of the 8 scopes (class and
+  rho, 15 instances) GA-cost-cycle is worse than Tabu and worse than ILS (p_Holm from 0.00012 to 0.0020;
+  losses 13 to 15 of 15). Shift against Tabu from 1.1 points (concentrated, rho = 1) to 7.2 (uniform,
+  rho = 5), against ILS from 1.4 to 8.9. In all 18 new cells the median gap of GA-cost-cycle is above those of
+  Tabu and of ILS. ILS is ahead of Tabu in 17 of them (the exception: `concentrated`, rho = 5, 20x20, 1.38
+  against 1.29 %). In 5 of the 18 cells the Balinski plan, from which the two local searches start, has a
+  smaller median gap than GA-cost-cycle: `uniform` with rho = 0.05 at 30x30 and 50x50, `concentrated` with
+  rho = 0.05 at 30x30 and 50x50 and with rho = 0.2 at 50x50.
+* 10.4 (`R7_timing`). One run at a time on logical processor 2, median by size from 10x10 to 70x70:
+  GA-cost-cycle 0.055, 0.17, 0.39, 1.35, 8.0, 26 s; Tabu 0.008, 0.015, 0.025, 0.059, 0.20, 0.48 s; ILS 0.006,
+  0.012, 0.022, 0.054, 0.18, 0.43 s. The same runs with 20 at once took 1.1 to 1.7 times longer (GA at
+  70x70: 40 to 43 s). Evaluations per run: the GA 18870 to 978290 decoder calls; Tabu and ILS one evaluation
+  of the start plan and B - 1 neighbour evaluations. The MIP with one thread and the GA time on one processor
+  as its limit: gap of its plan 1.5 to 21 % up to 30x30, 2.1 to 3.6 % at 50x50, 1.3 to 1.8 % at 70x70. ILS is
+  better than that plan on all instances up to 30x30 except two ties at 10x10, on 4 of 6 at 50x50 and on 2 of
+  6 at 70x70; GA-cost-cycle is worse than it on 5 of 6 at 50x50 and 6 of 6 at 70x70.
+* 10.5 a (`R8_theta_share`, figure `theta_share`). Median share of pivots with theta > 0 in the first tenth
+  of the budget and in the last: GA-rand-cycle 0.91 and 0.65 at 20x20, 0.64 and 0.47 at 50x50, 0.36 and 0.27
+  at 100x100; GA-cost-cycle 0.97 and 0.76, 0.82 and 0.41, 0.50 and 0.31. The share falls in the first two or
+  three tenths and then stays level. The 90 repeated runs have the costs of their records.
+* 10.5 b (`R9_entering_rule`, `R9_entering_tests`). 60 instances (5x5 to 50x50 and the structured 20x20),
+  1200 runs. With the second rule no pivot had theta = 0 and no pivot was left to the uniform rule in any
+  run. GA-cost-cycle: the second rule gives the smaller gap on 34 instances, ties on 16, the larger on 10
+  (p_Holm = 8.3e-6, shift -0.25 points, interval -0.61 to -0.08); at 50x50 on 10 of 10 (4.26 against 7.31 %,
+  shift -3.20, interval -4.61 to -2.20, p_Holm = 0.0039); at 30x30 8 of 10 (p_Holm = 0.055); no difference
+  up to 20x20. GA-rand-cycle: the second rule is worse on 35, ties on 15, better on 10 (p_Holm = 2.1e-5,
+  shift +0.90, interval 0.16 to 1.77); at 50x50 worse on 10 of 10 (21.2 against 11.9 %). With the same
+  budget of evaluations a run with the second rule took 2.1 to 3.9 times longer from 20x20 up. 100x100 was
+  not compared (time rule).
+* 10.6 (`S1_pairs`, `S2_bootstrap_linear`, `S3_normalisation`). 128 paired comparisons of 8.6, 9.1, 8.4, 9.2,
+  9.4, 10.1, 10.3 and 10.5 with the shift and its interval; the earlier test tables gained three columns and
+  their other columns did not change. With the denominator Z_NWC - Z* the order of the eight methods by
+  median is the same as with Z_rand - Z* in all 7 cells.
+* 10.7: `figures/linear_gap_sizes`, `figures/fctp_gap_rivals`, `figures/theta_share` (PDF and JPG, 600 dpi).
+* 10.8: `.zenodo.json`, `CITATION.cff` with the version `0.4.0-paper`, the workflow
+  `.github/workflows/paper-release.yml` and the release notes `docs/releases/v0.4.0-paper.md`. The tag
+  `v0.4.0-paper` is set on the commit that holds the tables of this record. No DOI was requested; the
+  repository has to be enabled in Zenodo by its owner first.
