@@ -165,9 +165,11 @@ def fctp_report():
             row["method"] = "MIP, GA time" if source == "mip_time" else "MIP, 1 thread / 60 s"
             mips.append(row)
     mips.extend(read_runs(REVIEW_RAW / "mip_default.jsonl", "MIP, default threads / 300 s"))
+    timing_refs = [r for r in mips if r["method"] == "MIP, GA time"]
+    timing_refs.extend(read_runs(REVIEW_RAW / "timing_mip.jsonl", "MIP, one CPU / GA time"))
     mips = [r for r in mips if r["method"] != "MIP, GA time"]
     refs = {}
-    for (instance,), rr in groups(archived + mips + k1, "instance"):
+    for (instance,), rr in groups(archived + mips + timing_refs + k1, "instance"):
         valid_mip = [r for r in rr if r["kind"] == "mip" and r.get("bound") is not None]
         costs = [r["cost"] for r in rr if r.get("cost") is not None]
         if not costs:
@@ -182,7 +184,7 @@ def fctp_report():
             "lower_bound": bound,
             "gap_best_to_bound_pct": gap(z, bound),
             "proved": any(r.get("proved") and r["cost"] is not None and abs(r["cost"] - z) <= 1e-6 for r in valid_mip),
-            "mip_available": bool(valid_mip),
+            "mip_available": bound is not None,
         }
 
     def detail(row):
@@ -782,6 +784,24 @@ def figures(ox, linear):
         fig.savefig(directory / f"{name}.pdf", bbox_inches="tight", metadata={"CreationDate": None})
         fig.savefig(directory / f"{name}.jpg", bbox_inches="tight", dpi=300)
         plt.close(fig)
+
+    k1 = read_csv(ROOT / "tables/K1_cells.csv")
+    fig, axes = plt.subplots(1, 2, figsize=(9, 4.5), sharey=True, layout="constrained")
+    for ax, rho in zip(axes, ("0.2", "1.0"), strict=True):
+        for (method,), rr in groups([r for r in k1 if r["rho"] == rho], "method"):
+            rows = sorted(rr, key=lambda r: int(r["size"].split("x")[0]))
+            ax.plot(
+                [int(r["size"].split("x")[0]) for r in rows],
+                [float(r["gap_best_pct"]) for r in rows],
+                marker=".",
+                label=method,
+            )
+        ax.set(title=f"ρ = {rho}", xlabel="Sources and destinations", xticks=[20, 30, 50, 70])
+        ax.grid(alpha=0.25)
+    axes[0].set_ylabel("Median gap to best recorded cost (%)")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="outside lower center", ncols=5, frameon=False)
+    save(fig, "K1_fctp_population")
 
     if ox:
         fig, axes = plt.subplots(1, 3, figsize=(10.2, 3.4), sharey=True, layout="constrained")
