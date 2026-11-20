@@ -162,11 +162,15 @@ def solve_mip(
     threads: int = 1,
     rel_gap: float = 0.0,
     abs_gap: float = 0.99,
+    *,
+    observe=None,
+    include_model_time: bool = False,
 ) -> MIPResult:
     """Exact reference: ``min sum c x + sum f y``, ``x_ij <= M_ij y_ij``, ``y`` binary, supply and demand
     equalities, with HiGHS. With integer data an absolute gap below 1 proves the optimum."""
     import highspy
 
+    model_started = time.perf_counter()
     p = fcp.problem
     m, n = p.shape
     arcs = m * n
@@ -206,6 +210,19 @@ def solve_mip(
     lp.a_matrix_.value_ = value
     lp.integrality_ = [highspy.HighsVarType.kContinuous] * arcs + [highspy.HighsVarType.kInteger] * arcs
     h.passModel(lp)
+    if observe is not None:
+
+        def incumbent(event):
+            elapsed = time.perf_counter() - model_started
+            values = np.asarray(event.data_out.mip_solution)
+            if values.size == 2 * arcs:
+                plan = _clean_plan(p, values[:arcs].reshape(m, n))
+                if p.is_feasible(plan, rtol=1e-6):
+                    observe(elapsed, fcp.total_cost(plan))
+
+        h.cbMipImprovingSolution.subscribe(incumbent)
+    if include_model_time:
+        h.setOptionValue("time_limit", max(0.0, time_limit - (time.perf_counter() - model_started)))
     t0 = time.perf_counter()
     h.run()
     elapsed = time.perf_counter() - t0
