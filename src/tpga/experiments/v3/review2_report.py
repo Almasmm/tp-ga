@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 import statistics
+import subprocess
 from collections import defaultdict
 from pathlib import Path
 from urllib.request import urlopen
@@ -14,7 +15,7 @@ import numpy as np
 
 from tpga.experiments.reporting.stats import paired
 from tpga.experiments.v3 import core, rev
-from tpga.experiments.v3.review2 import REVIEW, ROOT, records
+from tpga.experiments.v3.review2 import REVIEW, ROOT, records, write
 
 SRC = ROOT.parent
 LINEAR = SRC / "linear/raw/runs.jsonl"
@@ -446,13 +447,51 @@ def starting_plans(archived, refs):
                 if key not in base_points or int(row["evals"]) < int(base_points[key]["evals"]):
                     base_points[key] = row
     details = []
+    legacy_revision = "f8ba91549804a08158a567442a45cc483a215bdc"
+    legacy_constructor = None
+    kernel = _xkernels.table()["_decode_cost_fc"]
     for row in read_csv("paper_artifacts/raw/runs.csv"):
         if row["method"] != "GA-cost" or row["phase"] != "main":
             continue
         first = base_points.get((row["instance"], row["config"], row["seed"]))
         # A legacy run's first retained observation must be within its initial population.
-        if first is None or not 0 < int(first["evals"]) <= int(row["population"]):
-            continue
+        if first is not None and 0 < int(first["evals"]) <= int(row["population"]):
+            value, start_source = float(first["best_cost"]), source.as_posix()
+        else:
+            lookup = (row["instance"], "GA-cost", int(row["seed"]))
+            if lookup in cache:
+                value, start_source = cache[lookup]["start_cost"], cache[lookup]["start_source"]
+            elif time.time() < deadline:
+                if legacy_constructor is None:
+                    script = subprocess.check_output(["git", "show", legacy_revision + ":src/tpga/initialization.py"])
+                    namespace = {}
+                    exec(compile(script, "v0.3 initialization.py", "exec"), namespace)
+                    legacy_constructor = namespace["cost_aware_population"]
+                replay_started = time.perf_counter()
+                p = TransportProblem.from_json(
+                    Path("paper_artifacts/instances") / row["suite"] / (row["instance"] + ".json")
+                )
+                supply, demand, cost, n = _arrays(p)
+                pop = legacy_constructor(p, int(row["population"]), np.random.default_rng(lookup[2]))
+                fixed = np.zeros(cost.size)
+                eps = decoder_eps(p)
+                value = min(kernel(perm, supply, demand, cost, fixed, n, eps) for perm in pop)
+                if value < float(row["cost"]) - 1e-7:
+                    raise ValueError(f"legacy start is cheaper than archived final plan: {lookup}")
+                start_source = "legacy replay at " + legacy_revision
+                write(
+                    cache_path,
+                    {
+                        "instance": row["instance"],
+                        "method": "GA-cost",
+                        "seed": lookup[2],
+                        "start_cost": value,
+                        "start_source": start_source,
+                        "replay_time_s": time.perf_counter() - replay_started,
+                    },
+                )
+            else:
+                continue
         details.append(
             {
                 "set": row["suite"],
@@ -465,9 +504,9 @@ def starting_plans(archived, refs):
                 "evals": int(row["evals"]),
                 "time_s": float(row["time_s"]),
                 "cost": float(row["cost"]),
-                "start_cost": float(first["best_cost"]),
+                "start_cost": value,
                 "reference": float(row["z_star"]),
-                "start_source": source.as_posix(),
+                "start_source": start_source,
             }
         )
 
@@ -491,7 +530,6 @@ def starting_plans(archived, refs):
         for p in root.rglob("*.json")
         if p.stem != "manifest"
     }
-    kernel = _xkernels.table()["_decode_cost_fc"]
     errors = []
     for row in work:
         lookup = (row["instance"], row["method"], row["seed"])
@@ -535,8 +573,6 @@ def starting_plans(archived, refs):
                     }
                 )
                 continue
-            from tpga.experiments.v3.review2 import write
-
             write(
                 cache_path,
                 {
