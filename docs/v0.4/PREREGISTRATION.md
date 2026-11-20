@@ -1169,3 +1169,22 @@ information. Repeat only if archived counters are absent.
 Write the table pairs (CSV and Markdown), figures (PDF and JPG), execution manifest and incomplete-work
 report under paper_artifacts_v3/review2/. All archived measurements are labelled with their original
 source, separate from new measured runs.
+
+
+### Record of amendment 11 (2026-11-20)
+
+The plan was committed as `2926e69`. The last recorded calculation ended after 38.93 minutes of
+the 120-minute execution window. The block totals and the calculation times are in
+[review2](../../paper_artifacts_v3/review2/README.md).
+
+K1 contains 3,200 new runs and 800 archived ILS and Tabu runs. All 4,000 used the full budget.
+K2 completed 1,200 new controls. K3 completed 108 instrumented runs and retained 324 K4 snapshots.
+The K3 costs and evaluation counts matched the archived runs. K5 covers all 4,400 start/final
+pairs, including 22 reconstructed with the original legacy initializer. K8 completed eight
+one-core solves with a feasible incumbent at each of the 24 deadlines. K9 verified ten SHA-256
+digests. K11 confirmed zero pivots and zero completed generations in all 100 archived records.
+
+The two failed K1 implementation attempts consumed part of the same execution window. The first
+failed to bind the compiled shared pivot helpers. The second initialized OX scratch incorrectly.
+All of its D records were discarded and rerun. The corrected OX implementation is `a43fd7d`.
+The retained runs and error records are identified in the review2 README.

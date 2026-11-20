@@ -1,0 +1,61 @@
+size,rho,instance,z_best,z_best_method,z_best_source,lower_bound,bound_source,gap_best_to_bound_pct,proved,mip_available
+10x10,0.2,f10x10-r0.2-00,9955.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,9955.0,paper_artifacts_v3/fctp/raw/mip.jsonl,0.0,True,True
+10x10,0.2,f10x10-r0.2-01,11813.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,11812.241801879674,paper_artifacts_v3/fctp/raw/mip.jsonl,0.0064187487273164,True,True
+10x10,0.2,f10x10-r0.2-02,10428.0,GA-rand-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,10427.999999999993,paper_artifacts_v3/review/raw/mip_default.jsonl,6.97732797677736e-14,True,True
+10x10,0.2,f10x10-r0.2-03,10967.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,10967.0,paper_artifacts_v3/fctp/raw/mip.jsonl,0.0,True,True
+10x10,0.2,f10x10-r0.2-04,13525.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,13525.0,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0,True,True
+10x10,1.0,f10x10-r1-00,22879.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,22878.999999,paper_artifacts_v3/fctp/raw/mip.jsonl,4.370821882859671e-09,True,True
+10x10,1.0,f10x10-r1-01,26767.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,26766.999999999985,paper_artifacts_v3/fctp/raw/mip.jsonl,5.436513329236321e-14,True,True
+10x10,1.0,f10x10-r1-02,20350.0,GA-rand-tuned,paper_artifacts_v3/fctp/raw/runs.jsonl,20349.999999,paper_artifacts_v3/fctp/raw/mip.jsonl,4.914006577812757e-09,True,True
+10x10,1.0,f10x10-r1-03,27765.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,27764.999999999993,paper_artifacts_v3/review/raw/mip_default.jsonl,2.6205501941953638e-14,True,True
+10x10,1.0,f10x10-r1-04,31567.0,GA-rand-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,31566.999999999658,paper_artifacts_v3/fctp/raw/mip.jsonl,1.0833148790402152e-12,True,True
+15x15,0.2,f15x15-r0.2-00,16134.0,GA-cost-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,16133.999999999998,paper_artifacts_v3/review/raw/mip_default.jsonl,1.1274261829340875e-14,True,True
+15x15,0.2,f15x15-r0.2-01,14266.0,GA-rand-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,14265.99999999993,paper_artifacts_v3/review/raw/mip_default.jsonl,4.845198186929965e-13,True,True
+15x15,0.2,f15x15-r0.2-02,19011.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,19011.000000000004,paper_artifacts_v3/fctp/raw/mip.jsonl,-1.913617803951245e-14,True,True
+15x15,0.2,f15x15-r0.2-03,13172.0,GA-rand-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,13171.99999999993,paper_artifacts_v3/fctp/raw/mip.jsonl,5.247615953138697e-13,True,True
+15x15,0.2,f15x15-r0.2-04,14160.0,GA-hybrid-ft,paper_artifacts_v3/fctp/raw/runs_ft.jsonl,14159.999999996535,paper_artifacts_v3/review/raw/mip_default.jsonl,2.447157354347249e-11,True,True
+15x15,1.0,f15x15-r1-00,42107.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,42107.00000000764,paper_artifacts_v3/review/raw/mip_default.jsonl,-1.8143670873943075e-11,True,True
+15x15,1.0,f15x15-r1-01,33735.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,33735.0,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0,True,True
+15x15,1.0,f15x15-r1-02,35980.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,35979.99999999997,paper_artifacts_v3/fctp/raw/mip.jsonl,8.08889117752466e-14,True,True
+15x15,1.0,f15x15-r1-03,34535.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,34535.00000000003,paper_artifacts_v3/review/raw/mip_default.jsonl,-8.427343407190873e-14,True,True
+15x15,1.0,f15x15-r1-04,41470.0,GA-cost-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,41470.0,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0,True,True
+20x20,0.2,f20x20-r0.2-00,22798.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,22797.999999999538,paper_artifacts_v3/review/raw/mip_default.jsonl,2.0265957913003636e-12,True,True
+20x20,0.2,f20x20-r0.2-01,16451.0,GA-cost-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,16450.060618301835,paper_artifacts_v3/review/raw/mip_default.jsonl,0.00571050599728201,True,True
+20x20,0.2,f20x20-r0.2-02,20017.0,GA-cost-cycle,paper_artifacts_v3/fctp/raw/runs.jsonl,20017.000000000116,paper_artifacts_v3/fctp/raw/mip.jsonl,-5.815822642100921e-13,True,True
+20x20,0.2,f20x20-r0.2-03,20246.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,20246.00000000001,paper_artifacts_v3/fctp/raw/mip.jsonl,-5.390663055060324e-14,True,True
+20x20,0.2,f20x20-r0.2-04,18442.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,18441.261021266513,paper_artifacts_v3/fctp/raw/mip.jsonl,0.004007202829755958,True,True
+20x20,1.0,f20x20-r1-00,40218.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,40217.99999999999,paper_artifacts_v3/review/raw/mip_default.jsonl,1.809129646969871e-14,True,True
+20x20,1.0,f20x20-r1-01,42050.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,42049.26866460314,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0017392345219840357,True,True
+20x20,1.0,f20x20-r1-02,41061.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,41061.0,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0,True,True
+20x20,1.0,f20x20-r1-03,47649.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,47648.278162582676,paper_artifacts_v3/fctp/raw/mip.jsonl,0.0015149286504360375,True,True
+20x20,1.0,f20x20-r1-04,40408.0,GA-hybrid-ft,paper_artifacts_v3/fctp/raw/runs_ft.jsonl,40408.000000000015,paper_artifacts_v3/review/raw/mip_default.jsonl,-3.601246096903298e-14,True,True
+30x30,0.2,f30x30-r0.2-00,20178.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,20177.01694348471,paper_artifacts_v3/review/raw/mip_default.jsonl,0.004872159834355357,True,True
+30x30,0.2,f30x30-r0.2-01,26796.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,26592.223395689427,paper_artifacts_v3/review/raw/mip_default.jsonl,0.7663014907719413,False,True
+30x30,0.2,f30x30-r0.2-02,20306.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,19971.96851139667,paper_artifacts_v3/fctp/raw/mip.jsonl,1.6725015784634385,False,True
+30x30,0.2,f30x30-r0.2-03,21256.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,20939.66414845574,paper_artifacts_v3/fctp/raw/mip.jsonl,1.5107016488017015,False,True
+30x30,0.2,f30x30-r0.2-04,22041.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,21506.668515282712,paper_artifacts_v3/fctp/raw/mip.jsonl,2.48449212083959,False,True
+30x30,1.0,f30x30-r1-00,55182.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,55181.04387004027,paper_artifacts_v3/review/raw/mip_default.jsonl,0.00173271452056135,True,True
+30x30,1.0,f30x30-r1-01,52852.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,52851.087939905214,paper_artifacts_v3/review/raw/mip_default.jsonl,0.0017257167833959251,True,True
+30x30,1.0,f30x30-r1-02,52208.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,50745.51261894847,paper_artifacts_v3/fctp/raw/mip.jsonl,2.8820033645801257,False,True
+30x30,1.0,f30x30-r1-03,55455.0,"MIP, GA time",paper_artifacts_v3/fctp/raw/mip_time.jsonl,53682.25690008654,paper_artifacts_v3/fctp/raw/mip.jsonl,3.3022886932881574,False,True
+30x30,1.0,f30x30-r1-04,45771.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/mip.jsonl,44943.61381882695,paper_artifacts_v3/fctp/raw/mip.jsonl,1.8409427076966822,False,True
+50x50,0.2,f50x50-r0.2-00,29326.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,28632.271704013667,paper_artifacts_v3/review/raw/mip_default.jsonl,2.4228894694691183,False,True
+50x50,0.2,f50x50-r0.2-01,32674.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,32039.153236501454,paper_artifacts_v3/review/raw/mip_default.jsonl,1.9814717287074877,False,True
+50x50,0.2,f50x50-r0.2-02,29341.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/large_mip.jsonl,28259.953411903414,paper_artifacts_v3/fctp/raw/large_mip.jsonl,3.825365782950076,False,True
+50x50,0.2,f50x50-r0.2-03,28768.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,27652.37332815764,paper_artifacts_v3/fctp/raw/large_mip.jsonl,4.034469875706292,False,True
+50x50,0.2,f50x50-r0.2-04,32527.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/large_mip.jsonl,31320.19207020273,paper_artifacts_v3/fctp/raw/large_mip.jsonl,3.853130680336398,False,True
+50x50,1.0,f50x50-r1-00,56602.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,55421.238251661576,paper_artifacts_v3/review/raw/mip_default.jsonl,2.1305221348117813,False,True
+50x50,1.0,f50x50-r1-01,64003.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,62088.92861062087,paper_artifacts_v3/review/raw/mip_default.jsonl,3.082790172436175,False,True
+50x50,1.0,f50x50-r1-02,73863.0,"MIP, 1 thread / 60 s",paper_artifacts_v3/fctp/raw/large_mip.jsonl,69939.4260043893,paper_artifacts_v3/fctp/raw/large_mip.jsonl,5.609960246691846,False,True
+50x50,1.0,f50x50-r1-03,61614.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,59196.049722717544,paper_artifacts_v3/fctp/raw/large_mip.jsonl,4.084648027374239,False,True
+50x50,1.0,f50x50-r1-04,66088.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,63713.08127289035,paper_artifacts_v3/fctp/raw/large_mip.jsonl,3.7275213812648715,False,True
+70x70,0.2,f70x70-r0.2-00,37867.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,35985.00643034377,paper_artifacts_v3/review/raw/mip_default.jsonl,5.229938122421096,False,True
+70x70,0.2,f70x70-r0.2-01,36022.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,34674.53852423049,paper_artifacts_v3/fctp/raw/large_mip.jsonl,3.886025692390703,False,True
+70x70,0.2,f70x70-r0.2-02,33427.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,31855.01992531389,paper_artifacts_v3/fctp/raw/large_mip.jsonl,4.934795452558868,False,True
+70x70,0.2,f70x70-r0.2-03,38568.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,36580.25687222762,paper_artifacts_v3/fctp/raw/large_mip.jsonl,5.43392337214972,False,True
+70x70,0.2,f70x70-r0.2-04,33295.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,31643.392890736915,paper_artifacts_v3/fctp/raw/large_mip.jsonl,5.219437482465938,False,True
+70x70,1.0,f70x70-r1-00,82359.0,"MIP, default threads / 300 s",paper_artifacts_v3/review/raw/mip_default.jsonl,79218.01102228193,paper_artifacts_v3/review/raw/mip_default.jsonl,3.964993487193951,False,True
+70x70,1.0,f70x70-r1-01,80478.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,76516.61255580721,paper_artifacts_v3/fctp/raw/large_mip.jsonl,5.177159981178678,False,True
+70x70,1.0,f70x70-r1-02,79784.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,76035.90022966458,paper_artifacts_v3/fctp/raw/large_mip.jsonl,4.929381724967257,False,True
+70x70,1.0,f70x70-r1-03,78805.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,74167.56969045408,paper_artifacts_v3/fctp/raw/large_mip.jsonl,6.2526388944665525,False,True
+70x70,1.0,f70x70-r1-04,85842.0,ILS,paper_artifacts_v3/review/raw/rivals.jsonl,80788.8293823988,paper_artifacts_v3/fctp/raw/large_mip.jsonl,6.254788757592904,False,True

@@ -1,0 +1,4 @@
+{"block": "K1", "planned": 3200, "completed": 3200, "errors": 0, "elapsed_s": 707.1426401138306, "deadline_reached": false}
+{"block": "K2", "planned": 1200, "completed": 1200, "errors": 0, "elapsed_s": 256.91952252388, "runner_revision": "fb410f5a10e530bf222580292e99ba65af64e85a", "deadline_reached": false}
+{"block": "K3", "planned": 108, "completed": 108, "errors": 0, "elapsed_s": 702.949538230896, "runner_revision": "399d3e53963eea929095987db444bf225dfe81e0", "deadline_reached": false}
+{"block": "K8", "planned": 8, "completed": 8, "errors": 0, "elapsed_s": 90.59933996200562, "runner_revision": "4d1763fc385eb86097ebcd0871d4aad5a31a179e", "deadline_reached": false}

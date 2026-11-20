@@ -1,0 +1,7 @@
+{
+  "started_epoch": 1795185010.2363534,
+  "deadline_epoch": 1795192210.2363534,
+  "code_head": "bd6b4fcd481e95caf6284480af523d941477eb4d",
+  "config": "experiments\\paper-v3-review2.yaml",
+  "workers": 20
+}

@@ -1,0 +1,166 @@
+# K10_provenance
+
+| artifact | purpose | file | configuration | recorded_code_revision |
+| --- | --- | --- | --- | --- |
+| T1_instances | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T1_instances.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T2_gap | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T2_gap.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T2b_stopping | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T2b_stopping.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T3_time | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T3_time.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T3_time_fit | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T3_time_fit.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T4_factorial | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T4_factorial.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T4_factorial_tests | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T4_factorial_tests.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T5_tests | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T5_tests.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| T6_applied | v0.3 RQ1–RQ4 and applications | paper_artifacts/tables/T6_applied.csv | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F1_decoder | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F1_decoder.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F2_convergence | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F2_convergence.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F3_gap_boxplot | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F3_gap_boxplot.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F4_time_scaling | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F4_time_scaling.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F5_factorial_heatmap | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F5_factorial_heatmap.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F6_wheat_map | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/en/F6_wheat_map.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig1 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig1.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig2 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig2.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig3 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig3.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig4 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig4.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig5 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig5.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| Fig6 | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/final_en/Fig6.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F1_decoder | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F1_decoder.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F2_convergence | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F2_convergence.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F3_gap_boxplot | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F3_gap_boxplot.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F4_time_scaling | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F4_time_scaling.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F5_factorial_heatmap | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F5_factorial_heatmap.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| F6_wheat_map | v0.3 RQ1–RQ4 and applications | paper_artifacts/figures/ru/F6_wheat_map.pdf | paper.yaml | 0a7a315 (main), eb61ad1 (timing), as recorded in REPORT.md |
+| A1_methods_pooled | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/A1_methods_pooled.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| representation | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/representation.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T0_checks | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T0_checks.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T0_example1 | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T0_example1.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T10_applied_instances | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T10_applied_instances.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T10_applied_summary | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T10_applied_summary.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T1_instances | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T1_instances.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T2_gap | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T2_gap.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T3_fits | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T3_fits.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T3_time | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T3_time.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T4_factorial | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T4_factorial.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T4_tests | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T4_tests.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T5_methods_gap | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T5_methods_gap.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T5_methods_gap_norm | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T5_methods_gap_norm.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T6_initialisation | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T6_initialisation.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T7_stopping | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T7_stopping.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T8_lp_disagreement | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T8_lp_disagreement.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| T8_lp_scaling | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/tables/T8_lp_scaling.csv | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/en/boxplot_gap.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap_norm | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/en/boxplot_gap_norm.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| convergence | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/en/convergence.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| representation_neutrality | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/en/representation_neutrality.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/final_en/boxplot_gap.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap_norm | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/final_en/boxplot_gap_norm.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| convergence | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/final_en/convergence.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| representation_neutrality | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/final_en/representation_neutrality.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/ru/boxplot_gap.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| boxplot_gap_norm | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/ru/boxplot_gap_norm.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| convergence | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/ru/convergence.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| representation_neutrality | v0.4 partial archive; see MANUSCRIPT_MAP.md | paper_artifacts_v2/figures/ru/representation_neutrality.pdf | paper-v2.yaml | e3a8fb68bebbbf081611646140dbf0071cd0cd37 74f0caf0e878d0d15b4232d22a9daff89efc0773 dd2084344dfda5ce8d1718c8c9f8b1402189c097 |
+| A1_methods_pooled | short v0.4 run | paper_artifacts_quick/tables/A1_methods_pooled.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| representation | short v0.4 run | paper_artifacts_quick/tables/representation.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T0_checks | short v0.4 run | paper_artifacts_quick/tables/T0_checks.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T0_example1 | short v0.4 run | paper_artifacts_quick/tables/T0_example1.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T10_applied_instances | short v0.4 run | paper_artifacts_quick/tables/T10_applied_instances.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T10_applied_summary | short v0.4 run | paper_artifacts_quick/tables/T10_applied_summary.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T1_instances | short v0.4 run | paper_artifacts_quick/tables/T1_instances.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T2_gap | short v0.4 run | paper_artifacts_quick/tables/T2_gap.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T3_fits | short v0.4 run | paper_artifacts_quick/tables/T3_fits.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T3_time | short v0.4 run | paper_artifacts_quick/tables/T3_time.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T4_factorial | short v0.4 run | paper_artifacts_quick/tables/T4_factorial.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T4_tests | short v0.4 run | paper_artifacts_quick/tables/T4_tests.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T5_methods_gap | short v0.4 run | paper_artifacts_quick/tables/T5_methods_gap.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T5_methods_gap_norm | short v0.4 run | paper_artifacts_quick/tables/T5_methods_gap_norm.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T6_initialisation | short v0.4 run | paper_artifacts_quick/tables/T6_initialisation.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T7_stopping | short v0.4 run | paper_artifacts_quick/tables/T7_stopping.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T8_lp_disagreement | short v0.4 run | paper_artifacts_quick/tables/T8_lp_disagreement.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T8_lp_scaling | short v0.4 run | paper_artifacts_quick/tables/T8_lp_scaling.csv | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap | short v0.4 run | paper_artifacts_quick/figures/en/boxplot_gap.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap_norm | short v0.4 run | paper_artifacts_quick/figures/en/boxplot_gap_norm.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| convergence | short v0.4 run | paper_artifacts_quick/figures/en/convergence.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| representation_neutrality | short v0.4 run | paper_artifacts_quick/figures/en/representation_neutrality.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap | short v0.4 run | paper_artifacts_quick/figures/final_en/boxplot_gap.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap_norm | short v0.4 run | paper_artifacts_quick/figures/final_en/boxplot_gap_norm.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| convergence | short v0.4 run | paper_artifacts_quick/figures/final_en/convergence.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| representation_neutrality | short v0.4 run | paper_artifacts_quick/figures/final_en/representation_neutrality.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap | short v0.4 run | paper_artifacts_quick/figures/ru/boxplot_gap.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| boxplot_gap_norm | short v0.4 run | paper_artifacts_quick/figures/ru/boxplot_gap_norm.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| convergence | short v0.4 run | paper_artifacts_quick/figures/ru/convergence.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| representation_neutrality | short v0.4 run | paper_artifacts_quick/figures/ru/representation_neutrality.pdf | paper-v2-quick.yaml | see paper_artifacts_quick/run_manifest.json |
+| T1_gap | linear comparison and extension | paper_artifacts_v3/linear/tables/T1_gap.csv | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| T2_tests | linear comparison and extension | paper_artifacts_v3/linear/tables/T2_tests.csv | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| T2_tests_extension | linear comparison and extension | paper_artifacts_v3/linear/tables/T2_tests_extension.csv | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| T3_by_size | linear comparison and extension | paper_artifacts_v3/linear/tables/T3_by_size.csv | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| T4_cycle_counters | linear comparison and extension | paper_artifacts_v3/linear/tables/T4_cycle_counters.csv | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| linear_gap_norm | linear comparison and extension | paper_artifacts_v3/linear/figures/linear_gap_norm.pdf | paper-v3-cycle.yaml | ab93a139167e8acb68369173926bfa26cd79acd8 8db45379940e7a66dde396292ea1855407eb45c9 |
+| B1_benchmark_reference | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/B1_benchmark_reference.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| B2_benchmark_gap | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/B2_benchmark_gap.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E1_tuning | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E1_tuning.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E2_gap_tuned | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E2_gap_tuned.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E3_tests_tuned | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E3_tests_tuned.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E4_mip_equal_time | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E4_mip_equal_time.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E5_large_mip | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E5_large_mip.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E6_large_gap | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E6_large_gap.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| E7_large_tests | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/E7_large_tests.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| F1_mip_instances | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/F1_mip_instances.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| F1_mip_summary | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/F1_mip_summary.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| F2_gap | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/F2_gap.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| F3_cells | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/F3_cells.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| F3_tests | fixed-charge comparison and extension | paper_artifacts_v3/fctp/tables/F3_tests.csv | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| fctp_gap | fixed-charge comparison and extension | paper_artifacts_v3/fctp/figures/fctp_gap.pdf | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| fctp_gap_sizes | fixed-charge comparison and extension | paper_artifacts_v3/fctp/figures/fctp_gap_sizes.pdf | paper-v3-fctp.yaml; paper-v3-fctp-ext.yaml | 01f5af2f5b58c0a8b0c3ff8e6933f8910084b8b6 4ff8499316d4809fd99169f5d2008fbedbdec0f2 |
+| R0_rules | first review | paper_artifacts_v3/review/tables/R0_rules.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R1_tuning | first review | paper_artifacts_v3/review/tables/R1_tuning.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R2_gap | first review | paper_artifacts_v3/review/tables/R2_gap.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R2_z_best_lowered | first review | paper_artifacts_v3/review/tables/R2_z_best_lowered.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R3_tests | first review | paper_artifacts_v3/review/tables/R3_tests.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R4_mip_instances | first review | paper_artifacts_v3/review/tables/R4_mip_instances.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R4_mip_summary | first review | paper_artifacts_v3/review/tables/R4_mip_summary.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R5_generator_gap | first review | paper_artifacts_v3/review/tables/R5_generator_gap.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R5_generator_tests | first review | paper_artifacts_v3/review/tables/R5_generator_tests.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R6_public | first review | paper_artifacts_v3/review/tables/R6_public.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R7_timing | first review | paper_artifacts_v3/review/tables/R7_timing.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R8_theta_share | first review | paper_artifacts_v3/review/tables/R8_theta_share.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R9_entering_rule | first review | paper_artifacts_v3/review/tables/R9_entering_rule.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| R9_entering_tests | first review | paper_artifacts_v3/review/tables/R9_entering_tests.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| S1_pairs | first review | paper_artifacts_v3/review/tables/S1_pairs.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| S2_bootstrap_linear | first review | paper_artifacts_v3/review/tables/S2_bootstrap_linear.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| S3_normalisation | first review | paper_artifacts_v3/review/tables/S3_normalisation.csv | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| fctp_gap_rivals | first review | paper_artifacts_v3/review/figures/fctp_gap_rivals.pdf | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| linear_gap_sizes | first review | paper_artifacts_v3/review/figures/linear_gap_sizes.pdf | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| theta_share | first review | paper_artifacts_v3/review/figures/theta_share.pdf | paper-v3-review.yaml | 978c6f4cf942e97b845d77dcd08559c1232c5614 858771ade1db0ac742706d66b275432201868ebb b51a32585ea5868395fbb6d947520e7b9368ff37 |
+| K10_manuscript_map | second review, exploratory | paper_artifacts_v3/review2/tables/K10_manuscript_map.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K10_recorded_revisions | second review, exploratory | paper_artifacts_v3/review2/tables/K10_recorded_revisions.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K10_required_files | second review, exploratory | paper_artifacts_v3/review2/tables/K10_required_files.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K11_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K11_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K11_summary | second review, exploratory | paper_artifacts_v3/review2/tables/K11_summary.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_cells | second review, exploratory | paper_artifacts_v3/review2/tables/K1_cells.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K1_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_pairs | second review, exploratory | paper_artifacts_v3/review2/tables/K1_pairs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_pairs_pooled | second review, exploratory | paper_artifacts_v3/review2/tables/K1_pairs_pooled.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K1_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K2_cells | second review, exploratory | paper_artifacts_v3/review2/tables/K2_cells.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K2_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K2_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K2_pairs | second review, exploratory | paper_artifacts_v3/review2/tables/K2_pairs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K2_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K2_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K3_by_tenth | second review, exploratory | paper_artifacts_v3/review2/tables/K3_by_tenth.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K3_runs_by_tenth | second review, exploratory | paper_artifacts_v3/review2/tables/K3_runs_by_tenth.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K4_by_stage | second review, exploratory | paper_artifacts_v3/review2/tables/K4_by_stage.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K4_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K4_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K5_cells | second review, exploratory | paper_artifacts_v3/review2/tables/K5_cells.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K5_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K5_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K6_100x100_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K6_100x100_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K6_100x100_pairs | second review, exploratory | paper_artifacts_v3/review2/tables/K6_100x100_pairs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K6_cells | second review, exploratory | paper_artifacts_v3/review2/tables/K6_cells.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K6_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K6_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K7_methods_by_cell | second review, exploratory | paper_artifacts_v3/review2/tables/K7_methods_by_cell.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K7_reference_cells | second review, exploratory | paper_artifacts_v3/review2/tables/K7_reference_cells.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K7_reference_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K7_reference_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K7_runs | second review, exploratory | paper_artifacts_v3/review2/tables/K7_runs.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K8_deadlines | second review, exploratory | paper_artifacts_v3/review2/tables/K8_deadlines.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K9_public_instances | second review, exploratory | paper_artifacts_v3/review2/tables/K9_public_instances.csv | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K1_fctp_population | second review, exploratory | paper_artifacts_v3/review2/figures/K1_fctp_population.pdf | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K3_ox_novelty | second review, exploratory | paper_artifacts_v3/review2/figures/K3_ox_novelty.pdf | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
+| K6_linear_medians | second review, exploratory | paper_artifacts_v3/review2/figures/K6_linear_medians.pdf | paper-v3-review2.yaml | see session.json, blocks.jsonl and README.md |
