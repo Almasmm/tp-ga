@@ -4,6 +4,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import statistics
 from collections import defaultdict
 from pathlib import Path
@@ -36,13 +37,19 @@ def table(name, rows, title=None):
     with target.with_suffix(".csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fields, lineterminator="\n")
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(
+            {
+                key: None if isinstance(value, float) and not math.isfinite(value) else value
+                for key, value in row.items()
+            }
+            for row in rows
+        )
 
     def cell(value):
         if value is None:
             return ""
         if isinstance(value, float):
-            return f"{value:.9g}"
+            return f"{value:.9g}" if math.isfinite(value) else ""
         return str(value).replace("|", r"\|").replace("\n", " ")
 
     def line(items):
@@ -209,6 +216,7 @@ def fctp_report():
         )
     ] + [("a", "ILS"), ("a", "Tabu")]
     table("K1_pairs", pairing(k1_details, pairs, ("size", "rho"), "gap_best_pct", 5))
+    table("K1_pairs_pooled", pairing(k1_details, pairs, (), "gap_best_pct", 40))
     table("K7_reference_instances", list(refs.values()))
     cell_refs = []
     for (size, rho), rr in groups(list(refs.values()), "size", "rho"):
@@ -709,6 +717,40 @@ def provenance():
                         }
                     )
     table("K10_provenance", rows)
+    manuscript = (
+        ("Table 1", "paper_artifacts_v2/tables/T0_example1.csv"),
+        ("Table 2", "experiments/paper-v2.yaml"),
+        ("Table 2, tuned parameters", "experiments/tuned-v2.yaml"),
+        ("Table 3", "paper_artifacts_v2/tables/T1_instances.csv"),
+        ("Table 4", "paper_artifacts_v2/tables/T2_gap.csv"),
+        ("Table 5", "paper_artifacts_v2/tables/T5_methods_gap.csv"),
+        ("Table 6", "paper_artifacts_v2/tables/T4_factorial.csv"),
+        ("Table 7", "paper_artifacts_v2/tables/T10_applied_instances.csv"),
+        ("Table 7, Astana summary", "paper_artifacts_v2/tables/T10_applied_summary.csv"),
+        ("Figure 2", "paper_artifacts_v2/figures/en/boxplot_gap.pdf"),
+        ("Figure 3", "paper_artifacts_v2/figures/en/convergence.pdf"),
+        ("Figure 4", "paper_artifacts_v2/figures/en/time_scaling.pdf"),
+        ("v0.3 factorial comparison", "paper_artifacts/tables/T4_factorial.csv"),
+        ("v0.3 paired comparisons", "paper_artifacts/tables/T5_tests.csv"),
+    )
+    table(
+        "K10_manuscript_map",
+        [
+            {
+                "manuscript_item": name,
+                "file": path,
+                "present": Path(path).is_file(),
+                "configuration": path
+                if path.startswith("experiments/")
+                else (
+                    "experiments/paper-v2.yaml" if path.startswith("paper_artifacts_v2/") else "experiments/paper.yaml"
+                ),
+                "recorded_revision": legacy_rev if path.startswith("paper_artifacts/") else v2_rev,
+                "scope": "mapping from the archived manuscript map; v0.4 main archive is partial",
+            }
+            for name, path in manuscript
+        ],
+    )
     required = [
         "scripts/normalised_gap.py",
         "scripts/neutrality_check.py",

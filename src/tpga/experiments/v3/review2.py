@@ -80,6 +80,7 @@ def run_block(name, tasks, deadline, workers):
     tasks = list(tasks)
     pending = iter(task for task in tasks if key(task) not in done)
     started = time.time()
+    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     errors = 0
     stopped = False
     print(f"{name}: {len(done)} of {len(tasks)} already recorded", flush=True)
@@ -100,7 +101,7 @@ def run_block(name, tasks, deadline, workers):
                 task = active.pop(future)
                 try:
                     row = future.result()
-                    write(path, row)
+                    write(path, {**row, "runner_revision": revision})
                     done.add(key(task))
                 except Exception as error:
                     errors += 1
@@ -123,6 +124,7 @@ def run_block(name, tasks, deadline, workers):
             "completed": len(done),
             "errors": errors,
             "elapsed_s": time.time() - started,
+            "runner_revision": revision,
             "deadline_reached": stopped,
         },
     )
