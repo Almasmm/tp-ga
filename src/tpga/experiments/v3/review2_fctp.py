@@ -5,22 +5,23 @@ import time
 import numpy as np
 from numba import njit
 
+from tpga import _xkernels
 from tpga._kernels import _order_crossover, _two_positions
-from tpga._xkernels import (
-    _adjacency,
-    _complete_basis,
-    _decode_arcs,
-    _encode,
-    _nonbasic,
-    _path_apply,
-    _path_theta,
-    _plan_cost,
-    _tree_path,
-)
 from tpga.cycle import _work, run_ga_x
 from tpga.experiments.v3 import core
 from tpga.fctp import FixedChargeProblem
 from tpga.localsearch import _Search
+
+_kernels = _xkernels.table()
+_adjacency = _kernels["_adjacency"]
+_complete_basis = _kernels["_complete_basis"]
+_decode_arcs = _kernels["_decode_arcs"]
+_encode = _kernels["_encode"]
+_nonbasic = _kernels["_nonbasic"]
+_path_apply = _kernels["_path_apply"]
+_path_theta = _kernels["_path_theta"]
+_plan_cost = _kernels["_plan_cost"]
+_tree_path = _kernels["_tree_path"]
 
 
 @njit(cache=True)
@@ -105,8 +106,9 @@ def run(task):
     arc_rows = np.tile(search.arcs_row[0, :size], (count, 1))
     flow_rows = np.tile(search.flows[:size], (count, 1))
     fit = np.empty(count)
-    for slot in range(count):
-        for draw in rng.random(4) if slot else ():
+    fit[0] = search.current
+    for slot in range(1, count):
+        for draw in rng.random(4):
             pivot(arc_rows[slot], flow_rows[slot], m, n, draw, search.arcs_row)
         fit[slot] = _plan_cost(arc_rows[slot], flow_rows[slot], size, search.cost, search.fixed, search.eps)
     initial = float(fit.min())
