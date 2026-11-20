@@ -3,6 +3,7 @@
 [![CI](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml)
 [![Release](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24388243.svg)](https://doi.org/10.5281/zenodo.24388243)
 ![Python](https://img.shields.io/badge/python-3.10%E2%80%933.14-blue)
 
 The code base of the master's research project *Modelling and optimisation of the transportation problem using
@@ -189,5 +190,10 @@ ruff check . && ruff format --check . && mypy && pytest --cov=tpga
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md). Citation metadata is in
 [CITATION.cff](CITATION.cff). Released under the [MIT licence](LICENSE).
+
+The code and data of the article (tag `v0.4.1-paper`) are archived in Zenodo:
+[10.5281/zenodo.24388243](https://doi.org/10.5281/zenodo.24388243) is the DOI of this version and
+[10.5281/zenodo.24388242](https://doi.org/10.5281/zenodo.24388242) the DOI of all versions, which leads to the
+latest one.
 
 Author: Almas Murat, Astana IT University. ORCID [0009-0008-6202-088X](https://orcid.org/0009-0008-6202-088X).
