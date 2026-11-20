@@ -82,6 +82,8 @@ def measured(row, source, name=None):
     if unit is None:
         if row.get("kind") in ("tabu", "ils"):
             unit = "start + neighbour"
+        elif row.get("local_search_evaluations"):
+            unit = "decoder + local search"
         elif count is not None:
             unit = "decoder"
         elif row.get("kind") in ("balinski", "classical", "vam_lin"):
@@ -191,7 +193,19 @@ def fctp_report():
         ref = refs[row["instance"]]
         fields = {
             k: row.get(k)
-            for k in (*KEY_FIELDS, "unit", "source", "config", "time_limit_s", "nodes", "pivots", "zero_pivots")
+            for k in (
+                *KEY_FIELDS,
+                "unit",
+                "source",
+                "config",
+                "time_limit_s",
+                "nodes",
+                "pivots",
+                "zero_pivots",
+                "full_evaluations",
+                "neighbour_evaluations",
+                "local_search_evaluations",
+            )
         }
         if row["kind"] in ("independent", "population"):
             fields["config"] = f"{row['kind']}, P={row['population']}, r=4, OX={row['ox_rate']:.8g}"
