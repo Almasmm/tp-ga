@@ -6,8 +6,7 @@ authors:
     given-names: Almas
     affiliation: Astana IT University
     orcid: "https://orcid.org/0009-0008-6202-088X"
-version: 0.4.1-paper
-doi: 10.5281/zenodo.24388243
+version: 0.4.2-paper
 identifiers:
   - type: doi
     value: 10.5281/zenodo.24388242

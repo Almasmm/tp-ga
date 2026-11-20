@@ -19,8 +19,10 @@ jobs:
         run: |
           name="tp-ga-${GITHUB_REF_NAME}-artifacts"
           git archive --format=zip --prefix="${name}/" -o "${name}.zip" HEAD \
-            paper_artifacts_v2 paper_artifacts_quick paper_artifacts_v3 \
+            paper_artifacts paper_artifacts_supplement paper_artifacts_v2 paper_artifacts_quick paper_artifacts_v3 \
+            scripts/normalised_gap.py scripts/neutrality_check.py tests/test_proposition3.py \
             docs/v0.4/PREREGISTRATION.md experiments CITATION.cff .zenodo.json LICENSE
+          python scripts/check_paper_archive.py "${name}.zip"
           sha256sum "${name}.zip" > "${name}.zip.sha256"
           ls -l "${name}.zip" && cat "${name}.zip.sha256"
       - name: Create the release
