@@ -1,18 +1,17 @@
-# paper_artifacts_v2: data of the revised article (tp-ga v0.4)
+# v0.4 experiment archive
 
-Everything the revised article reports is in this directory. It is produced by one configuration,
-`experiments/paper-v2.yaml`, and the frozen tuned parameters, `experiments/tuned-v2.yaml`. The plan and every
-change made before the main run are in `docs/v0.4/PREREGISTRATION.md` (section 9 lists the amendments).
+This snapshot contains 2,952 run records from 18 November 2026. The reference and representation phases
+are complete. The main phase has 350 of 23,600 runs, and the remaining phases have yet to run. Tables that
+use the main phase cover the runs available in this snapshot. See [PROGRESS.md](PROGRESS.md) for phase counts.
 
-## Reproduce with one command
+## Run or resume the experiment
 
 ```
 python scripts/run_main.py --config experiments/paper-v2.yaml --priority normal
 ```
 
-`--priority` is `normal` (default) or `above_normal`; it replaces the `priority` of the configuration and
-changes run times only. The stops and restarts of the published run and its priorities are in the run
-record at the end of section 9 of `docs/v0.4/PREREGISTRATION.md`.
+`--priority` overrides the process priority in the configuration. The default is `normal`. Section 9 of the
+[preregistration](../docs/v0.4/PREREGISTRATION.md) records the interruptions, restarts and priorities.
 
 The command runs every phase in the order reference, representation, main, applied, factorial, stagnation,
 legacy, timing, and writes the tables, the figures and `PROGRESS.md` after each phase. It can be started
@@ -20,9 +19,8 @@ again after an interruption: runs already recorded are not repeated. The tuned p
 again; they are read from `experiments/tuned-v2.yaml`. The tables and figures alone are rebuilt from the raw
 records with `tpga-exp report --config experiments/paper-v2.yaml`.
 
-Set-up: Python 3.10 or newer, `pip install -e ".[runner]"` at the tag `v0.4.0-run`. The versions of the packages
-and the machine of the published run are in `run_manifest.json`. Gaps and counts do not depend on the
-machine; times do.
+Use Python 3.10 or newer and install the runner with `pip install -e ".[runner]"`. The archived code
+revisions, Python and package versions, and machine details are in `run_manifest.json`.
 
 ## What is where
 

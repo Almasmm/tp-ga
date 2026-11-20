@@ -1,4 +1,4 @@
-# tp-ga — modelling and optimisation of the transportation problem with genetic algorithms
+# tp-ga
 
 [![CI](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/ci.yml)
 [![Release](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml/badge.svg)](https://github.com/Almasmm/tp-ga/actions/workflows/release.yml)
@@ -6,11 +6,11 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24388243.svg)](https://doi.org/10.5281/zenodo.24388243)
 ![Python](https://img.shields.io/badge/python-3.10%E2%80%933.14-blue)
 
-The code base of the master's research project *Modelling and optimisation of the transportation problem using
-genetic algorithms* (Astana IT University). It contains the `tpga` Python library and, as it grows, the web
-platform built on it. The library solves the classical transportation
-problem with a **permutation-encoded genetic algorithm** whose individuals are turned into shipment plans by a
-**greedy decoder**, and reports every GA result against the **exact linear-programming optimum**.
+`tpga` is a Python library for studying genetic algorithms on the transportation problem. It uses permutations
+of shipping arcs to represent candidate solutions and a greedy decoder to turn them into shipment plans.
+The project includes a linear programming solver for computing the optimum, scripts for reproducing the
+experiments and a web interface for inspecting plans and algorithm steps. It grew out of master's research
+at Astana IT University.
 
 ## Problem
 
@@ -19,8 +19,8 @@ Minimise $Z = \sum_i \sum_j c_{ij} x_{ij}$ subject to $\sum_j x_{ij} = a_i$, $\s
 A chromosome is a permutation of the $m \cdot n$ arcs. The decoder visits the arcs in that order and assigns
 $x_{ij} = \min(a_i^{(r)}, b_j^{(r)})$, the smaller of the remaining supply and demand. For a balanced problem
 with a complete arc set every chromosome therefore decodes to a feasible plan, and no penalty or repair is needed.
-The guarantee does **not** extend to arc capacities, fixed charges or time windows, and says nothing about optimality.
-Because exact methods solve the classical model directly, `tpga` always computes the LP optimum as a reference.
+This feasibility guarantee applies to the balanced model with a complete arc set. The LP optimum gives a
+reference for measuring the gap of a decoded plan.
 
 ## Installation
 
@@ -65,14 +65,13 @@ Unbalanced instances are balanced automatically with a zero-cost dummy source or
 | ![convergence](docs/img/convergence_6x8.png) | ![plan](docs/img/plan_6x8.png) |
 
 One run with seed 0 (population 80, 300 generations): GA cost 5342, LP optimum 5342.
-This illustrates the tool; it is not a benchmark, and a single run says nothing about average behaviour.
+The benchmark results across instances and seeds are reported below.
 
 ## Computational experiment
 
-The experiment of the paper *Genetic algorithm with permutation encoding and greedy decoding for the
-balanced transportation problem: a computational comparison with exact and classical methods* is defined
-in [`experiments/paper.yaml`](experiments/paper.yaml) and runs with one command; every table and figure is
-then regenerated from the raw results with a second one:
+The original study compares the genetic algorithm with exact and classical methods on the balanced
+transportation problem. Run the configuration in [`experiments/paper.yaml`](experiments/paper.yaml),
+then build the tables and figures from the raw results.
 
 ```bash
 pip install -e .[dev]
@@ -85,7 +84,7 @@ The results, instances, figures (English and Russian), tables, `METHODS.md`, `LI
 
 ## Paper materials
 
-The article is based on the data of release 0.3.0. These files belong to it:
+The v0.3 study uses results from release 0.3.0. Tag `v0.3.1-paper` adds the neutrality and normalised-gap checks.
 
 | Path | Content |
 |---|---|
@@ -108,32 +107,28 @@ pytest tests/test_proposition3.py
 
 Both scripts use fixed seeds and write the same files on every run. `normalised_gap.py` keeps the `Z_rand`
 values already in `zrand.csv`; delete that file to compute them again (a few minutes on one core).
-`scripts/watch_tuning.py` is a read-only terminal view of the parameter tuning of the next version (v0.4,
-branch `work/v0.4`); it is not needed for the article.
+Use `scripts/watch_tuning.py` to follow v0.4 parameter tuning from the terminal.
 
-### Quick run of the v0.4 experiment
+## Quick run of the v0.4 experiment
 
-A short version of the experiment of v0.4 (work in progress, branch `work/v0.4`) is defined in
-[`experiments/paper-v2-quick.yaml`](experiments/paper-v2-quick.yaml): uniform instances 5x5 to 50x50 and
-structured 20x20, 10 instances per size, 10 seeds, budget of 200 m n decoder calls, the methods LP, NWC, LCM,
-VAM, RS and the tuned GA and SA (random and cost-aware start), the phases `reference`, `representation` and
-`main`. One command runs it (4 500 runs, about 8 minutes on 24 logical processors) and writes the tables and
-figures:
+The [quick configuration](experiments/paper-v2-quick.yaml) uses uniform instances from 5×5 to 50×50 and
+structured 20×20 instances. It uses 10 instances per size and 10 seeds, with a budget of 200 × m × n decoder
+calls. The methods are LP, NWC, LCM, VAM, random search, and tuned GA and SA with random and cost-aware starts.
+The three phases took about eight minutes on 24 logical processors for 4,500 runs.
 
 ```bash
 pip install -e ".[runner]"
 python scripts/run_main.py --config experiments/paper-v2-quick.yaml --priority normal --phase reference --phase representation --phase main
 ```
 
-The results of the run of 2026-11-18 are in [`paper_artifacts_quick/`](paper_artifacts_quick/): `tables/`,
-`figures/`, `raw/` (every run record), `run_manifest.json` and `PROGRESS.md`. This run is **not** part of the
-pre-registered plan of v0.4 (`docs/v0.4/PREREGISTRATION.md`) and does not replace it; it uses the first
-instances and seeds of that plan and the frozen parameters `experiments/tuned-v2.yaml`. Run times in it were
-measured with 24 runs at once and are not a timing result.
+The [quick-run archive](paper_artifacts_quick/) contains the records, figures and tables from 18 November 2026.
+This separate run uses the first instances and seeds from the [preregistered plan](docs/v0.4/PREREGISTRATION.md)
+and the frozen parameters in `experiments/tuned-v2.yaml`. Its durations reflect 24 concurrent runs.
+The [partial archive of the preregistered experiment](paper_artifacts_v2/README.md) has its own progress report.
 
-### Additional experiment v3: cycle mutation and the fixed-charge problem
+## Additional experiment v3: cycle mutation and the fixed-charge problem
 
-Branch `work/v0.4` also holds an experiment that was planned in amendment 8 of
+The additional experiment was planned in amendment 8 of
 [`docs/v0.4/PREREGISTRATION.md`](docs/v0.4/PREREGISTRATION.md) before its code was written: a mutation that
 makes random simplex pivots on the decoded plan (`tpga.cycle`), one protocol for the linear problem up to
 100x100, and the fixed-charge transportation problem (`tpga.fctp`) with a MIP reference and three MIPLIB
@@ -177,22 +172,8 @@ tests/                 unit, property (hypothesis), kernel, experiment and CLI t
 
 The [web application](platform/README.md) plans shipments for the Kazakhstan wheat case and the full Astana benchmark. It compares random and cost-aware GA starts with the LP optimum. The platform includes a Next.js interface and a FastAPI backend.
 
-## Technology choices
-
-| Need | Choice | Why |
-|---|---|---|
-| Language | **Python 3.10+** | Standard in scientific computing; the numerical stack below is mature; readable for reviewers of the research. |
-| Arrays | **NumPy** | Vectorised plan and cost arithmetic; reproducible random streams via `numpy.random.Generator`. |
-| Inner loops | **numba** | Decoder and GA operators compiled to machine code; the same functions run as plain Python in the tests. |
-| Exact baseline | **SciPy `linprog` (HiGHS)** | Open-source, state-of-the-art LP solver shipped with SciPy, so no extra dependency or licence. |
-| Plots | **matplotlib** | De-facto standard for publication figures; works headless in CI (`Agg` backend). |
-| Tests | **pytest** (+ pytest-cov) | Concise fixtures and parametrisation; coverage gate of 90 % in CI. |
-| Style / lint | **ruff** | One fast tool for linting, import sorting and formatting. |
-| Types | **mypy** | Catches interface errors in numerical code before runtime. |
-| Web API | **FastAPI** | Typed request/response models (pydantic), automatic OpenAPI docs, built-in test client. |
-| Packaging | **pyproject.toml + setuptools** | PEP 621 standard metadata; `pip install -e .` and a `tpga` console script. |
-| VCS / hosting | **Git + GitHub** | Issues, pull requests, branch protection and Actions in one place. |
-| CI/CD | **GitHub Actions** | Native to GitHub; free for public repositories; matrix builds on Linux and Windows. |
+The numerical code uses NumPy. Numba compiles the decoder and GA operators, with plain Python versions
+available for reference tests. SciPy calls HiGHS for the LP reference, and Matplotlib produces the figures.
 
 ## Quality checks and CI/CD
 
