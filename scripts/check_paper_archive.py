@@ -15,7 +15,11 @@ REQUIRED_FILES = (
     "docs/v0.4/PREREGISTRATION.md",
 )
 REQUIRED_DIRS = ("paper_artifacts_v2/", "paper_artifacts_v3/", "paper_artifacts_v3/review2/")
-SESSION = re.compile(rb"the agent.s session|assistant.s session|session of (the agent|the assistant)", re.IGNORECASE)
+SESSION = re.compile(
+    rb"the agent.s session|assistant.s session|session of (the agent|the assistant)"
+    rb"|https?://(?:chatgpt\.com/(?:c|share)/|claude\.ai/(?:chat|share)/)",
+    re.IGNORECASE,
+)
 
 
 def check(path: str) -> None:

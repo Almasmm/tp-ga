@@ -224,6 +224,9 @@ def fctp_report():
     table("K7_reference_instances", list(refs.values()))
     cell_refs = []
     for (size, rho), rr in groups(list(refs.values()), "size", "rho"):
+        solver_rows = [r for r in mips if r["size"] == size and r["rho"] == rho]
+        single = [r for r in solver_rows if r["method"] == "MIP, 1 thread / 60 s"]
+        default = [r for r in solver_rows if r["method"] == "MIP, default threads / 300 s"]
         cell_refs.append(
             {
                 "size": size,
@@ -231,6 +234,10 @@ def fctp_report():
                 "instances": len(rr),
                 "proved": sum(r["proved"] for r in rr),
                 "bound_available": sum(r["mip_available"] for r in rr),
+                "mip_60s_instances": len(single),
+                "mip_60s_proved": sum(r["proved"] for r in single),
+                "mip_300s_instances": len(default),
+                "mip_300s_proved": sum(r["proved"] for r in default),
                 "median_lower_bound": med(rr, "lower_bound"),
                 "median_z_best": med(rr, "z_best"),
                 "median_gap_best_to_bound_pct": med(rr, "gap_best_to_bound_pct"),
@@ -731,9 +738,11 @@ def provenance():
         ("Table 6", "paper_artifacts_v2/tables/T4_factorial.csv"),
         ("Table 7", "paper_artifacts_v2/tables/T10_applied_instances.csv"),
         ("Table 7, Astana summary", "paper_artifacts_v2/tables/T10_applied_summary.csv"),
+        ("Figure 1, decoder", "paper_artifacts/figures/en/F1_decoder.pdf"),
         ("Figure 2", "paper_artifacts_v2/figures/en/boxplot_gap.pdf"),
         ("Figure 3", "paper_artifacts_v2/figures/en/convergence.pdf"),
         ("Figure 4", "paper_artifacts_v2/figures/en/time_scaling.pdf"),
+        ("Figure 4, v0.3 timing", "paper_artifacts/figures/en/F4_time_scaling.pdf"),
         ("v0.3 factorial comparison", "paper_artifacts/tables/T4_factorial.csv"),
         ("v0.3 paired comparisons", "paper_artifacts/tables/T5_tests.csv"),
     )
