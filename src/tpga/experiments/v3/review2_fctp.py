@@ -51,7 +51,7 @@ def advance(arcs, flows, fit, supply, demand, cost, fixed, eps, draws, assignmen
     left = np.arange(m * n)
     right = left.copy()
     child = left.copy()
-    kept = np.empty(m * n, dtype=np.bool_)
+    kept = np.zeros(m * n, dtype=np.bool_)
     zero = accepted = crossed = 0
     for index in range(draws.shape[0]):
         u = draws[index]
