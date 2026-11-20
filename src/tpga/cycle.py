@@ -255,6 +255,8 @@ def run_ga_x(
     start_problem: TransportProblem | None = None,
     callback: ProgressCallback | None = None,
     engine: str = "numba",
+    *,
+    fill_budget: bool = False,
 ) -> GAXResult:
     """GA with the cycle mutation (or swaps), minimising ``sum c x + sum fixed [x > 0]``.
 
@@ -311,10 +313,13 @@ def run_ga_x(
     if callback is not None and callback(0, evaluations, best_cost):
         stop_reason = "cancelled"
     else:
-        while evaluations + offspring <= cfg.max_evaluations and offspring > 0:
+        while evaluations < cfg.max_evaluations and offspring > 0:
+            count = min(offspring, cfg.max_evaluations - evaluations)
+            if count < offspring and not fill_budget:
+                break
             order = np.argsort(fit, kind="stable").astype(np.int64)
-            uniforms = rng.random((offspring, width))
-            extra_u = rng.random(per_move * moves * offspring)
+            uniforms = rng.random((count, width))
+            extra_u = rng.random(per_move * moves * count)
             k["_next_generation_x"](
                 pop,
                 fit,
@@ -344,14 +349,14 @@ def run_ga_x(
             generation += 1
             if cycle:
                 trace.append((int(stats[0]), int(stats[1])))
-            child = cfg.elite + int(np.argmin(fit[cfg.elite :]))
+            child = cfg.elite + int(np.argmin(fit[cfg.elite : cfg.elite + count]))
             if fit[child] < best_cost:
                 best_cost = float(fit[child])
                 best = pop[child].copy()
                 best_evaluation = evaluations + (child - cfg.elite) + 1
                 best_generation = generation
                 improvements.append((best_evaluation, best_cost))
-            evaluations += offspring
+            evaluations += count
             if cfg.local_search_every and generation % cfg.local_search_every == 0:
                 room = cfg.max_evaluations - evaluations
                 if room >= 2:

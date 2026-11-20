@@ -1,0 +1,5 @@
+name: paper-v3-review2
+review: experiments/paper-v3-review.yaml
+output: paper_artifacts_v3/review2
+seconds: 7200
+workers: 20

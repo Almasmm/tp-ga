@@ -454,7 +454,7 @@ def _next_generation_x_py(
         src = order[e]
         new_pop[e, :] = pop[src, :]
         new_fit[e] = fit[src]
-    for c in range(size - elite):
+    for c in range(uniforms.shape[0]):
         u = uniforms[c]
         pa = _tournament(fit, u[0:tournament], scratch)
         pb = _tournament(fit, u[tournament : 2 * tournament], scratch)
@@ -493,7 +493,7 @@ def _next_generation_x_py(
                     child[i] = child[j]
                     child[j] = tmp
             new_fit[elite + c] = _decode_cost_fc(child, supply, demand, cost, fixed, n, eps)
-    return size - elite
+    return uniforms.shape[0]
 
 
 def _random_batch_cost_fc_py(uniforms, supply, demand, cost, fixed, n, eps, out):
