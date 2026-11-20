@@ -1,0 +1,6 @@
+set,size,method_a,method_b,value,n,nonzero,W,p,rank_biserial_r,hl_shift,hl_ci_low,hl_ci_high,hl_method,wins_x,wins_y,ties,p_holm,p_holm_text
+uniform,200x200,GA-rand-tuned,VAM,gap,7,7,0.0,0.015625,1.0,132.8831303885213,117.85704121104239,149.43906170321264,exact Walsh-average CI,0,7,0,0.078125,0.078
+uniform,200x200,GA-cost-tuned,VAM,gap,7,7,0.0,0.015625,-1.0,-17.050344628836537,-40.77979401667484,-13.644455806211937,exact Walsh-average CI,7,0,0,0.078125,0.078
+uniform,200x200,SA-rand-tuned,VAM,gap,7,7,0.0,0.015625,1.0,501.84288029670574,458.9056176402321,534.5383324006716,exact Walsh-average CI,0,7,0,0.078125,0.078
+uniform,200x200,SA-rand-tuned,GA-rand-tuned,gap,7,7,0.0,0.015625,1.0,362.8885014956738,332.7200813942835,406.2690736047173,exact Walsh-average CI,0,7,0,0.078125,0.078
+uniform,200x200,SA-cost-tuned,GA-cost-tuned,gap,7,7,0.0,0.015625,1.0,6.0391732222756085,3.2705741123568686,8.807772332194348,exact Walsh-average CI,0,7,0,0.078125,0.078

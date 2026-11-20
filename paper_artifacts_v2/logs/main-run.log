@@ -1,0 +1,28 @@
+2026-11-18 01:00:37 main run started: phases reference, representation, main, applied, factorial, stagnation, legacy, timing
+2026-11-18 01:00:37 phase reference: 712 runs to do
+2026-11-18 01:01:27 main run started: phases reference
+2026-11-18 01:01:28 phase reference: 712 runs to do
+2026-11-18 01:01:39 phase reference: attempt 1 ended with code 0, 0 runs left
+2026-11-18 01:01:39 phase reference: done
+2026-11-18 01:01:39 report started after reference (idle priority, one processor)
+2026-11-18 01:01:41 final report ended with code 1
+2026-11-18 01:01:41 main run finished; every phase is done
+2026-11-18 01:02:31 main run started: phases reference, representation, main, applied, factorial, stagnation, legacy, timing
+2026-11-18 01:02:32 phase reference: 0 runs to do
+2026-11-18 01:02:32 phase reference: done
+2026-11-18 01:02:32 report started after reference (idle priority, one processor)
+2026-11-18 01:02:34 phase representation: 1890 runs to do
+2026-11-18 01:13:24 phase representation: attempt 1 ended with code 1, 1834 runs left
+2026-11-18 01:24:30 phase representation: attempt 2 ended with code 1, 1779 runs left
+2026-11-18 01:44:05 phase representation: attempt 3 ended with code 0, 0 runs left
+2026-11-18 01:44:05 phase representation: done
+2026-11-18 01:44:05 report started after representation (idle priority, one processor)
+2026-11-18 01:44:09 phase main: 23600 runs to do
+2026-11-18 12:52:42 main run started: phases reference, representation, main, applied, factorial, stagnation, legacy, timing
+2026-11-18 12:52:44 phase reference: 0 runs to do
+2026-11-18 12:52:44 phase reference: done
+2026-11-18 12:52:44 report started after reference (idle priority, one processor)
+2026-11-18 12:52:46 phase representation: 0 runs to do
+2026-11-18 12:52:46 phase representation: done
+2026-11-18 12:53:06 report started after representation (idle priority, one processor)
+2026-11-18 12:53:10 phase main: 23250 runs to do
