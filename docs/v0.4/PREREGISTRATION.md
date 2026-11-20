@@ -1062,3 +1062,110 @@ than the present rule in the pilot at 50x50; this is what left the 100x100 group
   `.github/workflows/paper-release.yml` and the release notes `docs/releases/v0.4.0-paper.md`. The tag
   `v0.4.0-paper` is set on the commit that holds the tables of this record. No DOI was requested; the
   repository has to be enabled in Zenodo by its owner first.
+
+### Amendment 11 (2026-11-20): controls requested in the second review
+
+All results in this amendment are exploratory. Freeze the plan before executing any task. Reuse the
+published configurations and their training selections. Test instances are never used to select parameters.
+
+**Run order and budget.** A single 7,200-second elapsed-time limit covers the execution session, including
+warm-up and all new runs. Process K1, K2, K3, K6, K7, K10, K4, K5, K8, K9 and K11 in that priority order.
+Collect K4 and the K2/K3/K5 starting-plan diagnostics during their corresponding higher-priority runs if the
+same instrumented run supplies them. Use up to 20 local workers for heuristic runs and one worker on a
+single eligible logical processor for K8. Within a block dispatch increasing sizes, then increasing rho,
+instance number and run number. Keep completed records at the deadline and mark missing records and
+incomplete cells explicitly. Compare methods on matched instances and matched seed sets only. Heuristic
+seeds are 20261116 through 20261125 inclusive, truncated from the beginning for three-run blocks.
+Report evaluation limits, actual evaluation counts and elapsed seconds per run. Distinguish decoder calls,
+complete objective evaluations, neighbour evaluations and MIP nodes. Diagnostics do not consume the search
+budget and their overhead is included in instrumented elapsed time.
+
+**Analysis.** First take each method's median over seeds for each instance, then the median over
+instances. Report wins, ties and losses for the first named method, paired Hodges–Lehmann shifts (first
+minus second) with the 95% interval from the repository reporting routine, and unadjusted paired Wilcoxon
+p-values. Retain the repository tie tolerance. Gaps against a reference Z are 100(C−Z)/Z. For K1 and K7 a
+common per-instance Z_best is the smallest feasible cost in the applicable amendment 8–11 records.
+Use 10,000 percentile bootstrap resamples of the instance medians, seed 20261120, for K6. A missing
+reference, an undefined percentage or a solver evaluation count unavailable from HiGHS is left blank.
+
+**K1.** Use the existing five uniform FCTP instances per cell at 20×20, 30×30, 50×50 and 70×70,
+rho = 0.2 and 1, and ten runs. B = 200mn. Use the Balinski basic plan, with deterministic basis
+completion. The first plan is Balinski itself. Each additional start applies r = 4 unconditional
+uniform random pivots independently to that plan. Warm-up pivots do not score intermediate plans.
+For a–d, choose a uniform nonbasic entering arc and use the same cycle pivot, leaving-arc rule and
+true objective calculation on the resulting basic plan. Accept a candidate no worse than its incumbent
+(including ties, within the repository tolerance). Evaluate each starting plan once. The common methods
+consume exactly B evaluations, including starts. In b, allocate floor(B/P) evaluations per independent
+trajectory and one more to the first B mod P trajectories. In c and d, choose a parent by a tournament of
+two sampled with replacement, compare the candidate with that parent and replace its slot on acceptance.
+Use P = 30 and 300. In d, with the frozen GA-cost crossover probability, choose a second parent in the
+same way, apply OX1 on the deterministically encoded plans, decode the child to a basis, then apply the
+same pivot. All other steps are identical in c and d. Use f = ILS (perturbation 8, better acceptance)
+and Tabu (sample 0.25, tenure 5) as in amendment 10, and e = published GA-cost-cycle. For e, process a
+partial final generation using the original operators to fill B, with no earlier stopping; report which
+rows are archived in K7 and which use the K1 exact-budget comparison. Tabu and ILS keep their article
+evaluation accounting. Compare a–b, b–c, c–d and d–e at both P, and a against each f.
+
+**K2.** Use the ten archived uniform instances of each of 20×20, 30×30 and 50×50. Ten runs with the
+same cap B. At each of the random and cost-aware starts compare tuned swap, cycle, decode and re-encode
+with zero pivots, and tuned swap followed by decode and re-encode. Re-encoding uses the repository's leaf
+elimination and preserves the relative order of nonbasis arcs from the input chromosome. Keep all other
+GA parameters and generation termination as in the article. Report the six within-start pairs.
+
+**K3 and K4.** Use the first three archived uniform instances at 20×20, 50×50 and 100×100, the first
+three seeds and the four article GAs (random and cost-aware, tuned swap and cycle). For every actual OX
+event, compare the decoded pre-mutation offspring with the two parents and the source generation.
+Use exact equality of integer shipment plans. Assign the event to the tenth containing its one-based
+objective evaluation number, with right-closed bins. Record numerators and OX denominators, including
+empty bins. For K4 at the initial population, the first completed generation at/above half the budget
+and the final population, sample the first up to 16 slots and 64 pairs of distinct positions per slot,
+uniformly with replacement across draws. Diagnostic seeds use a stream separate from the GA, seed
+20261120 plus replicate number. Classify a swap by whether either moved arc carries positive flow and,
+separately, whether a zero-flow arc moves earlier to a position at which both endpoints still have
+positive residual in the original decoder trace. Cases can overlap. Record eligibility and neutrality
+counts independently. Diagnostic comparisons never affect selection.
+
+**K5.** Record initial-best and final cost and gaps, and their difference, using the frozen article
+configurations and their archived instance/seed sets at all sizes, including the FCTP GA-cost-cycle.
+For GA-cost use the original base configuration and stopping rule from paper-v1 raw records, including
+only its main phase. Use initial cost from archived traces when present, otherwise replay the start
+with the archived seed and published constructor. Count strict improvements and ties by run.
+
+**K6.** Reaggregate the archived v3 linear records, including the 100×100 extension, with per-instance
+medians and the bootstrap rule above. Methods: VAM, RS, GA-rand-tuned, SA-rand-tuned, GA-rand-cycle,
+GA-cost-tuned, SA-cost-tuned and GA-cost-cycle. Use percent gap to the exact LP in the main table;
+also retain the published normalised gap. For 100×100 split IDs 00–04 and 05–09. Use the five pairs in
+the frozen linear configuration in each group and export instance-level values and raw p-values.
+
+**K7.** Combine stored one-thread 60 s and default-thread 300 s MIP records on the article's uniform
+FCTP cells with archived method rows and the completed K1 runs. For each instance take the largest
+finite valid MIP bound and mark it proved if a stored run proves optimality. Report the availability
+and proof count, per-cell medians of bounds and percent gaps, and method budgets, actual evaluations
+and times. Preserve instance-level values and do not extrapolate missing solver rows.
+
+**K8.** Use the first instance of every K1 cell. One run at a time, one logical processor and one HiGHS
+thread. Observe incumbent callbacks from before model construction through the largest of 0.5 s, 5 s and
+the archived single-core GA-cost-cycle median for the same instance. Report first incumbent and the
+latest feasible plan seen by each deadline, using the proved optimum or K7 Z_best as the comparison
+reference. An early solver finish with an incumbent carries that incumbent forward. A missing incumbent
+or unavailable archived GA time is explicit. The existing solve_mip timer starts after passModel and
+immediately before run; this block additionally measures elapsed time from before model construction.
+
+**K9.** Use the ten pinned Sun/Glover files from the public section of paper-v3-review.yaml. Verify each
+SHA-256, retain the source and commit, and compare archived MIP incumbents/proof statuses with CPLEX 9.0
+(Glover et al., Table 3) and Barr et al. (2021, Table 2). List every discrepancy without inferring its cause.
+Do not redistribute the third-party inputs.
+
+**K10.** Produce a source map for the manuscript artifacts using the manuscript map and stored run
+manifests. Check the requested scripts, test, tables and artifact directories in both the tagged source
+and release asset. Validate no service prompt or references to assistant sessions in the new ZIP. Use a
+new annotated tag v0.4.2-paper and the paper release workflow. Existing references and tags are not moved.
+Read the version DOI from Zenodo only when it exists.
+
+**K11.** Count pivots directly in the 100 archived standard GA-cost-cycle records at uniform 5×5: ten
+instances and ten seeds. List instance and run counters, including zero pivots and stop/evaluation
+information. Repeat only if archived counters are absent.
+
+Write the table pairs (CSV and Markdown), figures (PDF and JPG), execution manifest and incomplete-work
+report under paper_artifacts_v3/review2/. All archived measurements are labelled with their original
+source, separate from new measured runs.
