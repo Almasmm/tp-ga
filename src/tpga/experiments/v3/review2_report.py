@@ -193,6 +193,8 @@ def fctp_report():
             k: row.get(k)
             for k in (*KEY_FIELDS, "unit", "source", "config", "time_limit_s", "nodes", "pivots", "zero_pivots")
         }
+        if row["kind"] in ("independent", "population"):
+            fields["config"] = f"{row['kind']}, P={row['population']}, r=4, OX={row['ox_rate']:.8g}"
         return {
             **fields,
             "z_best": ref["z_best"],
