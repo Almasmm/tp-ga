@@ -10,8 +10,9 @@ import time
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
 
-for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMBA_NUM_THREADS"):
-    os.environ[variable] = "1"
+if __name__ in ("__main__", "__mp_main__"):
+    for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMBA_NUM_THREADS"):
+        os.environ[variable] = "1"
 
 import yaml  # noqa: E402
 
