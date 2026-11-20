@@ -95,11 +95,11 @@ def read_runs(path, name=None):
     return [measured(r, path, name) for r in records(path)]
 
 
-def by_instance(rows, names, fields):
+def by_instance(rows, names, fields, *, count="runs"):
     return [
         {
             **dict(zip(names, group, strict=True)),
-            "runs": len(members),
+            count: len(members),
             **{field: med(members, field) for field in fields},
         }
         for group, members in groups(rows, *names)
@@ -173,17 +173,21 @@ def fctp_report():
     refs = {}
     for (instance,), rr in groups(archived + mips + timing_refs + k1, "instance"):
         valid_mip = [r for r in rr if r["kind"] == "mip" and r.get("bound") is not None]
-        costs = [r["cost"] for r in rr if r.get("cost") is not None]
-        if not costs:
+        best = min((r for r in rr if r.get("cost") is not None), key=lambda r: r["cost"], default=None)
+        if best is None:
             continue
-        z = min(costs)
-        bound = max((r["bound"] for r in valid_mip if r["bound"] <= z + 1e-6), default=None)
+        z = best["cost"]
+        bound_row = max((r for r in valid_mip if r["bound"] <= z + 1e-6), key=lambda r: r["bound"], default=None)
+        bound = bound_row["bound"] if bound_row else None
         refs[instance] = {
             "size": rr[0]["size"],
             "rho": rr[0]["rho"],
             "instance": instance,
             "z_best": z,
+            "z_best_method": best["method"],
+            "z_best_source": best["source"],
             "lower_bound": bound,
+            "bound_source": bound_row["source"] if bound_row else None,
             "gap_best_to_bound_pct": gap(z, bound),
             "proved": any(r.get("proved") and r["cost"] is not None and abs(r["cost"] - z) <= 1e-6 for r in valid_mip),
             "mip_available": bound is not None,
@@ -222,7 +226,7 @@ def fctp_report():
     fields = ("gap_best_pct", "cost", "budget", "evals", "time_s")
     k1_by = by_instance(k1_details, ("size", "rho", "method", "instance"), fields)
     table("K1_instances", k1_by)
-    table("K1_cells", by_instance(k1_by, ("size", "rho", "method"), fields))
+    table("K1_cells", by_instance(k1_by, ("size", "rho", "method"), fields, count="instances"))
     pairs = [
         (x, y)
         for p in (30, 300)
@@ -267,7 +271,10 @@ def fctp_report():
     table("K7_runs", all_details)
     fields = ("gap_best_pct", "gap_bound_pct", "cost", "budget", "evals", "time_s", "time_limit_s", "nodes")
     by = by_instance(all_details, ("size", "rho", "method", "source", "config", "unit", "instance"), fields)
-    table("K7_methods_by_cell", by_instance(by, ("size", "rho", "method", "source", "config", "unit"), fields))
+    table(
+        "K7_methods_by_cell",
+        by_instance(by, ("size", "rho", "method", "source", "config", "unit"), fields, count="instances"),
+    )
     return refs
 
 
@@ -287,7 +294,7 @@ def linear_report():
     fields = ("gap", "budget", "evals", "time_s")
     k2_by = by_instance(k2, ("size", "method", "instance"), fields)
     table("K2_instances", k2_by)
-    table("K2_cells", by_instance(k2_by, ("size", "method"), fields))
+    table("K2_cells", by_instance(k2_by, ("size", "method"), fields, count="instances"))
     pairs = []
     for start in ("rand", "cost"):
         names = [f"GA-{start}-{suffix}" for suffix in ("tuned", "cycle", "reencode-only", "reencode-after_swap")]
