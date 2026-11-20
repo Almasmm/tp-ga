@@ -3,6 +3,14 @@
 All notable changes are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/)
 and the project uses [Semantic Versioning](https://semver.org/).
 
+## [0.4.1-paper] — 2026-11-20
+
+The same code and data as `v0.4.0-paper`, released again after the repository was enabled in Zenodo, which
+archives only the releases published after that.
+
+### Changed
+- Version `0.4.1-paper` in `CITATION.cff` and `.zenodo.json`; release notes `docs/releases/v0.4.1-paper.md`.
+
 ## [0.4.0-paper] — 2026-11-20
 
 Code and data of the article at the tag `v0.4.0-paper`. The package version stays `0.4.0.dev0`: the main run

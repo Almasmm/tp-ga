@@ -1,7 +1,7 @@
 {
   "title": "tp-ga: modelling and optimisation of the transportation problem with genetic algorithms (code and data of the article)",
   "upload_type": "software",
-  "version": "0.4.0-paper",
+  "version": "0.4.1-paper",
   "description": "Python package tpga (permutation-encoded genetic algorithm for the transportation problem, cycle mutation, fixed-charge transportation problem, classical methods, exact references) together with the configurations, the preregistration and its amendments (docs/v0.4/PREREGISTRATION.md), and the raw records, tables and figures of the computational experiments of the article: paper_artifacts_v2 (experiment v0.4 without the raw records of its unfinished main run), paper_artifacts_quick (quick experiment) and paper_artifacts_v3 (additional experiment v3, amendments 8 to 10).",
   "creators": [
     {
