@@ -34,6 +34,19 @@ of the v0.4 experiment is not finished and its raw records are not part of this 
 - `.zenodo.json` and the workflow `paper-release.yml` (GitHub Release with one archive of the tracked paper
   artifacts for tags `vX.Y.Z-paper`).
 
+## [0.3.1-paper] — 2026-11-18
+
+Paper materials only; the library is unchanged (package version 0.3.0).
+
+### Added
+- `scripts/neutrality_check.py` and `paper_artifacts_supplement/neutrality/`: check of Proposition 3 on the
+  80 test instances (no exception).
+- `scripts/normalised_gap.py` and `paper_artifacts_supplement/normalised_gap/`: `Z_rand` and the normalised
+  gap of the v0.3.0 runs.
+- `tests/test_proposition3.py`: property test of Proposition 3 on random and degenerate instances.
+- `scripts/watch_tuning.py`: read-only view of the v0.4 tuning.
+- README section "Paper materials".
+
 ## [0.3.0] — 2026-11-16
 
 ### Added
