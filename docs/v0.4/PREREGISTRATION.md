@@ -192,8 +192,8 @@ with these amendments; where they differ, the amendment applies.
 * Round 2, first start (2026-11-17, 13:13 +05:00) stopped after 10 GA-rand trials (two batches of 5; the last
   trial was written at 13:22). Cause, from the Windows system log: at 13:23:47 the computer was restarted from
   the Start menu by the user account (event 1074, StartMenuExperienceHost, "Other (Unplanned)"), followed by a
-  second restart by winlogon at 13:25:36 (event 1074, reason code 0x500ff). The tuning ran as a child process of
-  the launch session and ended with it. There was no sleep (no Kernel-Power 42 / Power-Troubleshooter event)
+  second restart by winlogon at 13:25:36 (event 1074, reason code 0x500ff). The tuning process stopped when
+  its parent session ended. There was no sleep (no Kernel-Power 42 / Power-Troubleshooter event)
   and no memory exhaustion (no Resource-Exhaustion event); the worst case of round 2, population 4000 on
   100x100, peaks at 1054 MiB per process (measured), so 24 processes need about 25 GiB with 33 GiB free.
   The 10 trials are kept in `paper_artifacts_v2/tuning/round2-attempt1/` and are not used.
@@ -204,7 +204,7 @@ with these amendments; where they differ, the amendment applies.
   proposed by `TPESampler(seed=20261201 + k, constant_liar=True)` (before: one sampler seeded once), so a run
   resumed from the journal proposes the same trials as an uninterrupted run (tested); (c) the tuning process
   asks Windows not to sleep while it runs (`SetThreadExecutionState`, no setting changed) and runs as a
-  separate process, detached from the launch session; (d) the number of worker processes is reduced if the
+  process detached from the launch session; (d) the number of worker processes is reduced if the
   worst case (150 MiB + 24 bytes per individual and arc) would not fit in free memory less 4 GiB; the number of
   workers does not change any result.
 * Round 2 stopped a second time (2026-11-17, between 21:11 and 21:16 +05:00) with GA-rand complete (100 trials)
