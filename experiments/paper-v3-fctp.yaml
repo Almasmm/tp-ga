@@ -1,0 +1,62 @@
+# Additional experiment v3, part 2: fixed-charge transportation problem (FCTP).
+# Plan: docs/v0.4/PREREGISTRATION.md, amendment 8.4. The parameters of the methods come from the linear tuning
+# (experiments/tuned-v2.yaml) and the k chosen on linear training instances; nothing is tuned on FCTP.
+#
+#   python -m tpga.experiments.v3 run    --config experiments/paper-v3-fctp.yaml   # MIP reference, then all methods
+#   python -m tpga.experiments.v3 benchmark --config experiments/paper-v3-fctp.yaml   # external instances (8.5)
+#   python -m tpga.experiments.v3 report --config experiments/paper-v3-fctp.yaml
+
+name: paper-v3-fctp
+problem: fctp
+output: paper_artifacts_v3
+base_seed: 20261116
+runs: 10
+workers: 20
+budget_factor: 200             # B = 200 m n evaluations (decoder calls and local-search neighbours)
+tuned_parameters: experiments/tuned-v2.yaml
+selected_k: paper_artifacts_v3/kselect/selected.json
+
+# 5 instances per (size, rho): seed = seed_base + 1000 * size index + 100 * rho index + i.
+# Fixed charges U{1..F}, F = round(2 rho c_mean S / (m + n - 1)).
+instances:
+  seed_base: 20300000
+  sizes: [[10, 10], [15, 15], [20, 20], [30, 30]]
+  rho: [0.2, 1.0]
+  count: 5
+  cost: [1, 100]
+  supply: [20, 100]
+
+mip: {time_limit_s: 60, threads: 1, rel_gap: 0.0, abs_gap: 0.99}
+
+methods:
+  Balinski:      {kind: balinski}    # LP with c + f / min(a, b), true cost of its plan
+  VAM-lin:       {kind: vam_lin}     # Vogel on the same linearised costs
+  RS:            {kind: rs}
+  GA-rand-tuned: {kind: gax, initialization: random,     tuned: GA-rand}                       # swap_scaled
+  GA-rand-cycle: {kind: gax, initialization: random,     tuned: GA-rand, mutation: selected}
+  GA-cost-cycle: {kind: gax, initialization: cost-aware, tuned: GA-cost, mutation: selected}   # start from linearised costs
+  SA-rand-tuned: {kind: sa,  initialization: random,     tuned: SA-rand}
+  GA-hybrid:     {kind: gax, initialization: cost-aware, tuned: GA-cost, mutation: selected, select_as: GA-cost-cycle,
+                  local_search_every: 10}
+
+# One Holm family (8.6), tested on all instances and for each rho.
+pairs:
+  - [GA-hybrid, Balinski]
+  - [GA-hybrid, GA-rand-tuned]
+  - [GA-rand-cycle, Balinski]
+  - [GA-rand-cycle, GA-rand-tuned]
+
+# External benchmark (8.5): the fixed-charge transportation problems of MIPLIB 2017 up to 30x30. The MPS files
+# were downloaded on 2026-11-19 from https://miplib.zib.de/WebData/instances/<name>.mps.gz and are kept in
+# paper_artifacts_v3/fctp/benchmark/source/. `objective` is the value listed on the instance page (status
+# "easy"). gr4x6 has non-integer costs, so the MIP of this part uses an absolute gap of 1e-6.
+benchmark:
+  source: "MIPLIB 2017, https://miplib.zib.de (instances gr4x6, ran13x13, ran12x21; objective values as listed on the instance pages on 2026-11-19)."
+  mip: {time_limit_s: 60, threads: 1, rel_gap: 0.0, abs_gap: 1.0e-6}
+  instances:
+    - {id: gr4x6,    file: paper_artifacts_v3/fctp/benchmark/source/gr4x6.mps.gz,    objective: 202.35,
+       url: "https://miplib.zib.de/instance_details_gr4x6.html"}
+    - {id: ran13x13, file: paper_artifacts_v3/fctp/benchmark/source/ran13x13.mps.gz, objective: 3252,
+       url: "https://miplib.zib.de/instance_details_ran13x13.html"}
+    - {id: ran12x21, file: paper_artifacts_v3/fctp/benchmark/source/ran12x21.mps.gz, objective: 3664,
+       url: "https://miplib.zib.de/instance_details_ran12x21.html"}

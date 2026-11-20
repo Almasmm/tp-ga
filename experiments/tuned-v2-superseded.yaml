@@ -1,0 +1,52 @@
+frozen: '2026-11-16T23:55:58+05:00'
+git_commit: 16af15b1078c1251556b48183420852603377503
+procedure:
+  sampler: TPE
+  seed: 20261201
+  trials: 40
+  sets:
+    uniform:
+    - - 20
+      - 20
+    - - 50
+      - 50
+  instances_per_size: 4
+  seeds: 3
+  objective: mean gap (%) over training instances and seeds, budget-only stop
+training_instances:
+- u20x20-00-train
+- u20x20-01-train
+- u20x20-02-train
+- u20x20-03-train
+- u50x50-00-train
+- u50x50-01-train
+- u50x50-02-train
+- u50x50-03-train
+parameters:
+  GA-rand:
+    population: 179
+    crossover_rate: 0.9481479484700585
+    tournament: 3
+    elite: 3
+    mutation_mode: swap_scaled
+    mutation_strength: 0.059229433377577426
+  GA-cost:
+    population: 348
+    crossover_rate: 0.7132084155406866
+    tournament: 5
+    elite: 2
+    mutation_mode: swap_scaled
+    mutation_strength: 0.132927328907813
+  SA-rand:
+    insertion_probability: 0.5934287933987161
+    initial_acceptance: 0.0675873138913555
+    final_ratio: 0.000912023574036159
+  SA-cost:
+    insertion_probability: 0.9822141545560644
+    initial_acceptance: 0.06878133096964667
+    final_ratio: 6.735944137098405e-05
+best_objective:
+  GA-rand: 37.61968867438764
+  GA-cost: 7.7096615133973705
+  SA-rand: 48.143924529107416
+  SA-cost: 15.859212115523162

@@ -1,0 +1,145 @@
+# Experiment v0.4 (revision of the article). Every parameter of the runs is in this file or in the frozen
+# tuning result it names. Relative paths are resolved from the repository root.
+#
+#   tpga-exp doctor --config experiments/paper-v2.yaml
+#   tpga-exp pilot  --config experiments/paper-v2.yaml
+#   tpga-exp tune   --config experiments/paper-v2.yaml      # writes experiments/tuned-v2.yaml (then frozen)
+#   tpga-exp run    --config experiments/paper-v2.yaml [--plain] [--phase NAME]
+#   tpga-exp report --config experiments/paper-v2.yaml
+
+name: paper-v2
+output: paper_artifacts_v2
+base_seed: 20261116            # run r uses seed base_seed + r for every method and instance (common random numbers)
+instance_seed_base: 20270000   # test instances; training instances for tuning use instance_seed_base + 5_000_000
+runs: 30
+tolerance: 1.0e-9
+decoder_tol: 1.0e-12
+lp_repeats: 5
+convergence_points: 100
+zrand_samples: 1000            # random permutations decoded to estimate Z_rand of an instance
+workers: 24                    # quality phases: one pinned process per logical processor
+priority: above_normal
+memory_reserve_gib: 10         # a run starts only while this much memory stays free (amendments 6 and 7)
+state_interval_s: 3            # how often the state file for the web monitor is rewritten
+
+# Check of Proposition 2 written by `tpga-exp report` (Section 3.1): the permutation built from the HiGHS
+# optimal basis must decode to that vertex. Same generator and seed as v0.3.0.
+reachability: {instances: 1000, seed: 20261117, min_size: 2, max_size: 30, max_supply: 20, max_cost: 100}
+
+# Decoder-call budget B = min(factor * m * n, cap). The cap equals 200 m n at 200x200, so it is not active
+# (option A of the budget decision, PREREGISTRATION.md section 9, amendment 1).
+budget: {factor: 200, cap: 8000000}
+
+instances:
+  uniform:    {sizes: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]], per_size: 10,
+               cost: [1, 100], supply: [20, 100]}
+  structured: {sizes: [[20, 20], [50, 50], [100, 100]], per_size: 10, area: 100, noise: 10, supply: [20, 100]}
+  skewed:     {sizes: [[20, 20], [50, 50]], per_size: 10, cost: [1, 100], lognormal_sigma: 1.5, supply_median: 50}
+  ties:       {sizes: [[20, 20], [50, 50]], per_size: 10, cost: [1, 5], supply: [1, 20]}
+  lp_scaling: {sizes: [[100, 100], [200, 200], [500, 500], [1000, 1000]], per_size: 10, cost: [1, 100],
+               supply: [20, 100]}
+  # illustration (amendment 4): the scenarios of datasets/kazakh-wheat (set "wheat", 5) and
+  # datasets/astana-potato (set "astana", 33; the 8x40 API sample is left out, as in v0.3.0)
+  applied:    {datasets: [kazakh-wheat, astana-potato], exclude_events: [api_subset]}
+
+# Methods. "base" GA = the v0.3.0 base configuration (P=100, pc=0.9, pm=0.2 single swap, t=3, e=2) but
+# stopped by the budget only. Tuned parameters come from the frozen file below.
+tuned_parameters: experiments/tuned-v2.yaml
+methods:
+  LP:            {kind: lp, solver: highspy}
+  LP-ortools:    {kind: lp, solver: ortools}
+  NWC:           {kind: classical}
+  LCM:           {kind: classical}
+  VAM:           {kind: classical}
+  RS:            {kind: rs}
+  GA-rand-base:  {kind: ga, initialization: random, params: {population: 100, crossover_rate: 0.9, mutation_rate: 0.2,
+                  tournament: 3, elite: 2, mutation_mode: swap_fixed}}
+  GA-cost-base:  {kind: ga, initialization: cost-aware, params: {population: 100, crossover_rate: 0.9,
+                  mutation_rate: 0.2, tournament: 3, elite: 2, mutation_mode: swap_fixed}}
+  GA-rand-tuned: {kind: ga, initialization: random, tuned: GA-rand}
+  GA-cost-tuned: {kind: ga, initialization: cost-aware, tuned: GA-cost}
+  SA-rand-tuned: {kind: sa, initialization: random, tuned: SA-rand}
+  SA-cost-tuned: {kind: sa, initialization: cost-aware, tuned: SA-cost}
+
+stochastic_methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+reference_methods: [LP, NWC, LCM, VAM]
+
+tuning:
+  sampler: TPE
+  seed: 20261201
+  trials: 100                  # the same for every tuned method (40 before amendment 2, PREREGISTRATION.md section 9)
+  parallel_trials: 5           # trials evaluated together (ask/tell, TPE constant_liar); amendment 2
+  sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
+  instances_per_size: {20x20: 4, 50x50: 4, 100x100: 2}
+  seeds: 3
+  objective: mean gap (%) over training instances and seeds, budget-only stop
+  space:
+    ga:
+      population: [20, 4000]       # widened once (amendment 2, round 2): was [20, 400]
+      crossover_rate: [0.5, 1.0]
+      tournament: [2, 9]           # widened once (amendment 2, round 2): was [2, 7]
+      elite: [1, 5]
+      mutation_mode: [swap_fixed, swap_count, swap_per_position, swap_scaled]
+      swap_fixed: [0.01, 1.0]
+      swap_count: [1, 20]
+      swap_per_position: [0.0001, 0.05]
+      swap_scaled: [0.01, 0.5]
+    sa:
+      insertion_probability: [0.0, 1.0]
+      initial_acceptance: {range: [0.0001, 0.95], log: true}   # widened once (round 2): was [0.001, 0.95]
+      final_ratio: [1.0e-6, 0.99]  # widened once (round 2): was [1e-5, 0.1]; must stay below 1
+
+phases:
+  reference:                   # LP (HiGHS via highspy), classical methods and Z_rand on every test instance
+    sets: [uniform, structured, skewed, ties, wheat, astana]
+  main:                        # RQ1-RQ3 quality, budget-only stop
+    sets: [uniform, structured, skewed, ties]
+    methods: [RS, GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+    stop: budget
+    # 200x200: seeds r = 0..9 (option A, amendment 1); 50x50 and 100x100: r = 0..19 (amendment 7, e);
+    # smaller sizes: r = 0..29. B = 200 m n everywhere.
+    runs_by_size: {50x50: 20, 100x100: 20, 200x200: 10}
+    skip_methods_by_size: {200x200: [GA-rand-base, GA-cost-base]}   # amendment 7, d
+  stagnation:                  # additional stopping mode: stagnation_evaluations = 0.1 B
+    sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
+    methods: [GA-rand-base, GA-cost-base, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+    stop: {stagnation_evaluations_fraction: 0.1}
+    runs: 10                   # seeds r = 0..9 (amendment 7, c)
+  legacy:                      # link with v0.3.0: the old rule, 200 generations without improvement
+    sets: {uniform: [[20, 20], [50, 50], [100, 100]]}
+    methods: [GA-rand-base, GA-cost-base]
+    stop: {stagnation_generations: 200}
+  factorial:                   # RQ4, budget-only stop
+    sets: {uniform: [[20, 20], [50, 50]]}
+    population: [20, 50, 100, 200, 400]
+    mutation:
+      swap_fixed: [0.05, 0.2, 1.0]
+      swap_count: [1, 3, 10]
+      swap_per_position: [0.0005, 0.002, 0.01]
+      swap_scaled: [0.05, 0.1, 0.25]
+    initialization: [random, cost-aware]
+    fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+    runs: 10                   # seeds r = 0..9 (amendment 7, b); unit of analysis: median per cell and instance
+  applied:                     # illustration only (amendment 4): no test, not pooled with the synthetic sets
+    sets: [wheat, astana]
+    methods: [RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+    runs: 10
+    runs_by_set: {astana: 5}   # seeds r = 0..4 on the Astana instances (amendment 7, f)
+    stop: budget
+  representation:              # non-confirmatory (amendment 3): why the gap grows with the size
+    # up to 100x100 (amendment 7, g): 200x200 is covered in the article by the exact bound of Proposition 3
+    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100]],
+           structured: [[50, 50]], skewed: [[50, 50]], ties: [[50, 50]]}
+    random_parents: 1000       # random permutations per instance (prefix, neutrality, locality)
+    ga_methods: [GA-rand-tuned, GA-cost-tuned]
+    ga_seeds: 10               # populations of these runs at 10 %, 50 % and 100 % of the budget
+    snapshots: [0.1, 0.5, 1.0]
+    crossover_pairs: 200       # parent pairs from the population at 50 % (heritability of OX1)
+  timing:                      # RQ3: performance cores only, nothing else running, no GPU
+    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50], [100, 100], [200, 200]], lp_scaling: all}
+    instances: 5
+    runs: 3
+    methods: [LP, LP-ortools, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned]
+    lp_methods_only_on: [lp_scaling]
+    stochastic_max_arcs: 10000   # GA and SA up to 100x100; LP and OR-Tools on every size (amendment 7, a)
+    cpu_class: performance

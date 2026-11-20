@@ -1,0 +1,83 @@
+# Quick version of the v0.4 experiment. NOT part of the pre-registered plan (docs/v0.4/PREREGISTRATION.md) and
+# not a replacement for it: fewer sizes, sets, seeds and phases, written to its own directory.
+# The instances and the seeds are the first ones of experiments/paper-v2.yaml (same generator and seed bases),
+# the tuned parameters are the frozen experiments/tuned-v2.yaml, the budget is B = 200 m n.
+#
+#   tpga-exp pilot  --config experiments/paper-v2-quick.yaml
+#   python scripts/run_main.py --config experiments/paper-v2-quick.yaml --priority normal
+#   tpga-exp report --config experiments/paper-v2-quick.yaml
+
+name: paper-v2-quick
+output: paper_artifacts_quick
+base_seed: 20261116
+instance_seed_base: 20270000
+runs: 10                       # seeds r = 0..9
+tolerance: 1.0e-9
+decoder_tol: 1.0e-12
+lp_repeats: 5
+convergence_points: 100
+zrand_samples: 1000
+workers: 24
+priority: normal
+memory_reserve_gib: 10
+state_interval_s: 3
+
+reachability: {instances: 1000, seed: 20261117, min_size: 2, max_size: 30, max_supply: 20, max_cost: 100}
+
+budget: {factor: 200, cap: 8000000}   # the cap is not active at these sizes
+
+instances:
+  uniform:    {sizes: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50]], per_size: 10, cost: [1, 100],
+               supply: [20, 100]}
+  structured: {sizes: [[20, 20]], per_size: 10, area: 100, noise: 10, supply: [20, 100]}
+
+tuned_parameters: experiments/tuned-v2.yaml
+methods:
+  LP:            {kind: lp, solver: highspy}
+  LP-ortools:    {kind: lp, solver: ortools}   # measured by `tpga-exp pilot` only; in no phase of this file
+  NWC:           {kind: classical}
+  LCM:           {kind: classical}
+  VAM:           {kind: classical}
+  RS:            {kind: rs}
+  # speed calibration of `tpga-exp pilot` only; in no phase of this file
+  GA-rand-base:  {kind: ga, initialization: random, params: {population: 100, crossover_rate: 0.9, mutation_rate: 0.2,
+                  tournament: 3, elite: 2, mutation_mode: swap_fixed}}
+  GA-rand-tuned: {kind: ga, initialization: random, tuned: GA-rand}
+  GA-cost-tuned: {kind: ga, initialization: cost-aware, tuned: GA-cost}
+  SA-rand-tuned: {kind: sa, initialization: random, tuned: SA-rand}
+  SA-cost-tuned: {kind: sa, initialization: cost-aware, tuned: SA-cost}
+
+stochastic_methods: [RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+reference_methods: [LP, NWC, LCM, VAM]
+
+phases:
+  reference:
+    sets: [uniform, structured]
+  representation:
+    sets: {uniform: [[5, 5], [10, 10], [20, 20], [30, 30], [50, 50]], structured: [[20, 20]]}
+    random_parents: 1000
+    ga_methods: [GA-rand-tuned, GA-cost-tuned]
+    ga_seeds: 10
+    snapshots: [0.1, 0.5, 1.0]
+    crossover_pairs: 200
+  main:
+    sets: [uniform, structured]
+    methods: [RS, GA-rand-tuned, GA-cost-tuned, SA-rand-tuned, SA-cost-tuned]
+    stop: budget
+  # The phases below are empty: the runner, the pilot and the report expect every phase name. They have no runs.
+  # `factorial.mutation` is the operator list of the phase `representation` (the same grid as in paper-v2.yaml).
+  factorial:
+    sets: {}
+    population: []
+    mutation:
+      swap_fixed: [0.05, 0.2, 1.0]
+      swap_count: [1, 3, 10]
+      swap_per_position: [0.0005, 0.002, 0.01]
+      swap_scaled: [0.05, 0.1, 0.25]
+    initialization: []
+    fixed: {crossover_rate: 0.9, tournament: 3, elite: 2}
+    runs: 10
+  applied:    {sets: [], methods: [], runs: 10, stop: budget}
+  stagnation: {sets: {}, methods: [], stop: {stagnation_evaluations_fraction: 0.1}, runs: 10}
+  legacy:     {sets: {}, methods: [], stop: {stagnation_generations: 200}}
+  timing:     {sets: {}, instances: 1, runs: 1, methods: [], cpu_class: performance}

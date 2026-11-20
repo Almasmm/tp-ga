@@ -3,19 +3,18 @@
 from __future__ import annotations
 
 import csv
-import io
 import json
 import math
 import re
-import zipfile
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import FileResponse, PlainTextResponse, StreamingResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 
 from .paths import paper_dir
+from .zipstream import zip_response
 
 router = APIRouter(prefix="/artifacts", tags=["Experiment artifacts"])
 
@@ -54,7 +53,18 @@ def index() -> dict[str, Any]:
         "reachability": reach,
         "report": _json(root / "report.json"),
         "has_runs": (root / "raw" / "runs.csv").exists(),
+        "convergence_sizes": _convergence_sizes(root),
     }
+
+
+def _convergence_sizes(root: Path) -> list[str]:
+    """Sizes of the uniform set with GA runs in T2 (the sizes that have convergence curves), smallest first."""
+    path = root / "tables" / "T2_gap.csv"
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as fh:
+        sizes = {r["size"] for r in csv.DictReader(fh) if r.get("suite") == "uniform" and r.get("method") == "GA-rand"}
+    return sorted(sizes, key=lambda s: int(s.split("x")[0]) * int(s.split("x")[1]))
 
 
 def _num(v: str) -> Any:
@@ -147,14 +157,12 @@ def instances(suite: str | None = Query(None, pattern=r"^[a-z]+$")) -> list[dict
 
 
 @router.get("/download")
-def download() -> StreamingResponse:
-    """Zip of tables, figures, documents, instances and raw results."""
+def download() -> FileResponse:
+    """Zip of tables, figures, documents, instances and raw results (streamed from a temporary file)."""
     root = _root()
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for path in sorted(root.rglob("*")):
-            if path.is_file() and "pilot" not in path.relative_to(root).parts:
-                zf.write(path, Path("paper_artifacts") / path.relative_to(root))
-    buf.seek(0)
-    headers = {"Content-Disposition": 'attachment; filename="paper_artifacts.zip"'}
-    return StreamingResponse(buf, media_type="application/zip", headers=headers)
+    files = [
+        (path, Path("paper_artifacts") / path.relative_to(root))
+        for path in sorted(root.rglob("*"))
+        if path.is_file() and "pilot" not in path.relative_to(root).parts
+    ]
+    return zip_response(files, "paper_artifacts.zip")

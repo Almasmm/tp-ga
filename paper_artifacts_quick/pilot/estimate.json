@@ -1,0 +1,226 @@
+{
+ "measured": {
+  "per_eval_s_performance_core": {
+   "structured|20x20|GA-cost-tuned": 4.575192371004901e-06,
+   "structured|20x20|GA-rand-tuned": 2.2545487392026946e-06,
+   "structured|20x20|RS": 3.255435658760632e-06,
+   "structured|20x20|SA-cost-tuned": 1.2978948526327487e-06,
+   "structured|20x20|SA-rand-tuned": 3.6447049998969304e-06,
+   "structured|20x20|rep:GA-cost-tuned": 1.2550440175252086e-05,
+   "structured|20x20|rep:GA-rand-tuned": 9.971789839762157e-06,
+   "uniform|10x10|GA-cost-tuned": 1.3497669188674988e-05,
+   "uniform|10x10|GA-rand-tuned": 1.3452497467492614e-05,
+   "uniform|10x10|RS": 1.191945527686782e-05,
+   "uniform|10x10|SA-cost-tuned": 1.2102029089365887e-05,
+   "uniform|10x10|SA-rand-tuned": 1.1782917897608702e-05,
+   "uniform|10x10|rep:GA-cost-tuned": 1.0029542471991503e-05,
+   "uniform|10x10|rep:GA-rand-tuned": 8.756425904728147e-06,
+   "uniform|20x20|GA-P20": 1.3047245622029693e-05,
+   "uniform|20x20|GA-P400": 1.4945466558426155e-05,
+   "uniform|20x20|GA-cost-tuned": 1.7860180180388782e-05,
+   "uniform|20x20|GA-rand-tuned": 2.003135154158668e-05,
+   "uniform|20x20|RS": 1.6941175000101794e-05,
+   "uniform|20x20|SA-cost-tuned": 1.540527006545735e-05,
+   "uniform|20x20|SA-rand-tuned": 1.4039760000014213e-05,
+   "uniform|20x20|rep:GA-cost-tuned": 1.4556624271320085e-05,
+   "uniform|20x20|rep:GA-rand-tuned": 1.1239339067432682e-05,
+   "uniform|30x30|GA-cost-tuned": 2.0446781334140427e-05,
+   "uniform|30x30|GA-rand-tuned": 1.3099933443366552e-05,
+   "uniform|30x30|RS": 1.4462447397059343e-05,
+   "uniform|30x30|SA-cost-tuned": 1.1705227155117897e-05,
+   "uniform|30x30|SA-rand-tuned": 1.2815286996441273e-05,
+   "uniform|30x30|rep:GA-cost-tuned": 1.9817021727307403e-05,
+   "uniform|30x30|rep:GA-rand-tuned": 1.2554192444981746e-05,
+   "uniform|50x50|GA-P20": 8.319920574215801e-06,
+   "uniform|50x50|GA-P400": 1.4105421565570881e-05,
+   "uniform|50x50|GA-cost-tuned": 3.1950673025720086e-05,
+   "uniform|50x50|GA-rand-tuned": 1.8990679543106335e-05,
+   "uniform|50x50|RS": 2.663630999995803e-05,
+   "uniform|50x50|SA-cost-tuned": 9.051375000126428e-06,
+   "uniform|50x50|SA-rand-tuned": 7.441611031756205e-06,
+   "uniform|50x50|rep:GA-cost-tuned": 3.329956383281517e-05,
+   "uniform|50x50|rep:GA-rand-tuned": 1.870573419629734e-05,
+   "uniform|5x5|GA-cost-tuned": 0.0001299982749817163,
+   "uniform|5x5|GA-rand-tuned": 6.177093140116813e-05,
+   "uniform|5x5|RS": 7.019651999871712e-05,
+   "uniform|5x5|SA-cost-tuned": 6.126674290253833e-05,
+   "uniform|5x5|SA-rand-tuned": 6.495158174508262e-05,
+   "uniform|5x5|rep:GA-cost-tuned": 5.6686295258911984e-05,
+   "uniform|5x5|rep:GA-rand-tuned": 3.158648830221143e-05
+  },
+  "deterministic_s": {
+   "structured|20x20|LCM": 0.00013379999290918931,
+   "structured|20x20|LP": 0.000938900004257448,
+   "structured|20x20|LP-ortools": 0.00013169999874662608,
+   "structured|20x20|NWC": 7.550000009359792e-05,
+   "structured|20x20|VAM": 0.0008332999932463281,
+   "structured|20x20|rep:GA-cost-tuned:analysis": 1.5349918015530486,
+   "structured|20x20|rep:GA-rand-tuned:analysis": 0.10858545407113697,
+   "structured|20x20|rep:random": 0.3831044099863501,
+   "uniform|10x10|LCM": 6.779999966965988e-05,
+   "uniform|10x10|LP": 0.0006490000014309771,
+   "uniform|10x10|LP-ortools": 5.980000423733145e-05,
+   "uniform|10x10|NWC": 4.959999932907522e-05,
+   "uniform|10x10|VAM": 0.0004006000017398037,
+   "uniform|10x10|rep:GA-cost-tuned:analysis": 1.202115587134172,
+   "uniform|10x10|rep:GA-rand-tuned:analysis": 0.09570358583872876,
+   "uniform|10x10|rep:random": 0.32942650000040885,
+   "uniform|20x20|LCM": 0.00012680000509135425,
+   "uniform|20x20|LP": 0.001229300003615208,
+   "uniform|20x20|LP-ortools": 0.00017440000374335796,
+   "uniform|20x20|NWC": 7.230000483104959e-05,
+   "uniform|20x20|VAM": 0.0008357000042451546,
+   "uniform|20x20|rep:GA-cost-tuned:analysis": 1.612492000000202,
+   "uniform|20x20|rep:GA-rand-tuned:analysis": 0.09606110000459012,
+   "uniform|20x20|rep:random": 0.40818710724708707,
+   "uniform|30x30|LCM": 0.0002299999978276901,
+   "uniform|30x30|LP": 0.0023822999937692657,
+   "uniform|30x30|LP-ortools": 0.0003386000025784597,
+   "uniform|30x30|NWC": 9.879999561235309e-05,
+   "uniform|30x30|VAM": 0.0014054999992367812,
+   "uniform|30x30|rep:GA-cost-tuned:analysis": 2.2939098000060767,
+   "uniform|30x30|rep:GA-rand-tuned:analysis": 0.12389509999775328,
+   "uniform|30x30|rep:random": 0.48649745134556943,
+   "uniform|50x50|LCM": 0.0005289999971864745,
+   "uniform|50x50|LP": 0.0063955000005080365,
+   "uniform|50x50|LP-ortools": 0.0008505000005243346,
+   "uniform|50x50|NWC": 0.0001967999996850267,
+   "uniform|50x50|VAM": 0.0029434999960358255,
+   "uniform|50x50|rep:GA-cost-tuned:analysis": 3.40458438458834,
+   "uniform|50x50|rep:GA-rand-tuned:analysis": 0.20792104707475742,
+   "uniform|50x50|rep:random": 0.7313607475330782,
+   "uniform|5x5|LCM": 6.749999738531187e-05,
+   "uniform|5x5|LP": 0.0006485999983851798,
+   "uniform|5x5|LP-ortools": 7.069999992381781e-05,
+   "uniform|5x5|NWC": 5.989999772282317e-05,
+   "uniform|5x5|VAM": 0.00032579999970039353,
+   "uniform|5x5|rep:GA-cost-tuned:analysis": 1.1465051363184948,
+   "uniform|5x5|rep:GA-rand-tuned:analysis": 0.09410030284336862,
+   "uniform|5x5|rep:random": 0.31851409999944735
+  },
+  "e_over_p_speed_ratio": 1.320041447747163,
+  "monitor_overhead": {
+   "without_s": 0.640105800004676,
+   "with_reporting_s": 0.6097184000027482,
+   "overhead_percent": -4.747246471084274
+  }
+ },
+ "phases": {
+  "reference": {
+   "runs": 240,
+   "core_s": 1.0347899991757004,
+   "wall_h": 1.4285774721454894e-05,
+   "share": 8.627560372940582e-05
+  },
+  "representation": {
+   "runs": 1260,
+   "core_s": 4869.8580650251,
+   "wall_h": 0.06723073792540232,
+   "share": 0.4060243575713354
+  },
+  "main": {
+   "runs": 3000,
+   "core_s": 7123.111874530656,
+   "wall_h": 0.0983379928645669,
+   "share": 0.5938893668249352
+  },
+  "applied": {
+   "runs": 0,
+   "core_s": 0.0,
+   "wall_h": 0.0,
+   "by_set": {},
+   "share": 0.0
+  },
+  "factorial": {
+   "runs": 0,
+   "core_s": 0.0,
+   "wall_h": 0.0,
+   "share": 0.0
+  },
+  "stagnation": {
+   "runs": 0,
+   "core_s": 0.0,
+   "wall_h": 0.0,
+   "share": 0.0
+  },
+  "legacy": {
+   "runs": 0,
+   "core_s": 0.0,
+   "wall_h": 0.0,
+   "share": 0.0
+  },
+  "timing": {
+   "runs": 0,
+   "core_s": 0.0,
+   "wall_h": 0.0,
+   "share": 0.0
+  }
+ },
+ "total_wall_h": 0.16558301656469068,
+ "capacity_performance_cores": 20.12083152942376,
+ "memory_budget_gib": 13.538177490234375,
+ "memory_limited": [],
+ "largest_items": [
+  {
+   "phase": "representation",
+   "item": "uniform 50x50 GA-cost-tuned",
+   "wall_h": 0.02768601932621892
+  },
+  {
+   "phase": "main",
+   "item": "uniform 50x50 GA-cost-tuned",
+   "wall_h": 0.022054722088921223
+  },
+  {
+   "phase": "main",
+   "item": "uniform 50x50 RS",
+   "wall_h": 0.01838635493063104
+  },
+  {
+   "phase": "representation",
+   "item": "uniform 50x50 GA-rand-tuned",
+   "wall_h": 0.013199128877455243
+  },
+  {
+   "phase": "main",
+   "item": "uniform 50x50 GA-rand-tuned",
+   "wall_h": 0.013108774242902927
+  },
+  {
+   "phase": "representation",
+   "item": "uniform 30x30 GA-cost-tuned",
+   "wall_h": 0.00809135671482038
+  },
+  {
+   "phase": "main",
+   "item": "uniform 50x50 SA-cost-tuned",
+   "wall_h": 0.006247929738121659
+  },
+  {
+   "phase": "main",
+   "item": "uniform 50x50 SA-rand-tuned",
+   "wall_h": 0.005136751362549274
+  },
+  {
+   "phase": "main",
+   "item": "uniform 30x30 GA-cost-tuned",
+   "wall_h": 0.005080998094994234
+  },
+  {
+   "phase": "representation",
+   "item": "uniform 20x20 GA-cost-tuned",
+   "wall_h": 0.003833812646754275
+  },
+  {
+   "phase": "main",
+   "item": "uniform 30x30 RS",
+   "wall_h": 0.0035938990334246656
+  },
+  {
+   "phase": "representation",
+   "item": "structured 20x20 GA-cost-tuned",
+   "wall_h": 0.003505249179549543
+  }
+ ],
+ "reductions": []
+}

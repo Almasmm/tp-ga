@@ -1,0 +1,38 @@
+{
+ "selected": {
+  "GA-cost-cycle-ft": {
+   "population": 300,
+   "pivots": 2,
+   "local_search_every": 0,
+   "config": "P300-pc0.965569-t8-e5-cycle:2-cost-aware-budget",
+   "mean_gap": 5.569556635149223,
+   "rank": 28
+  },
+  "GA-hybrid-ft": {
+   "population": 300,
+   "pivots": 2,
+   "local_search_every": 3,
+   "config": "P300-pc0.965569-t8-e5-cycle:2-cost-aware-budget-ls3",
+   "mean_gap": 5.657728813552452,
+   "rank": 30
+  }
+ },
+ "instances": [
+  "t20x20-r0.2-00",
+  "t20x20-r0.2-01",
+  "t20x20-r1-00",
+  "t20x20-r1-01",
+  "t30x30-r0.2-00",
+  "t30x30-r0.2-01",
+  "t30x30-r1-00",
+  "t30x30-r1-01"
+ ],
+ "seeds": [
+  20261116,
+  20261117,
+  20261118
+ ],
+ "configurations": 48,
+ "wall_s": 111.15935826301575,
+ "rule": "smallest mean training gap over instances and seeds, separately without and with the local search; ties: the earlier configuration of the grid"
+}

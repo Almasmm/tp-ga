@@ -14,18 +14,21 @@ from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from tpga import GAConfig, TransportProblem, __version__, run_ga, solve_lp
 
 from .artifacts import router as artifacts_router
+from .artifacts_v2 import router as artifacts_v2_router
 from .history import router as history_router
 from .jobs import manager as job_manager
 from .jobs import router as jobs_router
+from .monitor import router as monitor_router
 from .scenarios import router as scenarios_router
 from .traces import router as traces_router
 
 MAX_ARCS = 400  # limit for arbitrary matrices submitted to /solve
+MAX_SOLVE_CALLS = 1_000_000  # GA decoder calls per synchronous /solve request (about population x generations)
 
 
 class JsonFormatter(logging.Formatter):
@@ -91,7 +94,9 @@ async def access_log(request: Request, call_next):  # type: ignore[no-untyped-de
 app.include_router(scenarios_router)
 app.include_router(jobs_router)
 app.include_router(traces_router)
+app.include_router(artifacts_v2_router)
 app.include_router(artifacts_router)
+app.include_router(monitor_router)
 app.include_router(history_router)
 
 
@@ -103,6 +108,15 @@ class SolveRequest(BaseModel):
     generations: int = Field(200, ge=1, le=5000)
     population: int = Field(60, ge=4, le=1000)
     seed: int | None = None
+
+    @model_validator(mode="after")
+    def _calls(self) -> "SolveRequest":
+        if self.method == "ga" and self.population * (self.generations + 1) > MAX_SOLVE_CALLS:
+            raise ValueError(
+                f"population x (generations + 1) = {self.population * (self.generations + 1)} decoder calls; "
+                f"the synchronous limit is {MAX_SOLVE_CALLS}"
+            )
+        return self
 
 
 class SolveResponse(BaseModel):

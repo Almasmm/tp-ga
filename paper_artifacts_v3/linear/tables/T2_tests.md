@@ -1,0 +1,41 @@
+# Linear problem: paired comparisons on gap
+
+Unit: the instance (median over its seeds). Two-sided Wilcoxon signed-rank test, Holm correction over the five pairs of each (set, size), matched-pairs rank-biserial r (negative: method_a has the smaller gap), Hodges-Lehmann shift of gap(a) - gap(b) in percentage points. wins_a counts the instances where method_a has the smaller median gap. `smallest_possible_p` is 2 / 2^n.
+
+| set | size | method_a | method_b | n | wins_a | ties | losses_a | median_a | median_b | W | p | rank_biserial_r | hl_shift | hl_ci_low | hl_ci_high | hl_ci_method | smallest_possible_p | p_holm | p_holm_text |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| uniform | 5x5 | GA-rand-cycle | VAM | 10 | 5 | 5 | 0 | 0 | 1.067 | 0 | 0.0625 | -1 | -1.489 | -8.798 | 0 | exact Walsh-average CI | 0.001953 | 0.3125 | 0.312 |
+| uniform | 5x5 | GA-rand-cycle | GA-rand-tuned | 10 | 1 | 9 | 0 | 0 | 0 | 0 | 1 | -1 | 0 | -0.3504 | 0 | exact Walsh-average CI | 0.001953 | 1 | 1.000 |
+| uniform | 5x5 | GA-rand-cycle | GA-cost-tuned | 10 | 2 | 8 | 0 | 0 | 0 | 0 | 0.5 | -1 | 0 | -0.6981 | 0 | exact Walsh-average CI | 0.001953 | 1 | 1.000 |
+| uniform | 5x5 | GA-cost-cycle | GA-cost-tuned | 10 | 0 | 10 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | exact Walsh-average CI | 0.001953 | 1 | 1.000 |
+| uniform | 5x5 | GA-cost-cycle | VAM | 10 | 5 | 5 | 0 | 0 | 1.067 | 0 | 0.0625 | -1 | -1.147 | -8.798 | 0 | exact Walsh-average CI | 0.001953 | 0.3125 | 0.312 |
+| uniform | 10x10 | GA-rand-cycle | VAM | 10 | 9 | 1 | 0 | 0 | 8.377 | 0 | 0.003906 | -1 | -8.998 | -17.83 | -3.927 | exact Walsh-average CI | 0.001953 | 0.01953 | 0.020 |
+| uniform | 10x10 | GA-rand-cycle | GA-rand-tuned | 10 | 9 | 1 | 0 | 0 | 1.547 | 0 | 0.003906 | -1 | -1.763 | -2.773 | -0.5469 | exact Walsh-average CI | 0.001953 | 0.01953 | 0.020 |
+| uniform | 10x10 | GA-rand-cycle | GA-cost-tuned | 10 | 8 | 1 | 1 | 0 | 1.382 | 1 | 0.007812 | -0.9556 | -1.311 | -2.601 | -0.4792 | exact Walsh-average CI | 0.001953 | 0.01953 | 0.020 |
+| uniform | 10x10 | GA-cost-cycle | GA-cost-tuned | 10 | 9 | 1 | 0 | 0.2654 | 1.382 | 0 | 0.003906 | -1 | -0.9703 | -2.04 | -0.3884 | exact Walsh-average CI | 0.001953 | 0.01953 | 0.020 |
+| uniform | 10x10 | GA-cost-cycle | VAM | 10 | 9 | 1 | 0 | 0.2654 | 8.377 | 0 | 0.003906 | -1 | -8.835 | -17.87 | -3.324 | exact Walsh-average CI | 0.001953 | 0.01953 | 0.020 |
+| uniform | 20x20 | GA-rand-cycle | VAM | 10 | 10 | 0 | 0 | 1.766 | 22.73 | 0 | 0.001953 | -1 | -20.54 | -29.49 | -11.68 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 20x20 | GA-rand-cycle | GA-rand-tuned | 10 | 10 | 0 | 0 | 1.766 | 14.03 | 0 | 0.001953 | -1 | -14.57 | -19.27 | -9.564 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 20x20 | GA-rand-cycle | GA-cost-tuned | 10 | 10 | 0 | 0 | 1.766 | 4.793 | 0 | 0.001953 | -1 | -2.396 | -3.405 | -1.436 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 20x20 | GA-cost-cycle | GA-cost-tuned | 10 | 10 | 0 | 0 | 0.7617 | 4.793 | 0 | 0.001953 | -1 | -3.388 | -4.415 | -2.528 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 20x20 | GA-cost-cycle | VAM | 10 | 10 | 0 | 0 | 0.7617 | 22.73 | 0 | 0.001953 | -1 | -21.02 | -29.94 | -12.18 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 30x30 | GA-rand-cycle | VAM | 10 | 10 | 0 | 0 | 6.98 | 25.62 | 0 | 0.001953 | -1 | -18.64 | -25.44 | -11.29 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 30x30 | GA-rand-cycle | GA-rand-tuned | 10 | 10 | 0 | 0 | 6.98 | 33.57 | 0 | 0.001953 | -1 | -27.09 | -30.56 | -23.92 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 30x30 | GA-rand-cycle | GA-cost-tuned | 10 | 3 | 0 | 7 | 6.98 | 5.636 | 16 | 0.2754 | 0.4182 | 1.137 | -0.9015 | 2.691 | exact Walsh-average CI | 0.001953 | 0.2754 | 0.275 |
+| uniform | 30x30 | GA-cost-cycle | GA-cost-tuned | 10 | 9 | 0 | 1 | 2.703 | 5.636 | 1 | 0.003906 | -0.9636 | -2.991 | -4.457 | -1.836 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 30x30 | GA-cost-cycle | VAM | 10 | 10 | 0 | 0 | 2.703 | 25.62 | 0 | 0.001953 | -1 | -22.11 | -28.77 | -16.3 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 50x50 | GA-rand-cycle | VAM | 10 | 10 | 0 | 0 | 11.87 | 31.47 | 0 | 0.001953 | -1 | -19.95 | -35.86 | -8.969 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 50x50 | GA-rand-cycle | GA-rand-tuned | 10 | 10 | 0 | 0 | 11.87 | 55.2 | 0 | 0.001953 | -1 | -43.44 | -46.33 | -40.42 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 50x50 | GA-rand-cycle | GA-cost-tuned | 10 | 3 | 0 | 7 | 11.87 | 11.86 | 19 | 0.4316 | 0.3091 | 1.115 | -1.392 | 2.746 | exact Walsh-average CI | 0.001953 | 0.4316 | 0.432 |
+| uniform | 50x50 | GA-cost-cycle | GA-cost-tuned | 10 | 10 | 0 | 0 | 7.31 | 11.86 | 0 | 0.001953 | -1 | -4.2 | -5.524 | -2.767 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 50x50 | GA-cost-cycle | VAM | 10 | 10 | 0 | 0 | 7.31 | 31.47 | 0 | 0.001953 | -1 | -25.49 | -39.59 | -13.7 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 100x100 | GA-rand-cycle | VAM | 10 | 8 | 0 | 2 | 33.23 | 41.7 | 4 | 0.01367 | -0.8545 | -7.747 | -14.81 | -1.812 | exact Walsh-average CI | 0.001953 | 0.01367 | 0.014 |
+| uniform | 100x100 | GA-rand-cycle | GA-rand-tuned | 10 | 10 | 0 | 0 | 33.23 | 111.3 | 0 | 0.001953 | -1 | -75.88 | -80.8 | -70.16 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 100x100 | GA-rand-cycle | GA-cost-tuned | 10 | 0 | 0 | 10 | 33.23 | 21.24 | 0 | 0.001953 | 1 | 14.14 | 11.19 | 17.04 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 100x100 | GA-cost-cycle | GA-cost-tuned | 10 | 10 | 0 | 0 | 14.56 | 21.24 | 0 | 0.001953 | -1 | -6.329 | -7.565 | -4.778 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| uniform | 100x100 | GA-cost-cycle | VAM | 10 | 10 | 0 | 0 | 14.56 | 41.7 | 0 | 0.001953 | -1 | -28.51 | -33.53 | -23.42 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| structured | 20x20 | GA-rand-cycle | VAM | 10 | 10 | 0 | 0 | 0.2483 | 8.357 | 0 | 0.001953 | -1 | -8.055 | -12.55 | -6.578 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| structured | 20x20 | GA-rand-cycle | GA-rand-tuned | 10 | 10 | 0 | 0 | 0.2483 | 1.522 | 0 | 0.001953 | -1 | -1.244 | -1.806 | -0.6643 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| structured | 20x20 | GA-rand-cycle | GA-cost-tuned | 10 | 9 | 0 | 1 | 0.2483 | 0.9751 | 1 | 0.003906 | -0.9636 | -0.534 | -0.7923 | -0.2458 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| structured | 20x20 | GA-cost-cycle | GA-cost-tuned | 10 | 9 | 0 | 1 | 0.3373 | 0.9751 | 2 | 0.005859 | -0.9273 | -0.4051 | -0.6914 | -0.1367 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |
+| structured | 20x20 | GA-cost-cycle | VAM | 10 | 10 | 0 | 0 | 0.3373 | 8.357 | 0 | 0.001953 | -1 | -7.977 | -12.49 | -6.197 | exact Walsh-average CI | 0.001953 | 0.009766 | 0.010 |

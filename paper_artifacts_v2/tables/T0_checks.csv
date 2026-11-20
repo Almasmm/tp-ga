@@ -1,0 +1,5 @@
+phase,records,failed_runs,plans_checked,plans_infeasible,plans_feasible_share,max_residual,max_dummy_volume,wall_h
+main,350,0,350,0,1.0,0.0,0.0,
+reference,712,0,712,0,1.0,0.0,504406500.0,0.0016718561781777276
+representation,1890,0,0,0,,,,0.3181633524099986
+total,2952,0,1062,0,1.0,0.0,504406500.0,0.3198352085881763

@@ -1,0 +1,4 @@
+instance,size,listed_objective,url,highs_status,highs_proved,highs_cost,highs_bound,highs_time_s,highs_minus_listed
+gr4x6,4x6,202.35,https://miplib.zib.de/instance_details_gr4x6.html,Optimal,True,202.35,202.35,0.01759950000268873,0.0
+ran13x13,13x13,3252.0,https://miplib.zib.de/instance_details_ran13x13.html,Optimal,True,3252.0,3251.9999999999936,6.611313599998539,0.0
+ran12x21,12x21,3664.0,https://miplib.zib.de/instance_details_ran12x21.html,Optimal,True,3664.0,3663.9999999999995,15.715659399997094,0.0

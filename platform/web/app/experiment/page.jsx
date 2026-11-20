@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Download } from "lucide-react";
 import { useSettings } from "../providers";
 import { useApi } from "../lib/use-api";
 import { METHODS, num } from "../lib/format";
 import { Field, PageHead, Panel, Segmented, Source, State } from "../components/ui";
 import { LineChart } from "../components/charts";
+import { ArtifactTable } from "../components/artifact-table";
 
 const TABLE_TITLE = {
   T1_instances: ["T1. Наборы задач", "T1. Instance sets"],
@@ -27,54 +28,6 @@ const FIGURE_TITLE = {
   F5_factorial_heatmap: ["F5. Факторный план", "F5. Factorial plan"],
   F6_wheat_map: ["F6. Карта: пшеница", "F6. Map: wheat"],
 };
-const FILTER_COLUMNS = ["size", "method", "suite", "initialization", "population", "mutation_rate", "set"];
-
-function TableView({ name, lang }) {
-  const { t } = useSettings();
-  const table = useApi(`/artifacts/tables/${name}`, { isEmpty: (d) => !d.rows.length });
-  const [filters, setFilters] = useState({});
-  const rows = useMemo(
-    () => (table.data?.rows ?? []).filter((r) => Object.entries(filters).every(([k, v]) => v === "" || String(r[k]) === v)),
-    [table.data, filters],
-  );
-  const columns = table.data?.columns ?? [];
-  const filterable = FILTER_COLUMNS.filter((c) => columns.includes(c));
-  return (
-    <State status={table.status} error={table.error} onRetry={table.reload}>
-      {table.data && (
-        <>
-          {filterable.length > 0 && (
-            <div className="field-row" style={{ marginBottom: 12 }} aria-label={t("filters")}>
-              {filterable.map((c) => {
-                const values = [...new Set(table.data.rows.map((r) => String(r[c])))];
-                return (
-                  <Field key={c} label={c}>
-                    <select value={filters[c] ?? ""} onChange={(e) => setFilters((f) => ({ ...f, [c]: e.target.value }))}>
-                      <option value="">{t("all")}</option>
-                      {values.map((v) => <option key={v} value={v}>{v}</option>)}
-                    </select>
-                  </Field>
-                );
-              })}
-            </div>
-          )}
-          <div className="table-wrap" style={{ maxHeight: 520 }}>
-            <table>
-              <thead><tr>{columns.map((c) => <th key={c} className={typeof table.data.rows[0]?.[c] === "number" ? "num" : ""}>{c}</th>)}</tr></thead>
-              <tbody>
-                {rows.map((r, i) => (
-                  <tr key={i}>{columns.map((c) => <td key={c} className={typeof r[c] === "number" ? "num" : ""}>{typeof r[c] === "number" ? num(r[c], 4, lang) : r[c] ?? "–"}</td>)}</tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="meta" style={{ marginTop: 8 }}>{rows.length} / {table.data.rows.length} · <Source>{`paper_artifacts/tables/${name}.csv`}</Source></p>
-        </>
-      )}
-    </State>
-  );
-}
-
 function Convergence({ lang, sizes }) {
   const { t } = useSettings();
   const [size, setSize] = useState(sizes.at(-1));
@@ -104,7 +57,7 @@ export default function ExperimentPage() {
   const [figLang, setFigLang] = useState(lang);
   const tables = index.data?.tables ?? [];
   const figures = index.data?.figures?.[figLang] ?? [];
-  const sizes = ["5x5", "10x10", "20x20", "30x30", "50x50", "100x100"];
+  const sizes = index.data?.convergence_sizes ?? [];
   const L = lang === "en" ? 1 : 0;
 
   return (
@@ -126,15 +79,15 @@ export default function ExperimentPage() {
                   {tables.map((n) => <option key={n} value={n}>{TABLE_TITLE[n]?.[L] ?? n}</option>)}
                 </select>
               </Field>}>
-              <TableView key={table} name={table} lang={lang} />
+              <ArtifactTable key={table} base="/artifacts/tables" source="paper_artifacts/tables" name={table} lang={lang} />
             </Panel>
           )}
           {tables.includes("T5_tests") && (
             <Panel title={t("tests")} subtitle={lang === "en" ? "Wilcoxon signed-rank on per-instance median gaps, Holm correction" : "Критерий Уилкоксона по медианным отклонениям задач, поправка Холма"}>
-              <TableView name="T5_tests" lang={lang} />
+              <ArtifactTable base="/artifacts/tables" source="paper_artifacts/tables" name="T5_tests" lang={lang} />
             </Panel>
           )}
-          {index.data?.has_runs && <Convergence lang={lang} sizes={sizes} />}
+          {index.data?.has_runs && sizes.length > 0 && <Convergence lang={lang} sizes={sizes} />}
           <Panel title={t("figures")} actions={<Segmented label={t("language")} value={figLang} onChange={setFigLang} options={[{ value: "en", label: "EN" }, { value: "ru", label: "RU" }]} />}>
             {figures.length === 0 ? (
               <State status="empty" empty={lang === "en" ? "Figures are not generated yet" : "Рисунки ещё не построены"} />

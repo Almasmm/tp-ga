@@ -1,0 +1,7 @@
+set,size,instances,arcs,z_star_median,z_rand_median,generator
+uniform,5x5,10,25,7508.0,13890.250499999998,tpga.experiments.v2.instances._uniform
+uniform,10x10,10,100,8824.5,29173.2095,tpga.experiments.v2.instances._uniform
+uniform,20x20,10,400,10338.5,62484.9555,tpga.experiments.v2.instances._uniform
+uniform,30x30,10,900,11412.5,95665.6445,tpga.experiments.v2.instances._uniform
+uniform,50x50,10,2500,12013.5,150298.1225,tpga.experiments.v2.instances._uniform
+structured,20x20,10,400,29025.5,71714.817,tpga.experiments.v2.instances._structured

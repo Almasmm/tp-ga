@@ -1,0 +1,75 @@
+# Additional experiment v3, part 1: cycle mutation on the linear transportation problem.
+# Plan: docs/v0.4/PREREGISTRATION.md, amendment 8 (8.2 choice of k, 8.3 one protocol). Not part of the
+# pre-registered v0.4 plan; experiments/paper-v2.yaml and paper_artifacts_v2/ are not touched.
+#
+#   python -m tpga.experiments.v3 kselect --config experiments/paper-v3-cycle.yaml   # writes kselect/selected.json
+#   python -m tpga.experiments.v3 pilot   --config experiments/paper-v3-cycle.yaml   # writes linear/pilot.json
+#   python -m tpga.experiments.v3 run     --config experiments/paper-v3-cycle.yaml
+#   python -m tpga.experiments.v3 report  --config experiments/paper-v3-cycle.yaml
+
+name: paper-v3-cycle
+problem: linear
+output: paper_artifacts_v3
+base_seed: 20261116            # run r uses seed base_seed + r for every method and instance, as in v0.4
+runs: 10
+workers: 20
+budget_factor: 200             # B = 200 m n decoder calls, budget-only stop
+instance_seed_base: 20270000   # only for the seed of Z_rand (base + crc32 of the instance id), as in v0.4
+zrand_samples: 1000
+tuned_parameters: experiments/tuned-v2.yaml
+
+generators:                    # the generators of v0.4 with the parameters of experiments/paper-v2.yaml
+  uniform:    {cost: [1, 100], supply: [20, 100]}
+  structured: {area: 100, noise: 10, supply: [20, 100]}
+
+# Instances of experiments/paper-v2-quick.yaml (the first instances of the v0.4 plan: seed 20270000 +
+# 100000 * set index + 1000 * size index + i) and ten new uniform 100x100 instances with the seeds 20290000 + i.
+instances:
+  - {set: uniform,    size: [5, 5],     first_seed: 20270000, count: 10, prefix: u}
+  - {set: uniform,    size: [10, 10],   first_seed: 20271000, count: 10, prefix: u}
+  - {set: uniform,    size: [20, 20],   first_seed: 20272000, count: 10, prefix: u}
+  - {set: uniform,    size: [30, 30],   first_seed: 20273000, count: 10, prefix: u}
+  - {set: uniform,    size: [50, 50],   first_seed: 20274000, count: 10, prefix: u}
+  - {set: uniform,    size: [100, 100], first_seed: 20290000, count: 10, prefix: v3u, reduced_count: 5}
+  - {set: structured, size: [20, 20],   first_seed: 20370000, count: 10, prefix: s}
+
+methods:
+  VAM:           {kind: classical}
+  RS:            {kind: rs}
+  GA-rand-tuned: {kind: ga,  initialization: random,     tuned: GA-rand}
+  GA-cost-tuned: {kind: ga,  initialization: cost-aware, tuned: GA-cost}
+  SA-rand-tuned: {kind: sa,  initialization: random,     tuned: SA-rand}
+  SA-cost-tuned: {kind: sa,  initialization: cost-aware, tuned: SA-cost}
+  # the tuned parameters with the mutation replaced by the cycle mutation; k from kselect/selected.json
+  GA-rand-cycle: {kind: gax, initialization: random,     tuned: GA-rand, mutation: selected}
+  GA-cost-cycle: {kind: gax, initialization: cost-aware, tuned: GA-cost, mutation: selected}
+
+# Choice of k (8.2): training instances of the tuning set (seeds of paper_artifacts_v2/instances_train).
+kselect:
+  variants: [GA-rand-cycle, GA-cost-cycle]
+  grid:                        # in this order; on a tie the earlier entry is taken
+    - {mode: cycle, strength: 1}
+    - {mode: cycle, strength: 2}
+    - {mode: cycle, strength: 4}
+    - {mode: cycle_scaled, strength: 0.05}   # k = max(1, round(0.05 (m + n)))
+  instances:
+    - {set: uniform, size: [20, 20], first_seed: 25272000, prefix: u, suffix: -train}
+    - {set: uniform, size: [50, 50], first_seed: 25274000, prefix: u, suffix: -train}
+  instances_per_size: 4
+  reduced_instances_per_size: 2
+  runs: 3
+  time_limit_min: 8
+  parallel_runs: 20
+  small_time_ratio: 0.16       # a 20x20 run is counted as 0.16 of the 50x50 probe run (B and the length scale)
+  probe: {instance: u50x50-00-train, mode: cycle_scaled}
+
+# Pilot and reduction rule (8.3): estimate = sum of pilot times of all planned runs / parallel_runs.
+pilot: {limit_min: 30, parallel_runs: 20}
+
+# One Holm family per (set, size) (8.6).
+pairs:
+  - [GA-rand-cycle, VAM]
+  - [GA-rand-cycle, GA-rand-tuned]
+  - [GA-rand-cycle, GA-cost-tuned]
+  - [GA-cost-cycle, GA-cost-tuned]
+  - [GA-cost-cycle, VAM]

@@ -14,6 +14,7 @@ from typing import Any
 import numpy as np
 
 from tpga._kernels import Kernels, uniforms_per_child
+from tpga.decoder import decoder_eps
 from tpga.ga import GAConfig, _arrays
 from tpga.initialization import cost_aware_population
 from tpga.model import TransportProblem
@@ -63,6 +64,8 @@ def trace_ga(problem: TransportProblem, config: GAConfig) -> dict[str, Any]:
     if config.population > MAX_POPULATION:
         raise ValueError(f"trace is limited to a population of {MAX_POPULATION}")
     gens = config.generations if config.generations is not None else MAX_GENERATIONS
+    if config.mutation_mode != "swap_fixed":
+        raise ValueError("the trace shows the swap_fixed mutation only")
     if gens > MAX_GENERATIONS:
         raise ValueError(f"trace is limited to {MAX_GENERATIONS} generations")
     k = Kernels("numba")
@@ -75,13 +78,14 @@ def trace_ga(problem: TransportProblem, config: GAConfig) -> dict[str, Any]:
         else [rng.permutation(length) for _ in range(size)]
     )
     pop = np.ascontiguousarray(np.vstack(starts), dtype=np.int64)
-    fit = np.array([k.decode_cost(pop[r], supply, demand, cost, cols) for r in range(size)])
+    eps = decoder_eps(p, config.decoder_tol)
+    fit = np.array([k.decode_cost(pop[r], supply, demand, cost, cols, eps) for r in range(size)])
     evaluations = size
     best_cost = float(fit.min())
     best = pop[int(np.argmin(fit))].copy()
 
     def snapshot(gen: int, detail: dict[str, Any] | None) -> dict[str, Any]:
-        x = k.decode_plan(best, supply, demand, cols).reshape(m, n)
+        x = k.decode_plan(best, supply, demand, cols, eps).reshape(m, n)
         return {
             "generation": gen,
             "evaluations": evaluations,
@@ -97,6 +101,7 @@ def trace_ga(problem: TransportProblem, config: GAConfig) -> dict[str, Any]:
     new_pop, new_fit = np.empty_like(pop), np.empty_like(fit)
     scratch, kept = np.arange(size, dtype=np.int64), np.zeros(length, dtype=np.bool_)
     width = uniforms_per_child(t)
+    no_swaps = np.zeros(max(size - elite, 1), dtype=np.int64)
     since = 0
     for gen in range(1, gens + 1):
         if config.stagnation is not None and since >= config.stagnation:
@@ -140,10 +145,15 @@ def trace_ga(problem: TransportProblem, config: GAConfig) -> dict[str, Any]:
             demand,
             cost,
             cols,
+            eps,
             new_pop,
             new_fit,
             scratch,
             kept,
+            0,
+            no_swaps,
+            no_swaps,
+            np.empty(0),
         )
         if size > elite and not np.array_equal(new_pop[elite], child):  # pragma: no cover - same rule twice
             raise AssertionError("trace disagrees with the kernel")

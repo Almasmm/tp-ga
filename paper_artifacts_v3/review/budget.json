@@ -1,0 +1,60 @@
+{
+ "commands": [
+  {
+   "command": "pilot",
+   "started": "2026-11-20T01:18:34",
+   "allowance_s": 120.0,
+   "wall_s": 30.389516353607178,
+   "beyond_limit": false
+  },
+  {
+   "command": "tune",
+   "started": "2026-11-20T01:19:09",
+   "allowance_s": 209.61048364639282,
+   "wall_s": 2.9774935245513916,
+   "beyond_limit": false
+  },
+  {
+   "command": "rivals",
+   "started": "2026-11-20T01:19:16",
+   "allowance_s": 386.63299012184143,
+   "wall_s": 10.462725400924683,
+   "beyond_limit": false
+  },
+  {
+   "command": "generator",
+   "started": "2026-11-20T01:19:31",
+   "allowance_s": 1036.1702647209167,
+   "wall_s": 358.7849519252777,
+   "beyond_limit": false
+  },
+  {
+   "command": "degenerate",
+   "started": "2026-11-20T01:25:34",
+   "allowance_s": 1577.385312795639,
+   "wall_s": 694.6549422740936,
+   "beyond_limit": false
+  },
+  {
+   "command": "public",
+   "started": "2026-11-20T01:37:13",
+   "allowance_s": 1182.7303705215454,
+   "wall_s": 79.87231302261353,
+   "beyond_limit": false
+  },
+  {
+   "command": "timing",
+   "started": "2026-11-20T01:38:37",
+   "allowance_s": 1702.8580574989319,
+   "wall_s": 1349.9265344142914,
+   "beyond_limit": false
+  },
+  {
+   "command": "mipdefault",
+   "started": "2026-11-20T02:01:12",
+   "allowance_s": 2752.9315230846405,
+   "wall_s": 2518.947317838669,
+   "beyond_limit": false
+  }
+ ]
+}

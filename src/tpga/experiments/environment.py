@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import ctypes
 import datetime as dt
 import os
 import platform
 import subprocess
 import sys
+from collections.abc import Iterator
 from importlib import metadata
 from pathlib import Path
 from typing import Any
@@ -51,6 +53,67 @@ def pin_to_cpu(cpu: int) -> bool:
         os.sched_setaffinity(0, {cpu})
         return True
     return False  # pragma: no cover
+
+
+ES_CONTINUOUS = 0x80000000
+ES_SYSTEM_REQUIRED = 0x00000001
+
+
+@contextlib.contextmanager
+def keep_awake() -> Iterator[bool]:
+    """Keep Windows from sleeping because of idleness while the block runs (no admin rights, no setting changed).
+
+    ``SetThreadExecutionState`` holds a request of this process only; Windows drops it when the block ends or the
+    process exits. It does not stop a sleep the user asks for (lid, power button, Start menu) or a restart.
+    Yields whether the request was accepted (False on other systems).
+    """
+    ok = False
+    if sys.platform == "win32":
+        k32 = ctypes.windll.kernel32  # type: ignore[attr-defined,unused-ignore]
+        k32.SetThreadExecutionState.restype = ctypes.c_uint
+        ok = bool(k32.SetThreadExecutionState(ctypes.c_uint(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)))
+    try:
+        yield ok
+    finally:
+        if ok:
+            ctypes.windll.kernel32.SetThreadExecutionState(ctypes.c_uint(ES_CONTINUOUS))  # type: ignore[attr-defined,unused-ignore]
+
+
+class _MemoryStatus(ctypes.Structure):
+    _fields_ = [
+        ("dwLength", ctypes.c_ulong),
+        ("dwMemoryLoad", ctypes.c_ulong),
+        ("ullTotalPhys", ctypes.c_ulonglong),
+        ("ullAvailPhys", ctypes.c_ulonglong),
+        ("ullTotalPageFile", ctypes.c_ulonglong),
+        ("ullAvailPageFile", ctypes.c_ulonglong),
+        ("ullTotalVirtual", ctypes.c_ulonglong),
+        ("ullAvailVirtual", ctypes.c_ulonglong),
+        ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+    ]
+
+
+def memory_status() -> dict[str, int]:
+    """Free RAM and, on Windows, the commit limit and the free commit (RAM plus page file not yet promised)."""
+    if sys.platform == "win32":
+        m = _MemoryStatus()
+        m.dwLength = ctypes.sizeof(_MemoryStatus)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(m)):  # type: ignore[attr-defined,unused-ignore]
+            return {
+                "ram_free": int(m.ullAvailPhys),
+                "commit_limit": int(m.ullTotalPageFile),
+                "commit_free": int(m.ullAvailPageFile),
+            }
+    import psutil  # pragma: no cover - other systems
+
+    free = int(psutil.virtual_memory().available)  # pragma: no cover
+    return {"ram_free": free, "commit_limit": free, "commit_free": free}  # pragma: no cover
+
+
+def usable_memory_bytes() -> int:
+    """Memory new runs may use: the smaller of the free RAM and the free commit."""
+    s = memory_status()
+    return min(s["ram_free"], s["commit_free"])
 
 
 def _run(cmd: list[str], encoding: str | None = None) -> str:

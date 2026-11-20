@@ -1,0 +1,62 @@
+# Linear problem: two normalisations of the gap (amendment 10.6)
+
+Exploratory (amendment 10, written after the results of amendments 8 and 9 were seen). `norm_rand` = (Z - Z*) / (Z_rand - Z*) as in 8.3 (Z_rand: mean cost of random basic plans); `norm_nwc` = (Z - Z*) / (Z_NWC - Z*) with the north-west corner plan. Median over the instances of the median over the seeds, on the instances where both denominators are positive (`instances_with_both`). `rank_*`: 1 = smallest median in the cell (equal medians share a rank); `same_order_in_cell`: the two rankings of the cell are identical.
+
+| set | size | method | instances | instances_with_both | norm_rand_median | norm_nwc_median | rank_rand | rank_nwc | same_order_in_cell |
+|---|---|---|---|---|---|---|---|---|---|
+| uniform | 5x5 | VAM | 10 | 10 | 0.005408 | 0.004107 | 7 | 7 | yes |
+| uniform | 5x5 | RS | 10 | 10 | 0.009756 | 0.008146 | 8 | 8 | yes |
+| uniform | 5x5 | GA-rand-tuned | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 5x5 | GA-cost-tuned | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 5x5 | SA-rand-tuned | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 5x5 | SA-cost-tuned | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 5x5 | GA-rand-cycle | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 5x5 | GA-cost-cycle | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 10x10 | VAM | 10 | 10 | 0.03352 | 0.03449 | 7 | 7 | yes |
+| uniform | 10x10 | RS | 10 | 10 | 0.2511 | 0.2354 | 8 | 8 | yes |
+| uniform | 10x10 | GA-rand-tuned | 10 | 10 | 0.006786 | 0.006871 | 6 | 6 | yes |
+| uniform | 10x10 | GA-cost-tuned | 10 | 10 | 0.005178 | 0.005533 | 5 | 5 | yes |
+| uniform | 10x10 | SA-rand-tuned | 10 | 10 | 0.00288 | 0.002892 | 4 | 4 | yes |
+| uniform | 10x10 | SA-cost-tuned | 10 | 10 | 0.0004448 | 0.0003921 | 2 | 2 | yes |
+| uniform | 10x10 | GA-rand-cycle | 10 | 10 | 0 | 0 | 1 | 1 | yes |
+| uniform | 10x10 | GA-cost-cycle | 10 | 10 | 0.001182 | 0.00135 | 3 | 3 | yes |
+| uniform | 20x20 | VAM | 10 | 10 | 0.04934 | 0.04833 | 7 | 7 | yes |
+| uniform | 20x20 | RS | 10 | 10 | 0.4748 | 0.5065 | 8 | 8 | yes |
+| uniform | 20x20 | GA-rand-tuned | 10 | 10 | 0.02973 | 0.02986 | 6 | 6 | yes |
+| uniform | 20x20 | GA-cost-tuned | 10 | 10 | 0.008961 | 0.008296 | 3 | 3 | yes |
+| uniform | 20x20 | SA-rand-tuned | 10 | 10 | 0.02935 | 0.02912 | 5 | 5 | yes |
+| uniform | 20x20 | SA-cost-tuned | 10 | 10 | 0.01064 | 0.01007 | 4 | 4 | yes |
+| uniform | 20x20 | GA-rand-cycle | 10 | 10 | 0.003759 | 0.003703 | 2 | 2 | yes |
+| uniform | 20x20 | GA-cost-cycle | 10 | 10 | 0.001488 | 0.001378 | 1 | 1 | yes |
+| uniform | 30x30 | VAM | 10 | 10 | 0.03554 | 0.03595 | 5 | 5 | yes |
+| uniform | 30x30 | RS | 10 | 10 | 0.5779 | 0.5813 | 8 | 8 | yes |
+| uniform | 30x30 | GA-rand-tuned | 10 | 10 | 0.04777 | 0.04735 | 7 | 7 | yes |
+| uniform | 30x30 | GA-cost-tuned | 10 | 10 | 0.008117 | 0.007961 | 2 | 2 | yes |
+| uniform | 30x30 | SA-rand-tuned | 10 | 10 | 0.04463 | 0.04644 | 6 | 6 | yes |
+| uniform | 30x30 | SA-cost-tuned | 10 | 10 | 0.01145 | 0.01112 | 4 | 4 | yes |
+| uniform | 30x30 | GA-rand-cycle | 10 | 10 | 0.008855 | 0.009248 | 3 | 3 | yes |
+| uniform | 30x30 | GA-cost-cycle | 10 | 10 | 0.00352 | 0.003426 | 1 | 1 | yes |
+| uniform | 50x50 | VAM | 10 | 10 | 0.02787 | 0.02988 | 5 | 5 | yes |
+| uniform | 50x50 | RS | 10 | 10 | 0.6597 | 0.6897 | 8 | 8 | yes |
+| uniform | 50x50 | GA-rand-tuned | 10 | 10 | 0.04983 | 0.04939 | 6 | 6 | yes |
+| uniform | 50x50 | GA-cost-tuned | 10 | 10 | 0.01026 | 0.01017 | 2 | 2 | yes |
+| uniform | 50x50 | SA-rand-tuned | 10 | 10 | 0.07579 | 0.07583 | 7 | 7 | yes |
+| uniform | 50x50 | SA-cost-tuned | 10 | 10 | 0.01341 | 0.01308 | 4 | 4 | yes |
+| uniform | 50x50 | GA-rand-cycle | 10 | 10 | 0.0105 | 0.01109 | 3 | 3 | yes |
+| uniform | 50x50 | GA-cost-cycle | 10 | 10 | 0.006393 | 0.006357 | 1 | 1 | yes |
+| uniform | 100x100 | VAM | 10 | 10 | 0.02119 | 0.02138 | 5 | 5 | yes |
+| uniform | 100x100 | RS | 10 | 10 | 0.749 | 0.734 | 8 | 8 | yes |
+| uniform | 100x100 | GA-rand-tuned | 10 | 10 | 0.05285 | 0.05254 | 6 | 6 | yes |
+| uniform | 100x100 | GA-cost-tuned | 10 | 10 | 0.01052 | 0.01009 | 2 | 2 | yes |
+| uniform | 100x100 | SA-rand-tuned | 10 | 10 | 0.1201 | 0.1212 | 7 | 7 | yes |
+| uniform | 100x100 | SA-cost-tuned | 10 | 10 | 0.01349 | 0.01334 | 3 | 3 | yes |
+| uniform | 100x100 | GA-rand-cycle | 10 | 10 | 0.01708 | 0.01642 | 4 | 4 | yes |
+| uniform | 100x100 | GA-cost-cycle | 10 | 10 | 0.007071 | 0.006975 | 1 | 1 | yes |
+| structured | 20x20 | VAM | 10 | 10 | 0.07043 | 0.07186 | 7 | 7 | yes |
+| structured | 20x20 | RS | 10 | 10 | 0.4668 | 0.4962 | 8 | 8 | yes |
+| structured | 20x20 | GA-rand-tuned | 10 | 10 | 0.01264 | 0.01349 | 6 | 6 | yes |
+| structured | 20x20 | GA-cost-tuned | 10 | 10 | 0.007357 | 0.007519 | 4 | 4 | yes |
+| structured | 20x20 | SA-rand-tuned | 10 | 10 | 0.009201 | 0.01066 | 5 | 5 | yes |
+| structured | 20x20 | SA-cost-tuned | 10 | 10 | 0.002773 | 0.002657 | 2 | 2 | yes |
+| structured | 20x20 | GA-rand-cycle | 10 | 10 | 0.001817 | 0.001942 | 1 | 1 | yes |
+| structured | 20x20 | GA-cost-cycle | 10 | 10 | 0.002882 | 0.003199 | 3 | 3 | yes |

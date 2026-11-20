@@ -1,0 +1,45 @@
+# Pilot estimate of the v0.4 run
+
+| Phase | Runs | Estimated wall time, h | Share |
+|---|---|---|---|
+| reference | 712 | 0.00 | 0.0 % |
+| representation | 1,890 | 0.58 | 3.4 % |
+| main | 23,600 | 13.40 | 78.1 % |
+| applied | 1,075 | 0.66 | 3.9 % |
+| &nbsp;&nbsp;applied: astana | 825 | 0.66 | |
+| &nbsp;&nbsp;applied: wheat | 250 | 0.00 | |
+| factorial | 24,000 | 0.99 | 5.8 % |
+| stagnation | 1,800 | 0.69 | 4.0 % |
+| legacy | 1,800 | 0.67 | 3.9 % |
+| timing | 380 | 0.16 | 0.9 % |
+| **total** | 55,257 | **17.15** | 100 % |
+
+* E/P speed ratio (same GA task): 1.34; quality phases use 20.0 performance-core equivalents, the timing phase 8 performance cores.
+* Monitor overhead (1 Hz status through a queue): -3.17 % (0.518 s without, 0.502 s with).
+* Phases with a stagnation stop are estimated with the full budget (upper bound).
+
+## Largest items
+
+| Phase | Item | h |
+|---|---|---|
+| main | uniform 200x200 GA-cost-tuned | 4.55 |
+| main | uniform 200x200 RS | 2.06 |
+| main | uniform 200x200 GA-rand-tuned | 1.47 |
+| main | uniform 200x200 SA-cost-tuned | 0.80 |
+| main | uniform 200x200 SA-rand-tuned | 0.75 |
+| factorial | uniform 50x50 GA-rand | 0.43 |
+| factorial | uniform 50x50 GA-cost | 0.43 |
+| main | uniform 100x100 GA-cost-tuned | 0.40 |
+| main | structured 100x100 GA-cost-tuned | 0.39 |
+| main | uniform 100x100 RS | 0.38 |
+| legacy | uniform 100x100 GA-cost-base | 0.34 |
+| legacy | uniform 100x100 GA-rand-base | 0.30 |
+
+## Memory
+
+Memory runs may use: 29.7 GiB (smaller of free RAM and free commit when the estimate was made, less the reserve). A run starts only while its memory is free; the times above include the slowdown where fewer runs fit at once.
+
+| Phase | Set | Size | Method | GiB per run | Runs at once |
+|---|---|---|---|---|---|
+| main | uniform | 200x200 | GA-cost-tuned | 2.56 | 11 of 24 |
+| representation | uniform | 100x100 | GA-cost-tuned | 1.55 | 19 of 24 |

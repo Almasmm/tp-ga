@@ -1,0 +1,44 @@
+{
+ "source": "MIPLIB 2017, https://miplib.zib.de (instances gr4x6, ran13x13, ran12x21; objective values as listed on the instance pages on 2026-11-19).",
+ "instances": {
+  "gr4x6": {
+   "id": "gr4x6",
+   "set": "benchmark",
+   "m": 4,
+   "n": 6,
+   "rho": null,
+   "listed_objective": 202.35,
+   "url": "https://miplib.zib.de/instance_details_gr4x6.html",
+   "source_file": "paper_artifacts_v3/fctp/benchmark/source/gr4x6.mps.gz",
+   "source_sha256": "ecb539938284a6453b8b94f47dfdd88d635e47cfd2977365f7246bb62ed562c7",
+   "file": "gr4x6.json",
+   "sha256": "28eea7b3efd5d739229cee6bf3f7b6104ffb174d66d641f1dea01609030616bb"
+  },
+  "ran13x13": {
+   "id": "ran13x13",
+   "set": "benchmark",
+   "m": 13,
+   "n": 13,
+   "rho": null,
+   "listed_objective": 3252.0,
+   "url": "https://miplib.zib.de/instance_details_ran13x13.html",
+   "source_file": "paper_artifacts_v3/fctp/benchmark/source/ran13x13.mps.gz",
+   "source_sha256": "ddf6f7b055f8cc7442c39a5f3853c3813a8b1f18ae66378d752938337b9cc579",
+   "file": "ran13x13.json",
+   "sha256": "798bf5529b9951d9a14c4e200ec0dcebaeebf11d887909cbcf0fa85c3f3a4bb5"
+  },
+  "ran12x21": {
+   "id": "ran12x21",
+   "set": "benchmark",
+   "m": 12,
+   "n": 21,
+   "rho": null,
+   "listed_objective": 3664.0,
+   "url": "https://miplib.zib.de/instance_details_ran12x21.html",
+   "source_file": "paper_artifacts_v3/fctp/benchmark/source/ran12x21.mps.gz",
+   "source_sha256": "15ad9b8724f5ba4f6ac958e442040a68abab37943e6a0a4cdf59f8a24e03e2b6",
+   "file": "ran12x21.json",
+   "sha256": "18eb750daac3a31c77eb426d9150b085e10ac57bbc1f25a38c66fd9a116f4ac7"
+  }
+ }
+}

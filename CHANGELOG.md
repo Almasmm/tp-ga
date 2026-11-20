@@ -3,6 +3,37 @@
 All notable changes are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/)
 and the project uses [Semantic Versioning](https://semver.org/).
 
+## [0.4.1-paper] — 2026-11-20
+
+The same code and data as `v0.4.0-paper`, released again after the repository was enabled in Zenodo, which
+archives only the releases published after that.
+
+### Changed
+- Version `0.4.1-paper` in `CITATION.cff` and `.zenodo.json`; release notes `docs/releases/v0.4.1-paper.md`.
+
+## [0.4.0-paper] — 2026-11-20
+
+Code and data of the article at the tag `v0.4.0-paper`. The package version stays `0.4.0.dev0`: the main run
+of the v0.4 experiment is not finished and its raw records are not part of this tag.
+
+### Added
+- Cycle mutation: random simplex pivots on the decoded basic plan (`tpga.cycle`, `GAXConfig`, `run_ga_x`),
+  with a second rule that draws the entering arc among the arcs with theta > 0
+  (`entering="nondegenerate"`), and counters of pivots, pivots with theta = 0 and unchanged offspring.
+- Fixed-charge transportation problem (`tpga.fctp`): generators (uniform and with a few large suppliers),
+  true cost, MIP model for HiGHS, Balinski plan.
+- Local searches over basis pivots for the fixed-charge problem (`tpga.localsearch`): tabu search
+  (`run_tabu`) and iterated local search (`run_ils`), with a separate counter of neighbour evaluations.
+- Experiment v0.4 (`tpga.experiments.v2`, `experiments/paper-v2.yaml`): preregistration with amendments
+  (`docs/v0.4/PREREGISTRATION.md`), tuning, pilot, resumable runner with a memory reserve and a process
+  priority option; its quick version with artifacts in `paper_artifacts_quick/`.
+- Additional experiment v3 (`tpga.experiments.v3`, amendments 8 to 10) with artifacts in
+  `paper_artifacts_v3/`: one protocol for the linear problem up to 100x100, the fixed-charge problem with a
+  MIP reference, MIPLIB and public instances, rivals, timing on one processor, effect sizes with intervals.
+- Paired tests report the Hodges-Lehmann shift with its interval and the rank-biserial correlation.
+- `.zenodo.json` and the workflow `paper-release.yml` (GitHub Release with one archive of the tracked paper
+  artifacts for tags `vX.Y.Z-paper`).
+
 ## [0.3.1-paper] — 2026-11-18
 
 Paper materials only; the library is unchanged (package version 0.3.0).

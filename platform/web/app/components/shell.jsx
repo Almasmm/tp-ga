@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
-  BookOpenText, Boxes, Dna, FlaskConical, Languages, LayoutDashboard, ListOrdered, Map, Menu, Microscope,
+  Activity, BookOpenText, Boxes, Dna, FileCheck2, FlaskRound, FlaskConical, Languages, LayoutDashboard, ListOrdered, Map, Menu, Microscope,
   Search, Settings2, Truck, X,
 } from "lucide-react";
 import { useSettings } from "../providers";
@@ -14,6 +14,9 @@ const NAV = [
   { section: "navResearch", items: [
     { href: "/", key: "overview", icon: LayoutDashboard, tile: "tile-blue" },
     { href: "/experiment", key: "experiment", icon: FlaskConical, tile: "tile-indigo" },
+    { href: "/experiment-v2", key: "experimentV2", icon: FlaskRound, tile: "tile-violet" },
+    { href: "/monitor", key: "monitor", icon: Activity, tile: "tile-teal" },
+    { href: "/reproducibility", key: "reproducibility", icon: FileCheck2, tile: "tile-slate" },
     { href: "/methods", key: "methods", icon: BookOpenText, tile: "tile-slate" },
   ] },
   { section: "navLearn", items: [
@@ -67,7 +70,7 @@ export function Shell({ children }) {
           ))}
         </nav>
         <div className="sidebar-foot">
-          Astana IT University · <span className="code-value">tp-ga 0.3.0</span>
+          Astana IT University · <span className="code-value">tp-ga 0.4.0.dev0</span>
         </div>
       </aside>
       <div className="main">

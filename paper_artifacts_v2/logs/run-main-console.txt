@@ -1,0 +1,901 @@
+Running HiGHS 1.16.0 (git hash: f3f113d): Copyright (c) 2026 under MIT licence terms
+Includes third-party software components, see THIRD_PARTY_NOTICES.md for full details
+[01:44:17] phase main: 23600 runs to do, 0 already done
+[01:45:14] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:46:14] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:47:15] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:48:15] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:49:15] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:50:16] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:51:18] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:52:29] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:53:38] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:54:49] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:55:59] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:57:09] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:58:09] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[01:59:10] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:00:10] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:01:10] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:02:11] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:03:11] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:04:12] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:05:22] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:06:33] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:07:45] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:08:55] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:10:06] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:11:19] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:12:28] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:13:40] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:14:48] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:16:05] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:17:15] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:18:26] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:19:35] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:20:44] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:21:54] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:23:05] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:24:17] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:25:29] summary main: 0/23600, 0.0 runs/min, ETA -, errors 0
+[02:25:48] main GA-rand-tuned u200x200-00 seed=20261117 gap=167 gap_norm=0.0483 stop=budget t=2489.22s
+[02:25:52] main GA-rand-tuned u200x200-00 seed=20261119 gap=198 gap_norm=0.0572 stop=budget t=2492.53s
+[02:25:59] main GA-rand-tuned u200x200-00 seed=20261118 gap=192 gap_norm=0.0554 stop=budget t=2500.33s
+[02:26:20] main GA-rand-tuned u200x200-00 seed=20261116 gap=220 gap_norm=0.0634 stop=budget t=2521.17s
+[02:26:43] summary main: 4/23600, 0.1 runs/min, ETA 4171:09:30, errors 0
+[02:27:56] summary main: 4/23600, 0.1 runs/min, ETA 4290:38:28, errors 0
+[02:29:04] summary main: 4/23600, 0.1 runs/min, ETA 4402:55:40, errors 0
+[02:29:50] main GA-cost-tuned u200x200-00 seed=20261118 gap=25.5 gap_norm=0.00737 stop=budget t=2730.60s
+[02:30:15] summary main: 5/23600, 0.1 runs/min, ETA 3615:17:05, errors 0
+[02:30:26] main GA-cost-tuned u200x200-00 seed=20261119 gap=24.5 gap_norm=0.00707 stop=budget t=2766.53s
+[02:31:16] summary main: 6/23600, 0.1 runs/min, ETA 3078:39:02, errors 0
+[02:32:16] summary main: 6/23600, 0.1 runs/min, ETA 3144:28:23, errors 0
+[02:33:16] summary main: 6/23600, 0.1 runs/min, ETA 3210:18:28, errors 0
+[02:34:17] summary main: 6/23600, 0.1 runs/min, ETA 3276:14:38, errors 0
+[02:35:17] summary main: 6/23600, 0.1 runs/min, ETA 3342:18:14, errors 0
+[02:36:24] summary main: 6/23600, 0.1 runs/min, ETA 3415:18:33, errors 0
+[02:37:35] summary main: 6/23600, 0.1 runs/min, ETA 3492:48:25, errors 0
+[02:38:49] summary main: 6/23600, 0.1 runs/min, ETA 3572:58:44, errors 0
+[02:40:01] summary main: 6/23600, 0.1 runs/min, ETA 3652:28:08, errors 0
+[02:41:11] summary main: 6/23600, 0.1 runs/min, ETA 3728:39:21, errors 0
+[02:42:26] summary main: 6/23600, 0.1 runs/min, ETA 3810:24:23, errors 0
+[02:43:26] summary main: 6/23600, 0.1 runs/min, ETA 3876:27:49, errors 0
+[02:44:22] main RS u200x200-00 seed=20261117 gap=2.84e+03 gap_norm=0.821 stop=budget t=3603.50s
+[02:44:27] summary main: 7/23600, 0.1 runs/min, ETA 3378:59:21, errors 0
+[02:45:07] main GA-rand-tuned u200x200-00 seed=20261124 gap=229 gap_norm=0.0661 stop=budget t=3648.13s
+[02:45:12] main GA-rand-tuned u200x200-00 seed=20261125 gap=193 gap_norm=0.0558 stop=budget t=3652.38s
+[02:45:22] main GA-rand-tuned u200x200-00 seed=20261123 gap=195 gap_norm=0.0563 stop=budget t=3662.78s
+[02:45:27] summary main: 10/23600, 0.2 runs/min, ETA 2404:37:26, errors 0
+[02:45:32] main GA-rand-tuned u200x200-00 seed=20261122 gap=176 gap_norm=0.0507 stop=budget t=3673.18s
+[02:45:33] main RS u200x200-00 seed=20261116 gap=2.81e+03 gap_norm=0.811 stop=budget t=3673.87s
+[02:45:37] main GA-cost-tuned u200x200-00 seed=20261116 gap=21.8 gap_norm=0.00629 stop=budget t=3677.81s
+[02:46:06] main RS u200x200-00 seed=20261125 gap=2.8e+03 gap_norm=0.808 stop=budget t=3702.03s
+[02:46:09] main RS u200x200-00 seed=20261122 gap=2.86e+03 gap_norm=0.825 stop=budget t=3709.88s
+[02:46:09] main RS u200x200-00 seed=20261124 gap=2.83e+03 gap_norm=0.816 stop=budget t=3710.45s
+[02:46:13] main RS u200x200-00 seed=20261121 gap=2.81e+03 gap_norm=0.811 stop=budget t=3713.53s
+[02:46:28] summary main: 17/23600, 0.3 runs/min, ETA 1437:22:31, errors 0
+[02:46:50] main GA-cost-tuned u200x200-00 seed=20261117 gap=17.3 gap_norm=0.005 stop=budget t=3751.22s
+[02:46:53] main RS u200x200-00 seed=20261123 gap=2.82e+03 gap_norm=0.815 stop=budget t=3754.31s
+[02:46:55] main RS u200x200-00 seed=20261120 gap=2.84e+03 gap_norm=0.821 stop=budget t=3756.28s
+[02:47:19] main GA-rand-tuned u200x200-00 seed=20261121 gap=189 gap_norm=0.0546 stop=budget t=3773.11s
+[02:47:28] summary main: 21/23600, 0.3 runs/min, ETA 1182:14:25, errors 0
+[02:48:15] main GA-rand-tuned u200x200-00 seed=20261120 gap=230 gap_norm=0.0665 stop=budget t=3835.96s
+[02:48:34] main RS u200x200-00 seed=20261118 gap=2.85e+03 gap_norm=0.824 stop=budget t=3853.92s
+[02:48:34] summary main: 23/23600, 0.4 runs/min, ETA 1098:01:56, errors 0
+[02:49:34] summary main: 23/23600, 0.4 runs/min, ETA 1115:10:09, errors 0
+[02:49:47] main RS u200x200-00 seed=20261119 gap=2.81e+03 gap_norm=0.81 stop=budget t=3928.52s
+[02:50:34] summary main: 24/23600, 0.4 runs/min, ETA 1085:04:56, errors 0
+[02:51:34] summary main: 24/23600, 0.4 runs/min, ETA 1101:30:36, errors 0
+[02:52:35] summary main: 24/23600, 0.4 runs/min, ETA 1117:58:43, errors 0
+[02:53:35] summary main: 24/23600, 0.3 runs/min, ETA 1134:23:41, errors 0
+[02:54:39] summary main: 24/23600, 0.3 runs/min, ETA 1152:01:01, errors 0
+[02:55:02] main SA-rand-tuned u200x200-00 seed=20261116 gap=633 gap_norm=0.183 stop=budget t=639.92s
+[02:55:28] main SA-rand-tuned u200x200-00 seed=20261121 gap=495 gap_norm=0.143 stop=budget t=595.56s
+[02:55:40] summary main: 26/23600, 0.4 runs/min, ETA 1078:32:18, errors 0
+[02:56:40] summary main: 26/23600, 0.4 runs/min, ETA 1093:44:18, errors 0
+[02:57:40] summary main: 26/23600, 0.4 runs/min, ETA 1108:54:14, errors 0
+[02:58:20] main SA-rand-tuned u200x200-00 seed=20261117 gap=488 gap_norm=0.141 stop=budget t=792.35s
+[02:58:21] main SA-rand-tuned u200x200-00 seed=20261118 gap=664 gap_norm=0.192 stop=budget t=789.37s
+[02:58:36] main SA-rand-tuned u200x200-00 seed=20261122 gap=665 gap_norm=0.192 stop=budget t=778.57s
+[02:58:40] summary main: 29/23600, 0.4 runs/min, ETA 1007:36:36, errors 0
+[02:58:47] main SA-rand-tuned u200x200-00 seed=20261119 gap=520 gap_norm=0.15 stop=budget t=805.26s
+[02:58:57] main SA-rand-tuned u200x200-00 seed=20261120 gap=565 gap_norm=0.163 stop=budget t=804.64s
+[02:59:25] main SA-cost-tuned u200x200-00 seed=20261116 gap=27.3 gap_norm=0.00788 stop=budget t=791.44s
+[02:59:29] main SA-rand-tuned u200x200-00 seed=20261123 gap=569 gap_norm=0.164 stop=budget t=802.63s
+[02:59:30] main SA-rand-tuned u200x200-00 seed=20261125 gap=738 gap_norm=0.213 stop=budget t=800.84s
+[02:59:41] summary main: 34/23600, 0.5 runs/min, ETA 870:53:14, errors 0
+[02:59:41] main SA-rand-tuned u200x200-00 seed=20261124 gap=655 gap_norm=0.189 stop=budget t=812.18s
+[02:59:46] main SA-cost-tuned u200x200-00 seed=20261117 gap=58.1 gap_norm=0.0168 stop=budget t=775.09s
+[02:59:53] main SA-cost-tuned u200x200-00 seed=20261119 gap=35.2 gap_norm=0.0102 stop=budget t=778.00s
+[03:00:26] main SA-cost-tuned u200x200-00 seed=20261118 gap=39.4 gap_norm=0.0114 stop=budget t=812.26s
+[03:00:37] main SA-cost-tuned u200x200-00 seed=20261120 gap=30.6 gap_norm=0.00884 stop=budget t=788.88s
+[03:00:41] summary main: 39/23600, 0.5 runs/min, ETA 769:11:24, errors 0
+[03:01:07] main GA-cost-tuned u200x200-00 seed=20261123 gap=24.8 gap_norm=0.00717 stop=budget t=2086.23s
+[03:01:25] main GA-cost-tuned u200x200-00 seed=20261121 gap=26.6 gap_norm=0.00769 stop=budget t=2133.50s
+[03:01:45] main SA-cost-tuned u200x200-00 seed=20261122 gap=30.1 gap_norm=0.00871 stop=budget t=788.63s
+[03:01:45] main GA-cost-tuned u200x200-00 seed=20261122 gap=25.3 gap_norm=0.00731 stop=budget t=2145.34s
+[03:01:45] summary main: 43/23600, 0.6 runs/min, ETA 707:16:37, errors 0
+[03:01:47] main GA-cost-tuned u200x200-00 seed=20261120 gap=21.4 gap_norm=0.00617 stop=budget t=2158.23s
+[03:01:59] main SA-cost-tuned u200x200-00 seed=20261121 gap=36.3 gap_norm=0.0105 stop=budget t=824.10s
+[03:02:41] main SA-cost-tuned u200x200-00 seed=20261123 gap=26 gap_norm=0.00752 stop=budget t=773.44s
+[03:02:59] summary main: 46/23600, 0.6 runs/min, ETA 671:29:55, errors 0
+[03:03:46] summary main: 46/23600, 0.6 runs/min, ETA 678:15:31, errors 0
+[03:04:09] main GA-cost-tuned u200x200-00 seed=20261124 gap=22.4 gap_norm=0.00646 stop=budget t=2055.96s
+[03:04:46] summary main: 47/23600, 0.6 runs/min, ETA 672:11:37, errors 0
+[03:05:20] main GA-cost-tuned u200x200-00 seed=20261125 gap=24.2 gap_norm=0.007 stop=budget t=2090.08s
+[03:05:20] main SA-cost-tuned u200x200-00 seed=20261125 gap=52.1 gap_norm=0.015 stop=budget t=585.25s
+[03:05:47] summary main: 49/23600, 0.6 runs/min, ETA 652:46:47, errors 0
+[03:06:06] main SA-cost-tuned u200x200-00 seed=20261124 gap=28.9 gap_norm=0.00833 stop=budget t=663.32s
+[03:06:47] summary main: 50/23600, 0.6 runs/min, ETA 647:32:54, errors 0
+[03:07:47] summary main: 50/23600, 0.6 runs/min, ETA 655:25:36, errors 0
+[03:08:59] summary main: 50/23600, 0.6 runs/min, ETA 664:49:06, errors 0
+[03:10:09] summary main: 50/23600, 0.6 runs/min, ETA 674:00:50, errors 0
+[03:11:00] summary main: 50/23600, 0.6 runs/min, ETA 680:37:27, errors 0
+[03:12:00] summary main: 50/23600, 0.6 runs/min, ETA 688:31:16, errors 0
+[03:13:01] summary main: 50/23600, 0.6 runs/min, ETA 696:26:30, errors 0
+[03:14:01] summary main: 50/23600, 0.6 runs/min, ETA 704:20:47, errors 0
+[03:15:01] summary main: 50/23600, 0.6 runs/min, ETA 712:12:36, errors 0
+[03:16:11] summary main: 50/23600, 0.5 runs/min, ETA 721:20:00, errors 0
+[03:17:24] summary main: 50/23600, 0.5 runs/min, ETA 730:55:34, errors 0
+[03:18:11] summary main: 50/23600, 0.5 runs/min, ETA 737:04:23, errors 0
+[03:19:11] summary main: 50/23600, 0.5 runs/min, ETA 744:55:44, errors 0
+[03:20:12] summary main: 50/23600, 0.5 runs/min, ETA 752:49:11, errors 0
+[03:21:12] summary main: 50/23600, 0.5 runs/min, ETA 760:43:11, errors 0
+[03:22:12] summary main: 50/23600, 0.5 runs/min, ETA 768:37:47, errors 0
+[03:23:22] summary main: 50/23600, 0.5 runs/min, ETA 777:43:48, errors 0
+[03:24:33] summary main: 50/23600, 0.5 runs/min, ETA 787:03:12, errors 0
+[03:25:22] summary main: 50/23600, 0.5 runs/min, ETA 793:29:02, errors 0
+[03:26:23] summary main: 50/23600, 0.5 runs/min, ETA 801:23:14, errors 0
+[03:27:23] summary main: 50/23600, 0.5 runs/min, ETA 809:14:52, errors 0
+[03:28:23] summary main: 50/23600, 0.5 runs/min, ETA 817:07:53, errors 0
+[03:29:24] summary main: 50/23600, 0.5 runs/min, ETA 825:02:51, errors 0
+[03:30:36] summary main: 50/23600, 0.5 runs/min, ETA 834:28:35, errors 0
+[03:31:44] summary main: 50/23600, 0.5 runs/min, ETA 843:28:34, errors 0
+[03:32:36] summary main: 50/23600, 0.5 runs/min, ETA 850:13:16, errors 0
+[03:33:36] summary main: 50/23600, 0.5 runs/min, ETA 858:06:11, errors 0
+[03:34:36] summary main: 50/23600, 0.5 runs/min, ETA 865:57:56, errors 0
+[03:35:37] summary main: 50/23600, 0.4 runs/min, ETA 873:51:22, errors 0
+[03:36:40] summary main: 50/23600, 0.4 runs/min, ETA 882:11:59, errors 0
+[03:37:53] summary main: 50/23600, 0.4 runs/min, ETA 891:44:07, errors 0
+[03:39:04] summary main: 50/23600, 0.4 runs/min, ETA 901:01:20, errors 0
+[03:40:14] summary main: 50/23600, 0.4 runs/min, ETA 910:09:40, errors 0
+[03:41:24] summary main: 50/23600, 0.4 runs/min, ETA 919:19:17, errors 0
+[03:42:37] summary main: 50/23600, 0.4 runs/min, ETA 928:51:41, errors 0
+[03:43:49] summary main: 50/23600, 0.4 runs/min, ETA 938:15:35, errors 0
+[03:44:22] main GA-rand-tuned u200x200-01 seed=20261119 gap=184 gap_norm=0.0537 stop=budget t=2594.79s
+[03:44:23] main GA-rand-tuned u200x200-01 seed=20261122 gap=185 gap_norm=0.0541 stop=budget t=2558.03s
+[03:44:27] main GA-rand-tuned u200x200-01 seed=20261120 gap=222 gap_norm=0.0648 stop=budget t=2581.17s
+[03:44:59] main GA-rand-tuned u200x200-01 seed=20261123 gap=202 gap_norm=0.0592 stop=budget t=2588.36s
+[03:44:59] summary main: 54/23600, 0.4 runs/min, ETA 877:05:48, errors 0
+[03:45:59] summary main: 54/23600, 0.4 runs/min, ETA 884:21:51, errors 0
+[03:46:59] summary main: 54/23600, 0.4 runs/min, ETA 891:40:23, errors 0
+[03:47:59] summary main: 54/23600, 0.4 runs/min, ETA 898:56:30, errors 0
+[03:48:59] summary main: 54/23600, 0.4 runs/min, ETA 906:13:54, errors 0
+[03:50:00] summary main: 54/23600, 0.4 runs/min, ETA 913:30:38, errors 0
+[03:51:00] summary main: 54/23600, 0.4 runs/min, ETA 920:49:43, errors 0
+[03:51:37] main GA-cost-tuned u200x200-01 seed=20261116 gap=24.8 gap_norm=0.00725 stop=budget t=2847.74s
+[03:52:09] summary main: 55/23600, 0.4 runs/min, ETA 912:13:13, errors 0
+[03:52:54] main GA-cost-tuned u200x200-01 seed=20261118 gap=23.6 gap_norm=0.0069 stop=budget t=2853.44s
+[03:53:19] summary main: 56/23600, 0.4 runs/min, ETA 904:09:18, errors 0
+[03:54:33] main GA-cost-tuned u200x200-01 seed=20261117 gap=23.8 gap_norm=0.00697 stop=budget t=2952.02s
+[03:54:33] summary main: 57/23600, 0.4 runs/min, ETA 896:40:33, errors 0
+[03:55:33] summary main: 57/23600, 0.4 runs/min, ETA 903:36:48, errors 0
+[03:56:34] summary main: 57/23600, 0.4 runs/min, ETA 910:31:42, errors 0
+[03:57:34] summary main: 57/23600, 0.4 runs/min, ETA 917:26:58, errors 0
+[03:58:16] main GA-cost-tuned u200x200-01 seed=20261119 gap=24.2 gap_norm=0.00709 stop=budget t=3130.26s
+[03:58:34] summary main: 58/23600, 0.4 runs/min, ETA 908:21:35, errors 0
+[03:59:00] main GA-rand-tuned u200x200-01 seed=20261116 gap=177 gap_norm=0.0517 stop=budget t=3547.04s
+[03:59:34] summary main: 59/23600, 0.4 runs/min, ETA 899:36:26, errors 0
+[04:00:03] main RS u200x200-01 seed=20261116 gap=2.8e+03 gap_norm=0.818 stop=budget t=3703.84s
+[04:00:07] main RS u200x200-01 seed=20261117 gap=2.78e+03 gap_norm=0.814 stop=budget t=3705.60s
+[04:00:34] summary main: 61/23600, 0.4 runs/min, ETA 876:29:36, errors 0
+[04:00:50] main RS u200x200-01 seed=20261118 gap=2.83e+03 gap_norm=0.827 stop=budget t=3733.87s
+[04:00:52] main GA-rand-tuned u200x200-01 seed=20261118 gap=185 gap_norm=0.054 stop=budget t=3615.47s
+[04:01:30] main GA-rand-tuned u200x200-01 seed=20261117 gap=210 gap_norm=0.0614 stop=budget t=3664.31s
+[04:01:46] main RS u200x200-01 seed=20261122 gap=2.79e+03 gap_norm=0.815 stop=budget t=3735.22s
+[04:01:46] main RS u200x200-01 seed=20261125 gap=2.82e+03 gap_norm=0.826 stop=budget t=3719.11s
+[04:01:46] summary main: 66/23600, 0.5 runs/min, ETA 817:01:28, errors 0
+[04:01:54] main RS u200x200-01 seed=20261119 gap=2.78e+03 gap_norm=0.812 stop=budget t=3786.86s
+[04:02:17] main RS u200x200-01 seed=20261123 gap=2.8e+03 gap_norm=0.819 stop=budget t=3766.32s
+[04:02:17] main RS u200x200-01 seed=20261120 gap=2.81e+03 gap_norm=0.823 stop=budget t=3800.51s
+[04:02:21] main GA-rand-tuned u200x200-01 seed=20261125 gap=148 gap_norm=0.0432 stop=budget t=3580.38s
+[04:02:29] main GA-rand-tuned u200x200-01 seed=20261121 gap=194 gap_norm=0.0567 stop=budget t=3643.90s
+[04:02:46] summary main: 71/23600, 0.5 runs/min, ETA 764:51:59, errors 0
+[04:02:54] main RS u200x200-01 seed=20261121 gap=2.78e+03 gap_norm=0.814 stop=budget t=3804.57s
+[04:03:15] main GA-rand-tuned u200x200-01 seed=20261124 gap=236 gap_norm=0.0691 stop=budget t=3675.47s
+[04:03:29] main RS u200x200-01 seed=20261124 gap=2.8e+03 gap_norm=0.82 stop=budget t=3827.39s
+[04:03:47] summary main: 74/23600, 0.5 runs/min, ETA 739:05:15, errors 0
+[04:04:29] main SA-rand-tuned u200x200-01 seed=20261116 gap=516 gap_norm=0.151 stop=budget t=595.67s
+[04:04:47] summary main: 75/23600, 0.5 runs/min, ETA 734:26:00, errors 0
+[04:05:47] summary main: 75/23600, 0.5 runs/min, ETA 739:41:12, errors 0
+[04:06:47] summary main: 75/23600, 0.5 runs/min, ETA 744:57:31, errors 0
+[04:07:48] summary main: 75/23600, 0.5 runs/min, ETA 750:11:55, errors 0
+[04:08:10] main SA-rand-tuned u200x200-01 seed=20261117 gap=541 gap_norm=0.158 stop=budget t=593.62s
+[04:08:56] summary main: 76/23600, 0.5 runs/min, ETA 746:10:22, errors 0
+[04:09:56] summary main: 76/23600, 0.5 runs/min, ETA 751:21:07, errors 0
+[04:10:56] summary main: 76/23600, 0.5 runs/min, ETA 756:31:24, errors 0
+[04:11:57] summary main: 76/23600, 0.5 runs/min, ETA 761:42:10, errors 0
+[04:12:19] main SA-rand-tuned u200x200-01 seed=20261118 gap=490 gap_norm=0.143 stop=budget t=798.10s
+[04:12:57] summary main: 77/23600, 0.5 runs/min, ETA 756:53:05, errors 0
+[04:13:12] main SA-rand-tuned u200x200-01 seed=20261119 gap=565 gap_norm=0.165 stop=budget t=788.65s
+[04:13:19] main SA-rand-tuned u200x200-01 seed=20261120 gap=438 gap_norm=0.128 stop=budget t=792.10s
+[04:13:43] main SA-cost-tuned u200x200-01 seed=20261124 gap=33.9 gap_norm=0.00992 stop=budget t=554.12s
+[04:13:57] summary main: 80/23600, 0.5 runs/min, ETA 733:18:51, errors 0
+[04:13:58] main SA-rand-tuned u200x200-01 seed=20261121 gap=568 gap_norm=0.166 stop=budget t=788.87s
+[04:14:19] main SA-rand-tuned u200x200-01 seed=20261122 gap=530 gap_norm=0.155 stop=budget t=806.77s
+[04:14:55] main SA-cost-tuned u200x200-01 seed=20261116 gap=24.5 gap_norm=0.00718 stop=budget t=777.50s
+[04:14:57] summary main: 83/23600, 0.6 runs/min, ETA 711:26:31, errors 0
+[04:15:02] main SA-cost-tuned u200x200-01 seed=20261118 gap=24.1 gap_norm=0.00707 stop=budget t=764.72s
+[04:15:03] main SA-rand-tuned u200x200-01 seed=20261125 gap=489 gap_norm=0.143 stop=budget t=796.83s
+[04:15:03] main SA-cost-tuned u200x200-01 seed=20261119 gap=25.3 gap_norm=0.00741 stop=budget t=761.88s
+[04:15:04] main SA-cost-tuned u200x200-01 seed=20261117 gap=39.8 gap_norm=0.0117 stop=budget t=767.03s
+[04:15:06] main SA-rand-tuned u200x200-01 seed=20261123 gap=610 gap_norm=0.179 stop=budget t=815.43s
+[04:15:09] main SA-rand-tuned u200x200-01 seed=20261124 gap=552 gap_norm=0.162 stop=budget t=803.18s
+[04:15:21] main SA-cost-tuned u200x200-01 seed=20261120 gap=24.1 gap_norm=0.00705 stop=budget t=772.29s
+[04:15:50] main SA-cost-tuned u200x200-01 seed=20261121 gap=23 gap_norm=0.00674 stop=budget t=775.10s
+[04:16:05] summary main: 91/23600, 0.6 runs/min, ETA 653:33:58, errors 0
+[04:16:19] main SA-cost-tuned u200x200-01 seed=20261123 gap=38.7 gap_norm=0.0113 stop=budget t=770.60s
+[04:16:54] main SA-cost-tuned u200x200-01 seed=20261122 gap=39.8 gap_norm=0.0117 stop=budget t=819.75s
+[04:17:14] summary main: 93/23600, 0.6 runs/min, ETA 644:18:21, errors 0
+[04:17:32] main SA-cost-tuned u200x200-01 seed=20261125 gap=39.8 gap_norm=0.0116 stop=budget t=562.38s
+[04:18:05] summary main: 94/23600, 0.6 runs/min, ETA 640:59:08, errors 0
+[04:19:01] main GA-cost-tuned u200x200-01 seed=20261121 gap=22.5 gap_norm=0.00657 stop=budget t=2077.07s
+[04:19:06] summary main: 95/23600, 0.6 runs/min, ETA 638:20:54, errors 0
+[04:20:04] main GA-cost-tuned u200x200-01 seed=20261122 gap=24.9 gap_norm=0.00728 stop=budget t=2136.88s
+[04:20:06] summary main: 96/23600, 0.6 runs/min, ETA 635:47:07, errors 0
+[04:20:07] main GA-cost-tuned u200x200-01 seed=20261120 gap=24.3 gap_norm=0.00712 stop=budget t=2145.06s
+[04:21:06] summary main: 97/23600, 0.6 runs/min, ETA 633:16:11, errors 0
+[04:21:12] main GA-cost-tuned u200x200-01 seed=20261123 gap=24 gap_norm=0.00703 stop=budget t=2172.78s
+[04:22:07] summary main: 98/23600, 0.6 runs/min, ETA 630:47:45, errors 0
+[04:23:07] summary main: 98/23600, 0.6 runs/min, ETA 634:47:48, errors 0
+[04:24:15] summary main: 98/23600, 0.6 runs/min, ETA 639:20:55, errors 0
+[04:25:26] summary main: 98/23600, 0.6 runs/min, ETA 644:03:26, errors 0
+[04:26:40] summary main: 98/23600, 0.6 runs/min, ETA 648:59:29, errors 0
+[04:26:58] main GA-cost-tuned u200x200-01 seed=20261124 gap=23.2 gap_norm=0.00679 stop=budget t=2120.94s
+[04:27:26] summary main: 99/23600, 0.6 runs/min, ETA 645:28:09, errors 0
+[04:28:27] summary main: 99/23600, 0.6 runs/min, ETA 649:26:53, errors 0
+[04:28:35] main GA-cost-tuned u200x200-01 seed=20261125 gap=24.9 gap_norm=0.00729 stop=budget t=2140.83s
+[04:29:27] summary main: 100/23600, 0.6 runs/min, ETA 646:51:30, errors 0
+[04:30:27] summary main: 100/23600, 0.6 runs/min, ETA 650:47:36, errors 0
+[04:31:27] summary main: 100/23600, 0.6 runs/min, ETA 654:43:05, errors 0
+[04:32:36] summary main: 100/23600, 0.6 runs/min, ETA 659:13:31, errors 0
+[04:33:46] summary main: 100/23600, 0.6 runs/min, ETA 663:46:30, errors 0
+[04:34:46] summary main: 100/23600, 0.6 runs/min, ETA 667:41:29, errors 0
+[04:35:46] summary main: 100/23600, 0.6 runs/min, ETA 671:36:53, errors 0
+[04:36:46] summary main: 100/23600, 0.6 runs/min, ETA 675:32:49, errors 0
+[04:37:47] summary main: 100/23600, 0.6 runs/min, ETA 679:29:05, errors 0
+[04:38:47] summary main: 100/23600, 0.6 runs/min, ETA 683:26:03, errors 0
+[04:39:47] summary main: 100/23600, 0.6 runs/min, ETA 687:22:21, errors 0
+[04:40:54] summary main: 100/23600, 0.6 runs/min, ETA 691:43:34, errors 0
+[04:42:06] summary main: 100/23600, 0.6 runs/min, ETA 696:24:26, errors 0
+[04:43:19] summary main: 100/23600, 0.6 runs/min, ETA 701:11:27, errors 0
+[04:44:32] summary main: 100/23600, 0.6 runs/min, ETA 705:58:00, errors 0
+[04:45:42] summary main: 100/23600, 0.6 runs/min, ETA 710:30:26, errors 0
+[04:46:57] summary main: 100/23600, 0.5 runs/min, ETA 715:24:45, errors 0
+[04:47:57] summary main: 100/23600, 0.5 runs/min, ETA 719:21:29, errors 0
+[04:48:58] summary main: 100/23600, 0.5 runs/min, ETA 723:16:45, errors 0
+[04:49:58] summary main: 100/23600, 0.5 runs/min, ETA 727:13:46, errors 0
+[04:50:58] summary main: 100/23600, 0.5 runs/min, ETA 731:10:10, errors 0
+[04:51:59] summary main: 100/23600, 0.5 runs/min, ETA 735:06:42, errors 0
+[04:52:59] summary main: 100/23600, 0.5 runs/min, ETA 739:02:37, errors 0
+[04:54:05] summary main: 100/23600, 0.5 runs/min, ETA 743:22:40, errors 0
+[04:55:19] summary main: 100/23600, 0.5 runs/min, ETA 748:12:35, errors 0
+[04:56:29] summary main: 100/23600, 0.5 runs/min, ETA 752:44:25, errors 0
+[04:57:29] summary main: 100/23600, 0.5 runs/min, ETA 756:41:21, errors 0
+[04:58:30] summary main: 100/23600, 0.5 runs/min, ETA 760:37:37, errors 0
+[04:59:30] summary main: 100/23600, 0.5 runs/min, ETA 764:33:19, errors 0
+[05:00:30] summary main: 100/23600, 0.5 runs/min, ETA 768:30:11, errors 0
+[05:01:08] main GA-rand-tuned u200x200-02 seed=20261123 gap=173 gap_norm=0.0519 stop=budget t=2616.10s
+[05:01:31] summary main: 101/23600, 0.5 runs/min, ETA 764:45:55, errors 0
+[05:01:36] main GA-rand-tuned u200x200-02 seed=20261124 gap=184 gap_norm=0.0552 stop=budget t=2555.23s
+[05:02:35] summary main: 102/23600, 0.5 runs/min, ETA 761:21:22, errors 0
+[05:02:41] main GA-rand-tuned u200x200-02 seed=20261125 gap=186 gap_norm=0.0559 stop=budget t=2557.54s
+[05:03:48] summary main: 103/23600, 0.5 runs/min, ETA 758:32:36, errors 0
+[05:04:59] summary main: 103/23600, 0.5 runs/min, ETA 763:04:52, errors 0
+[05:05:52] main GA-cost-tuned u200x200-02 seed=20261116 gap=18 gap_norm=0.0054 stop=budget t=2744.84s
+[05:06:11] summary main: 104/23600, 0.5 runs/min, ETA 760:11:36, errors 0
+[05:07:23] summary main: 104/23600, 0.5 runs/min, ETA 764:44:02, errors 0
+[05:08:32] main GA-cost-tuned u200x200-02 seed=20261117 gap=19 gap_norm=0.00569 stop=budget t=2830.46s
+[05:08:32] summary main: 105/23600, 0.5 runs/min, ETA 761:42:21, errors 0
+[05:09:32] summary main: 105/23600, 0.5 runs/min, ETA 765:26:12, errors 0
+[05:09:45] main RS u200x200-02 seed=20261119 gap=2.75e+03 gap_norm=0.823 stop=budget t=3362.56s
+[05:10:33] summary main: 106/23600, 0.5 runs/min, ETA 761:54:07, errors 0
+[05:11:33] summary main: 106/23600, 0.5 runs/min, ETA 765:36:14, errors 0
+[05:12:33] summary main: 106/23600, 0.5 runs/min, ETA 769:18:39, errors 0
+[05:13:33] main GA-cost-tuned u200x200-02 seed=20261118 gap=18.9 gap_norm=0.00567 stop=budget t=2793.94s
+[05:13:33] summary main: 107/23600, 0.5 runs/min, ETA 765:45:35, errors 0
+[05:14:08] main GA-rand-tuned u200x200-02 seed=20261120 gap=150 gap_norm=0.045 stop=budget t=3497.97s
+[05:14:40] summary main: 108/23600, 0.5 runs/min, ETA 762:39:48, errors 0
+[05:15:25] main GA-cost-tuned u200x200-02 seed=20261119 gap=17.9 gap_norm=0.00535 stop=budget t=2810.21s
+[05:15:38] main GA-rand-tuned u200x200-02 seed=20261118 gap=186 gap_norm=0.0557 stop=budget t=3628.18s
+[05:15:39] main GA-rand-tuned u200x200-02 seed=20261119 gap=175 gap_norm=0.0524 stop=budget t=3617.39s
+[05:15:49] main RS u200x200-02 seed=20261117 gap=2.68e+03 gap_norm=0.804 stop=budget t=3747.32s
+[05:15:49] main RS u200x200-02 seed=20261118 gap=2.68e+03 gap_norm=0.803 stop=budget t=3743.00s
+[05:15:49] summary main: 113/23600, 0.5 runs/min, ETA 732:44:34, errors 0
+[05:15:50] main GA-rand-tuned u200x200-02 seed=20261116 gap=178 gap_norm=0.0534 stop=budget t=3645.87s
+[05:15:51] main RS u200x200-02 seed=20261116 gap=2.73e+03 gap_norm=0.819 stop=budget t=3812.92s
+[05:16:38] main GA-rand-tuned u200x200-02 seed=20261122 gap=213 gap_norm=0.0637 stop=budget t=3583.96s
+[05:16:44] main RS u200x200-02 seed=20261120 gap=2.73e+03 gap_norm=0.817 stop=budget t=3765.50s
+[05:17:00] main GA-rand-tuned u200x200-02 seed=20261117 gap=185 gap_norm=0.0554 stop=budget t=3709.84s
+[05:17:00] summary main: 118/23600, 0.6 runs/min, ETA 705:27:23, errors 0
+[05:17:23] main GA-rand-tuned u200x200-02 seed=20261121 gap=177 gap_norm=0.0531 stop=budget t=3663.74s
+[05:17:35] main RS u200x200-02 seed=20261124 gap=2.74e+03 gap_norm=0.821 stop=budget t=3751.64s
+[05:18:00] summary main: 120/23600, 0.6 runs/min, ETA 696:54:38, errors 0
+[05:18:01] main RS u200x200-02 seed=20261121 gap=2.69e+03 gap_norm=0.808 stop=budget t=3821.46s
+[05:18:12] main RS u200x200-02 seed=20261122 gap=2.71e+03 gap_norm=0.813 stop=budget t=3790.47s
+[05:18:23] main RS u200x200-02 seed=20261123 gap=2.73e+03 gap_norm=0.817 stop=budget t=3800.89s
+[05:19:00] summary main: 123/23600, 0.6 runs/min, ETA 683:01:26, errors 0
+[05:19:09] main RS u200x200-02 seed=20261125 gap=2.73e+03 gap_norm=0.819 stop=budget t=3845.33s
+[05:20:01] summary main: 124/23600, 0.6 runs/min, ETA 680:40:06, errors 0
+[05:21:01] summary main: 124/23600, 0.6 runs/min, ETA 683:49:42, errors 0
+[05:22:01] summary main: 124/23600, 0.6 runs/min, ETA 686:59:53, errors 0
+[05:23:02] main SA-rand-tuned u200x200-02 seed=20261116 gap=514 gap_norm=0.154 stop=budget t=566.26s
+[05:23:02] summary main: 125/23600, 0.6 runs/min, ETA 684:38:22, errors 0
+[05:24:02] summary main: 125/23600, 0.6 runs/min, ETA 687:46:38, errors 0
+[05:24:55] main SA-rand-tuned u200x200-02 seed=20261118 gap=435 gap_norm=0.13 stop=budget t=569.86s
+[05:25:02] summary main: 126/23600, 0.6 runs/min, ETA 685:25:15, errors 0
+[05:26:03] summary main: 126/23600, 0.6 runs/min, ETA 688:32:26, errors 0
+[05:27:03] summary main: 126/23600, 0.6 runs/min, ETA 691:38:55, errors 0
+[05:27:35] main SA-rand-tuned u200x200-02 seed=20261117 gap=498 gap_norm=0.149 stop=budget t=807.84s
+[05:28:03] summary main: 127/23600, 0.6 runs/min, ETA 689:15:43, errors 0
+[05:28:34] main SA-rand-tuned u200x200-02 seed=20261119 gap=565 gap_norm=0.169 stop=budget t=776.19s
+[05:28:59] main SA-rand-tuned u200x200-02 seed=20261124 gap=567 gap_norm=0.17 stop=budget t=785.58s
+[05:28:59] main SA-rand-tuned u200x200-02 seed=20261121 gap=552 gap_norm=0.165 stop=budget t=785.93s
+[05:29:03] summary main: 130/23600, 0.6 runs/min, ETA 676:16:56, errors 0
+[05:29:10] main SA-rand-tuned u200x200-02 seed=20261120 gap=503 gap_norm=0.151 stop=budget t=811.16s
+[05:29:11] main SA-rand-tuned u200x200-02 seed=20261122 gap=583 gap_norm=0.175 stop=budget t=801.80s
+[05:29:20] main SA-rand-tuned u200x200-02 seed=20261123 gap=579 gap_norm=0.174 stop=budget t=810.78s
+[05:29:26] main SA-cost-tuned u200x200-02 seed=20261116 gap=19.9 gap_norm=0.00596 stop=budget t=761.88s
+[05:30:10] main SA-rand-tuned u200x200-02 seed=20261125 gap=594 gap_norm=0.178 stop=budget t=804.62s
+[05:30:10] main SA-cost-tuned u200x200-02 seed=20261117 gap=29.7 gap_norm=0.0089 stop=budget t=788.48s
+[05:30:10] summary main: 136/23600, 0.6 runs/min, ETA 649:30:44, errors 0
+[05:30:22] main SA-cost-tuned u200x200-02 seed=20261118 gap=18.4 gap_norm=0.00553 stop=budget t=779.45s
+[05:30:23] main SA-cost-tuned u200x200-02 seed=20261119 gap=23.9 gap_norm=0.00717 stop=budget t=768.63s
+[05:30:44] main SA-cost-tuned u200x200-02 seed=20261121 gap=26.1 gap_norm=0.00781 stop=budget t=752.16s
+[05:31:05] main SA-cost-tuned u200x200-02 seed=20261120 gap=29.7 gap_norm=0.0089 stop=budget t=783.93s
+[05:31:19] summary main: 140/23600, 0.6 runs/min, ETA 634:03:48, errors 0
+[05:31:23] main SA-cost-tuned u200x200-02 seed=20261122 gap=29.3 gap_norm=0.0088 stop=budget t=780.05s
+[05:32:03] main SA-cost-tuned u200x200-02 seed=20261124 gap=18.2 gap_norm=0.00544 stop=budget t=541.59s
+[05:32:06] main SA-cost-tuned u200x200-02 seed=20261123 gap=20.4 gap_norm=0.00611 stop=budget t=777.43s
+[05:32:11] summary main: 143/23600, 0.6 runs/min, ETA 623:01:46, errors 0
+[05:33:11] summary main: 143/23600, 0.6 runs/min, ETA 625:47:14, errors 0
+[05:34:12] summary main: 143/23600, 0.6 runs/min, ETA 628:32:36, errors 0
+[05:34:21] main SA-cost-tuned u200x200-02 seed=20261125 gap=29.7 gap_norm=0.0089 stop=budget t=565.78s
+[05:35:12] summary main: 144/23600, 0.6 runs/min, ETA 626:52:18, errors 0
+[05:36:12] summary main: 144/23600, 0.6 runs/min, ETA 629:35:31, errors 0
+[05:37:14] summary main: 144/23600, 0.6 runs/min, ETA 632:22:48, errors 0
+[05:37:23] main GA-cost-tuned u200x200-02 seed=20261121 gap=18.6 gap_norm=0.00557 stop=budget t=2146.44s
+[05:37:26] main GA-cost-tuned u200x200-02 seed=20261120 gap=18.2 gap_norm=0.00545 stop=budget t=2177.53s
+[05:38:24] summary main: 146/23600, 0.6 runs/min, ETA 626:48:16, errors 0
+[05:38:57] main GA-cost-tuned u200x200-02 seed=20261122 gap=18.4 gap_norm=0.00552 stop=budget t=2175.04s
+[05:39:14] summary main: 147/23600, 0.6 runs/min, ETA 624:44:28, errors 0
+[05:40:14] summary main: 147/23600, 0.6 runs/min, ETA 627:24:27, errors 0
+[05:40:21] main GA-cost-tuned u200x200-02 seed=20261123 gap=16.7 gap_norm=0.005 stop=budget t=2068.95s
+[05:41:15] summary main: 148/23600, 0.6 runs/min, ETA 625:47:43, errors 0
+[05:42:15] summary main: 148/23600, 0.6 runs/min, ETA 628:26:54, errors 0
+[05:43:15] summary main: 148/23600, 0.6 runs/min, ETA 631:06:20, errors 0
+[05:44:20] summary main: 148/23600, 0.6 runs/min, ETA 633:55:55, errors 0
+[05:44:23] main GA-cost-tuned u200x200-02 seed=20261124 gap=16.9 gap_norm=0.00508 stop=budget t=2150.23s
+[05:45:30] summary main: 149/23600, 0.6 runs/min, ETA 632:43:30, errors 0
+[05:46:20] summary main: 149/23600, 0.6 runs/min, ETA 634:55:30, errors 0
+[05:46:28] main GA-cost-tuned u200x200-02 seed=20261125 gap=16.9 gap_norm=0.00508 stop=budget t=2202.68s
+[05:47:21] summary main: 150/23600, 0.6 runs/min, ETA 633:17:10, errors 0
+[05:48:21] summary main: 150/23600, 0.6 runs/min, ETA 635:53:56, errors 0
+[05:49:21] summary main: 150/23600, 0.6 runs/min, ETA 638:30:59, errors 0
+[05:50:21] summary main: 150/23600, 0.6 runs/min, ETA 641:08:02, errors 0
+[05:51:23] summary main: 150/23600, 0.6 runs/min, ETA 643:49:45, errors 0
+[05:52:33] summary main: 150/23600, 0.6 runs/min, ETA 646:50:23, errors 0
+[05:53:43] summary main: 150/23600, 0.6 runs/min, ETA 649:54:24, errors 0
+[05:54:44] summary main: 150/23600, 0.6 runs/min, ETA 652:31:34, errors 0
+[05:55:44] summary main: 150/23600, 0.6 runs/min, ETA 655:08:18, errors 0
+[05:56:44] summary main: 150/23600, 0.6 runs/min, ETA 657:44:54, errors 0
+[05:57:44] summary main: 150/23600, 0.6 runs/min, ETA 660:21:27, errors 0
+[05:58:44] summary main: 150/23600, 0.6 runs/min, ETA 662:58:56, errors 0
+[05:59:45] summary main: 150/23600, 0.6 runs/min, ETA 665:36:29, errors 0
+[06:00:48] summary main: 150/23600, 0.6 runs/min, ETA 668:20:51, errors 0
+[06:01:59] summary main: 150/23600, 0.6 runs/min, ETA 671:24:49, errors 0
+[06:03:10] summary main: 150/23600, 0.6 runs/min, ETA 674:31:16, errors 0
+[06:04:20] summary main: 150/23600, 0.6 runs/min, ETA 677:34:13, errors 0
+[06:05:30] summary main: 150/23600, 0.6 runs/min, ETA 680:36:46, errors 0
+[06:06:40] summary main: 150/23600, 0.6 runs/min, ETA 683:36:47, errors 0
+[06:07:50] summary main: 150/23600, 0.6 runs/min, ETA 686:40:06, errors 0
+[06:08:50] summary main: 150/23600, 0.6 runs/min, ETA 689:17:29, errors 0
+[06:09:51] summary main: 150/23600, 0.6 runs/min, ETA 691:54:24, errors 0
+[06:10:51] summary main: 150/23600, 0.6 runs/min, ETA 694:31:19, errors 0
+[06:11:51] summary main: 150/23600, 0.6 runs/min, ETA 697:07:43, errors 0
+[06:12:51] summary main: 150/23600, 0.6 runs/min, ETA 699:44:27, errors 0
+[06:13:55] summary main: 150/23600, 0.6 runs/min, ETA 702:31:24, errors 0
+[06:14:55] summary main: 150/23600, 0.6 runs/min, ETA 705:08:46, errors 0
+[06:15:21] main GA-rand-tuned u200x200-03 seed=20261121 gap=212 gap_norm=0.0665 stop=budget t=2598.06s
+[06:15:56] summary main: 151/23600, 0.6 runs/min, ETA 703:02:56, errors 0
+[06:16:56] summary main: 151/23600, 0.6 runs/min, ETA 705:38:58, errors 0
+[06:17:37] main GA-rand-tuned u200x200-03 seed=20261123 gap=177 gap_norm=0.0556 stop=budget t=2595.70s
+[06:17:56] summary main: 152/23600, 0.6 runs/min, ETA 703:33:49, errors 0
+[06:18:57] summary main: 152/23600, 0.6 runs/min, ETA 706:08:50, errors 0
+[06:20:00] summary main: 152/23600, 0.6 runs/min, ETA 708:51:44, errors 0
+[06:20:27] main GA-rand-tuned u200x200-03 seed=20261124 gap=173 gap_norm=0.0543 stop=budget t=2583.95s
+[06:21:12] summary main: 153/23600, 0.6 runs/min, ETA 707:15:09, errors 0
+[06:21:45] main GA-rand-tuned u200x200-03 seed=20261125 gap=177 gap_norm=0.0553 stop=budget t=2659.07s
+[06:22:23] summary main: 154/23600, 0.6 runs/min, ETA 705:37:40, errors 0
+[06:23:31] summary main: 154/23600, 0.6 runs/min, ETA 708:31:46, errors 0
+[06:24:41] summary main: 154/23600, 0.5 runs/min, ETA 711:27:38, errors 0
+[06:25:51] summary main: 154/23600, 0.5 runs/min, ETA 714:25:11, errors 0
+[06:25:57] main GA-cost-tuned u200x200-03 seed=20261116 gap=27.9 gap_norm=0.00875 stop=budget t=2819.71s
+[06:27:01] summary main: 155/23600, 0.5 runs/min, ETA 712:44:44, errors 0
+[06:27:12] main GA-cost-tuned u200x200-03 seed=20261117 gap=24.6 gap_norm=0.00771 stop=budget t=2810.65s
+[06:28:14] summary main: 156/23600, 0.5 runs/min, ETA 711:10:12, errors 0
+[06:28:24] main GA-rand-tuned u200x200-03 seed=20261117 gap=218 gap_norm=0.0683 stop=budget t=3480.75s
+[06:28:48] main GA-rand-tuned u200x200-03 seed=20261116 gap=168 gap_norm=0.0528 stop=budget t=3505.73s
+[06:29:23] summary main: 158/23600, 0.6 runs/min, ETA 704:59:10, errors 0
+[06:29:58] main RS u200x200-03 seed=20261116 gap=2.62e+03 gap_norm=0.82 stop=budget t=3742.93s
+[06:30:35] summary main: 159/23600, 0.6 runs/min, ETA 703:27:14, errors 0
+[06:30:39] main GA-rand-tuned u200x200-03 seed=20261122 gap=178 gap_norm=0.0557 stop=budget t=3512.43s
+[06:31:16] main GA-cost-tuned u200x200-03 seed=20261118 gap=24.9 gap_norm=0.00779 stop=budget t=2813.05s
+[06:31:18] main GA-rand-tuned u200x200-03 seed=20261118 gap=183 gap_norm=0.0574 stop=budget t=3633.69s
+[06:31:24] main RS u200x200-03 seed=20261117 gap=2.6e+03 gap_norm=0.813 stop=budget t=3770.40s
+[06:31:44] summary main: 163/23600, 0.6 runs/min, ETA 688:48:58, errors 0
+[06:31:55] main RS u200x200-03 seed=20261119 gap=2.57e+03 gap_norm=0.805 stop=budget t=3776.15s
+[06:32:02] main GA-rand-tuned u200x200-03 seed=20261120 gap=165 gap_norm=0.0516 stop=budget t=3638.62s
+[06:32:07] main RS u200x200-03 seed=20261118 gap=2.61e+03 gap_norm=0.816 stop=budget t=3787.43s
+[06:32:15] main RS u200x200-03 seed=20261121 gap=2.61e+03 gap_norm=0.819 stop=budget t=3783.92s
+[06:32:18] main RS u200x200-03 seed=20261122 gap=2.6e+03 gap_norm=0.815 stop=budget t=3777.41s
+[06:32:23] main GA-rand-tuned u200x200-03 seed=20261119 gap=188 gap_norm=0.059 stop=budget t=3678.55s
+[06:32:25] main RS u200x200-03 seed=20261123 gap=2.5e+03 gap_norm=0.784 stop=budget t=3779.32s
+[06:32:53] summary main: 170/23600, 0.6 runs/min, ETA 662:54:19, errors 0
+[06:33:31] main RS u200x200-03 seed=20261120 gap=2.59e+03 gap_norm=0.81 stop=budget t=3860.97s
+[06:33:44] summary main: 171/23600, 0.6 runs/min, ETA 660:57:06, errors 0
+[06:34:02] main RS u200x200-03 seed=20261125 gap=2.62e+03 gap_norm=0.821 stop=budget t=3825.17s
+[06:34:17] main GA-cost-tuned u200x200-03 seed=20261119 gap=24.5 gap_norm=0.00768 stop=budget t=2867.91s
+[06:34:44] summary main: 173/23600, 0.6 runs/min, ETA 655:30:44, errors 0
+[06:35:45] summary main: 173/23600, 0.6 runs/min, ETA 657:47:13, errors 0
+[06:35:58] main RS u200x200-03 seed=20261124 gap=2.61e+03 gap_norm=0.818 stop=budget t=3948.10s
+[06:36:45] summary main: 174/23600, 0.6 runs/min, ETA 656:13:37, errors 0
+[06:37:45] summary main: 174/23600, 0.6 runs/min, ETA 658:28:41, errors 0
+[06:38:53] summary main: 174/23600, 0.6 runs/min, ETA 661:02:01, errors 0
+[06:39:53] summary main: 174/23600, 0.6 runs/min, ETA 663:17:06, errors 0
+[06:40:54] summary main: 174/23600, 0.6 runs/min, ETA 665:32:29, errors 0
+[06:41:05] main SA-rand-tuned u200x200-03 seed=20261120 gap=611 gap_norm=0.191 stop=budget t=588.38s
+[06:41:41] main SA-rand-tuned u200x200-03 seed=20261116 gap=593 gap_norm=0.186 stop=budget t=797.12s
+[06:41:54] summary main: 176/23600, 0.6 runs/min, ETA 660:08:26, errors 0
+[06:42:31] main SA-rand-tuned u200x200-03 seed=20261117 gap=428 gap_norm=0.134 stop=budget t=818.53s
+[06:42:54] summary main: 177/23600, 0.6 runs/min, ETA 658:35:56, errors 0
+[06:43:15] main SA-rand-tuned u200x200-03 seed=20261118 gap=467 gap_norm=0.146 stop=budget t=796.56s
+[06:43:42] main SA-cost-tuned u200x200-03 seed=20261122 gap=42.5 gap_norm=0.0133 stop=budget t=556.71s
+[06:43:44] main SA-rand-tuned u200x200-03 seed=20261119 gap=500 gap_norm=0.157 stop=budget t=785.30s
+[06:43:54] summary main: 180/23600, 0.6 runs/min, ETA 649:43:02, errors 0
+[06:44:39] main SA-rand-tuned u200x200-03 seed=20261121 gap=617 gap_norm=0.193 stop=budget t=801.90s
+[06:44:55] summary main: 181/23600, 0.6 runs/min, ETA 648:16:37, errors 0
+[06:44:55] main SA-rand-tuned u200x200-03 seed=20261122 gap=511 gap_norm=0.16 stop=budget t=810.57s
+[06:45:03] main SA-cost-tuned u200x200-03 seed=20261119 gap=27.4 gap_norm=0.00857 stop=budget t=757.84s
+[06:45:09] main SA-rand-tuned u200x200-03 seed=20261123 gap=530 gap_norm=0.166 stop=budget t=793.42s
+[06:45:12] main SA-cost-tuned u200x200-03 seed=20261116 gap=27.8 gap_norm=0.0087 stop=budget t=777.26s
+[06:45:13] main SA-rand-tuned u200x200-03 seed=20261125 gap=543 gap_norm=0.17 stop=budget t=785.96s
+[06:45:21] main SA-cost-tuned u200x200-03 seed=20261118 gap=27.2 gap_norm=0.00852 stop=budget t=777.80s
+[06:45:23] main SA-cost-tuned u200x200-03 seed=20261117 gap=42.5 gap_norm=0.0133 stop=budget t=784.85s
+[06:45:27] main SA-rand-tuned u200x200-03 seed=20261124 gap=551 gap_norm=0.173 stop=budget t=805.47s
+[06:46:06] summary main: 189/23600, 0.6 runs/min, ETA 623:04:29, errors 0
+[06:46:17] main SA-cost-tuned u200x200-03 seed=20261120 gap=35.9 gap_norm=0.0112 stop=budget t=766.04s
+[06:46:55] summary main: 190/23600, 0.6 runs/min, ETA 621:27:28, errors 0
+[06:47:04] main SA-cost-tuned u200x200-03 seed=20261121 gap=36 gap_norm=0.0113 stop=budget t=782.63s
+[06:47:56] summary main: 191/23600, 0.6 runs/min, ETA 620:13:24, errors 0
+[06:48:56] summary main: 191/23600, 0.6 runs/min, ETA 622:16:32, errors 0
+[06:49:20] main SA-cost-tuned u200x200-03 seed=20261123 gap=26.2 gap_norm=0.0082 stop=budget t=801.24s
+[06:49:56] summary main: 192/23600, 0.6 runs/min, ETA 621:03:15, errors 0
+[06:50:28] main SA-cost-tuned u200x200-03 seed=20261124 gap=26.6 gap_norm=0.00833 stop=budget t=563.37s
+[06:50:47] main GA-cost-tuned u200x200-03 seed=20261120 gap=26.3 gap_norm=0.00824 stop=budget t=2125.16s
+[06:50:57] summary main: 194/23600, 0.6 runs/min, ETA 616:37:37, errors 0
+[06:51:57] summary main: 194/23600, 0.6 runs/min, ETA 618:38:39, errors 0
+[06:53:08] main GA-cost-tuned u200x200-03 seed=20261121 gap=28 gap_norm=0.00876 stop=budget t=2121.33s
+[06:53:08] summary main: 195/23600, 0.6 runs/min, ETA 617:48:20, errors 0
+[06:54:08] summary main: 195/23600, 0.6 runs/min, ETA 619:49:03, errors 0
+[06:54:20] main SA-cost-tuned u200x200-03 seed=20261125 gap=41.6 gap_norm=0.013 stop=budget t=758.23s
+[06:55:08] summary main: 196/23600, 0.6 runs/min, ETA 618:37:56, errors 0
+[06:56:06] main GA-cost-tuned u200x200-03 seed=20261122 gap=26.8 gap_norm=0.00841 stop=budget t=2138.90s
+[06:56:09] summary main: 197/23600, 0.6 runs/min, ETA 617:27:35, errors 0
+[06:57:09] summary main: 197/23600, 0.6 runs/min, ETA 619:27:11, errors 0
+[06:58:09] summary main: 197/23600, 0.6 runs/min, ETA 621:26:12, errors 0
+[06:59:00] main GA-cost-tuned u200x200-03 seed=20261123 gap=28.4 gap_norm=0.00888 stop=budget t=2233.78s
+[06:59:10] summary main: 198/23600, 0.6 runs/min, ETA 620:15:09, errors 0
+[07:00:10] summary main: 198/23600, 0.6 runs/min, ETA 622:13:48, errors 0
+[07:00:46] main GA-cost-tuned u200x200-03 seed=20261124 gap=26.3 gap_norm=0.00822 stop=budget t=2088.35s
+[07:01:20] summary main: 199/23600, 0.6 runs/min, ETA 621:22:51, errors 0
+[07:02:31] summary main: 199/23600, 0.6 runs/min, ETA 623:41:32, errors 0
+[07:02:36] main GA-cost-tuned u200x200-03 seed=20261125 gap=26 gap_norm=0.00814 stop=budget t=2123.94s
+[07:03:41] summary main: 200/23600, 0.6 runs/min, ETA 622:49:48, errors 0
+[07:04:50] summary main: 200/23600, 0.6 runs/min, ETA 625:04:08, errors 0
+[07:06:03] summary main: 200/23600, 0.6 runs/min, ETA 627:25:21, errors 0
+[07:07:16] summary main: 200/23600, 0.6 runs/min, ETA 629:47:35, errors 0
+[07:08:32] summary main: 200/23600, 0.6 runs/min, ETA 632:16:51, errors 0
+[07:09:42] summary main: 200/23600, 0.6 runs/min, ETA 634:33:33, errors 0
+[07:10:53] summary main: 200/23600, 0.6 runs/min, ETA 636:51:40, errors 0
+[07:12:02] summary main: 200/23600, 0.6 runs/min, ETA 639:06:15, errors 0
+[07:13:03] summary main: 200/23600, 0.6 runs/min, ETA 641:04:07, errors 0
+[07:14:03] summary main: 200/23600, 0.6 runs/min, ETA 643:01:32, errors 0
+[07:15:03] summary main: 200/23600, 0.6 runs/min, ETA 644:58:49, errors 0
+[07:16:03] summary main: 200/23600, 0.6 runs/min, ETA 646:56:03, errors 0
+[07:17:03] summary main: 200/23600, 0.6 runs/min, ETA 648:53:35, errors 0
+[07:18:04] summary main: 200/23600, 0.6 runs/min, ETA 650:51:07, errors 0
+[07:19:15] summary main: 200/23600, 0.6 runs/min, ETA 653:09:11, errors 0
+[07:20:25] summary main: 200/23600, 0.6 runs/min, ETA 655:26:37, errors 0
+[07:21:25] summary main: 200/23600, 0.6 runs/min, ETA 657:24:29, errors 0
+[07:22:26] summary main: 200/23600, 0.6 runs/min, ETA 659:22:30, errors 0
+[07:23:26] summary main: 200/23600, 0.6 runs/min, ETA 661:19:37, errors 0
+[07:24:26] summary main: 200/23600, 0.6 runs/min, ETA 663:17:14, errors 0
+[07:25:27] summary main: 200/23600, 0.6 runs/min, ETA 665:14:37, errors 0
+[07:26:27] summary main: 200/23600, 0.6 runs/min, ETA 667:12:10, errors 0
+[07:27:40] summary main: 200/23600, 0.6 runs/min, ETA 669:35:39, errors 0
+[07:28:41] summary main: 200/23600, 0.6 runs/min, ETA 671:33:30, errors 0
+[07:29:41] summary main: 200/23600, 0.6 runs/min, ETA 673:30:36, errors 0
+[07:30:41] summary main: 200/23600, 0.6 runs/min, ETA 675:28:27, errors 0
+[07:31:41] summary main: 200/23600, 0.6 runs/min, ETA 677:25:45, errors 0
+[07:32:42] summary main: 200/23600, 0.6 runs/min, ETA 679:23:44, errors 0
+[07:33:44] main GA-rand-tuned u200x200-04 seed=20261122 gap=179 gap_norm=0.0529 stop=budget t=2596.19s
+[07:33:44] summary main: 201/23600, 0.6 runs/min, ETA 678:00:18, errors 0
+[07:33:45] main GA-rand-tuned u200x200-04 seed=20261123 gap=178 gap_norm=0.0528 stop=budget t=2578.16s
+[07:34:45] summary main: 202/23600, 0.6 runs/min, ETA 676:33:38, errors 0
+[07:35:45] summary main: 202/23600, 0.6 runs/min, ETA 678:29:53, errors 0
+[07:36:20] main GA-rand-tuned u200x200-04 seed=20261124 gap=192 gap_norm=0.0568 stop=budget t=2592.28s
+[07:36:45] summary main: 203/23600, 0.6 runs/min, ETA 677:02:55, errors 0
+[07:37:45] summary main: 203/23600, 0.6 runs/min, ETA 678:58:20, errors 0
+[07:38:37] main RS u200x200-04 seed=20261118 gap=2.76e+03 gap_norm=0.818 stop=budget t=3292.86s
+[07:38:45] summary main: 204/23600, 0.6 runs/min, ETA 677:32:23, errors 0
+[07:39:53] summary main: 204/23600, 0.6 runs/min, ETA 679:41:29, errors 0
+[07:40:53] summary main: 204/23600, 0.6 runs/min, ETA 681:37:00, errors 0
+[07:41:54] summary main: 204/23600, 0.6 runs/min, ETA 683:32:09, errors 0
+[07:42:54] summary main: 204/23600, 0.6 runs/min, ETA 685:27:19, errors 0
+[07:43:29] main GA-cost-tuned u200x200-04 seed=20261116 gap=32.5 gap_norm=0.00962 stop=budget t=2842.72s
+[07:43:45] main GA-rand-tuned u200x200-04 seed=20261117 gap=178 gap_norm=0.0528 stop=budget t=3502.24s
+[07:43:54] summary main: 206/23600, 0.6 runs/min, ETA 680:38:12, errors 0
+[07:44:54] summary main: 206/23600, 0.6 runs/min, ETA 682:32:36, errors 0
+[07:45:15] main GA-rand-tuned u200x200-04 seed=20261118 gap=166 gap_norm=0.0491 stop=budget t=3587.31s
+[07:45:18] main RS u200x200-04 seed=20261117 gap=2.77e+03 gap_norm=0.82 stop=budget t=3723.30s
+[07:45:29] main RS u200x200-04 seed=20261116 gap=2.72e+03 gap_norm=0.806 stop=budget t=3778.16s
+[07:45:45] main GA-rand-tuned u200x200-04 seed=20261119 gap=170 gap_norm=0.0505 stop=budget t=3560.95s
+[07:45:46] main GA-rand-tuned u200x200-04 seed=20261116 gap=191 gap_norm=0.0565 stop=budget t=3625.17s
+[07:45:55] summary main: 211/23600, 0.6 runs/min, ETA 668:04:44, errors 0
+[07:45:59] main GA-cost-tuned u200x200-04 seed=20261117 gap=33.1 gap_norm=0.00979 stop=budget t=2818.90s
+[07:46:36] main RS u200x200-04 seed=20261119 gap=2.78e+03 gap_norm=0.824 stop=budget t=3772.56s
+[07:46:58] main GA-rand-tuned u200x200-04 seed=20261120 gap=153 gap_norm=0.0452 stop=budget t=3592.19s
+[07:46:58] summary main: 214/23600, 0.6 runs/min, ETA 660:32:37, errors 0
+[07:47:05] main GA-cost-tuned u200x200-04 seed=20261118 gap=29.7 gap_norm=0.0088 stop=budget t=2779.19s
+[07:47:29] main RS u200x200-04 seed=20261122 gap=2.78e+03 gap_norm=0.824 stop=budget t=3746.19s
+[07:47:35] main RS u200x200-04 seed=20261123 gap=2.77e+03 gap_norm=0.822 stop=budget t=3746.09s
+[07:47:38] main RS u200x200-04 seed=20261124 gap=2.75e+03 gap_norm=0.816 stop=budget t=3746.10s
+[07:47:45] main RS u200x200-04 seed=20261125 gap=2.73e+03 gap_norm=0.809 stop=budget t=3752.14s
+[07:47:58] summary main: 219/23600, 0.6 runs/min, ETA 647:06:37, errors 0
+[07:48:00] main RS u200x200-04 seed=20261121 gap=2.78e+03 gap_norm=0.823 stop=budget t=3785.46s
+[07:48:25] main GA-cost-tuned u200x200-04 seed=20261119 gap=31.3 gap_norm=0.00927 stop=budget t=2748.51s
+[07:48:26] main RS u200x200-04 seed=20261120 gap=2.77e+03 gap_norm=0.821 stop=budget t=3826.34s
+[07:48:58] summary main: 222/23600, 0.6 runs/min, ETA 640:02:48, errors 0
+[07:49:36] main GA-rand-tuned u200x200-04 seed=20261125 gap=144 gap_norm=0.0427 stop=budget t=3315.72s
+[07:49:59] summary main: 223/23600, 0.6 runs/min, ETA 638:54:34, errors 0
+[07:50:04] main GA-rand-tuned u200x200-04 seed=20261121 gap=192 gap_norm=0.057 stop=budget t=3643.96s
+[07:50:59] summary main: 224/23600, 0.6 runs/min, ETA 637:46:42, errors 0
+[07:51:59] summary main: 224/23600, 0.6 runs/min, ETA 639:31:31, errors 0
+[07:52:59] summary main: 224/23600, 0.6 runs/min, ETA 641:16:20, errors 0
+[07:54:08] summary main: 224/23600, 0.6 runs/min, ETA 643:16:19, errors 0
+[07:55:09] summary main: 224/23600, 0.6 runs/min, ETA 645:01:02, errors 0
+[07:55:40] main SA-rand-tuned u200x200-04 seed=20261121 gap=493 gap_norm=0.146 stop=budget t=581.36s
+[07:56:09] summary main: 225/23600, 0.6 runs/min, ETA 643:51:36, errors 0
+[07:56:41] main SA-rand-tuned u200x200-04 seed=20261124 gap=585 gap_norm=0.173 stop=budget t=576.23s
+[07:57:09] summary main: 226/23600, 0.6 runs/min, ETA 642:43:02, errors 0
+[07:57:44] main SA-cost-tuned u200x200-04 seed=20261120 gap=31.7 gap_norm=0.0094 stop=budget t=551.32s
+[07:58:09] summary main: 227/23600, 0.6 runs/min, ETA 641:34:52, errors 0
+[07:58:27] main SA-rand-tuned u200x200-04 seed=20261117 gap=611 gap_norm=0.181 stop=budget t=788.45s
+[07:58:35] main SA-rand-tuned u200x200-04 seed=20261116 gap=480 gap_norm=0.142 stop=budget t=800.08s
+[07:58:43] main SA-rand-tuned u200x200-04 seed=20261118 gap=542 gap_norm=0.16 stop=budget t=794.13s
+[07:58:54] main SA-rand-tuned u200x200-04 seed=20261119 gap=563 gap_norm=0.167 stop=budget t=788.57s
+[07:59:03] main SA-rand-tuned u200x200-04 seed=20261120 gap=496 gap_norm=0.147 stop=budget t=796.36s
+[07:59:09] summary main: 232/23600, 0.6 runs/min, ETA 629:17:59, errors 0
+[08:00:03] main SA-rand-tuned u200x200-04 seed=20261122 gap=476 gap_norm=0.141 stop=budget t=805.77s
+[08:00:10] summary main: 233/23600, 0.6 runs/min, ETA 628:14:59, errors 0
+[08:00:22] main SA-cost-tuned u200x200-04 seed=20261117 gap=32.1 gap_norm=0.00951 stop=budget t=764.51s
+[08:00:26] main SA-cost-tuned u200x200-04 seed=20261116 gap=29.7 gap_norm=0.0088 stop=budget t=770.80s
+[08:00:31] main SA-rand-tuned u200x200-04 seed=20261123 gap=600 gap_norm=0.178 stop=budget t=813.20s
+[08:00:34] main SA-cost-tuned u200x200-04 seed=20261118 gap=31.4 gap_norm=0.00929 stop=budget t=768.80s
+[08:00:43] main SA-rand-tuned u200x200-04 seed=20261125 gap=471 gap_norm=0.14 stop=budget t=793.82s
+[08:00:55] main SA-cost-tuned u200x200-04 seed=20261119 gap=33.9 gap_norm=0.01 stop=budget t=774.50s
+[08:01:13] summary main: 239/23600, 0.6 runs/min, ETA 614:02:41, errors 0
+[08:01:16] main SA-cost-tuned u200x200-04 seed=20261121 gap=35.2 gap_norm=0.0104 stop=budget t=769.89s
+[08:02:25] summary main: 240/23600, 0.6 runs/min, ETA 613:23:41, errors 0
+[08:02:46] main SA-cost-tuned u200x200-04 seed=20261122 gap=32.1 gap_norm=0.00951 stop=budget t=789.60s
+[08:03:13] summary main: 241/23600, 0.6 runs/min, ETA 612:08:02, errors 0
+[08:03:36] main SA-cost-tuned u200x200-04 seed=20261123 gap=29 gap_norm=0.0086 stop=budget t=812.05s
+[08:04:14] summary main: 242/23600, 0.6 runs/min, ETA 611:12:00, errors 0
+[08:05:14] summary main: 242/23600, 0.6 runs/min, ETA 612:49:07, errors 0
+[08:05:28] main SA-cost-tuned u200x200-04 seed=20261124 gap=33.4 gap_norm=0.0099 stop=budget t=587.66s
+[08:05:59] main SA-cost-tuned u200x200-04 seed=20261125 gap=38.8 gap_norm=0.0115 stop=budget t=557.70s
+[08:06:15] summary main: 244/23600, 0.6 runs/min, ETA 609:21:01, errors 0
+[08:07:15] summary main: 244/23600, 0.6 runs/min, ETA 610:56:59, errors 0
+[08:08:18] summary main: 244/23600, 0.6 runs/min, ETA 612:37:16, errors 0
+[08:08:52] main GA-cost-tuned u200x200-04 seed=20261121 gap=29.6 gap_norm=0.00877 stop=budget t=2106.09s
+[08:09:27] summary main: 245/23600, 0.6 runs/min, ETA 611:56:31, errors 0
+[08:10:18] summary main: 245/23600, 0.6 runs/min, ETA 613:16:55, errors 0
+[08:10:42] main GA-cost-tuned u200x200-04 seed=20261120 gap=32.2 gap_norm=0.00955 stop=budget t=2216.89s
+[08:10:56] main GA-cost-tuned u200x200-04 seed=20261122 gap=30.2 gap_norm=0.00894 stop=budget t=2075.79s
+[08:11:18] summary main: 247/23600, 0.6 runs/min, ETA 609:50:55, errors 0
+[08:12:18] summary main: 247/23600, 0.6 runs/min, ETA 611:25:39, errors 0
+[08:13:19] summary main: 247/23600, 0.6 runs/min, ETA 613:00:17, errors 0
+[08:14:19] summary main: 247/23600, 0.6 runs/min, ETA 614:35:24, errors 0
+[08:15:24] summary main: 247/23600, 0.6 runs/min, ETA 616:17:19, errors 0
+[08:16:01] main GA-cost-tuned u200x200-04 seed=20261123 gap=30.8 gap_norm=0.00913 stop=budget t=2244.40s
+[08:16:35] summary main: 248/23600, 0.6 runs/min, ETA 615:39:00, errors 0
+[08:17:24] summary main: 248/23600, 0.6 runs/min, ETA 616:55:26, errors 0
+[08:18:18] main GA-cost-tuned u200x200-04 seed=20261124 gap=27.8 gap_norm=0.00824 stop=budget t=2088.36s
+[08:18:24] summary main: 249/23600, 0.6 runs/min, ETA 615:59:20, errors 0
+[08:19:24] summary main: 249/23600, 0.6 runs/min, ETA 617:33:09, errors 0
+[08:20:24] summary main: 249/23600, 0.6 runs/min, ETA 619:07:07, errors 0
+[08:21:24] summary main: 249/23600, 0.6 runs/min, ETA 620:41:13, errors 0
+[08:22:33] summary main: 249/23600, 0.6 runs/min, ETA 622:27:38, errors 0
+[08:23:42] summary main: 249/23600, 0.6 runs/min, ETA 624:16:22, errors 0
+[08:24:55] summary main: 249/23600, 0.6 runs/min, ETA 626:09:44, errors 0
+[08:26:06] summary main: 249/23600, 0.6 runs/min, ETA 628:01:11, errors 0
+[08:27:15] summary main: 249/23600, 0.6 runs/min, ETA 629:49:01, errors 0
+[08:28:28] summary main: 249/23600, 0.6 runs/min, ETA 631:43:15, errors 0
+[08:29:40] summary main: 249/23600, 0.6 runs/min, ETA 633:35:01, errors 0
+[08:30:54] summary main: 249/23600, 0.6 runs/min, ETA 635:31:16, errors 0
+[08:31:09] main GA-cost-tuned u200x200-04 seed=20261125 gap=31.9 gap_norm=0.00945 stop=budget t=2843.75s
+[08:32:04] summary main: 250/23600, 0.6 runs/min, ETA 634:46:09, errors 0
+[08:33:15] summary main: 250/23600, 0.6 runs/min, ETA 636:36:29, errors 0
+[08:34:24] summary main: 250/23600, 0.6 runs/min, ETA 638:24:19, errors 0
+[08:35:34] summary main: 250/23600, 0.6 runs/min, ETA 640:13:35, errors 0
+[08:36:46] summary main: 250/23600, 0.6 runs/min, ETA 642:05:06, errors 0
+[08:37:58] summary main: 250/23600, 0.6 runs/min, ETA 643:57:14, errors 0
+[08:39:08] summary main: 250/23600, 0.6 runs/min, ETA 645:46:23, errors 0
+[08:40:22] summary main: 250/23600, 0.6 runs/min, ETA 647:41:26, errors 0
+[08:41:22] summary main: 250/23600, 0.6 runs/min, ETA 649:15:30, errors 0
+[08:42:22] summary main: 250/23600, 0.6 runs/min, ETA 650:48:56, errors 0
+[08:43:23] summary main: 250/23600, 0.6 runs/min, ETA 652:23:05, errors 0
+[08:44:23] summary main: 250/23600, 0.6 runs/min, ETA 653:56:34, errors 0
+[08:45:23] summary main: 250/23600, 0.6 runs/min, ETA 655:30:36, errors 0
+[08:46:31] summary main: 250/23600, 0.6 runs/min, ETA 657:15:25, errors 0
+[08:47:41] summary main: 250/23600, 0.6 runs/min, ETA 659:05:24, errors 0
+[08:48:36] main GA-rand-tuned u200x200-05 seed=20261123 gap=186 gap_norm=0.0581 stop=budget t=2557.47s
+[08:48:55] summary main: 251/23600, 0.6 runs/min, ETA 658:20:36, errors 0
+[08:49:15] main RS u200x200-05 seed=20261116 gap=2.62e+03 gap_norm=0.817 stop=budget t=3090.59s
+[08:49:20] main GA-rand-tuned u200x200-05 seed=20261122 gap=152 gap_norm=0.0473 stop=budget t=2632.42s
+[08:50:04] summary main: 253/23600, 0.6 runs/min, ETA 654:51:24, errors 0
+[08:51:14] summary main: 253/23600, 0.6 runs/min, ETA 656:38:28, errors 0
+[08:51:15] main GA-rand-tuned u200x200-05 seed=20261124 gap=168 gap_norm=0.0524 stop=budget t=2542.97s
+[08:52:14] summary main: 254/23600, 0.6 runs/min, ETA 655:34:07, errors 0
+[08:53:08] main GA-rand-tuned u200x200-05 seed=20261125 gap=155 gap_norm=0.0485 stop=budget t=2546.20s
+[08:53:15] summary main: 255/23600, 0.6 runs/min, ETA 654:30:11, errors 0
+[08:54:15] summary main: 255/23600, 0.6 runs/min, ETA 656:02:01, errors 0
+[08:55:15] summary main: 255/23600, 0.6 runs/min, ETA 657:33:53, errors 0
+[08:56:15] summary main: 255/23600, 0.6 runs/min, ETA 659:05:51, errors 0
+[08:57:15] summary main: 255/23600, 0.6 runs/min, ETA 660:37:30, errors 0
+[08:57:35] main GA-cost-tuned u200x200-05 seed=20261116 gap=21.5 gap_norm=0.0067 stop=budget t=2798.19s
+[08:58:18] summary main: 256/23600, 0.6 runs/min, ETA 659:36:20, errors 0
+[08:58:41] main GA-rand-tuned u200x200-05 seed=20261118 gap=175 gap_norm=0.0545 stop=budget t=3465.89s
+[08:59:28] summary main: 257/23600, 0.6 runs/min, ETA 658:45:41, errors 0
+[08:59:36] main RS u200x200-05 seed=20261117 gap=2.63e+03 gap_norm=0.82 stop=budget t=3669.52s
+[08:59:40] main GA-rand-tuned u200x200-05 seed=20261117 gap=145 gap_norm=0.0451 stop=budget t=3536.31s
+[08:59:40] main GA-rand-tuned u200x200-05 seed=20261119 gap=179 gap_norm=0.0557 stop=budget t=3504.47s
+[08:59:51] main GA-rand-tuned u200x200-05 seed=20261116 gap=167 gap_norm=0.0522 stop=budget t=3557.42s
+[09:00:28] summary main: 261/23600, 0.6 runs/min, ETA 650:03:23, errors 0
+[09:01:26] main RS u200x200-05 seed=20261118 gap=2.64e+03 gap_norm=0.822 stop=budget t=3770.82s
+[09:01:28] summary main: 262/23600, 0.6 runs/min, ETA 649:02:29, errors 0
+[09:01:40] main RS u200x200-05 seed=20261120 gap=2.57e+03 gap_norm=0.8 stop=budget t=3766.02s
+[09:01:55] main RS u200x200-05 seed=20261119 gap=2.6e+03 gap_norm=0.811 stop=budget t=3791.97s
+[09:02:08] main RS u200x200-05 seed=20261122 gap=2.58e+03 gap_norm=0.804 stop=budget t=3725.31s
+[09:02:12] main RS u200x200-05 seed=20261124 gap=2.62e+03 gap_norm=0.818 stop=budget t=3706.34s
+[09:02:12] main GA-rand-tuned u200x200-05 seed=20261120 gap=205 gap_norm=0.0641 stop=budget t=3566.34s
+[09:02:28] main RS u200x200-05 seed=20261121 gap=2.58e+03 gap_norm=0.804 stop=budget t=3805.59s
+[09:02:29] summary main: 268/23600, 0.6 runs/min, ETA 635:48:30, errors 0
+[09:02:52] main GA-cost-tuned u200x200-05 seed=20261117 gap=19.7 gap_norm=0.00614 stop=budget t=2810.45s
+[09:03:29] summary main: 269/23600, 0.6 runs/min, ETA 634:51:54, errors 0
+[09:03:30] main GA-rand-tuned u200x200-05 seed=20261121 gap=185 gap_norm=0.0575 stop=budget t=3594.10s
+[09:03:41] main GA-cost-tuned u200x200-05 seed=20261118 gap=22.3 gap_norm=0.00695 stop=budget t=2722.94s
+[09:03:58] main RS u200x200-05 seed=20261123 gap=2.62e+03 gap_norm=0.816 stop=budget t=3815.33s
+[09:04:16] main RS u200x200-05 seed=20261125 gap=2.62e+03 gap_norm=0.816 stop=budget t=3817.45s
+[09:04:29] summary main: 273/23600, 0.6 runs/min, ETA 626:53:30, errors 0
+[09:05:30] summary main: 273/23600, 0.6 runs/min, ETA 628:20:14, errors 0
+[09:06:30] summary main: 273/23600, 0.6 runs/min, ETA 629:45:56, errors 0
+[09:07:31] summary main: 273/23600, 0.6 runs/min, ETA 631:11:34, errors 0
+[09:08:31] summary main: 273/23600, 0.6 runs/min, ETA 632:37:39, errors 0
+[09:09:31] summary main: 273/23600, 0.6 runs/min, ETA 634:03:27, errors 0
+[09:10:31] summary main: 273/23600, 0.6 runs/min, ETA 635:29:05, errors 0
+[09:11:34] summary main: 273/23600, 0.6 runs/min, ETA 636:57:48, errors 0
+[09:11:56] main SA-rand-tuned u200x200-05 seed=20261116 gap=578 gap_norm=0.18 stop=budget t=795.19s
+[09:12:10] main SA-cost-tuned u200x200-05 seed=20261118 gap=27.7 gap_norm=0.00863 stop=budget t=557.99s
+[09:12:34] summary main: 275/23600, 0.6 runs/min, ETA 633:41:37, errors 0
+[09:12:47] main SA-rand-tuned u200x200-05 seed=20261117 gap=450 gap_norm=0.14 stop=budget t=790.24s
+[09:12:50] main SA-rand-tuned u200x200-05 seed=20261118 gap=629 gap_norm=0.196 stop=budget t=790.34s
+[09:13:04] main SA-rand-tuned u200x200-05 seed=20261120 gap=612 gap_norm=0.191 stop=budget t=792.57s
+[09:13:10] main SA-rand-tuned u200x200-05 seed=20261119 gap=583 gap_norm=0.182 stop=budget t=809.61s
+[09:13:17] main SA-cost-tuned u200x200-05 seed=20261120 gap=33.2 gap_norm=0.0103 stop=budget t=575.70s
+[09:13:34] summary main: 280/23600, 0.6 runs/min, ETA 623:38:35, errors 0
+[09:14:34] summary main: 280/23600, 0.6 runs/min, ETA 625:01:56, errors 0
+[09:14:48] main SA-rand-tuned u200x200-05 seed=20261121 gap=502 gap_norm=0.157 stop=budget t=802.25s
+[09:14:50] main SA-cost-tuned u200x200-05 seed=20261116 gap=24.6 gap_norm=0.00766 stop=budget t=758.10s
+[09:15:07] main SA-rand-tuned u200x200-05 seed=20261122 gap=596 gap_norm=0.186 stop=budget t=800.41s
+[09:15:28] main SA-rand-tuned u200x200-05 seed=20261124 gap=577 gap_norm=0.18 stop=budget t=800.16s
+[09:15:35] summary main: 284/23600, 0.6 runs/min, ETA 617:29:53, errors 0
+[09:15:38] main SA-rand-tuned u200x200-05 seed=20261123 gap=505 gap_norm=0.157 stop=budget t=822.53s
+[09:15:40] main SA-rand-tuned u200x200-05 seed=20261125 gap=427 gap_norm=0.133 stop=budget t=808.25s
+[09:15:42] main SA-cost-tuned u200x200-05 seed=20261117 gap=23.1 gap_norm=0.0072 stop=budget t=793.50s
+[09:16:35] summary main: 287/23600, 0.6 runs/min, ETA 612:19:21, errors 0
+[09:16:40] main SA-cost-tuned u200x200-05 seed=20261119 gap=37.4 gap_norm=0.0117 stop=budget t=789.92s
+[09:17:03] main SA-cost-tuned u200x200-05 seed=20261121 gap=24.4 gap_norm=0.00761 stop=budget t=785.50s
+[09:17:17] main SA-cost-tuned u200x200-05 seed=20261122 gap=26.4 gap_norm=0.00822 stop=budget t=781.25s
+[09:17:35] summary main: 290/23600, 0.6 runs/min, ETA 607:15:37, errors 0
+[09:18:38] main GA-cost-tuned u200x200-05 seed=20261119 gap=19.4 gap_norm=0.00605 stop=budget t=2844.42s
+[09:18:38] summary main: 291/23600, 0.6 runs/min, ETA 606:32:37, errors 0
+[09:19:38] summary main: 291/23600, 0.6 runs/min, ETA 607:53:14, errors 0
+[09:20:38] summary main: 291/23600, 0.6 runs/min, ETA 609:13:22, errors 0
+[09:21:39] summary main: 291/23600, 0.6 runs/min, ETA 610:33:45, errors 0
+[09:21:57] main SA-cost-tuned u200x200-05 seed=20261124 gap=23.6 gap_norm=0.00737 stop=budget t=586.86s
+[09:22:39] summary main: 292/23600, 0.6 runs/min, ETA 609:46:35, errors 0
+[09:23:00] main GA-cost-tuned u200x200-05 seed=20261121 gap=22.4 gap_norm=0.007 stop=budget t=2024.73s
+[09:23:24] main GA-cost-tuned u200x200-05 seed=20261120 gap=21.6 gap_norm=0.00675 stop=budget t=2087.45s
+[09:23:39] summary main: 294/23600, 0.6 runs/min, ETA 606:54:15, errors 0
+[09:24:47] main SA-cost-tuned u200x200-05 seed=20261123 gap=21.3 gap_norm=0.00665 stop=budget t=770.17s
+[09:24:47] summary main: 295/23600, 0.6 runs/min, ETA 606:18:46, errors 0
+[09:25:04] main GA-cost-tuned u200x200-05 seed=20261122 gap=22.9 gap_norm=0.00714 stop=budget t=2143.47s
+[09:25:17] main SA-cost-tuned u200x200-05 seed=20261125 gap=26.9 gap_norm=0.00839 stop=budget t=750.18s
+[09:25:27] main GA-cost-tuned u200x200-05 seed=20261123 gap=20.8 gap_norm=0.00649 stop=budget t=2051.97s
+[09:26:05] summary main: 298/23600, 0.6 runs/min, ETA 601:49:53, errors 0
+[09:27:05] summary main: 298/23600, 0.6 runs/min, ETA 603:08:11, errors 0
+[09:27:55] main GA-cost-tuned u200x200-05 seed=20261124 gap=20.4 gap_norm=0.00635 stop=budget t=2086.23s
+[09:28:06] summary main: 299/23600, 0.6 runs/min, ETA 602:24:12, errors 0
+[09:29:06] summary main: 299/23600, 0.6 runs/min, ETA 603:42:36, errors 0
+[09:30:07] summary main: 299/23600, 0.6 runs/min, ETA 605:01:05, errors 0
+[09:31:07] summary main: 299/23600, 0.6 runs/min, ETA 606:19:58, errors 0
+[09:31:14] main GA-cost-tuned u200x200-05 seed=20261125 gap=22 gap_norm=0.00685 stop=budget t=2019.53s
+[09:32:08] summary main: 300/23600, 0.6 runs/min, ETA 605:35:16, errors 0
+[09:33:08] summary main: 300/23600, 0.6 runs/min, ETA 606:53:26, errors 0
+[09:34:08] summary main: 300/23600, 0.6 runs/min, ETA 608:11:37, errors 0
+[09:35:09] summary main: 300/23600, 0.6 runs/min, ETA 609:29:26, errors 0
+[09:36:09] summary main: 300/23600, 0.6 runs/min, ETA 610:47:27, errors 0
+[09:37:17] summary main: 300/23600, 0.6 runs/min, ETA 612:16:15, errors 0
+[09:38:18] summary main: 300/23600, 0.6 runs/min, ETA 613:34:34, errors 0
+[09:39:18] summary main: 300/23600, 0.6 runs/min, ETA 614:52:15, errors 0
+[09:40:18] summary main: 300/23600, 0.6 runs/min, ETA 616:10:14, errors 0
+[09:41:18] summary main: 300/23600, 0.6 runs/min, ETA 617:27:56, errors 0
+[09:42:18] summary main: 300/23600, 0.6 runs/min, ETA 618:45:54, errors 0
+[09:43:26] summary main: 300/23600, 0.6 runs/min, ETA 620:13:35, errors 0
+[09:44:44] summary main: 300/23600, 0.6 runs/min, ETA 621:54:52, errors 0
+[09:45:45] summary main: 300/23600, 0.6 runs/min, ETA 623:13:11, errors 0
+[09:46:45] summary main: 300/23600, 0.6 runs/min, ETA 624:31:02, errors 0
+[09:47:45] summary main: 300/23600, 0.6 runs/min, ETA 625:48:49, errors 0
+[09:48:45] summary main: 300/23600, 0.6 runs/min, ETA 627:06:42, errors 0
+[09:49:46] summary main: 300/23600, 0.6 runs/min, ETA 628:24:41, errors 0
+[09:50:47] summary main: 300/23600, 0.6 runs/min, ETA 629:44:45, errors 0
+[09:52:00] summary main: 300/23600, 0.6 runs/min, ETA 631:18:27, errors 0
+[09:53:19] summary main: 300/23600, 0.6 runs/min, ETA 633:01:31, errors 0
+[09:54:34] summary main: 300/23600, 0.6 runs/min, ETA 634:38:07, errors 0
+[09:55:52] summary main: 300/23600, 0.6 runs/min, ETA 636:18:45, errors 0
+[09:56:35] summary main: 300/23600, 0.6 runs/min, ETA 637:14:23, errors 0
+[09:57:35] summary main: 300/23600, 0.6 runs/min, ETA 638:32:10, errors 0
+[09:58:35] summary main: 300/23600, 0.6 runs/min, ETA 639:49:54, errors 0
+[09:59:42] summary main: 300/23600, 0.6 runs/min, ETA 641:16:19, errors 0
+[10:00:51] summary main: 300/23600, 0.6 runs/min, ETA 642:46:07, errors 0
+[10:01:01] main RS u200x200-06 seed=20261119 gap=2.5e+03 gap_norm=0.814 stop=budget t=2864.67s
+[10:01:04] main GA-rand-tuned u200x200-06 seed=20261123 gap=175 gap_norm=0.0568 stop=budget t=2260.04s
+[10:01:18] main GA-rand-tuned u200x200-06 seed=20261122 gap=136 gap_norm=0.0443 stop=budget t=2298.06s
+[10:02:00] summary main: 303/23600, 0.6 runs/min, ETA 637:47:57, errors 0
+[10:03:01] summary main: 303/23600, 0.6 runs/min, ETA 639:05:15, errors 0
+[10:04:01] summary main: 303/23600, 0.6 runs/min, ETA 640:22:09, errors 0
+[10:05:01] summary main: 303/23600, 0.6 runs/min, ETA 641:39:32, errors 0
+[10:05:56] main GA-rand-tuned u200x200-06 seed=20261121 gap=219 gap_norm=0.0711 stop=budget t=2638.84s
+[10:06:01] summary main: 304/23600, 0.6 runs/min, ETA 640:47:53, errors 0
+[10:06:58] main GA-cost-tuned u200x200-06 seed=20261117 gap=22.8 gap_norm=0.00743 stop=budget t=2478.90s
+[10:07:01] summary main: 305/23600, 0.6 runs/min, ETA 639:57:13, errors 0
+[10:07:25] main GA-rand-tuned u200x200-06 seed=20261118 gap=139 gap_norm=0.0454 stop=budget t=3021.56s
+[10:07:47] main GA-rand-tuned u200x200-06 seed=20261125 gap=136 gap_norm=0.0443 stop=budget t=2563.03s
+[10:08:14] summary main: 307/23600, 0.6 runs/min, ETA 637:15:29, errors 0
+[10:09:29] summary main: 307/23600, 0.6 runs/min, ETA 638:50:57, errors 0
+[10:10:39] summary main: 307/23600, 0.6 runs/min, ETA 640:18:40, errors 0
+[10:10:40] main GA-rand-tuned u200x200-06 seed=20261116 gap=190 gap_norm=0.0618 stop=budget t=3297.88s
+[10:10:42] main GA-cost-tuned u200x200-06 seed=20261118 gap=25.8 gap_norm=0.00839 stop=budget t=2567.15s
+[10:11:01] main RS u200x200-06 seed=20261116 gap=2.55e+03 gap_norm=0.828 stop=budget t=3490.77s
+[10:11:34] main RS u200x200-06 seed=20261117 gap=2.47e+03 gap_norm=0.804 stop=budget t=3510.34s
+[10:11:39] summary main: 311/23600, 0.6 runs/min, ETA 633:13:25, errors 0
+[10:11:41] main GA-rand-tuned u200x200-06 seed=20261119 gap=163 gap_norm=0.053 stop=budget t=3263.37s
+[10:12:06] main GA-rand-tuned u200x200-06 seed=20261120 gap=211 gap_norm=0.0687 stop=budget t=3208.27s
+[10:12:34] main RS u200x200-06 seed=20261118 gap=2.54e+03 gap_norm=0.827 stop=budget t=3563.83s
+[10:12:38] main GA-cost-tuned u200x200-06 seed=20261119 gap=21.9 gap_norm=0.00712 stop=budget t=2483.71s
+[10:12:39] summary main: 315/23600, 0.6 runs/min, ETA 626:18:32, errors 0
+[10:13:02] main GA-rand-tuned u200x200-06 seed=20261117 gap=188 gap_norm=0.0611 stop=budget t=3375.23s
+[10:13:23] main RS u200x200-06 seed=20261121 gap=2.52e+03 gap_norm=0.82 stop=budget t=3512.37s
+[10:13:40] summary main: 317/23600, 0.6 runs/min, ETA 623:32:01, errors 0
+[10:14:29] main RS u200x200-06 seed=20261120 gap=2.54e+03 gap_norm=0.827 stop=budget t=3581.44s
+[10:14:40] summary main: 318/23600, 0.6 runs/min, ETA 622:46:15, errors 0
+[10:14:42] main RS u200x200-06 seed=20261125 gap=2.53e+03 gap_norm=0.824 stop=budget t=3541.79s
+[10:15:40] summary main: 319/23600, 0.6 runs/min, ETA 622:01:06, errors 0
+[10:15:54] main GA-rand-tuned u200x200-06 seed=20261124 gap=151 gap_norm=0.0492 stop=budget t=3066.62s
+[10:16:06] main RS u200x200-06 seed=20261124 gap=2.5e+03 gap_norm=0.815 stop=budget t=3628.27s
+[10:16:20] main GA-cost-tuned u200x200-06 seed=20261116 gap=22.1 gap_norm=0.0072 stop=budget t=3063.24s
+[10:16:42] main RS u200x200-06 seed=20261122 gap=2.51e+03 gap_norm=0.817 stop=budget t=3692.57s
+[10:16:42] summary main: 323/23600, 0.6 runs/min, ETA 615:26:24, errors 0
+[10:17:06] main RS u200x200-06 seed=20261123 gap=2.46e+03 gap_norm=0.801 stop=budget t=3697.80s
+[10:17:42] summary main: 324/23600, 0.6 runs/min, ETA 614:42:51, errors 0
+[10:18:30] main SA-rand-tuned u200x200-06 seed=20261116 gap=478 gap_norm=0.155 stop=budget t=643.16s
+[10:18:42] summary main: 325/23600, 0.6 runs/min, ETA 613:59:50, errors 0
+[10:19:43] summary main: 325/23600, 0.6 runs/min, ETA 615:12:02, errors 0
+[10:20:43] summary main: 325/23600, 0.6 runs/min, ETA 616:23:54, errors 0
+[10:20:43] main SA-rand-tuned u200x200-06 seed=20261118 gap=590 gap_norm=0.192 stop=budget t=600.93s
+[10:21:43] summary main: 326/23600, 0.6 runs/min, ETA 615:40:43, errors 0
+[10:21:53] main SA-rand-tuned u200x200-06 seed=20261124 gap=485 gap_norm=0.158 stop=budget t=554.39s
+[10:22:43] summary main: 327/23600, 0.6 runs/min, ETA 614:57:32, errors 0
+[10:23:44] summary main: 327/23600, 0.6 runs/min, ETA 616:08:57, errors 0
+[10:23:56] main SA-rand-tuned u200x200-06 seed=20261119 gap=451 gap_norm=0.147 stop=budget t=774.75s
+[10:24:15] main SA-rand-tuned u200x200-06 seed=20261117 gap=485 gap_norm=0.158 stop=budget t=814.98s
+[10:24:30] main SA-rand-tuned u200x200-06 seed=20261120 gap=554 gap_norm=0.18 stop=budget t=775.91s
+[10:24:44] summary main: 330/23600, 0.6 runs/min, ETA 611:38:44, errors 0
+[10:25:27] main SA-rand-tuned u200x200-06 seed=20261122 gap=498 gap_norm=0.162 stop=budget t=797.87s
+[10:25:37] main SA-rand-tuned u200x200-06 seed=20261121 gap=609 gap_norm=0.198 stop=budget t=836.64s
+[10:25:44] summary main: 332/23600, 0.6 runs/min, ETA 609:04:50, errors 0
+[10:25:52] main SA-rand-tuned u200x200-06 seed=20261123 gap=490 gap_norm=0.159 stop=budget t=798.42s
+[10:26:19] main SA-cost-tuned u200x200-06 seed=20261116 gap=35.6 gap_norm=0.0116 stop=budget t=776.24s
+[10:26:48] summary main: 334/23600, 0.6 runs/min, ETA 606:36:45, errors 0
+[10:27:02] main SA-rand-tuned u200x200-06 seed=20261125 gap=461 gap_norm=0.15 stop=budget t=840.16s
+[10:27:38] main SA-cost-tuned u200x200-06 seed=20261117 gap=64.4 gap_norm=0.021 stop=budget t=788.11s
+[10:27:48] summary main: 336/23600, 0.6 runs/min, ETA 604:06:33, errors 0
+[10:27:58] main SA-cost-tuned u200x200-06 seed=20261118 gap=39.6 gap_norm=0.0129 stop=budget t=793.96s
+[10:28:21] main SA-cost-tuned u200x200-06 seed=20261124 gap=37.3 gap_norm=0.0121 stop=budget t=590.88s
+[10:28:48] summary main: 338/23600, 0.6 runs/min, ETA 601:37:54, errors 0
+[10:29:04] main SA-cost-tuned u200x200-06 seed=20261119 gap=30.5 gap_norm=0.00994 stop=budget t=785.73s
+[10:29:04] main SA-cost-tuned u200x200-06 seed=20261121 gap=30.2 gap_norm=0.00981 stop=budget t=760.26s
+[10:29:37] main SA-cost-tuned u200x200-06 seed=20261120 gap=33.1 gap_norm=0.0108 stop=budget t=810.74s
+[10:29:38] main SA-cost-tuned u200x200-06 seed=20261122 gap=31.3 gap_norm=0.0102 stop=budget t=776.63s
+[10:29:48] summary main: 342/23600, 0.7 runs/min, ETA 595:37:52, errors 0
+[10:29:49] main SA-cost-tuned u200x200-06 seed=20261123 gap=42.1 gap_norm=0.0137 stop=budget t=763.28s
+[10:30:31] main SA-cost-tuned u200x200-06 seed=20261125 gap=30.8 gap_norm=0.01 stop=budget t=587.69s
+[10:30:48] summary main: 344/23600, 0.7 runs/min, ETA 593:14:42, errors 0
+[10:31:49] summary main: 344/23600, 0.7 runs/min, ETA 594:22:47, errors 0
+[10:32:50] summary main: 344/23600, 0.7 runs/min, ETA 595:31:23, errors 0
+[10:33:59] summary main: 344/23600, 0.6 runs/min, ETA 596:49:51, errors 0
+[10:35:00] summary main: 344/23600, 0.6 runs/min, ETA 597:57:57, errors 0
+[10:35:23] main GA-cost-tuned u200x200-06 seed=20261121 gap=24.4 gap_norm=0.00794 stop=budget t=2057.86s
+[10:35:51] main GA-cost-tuned u200x200-06 seed=20261120 gap=24.2 gap_norm=0.00788 stop=budget t=2089.43s
+[10:36:00] summary main: 346/23600, 0.7 runs/min, ETA 595:34:54, errors 0
+[10:36:04] main GA-cost-tuned u200x200-06 seed=20261122 gap=26.6 gap_norm=0.00866 stop=budget t=2085.76s
+[10:37:00] summary main: 347/23600, 0.7 runs/min, ETA 594:57:31, errors 0
+[10:38:00] summary main: 347/23600, 0.7 runs/min, ETA 596:05:01, errors 0
+[10:39:23] summary main: 347/23600, 0.6 runs/min, ETA 597:37:15, errors 0
+[10:40:33] summary main: 347/23600, 0.6 runs/min, ETA 598:55:17, errors 0
+[10:41:01] main GA-cost-tuned u200x200-06 seed=20261124 gap=25 gap_norm=0.00813 stop=budget t=2042.50s
+[10:41:33] summary main: 348/23600, 0.6 runs/min, ETA 598:17:41, errors 0
+[10:42:34] summary main: 348/23600, 0.6 runs/min, ETA 599:24:55, errors 0
+[10:43:10] main GA-cost-tuned u200x200-06 seed=20261123 gap=23 gap_norm=0.00749 stop=budget t=2233.58s
+[10:43:34] summary main: 349/23600, 0.6 runs/min, ETA 598:47:25, errors 0
+[10:44:34] summary main: 349/23600, 0.6 runs/min, ETA 599:54:28, errors 0
+[10:45:36] summary main: 349/23600, 0.6 runs/min, ETA 601:02:36, errors 0
+[10:46:48] summary main: 349/23600, 0.6 runs/min, ETA 602:22:25, errors 0
+[10:47:48] summary main: 349/23600, 0.6 runs/min, ETA 603:29:07, errors 0
+[10:48:48] summary main: 349/23600, 0.6 runs/min, ETA 604:36:12, errors 0
+[10:49:48] summary main: 349/23600, 0.6 runs/min, ETA 605:43:01, errors 0
+[10:50:01] main GA-cost-tuned u200x200-06 seed=20261125 gap=22.5 gap_norm=0.00732 stop=budget t=2555.62s
+[10:50:49] summary main: 350/23600, 0.6 runs/min, ETA 605:04:35, errors 0
+[10:51:49] summary main: 350/23600, 0.6 runs/min, ETA 606:11:21, errors 0
+[10:52:49] summary main: 350/23600, 0.6 runs/min, ETA 607:17:52, errors 0
+[10:54:12] summary main: 350/23600, 0.6 runs/min, ETA 608:49:18, errors 0
+[10:54:50] summary main: 350/23600, 0.6 runs/min, ETA 609:31:35, errors 0
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\dev\tp-ga\.venv\Scripts\tpga-exp.exe\__main__.py", line 5, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\dev\tp-ga\src\tpga\experiments\v2\cli.py", line 191, in main
+    return int(args.fn(args))
+               ~~~~~~~^^^^^^
+  File "C:\dev\tp-ga\src\tpga\experiments\v2\cli.py", line 139, in cmd_run
+    counts = runner.execute_tasks(cfg, ph, tasks, _cpus(cfg, ph), monitor, interrupt, log_path, live)
+  File "C:\dev\tp-ga\src\tpga\experiments\v2\runner.py", line 221, in execute_tasks
+    fill()
+    ~~~~^^
+  File "C:\dev\tp-ga\src\tpga\experiments\v2\runner.py", line 164, in fill
+    fut = pool.submit(methods.execute, todo[i])
+  File "C:\Python314\Lib\concurrent\futures\process.py", line 801, in submit
+    raise BrokenProcessPool(self._broken)
+concurrent.futures.process.BrokenProcessPool: A child process terminated abruptly, the process pool is not usable anymore
+Running HiGHS 1.16.0 (git hash: f3f113d): Copyright (c) 2026 under MIT licence terms
+Includes third-party software components, see THIRD_PARTY_NOTICES.md for full details
+[12:53:19] phase main: 23250 runs to do, 350 already done
+[12:54:15] summary main: 0/23250, 0.0 runs/min, ETA -, errors 0
+[12:55:16] summary main: 0/23250, 0.0 runs/min, ETA -, errors 0
+[12:56:16] summary main: 0/23250, 0.0 runs/min, ETA -, errors 0
+[12:57:16] summary main: 0/23250, 0.0 runs/min, ETA -, errors 0
+[12:58:16] summary main: 0/23250, 0.0 runs/min, ETA -, errors 0

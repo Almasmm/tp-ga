@@ -25,6 +25,7 @@ router = APIRouter(prefix="/jobs", tags=["Jobs"])
 
 MAX_ACTIVE_JOBS = 2
 KEEP_FINISHED = 50
+MAX_PROGRESS_EVENTS = 500  # per job; older progress events are dropped, all other events are kept
 FINISHED = {"done", "error", "cancelled"}
 
 
@@ -45,6 +46,19 @@ class Job:
     error: str | None = None
     progress: dict[str, Any] = field(default_factory=dict)
     future: Future | None = None
+    seq: int = 0
+    progress_events: int = 0
+
+    def add(self, event: dict[str, Any]) -> None:
+        """Append an event with the next sequence number; keep at most MAX_PROGRESS_EVENTS progress events."""
+        self.seq += 1
+        self.events.append({**event, "seq": self.seq})
+        if event["type"] == "progress":
+            self.progress_events += 1
+            if self.progress_events > MAX_PROGRESS_EVENTS:
+                i = next(k for k, e in enumerate(self.events) if e["type"] == "progress")
+                del self.events[i]
+                self.progress_events -= 1
 
     def public(self, with_result: bool = True) -> dict[str, Any]:
         out = {
@@ -99,7 +113,7 @@ class JobManager:
                     job.status = "running"
                 if event["type"] == "progress":
                     job.progress = {k: event[k] for k in ("method", "generation", "evaluations", "best_cost", "gap")}
-                job.events.append(event)
+                job.add(event)
 
     def active(self) -> int:
         return sum(1 for j in self.jobs.values() if j.status not in FINISHED)
@@ -129,14 +143,14 @@ class JobManager:
             if exc is None:
                 job.result = fut.result()
                 job.status = "done"
-                job.events.append({"type": "done", "time": time.time()})
+                job.add({"type": "done", "time": time.time()})
             elif isinstance(exc, Cancelled) or self._cancel.get(job.id):
                 job.status = "cancelled"
-                job.events.append({"type": "cancelled", "time": time.time()})
+                job.add({"type": "cancelled", "time": time.time()})
             else:
                 job.status = "error"
                 job.error = str(exc) or exc.__class__.__name__
-                job.events.append({"type": "error", "time": time.time(), "message": job.error})
+                job.add({"type": "error", "time": time.time(), "message": job.error})
         log.info(json.dumps({"event": "job_finished", "job": job.id, "status": job.status}))
 
     def cancel(self, job_id: str) -> Job:
@@ -147,7 +161,7 @@ class JobManager:
         if job.future is not None and job.future.cancel():  # still queued: never started
             with self.lock:
                 job.status = "cancelled"
-                job.events.append({"type": "cancelled", "time": time.time()})
+                job.add({"type": "cancelled", "time": time.time()})
         else:
             job.status = "cancelling"
         return job

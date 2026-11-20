@@ -19,10 +19,21 @@ Run from the repository root:
 Output: paper_artifacts_supplement/neutrality/neutrality_instances.csv and neutrality_summary.csv.
 The decoder is the plain reference kernel of the library (tpga._kernels._decode_plan_py) when the library
 can be imported; otherwise a line-by-line copy of it below is used (same arithmetic, eps = 0).
+
+Second measurement (amendment 8.1 of docs/v0.4/PREREGISTRATION.md), on the same instances and sample sizes:
+
+    python scripts/neutrality_check.py --operators paper_artifacts_v3/kselect/selected.json
+
+For random parents it applies a whole mutation, as the GA does, and counts the offspring whose decoded plan
+equals the plan of the parent: `swap_scaled` with the tuned strength 0.0837 (max(1, round(0.0837 (m + n)))
+swaps) and the cycle mutation with the k chosen for GA-rand-cycle and GA-cost-cycle (tpga.cycle). For the
+cycle mutation it also counts the pivots with theta = 0. Output:
+paper_artifacts_v3/neutrality/operators_instances.csv and operators_summary.csv. This part needs the library.
 """
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -179,5 +190,136 @@ def main() -> None:
         )
 
 
+SWAP_SCALED_STRENGTH = 0.08371937516446804  # GA-rand of experiments/tuned-v2.yaml
+
+
+def load_instances() -> list[dict]:
+    root = ROOT / "paper_artifacts" / "instances"
+    out = []
+    for f in sorted((root / "uniform").glob("*.json")) + sorted((root / "structured").glob("*.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        d["id"] = f.stem
+        d["set"] = f.parent.name
+        out.append(d)
+    return out
+
+
+def operators(selected_path: Path) -> None:
+    """Share of offspring with the plan of the parent: swap_scaled against the cycle mutation."""
+    sys.path.insert(0, str(ROOT / "src"))
+    from tpga._kernels import Kernels
+    from tpga.cycle import GAXConfig, cycle_mutation
+    from tpga.model import TransportProblem
+
+    chosen = json.loads(selected_path.read_text(encoding="utf-8"))["selected"]
+    kern = Kernels("numba")
+    base = dict(population=2, crossover_rate=1.0, tournament=1, elite=0, max_evaluations=2)
+    ops: dict[str, GAXConfig] = {
+        f"swap_scaled:{SWAP_SCALED_STRENGTH:.4f}": GAXConfig(
+            mutation_mode="swap_scaled", mutation_strength=SWAP_SCALED_STRENGTH, **base
+        )
+    }
+    for sel in chosen.values():
+        ops.setdefault(
+            f"cycle k={sel['k']}",
+            GAXConfig(mutation_mode=sel["mode"], mutation_strength=float(sel["strength"]), **base),
+        )
+    used_by = {name: [v for v, sel in chosen.items() if f"cycle k={sel['k']}" == name] for name in ops}
+    rng = np.random.default_rng(SEED + 2)
+    out_dir = ROOT / "paper_artifacts_v3" / "neutrality"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for inst in load_instances():
+        p = TransportProblem(inst["supply"], inst["demand"], inst["cost"])
+        m, n = p.shape
+        big_n = m * n
+        samples = SAMPLES.get(m, 500)
+        supply, demand = p.supply.copy(), p.demand.copy()
+        for name, cfg in ops.items():
+            moves = cfg.moves(m, n)
+            unchanged = pivots = zero = unchanged_all_zero = 0
+            for _ in range(samples):
+                parent = rng.permutation(big_n)
+                plan = kern.decode_plan(parent, supply, demand, n)
+                if name.startswith("swap"):
+                    child = parent.copy()
+                    for _s in range(moves):
+                        u, v = rng.choice(big_n, size=2, replace=False)
+                        child[u], child[v] = child[v], child[u]
+                    same = bool(np.array_equal(kern.decode_plan(child, supply, demand, n), plan))
+                else:
+                    move = cycle_mutation(p, parent, moves, rng=rng)
+                    same = bool(np.array_equal(kern.decode_plan(move.permutation, supply, demand, n), plan))
+                    pivots += move.pivots
+                    zero += move.zero_pivots
+                    unchanged_all_zero += same and move.zero_pivots == move.pivots
+                unchanged += same
+            rows.append(
+                {
+                    "set": inst["set"],
+                    "instance": inst["id"],
+                    "m": m,
+                    "n": n,
+                    "operator": name,
+                    "used_by": "; ".join(used_by[name]) or "GA-rand-tuned",
+                    "moves_per_offspring": moves,
+                    "samples": samples,
+                    "unchanged": unchanged,
+                    "unchanged_share": unchanged / samples,
+                    "pivots": pivots,
+                    "pivots_theta_zero": zero,
+                    "unchanged_with_all_theta_zero": unchanged_all_zero,
+                }
+            )
+    with (out_dir / "operators_instances.csv").open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(rows[0]), lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+    summary = []
+    keys = sorted({(r["set"], r["m"], r["n"]) for r in rows}, key=lambda x: (x[0] != "uniform", x[1]))
+    for key in keys:
+        for name in ops:
+            grp = [r for r in rows if (r["set"], r["m"], r["n"]) == key and r["operator"] == name]
+            pivots = sum(r["pivots"] for r in grp)
+            summary.append(
+                {
+                    "set": key[0],
+                    "size": f"{key[1]}x{key[2]}",
+                    "operator": name,
+                    "used_by": grp[0]["used_by"],
+                    "moves_per_offspring": grp[0]["moves_per_offspring"],
+                    "instances": len(grp),
+                    "samples": sum(r["samples"] for r in grp),
+                    "unchanged": sum(r["unchanged"] for r in grp),
+                    "unchanged_share_median": statistics.median(r["unchanged_share"] for r in grp),
+                    "unchanged_share_min": min(r["unchanged_share"] for r in grp),
+                    "unchanged_share_max": max(r["unchanged_share"] for r in grp),
+                    "pivots": pivots,
+                    "pivots_theta_zero": sum(r["pivots_theta_zero"] for r in grp),
+                    "share_pivots_theta_zero": sum(r["pivots_theta_zero"] for r in grp) / pivots if pivots else "",
+                    "unchanged_with_all_theta_zero": sum(r["unchanged_with_all_theta_zero"] for r in grp),
+                }
+            )
+    with (out_dir / "operators_summary.csv").open("w", newline="", encoding="utf-8") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(summary[0]), lineterminator="\n")
+        w.writeheader()
+        w.writerows(summary)
+    for s in summary:
+        print(
+            f"{s['set']:10s} {s['size']:8s} {s['operator']:28s} unchanged {s['unchanged_share_median']:.4f}  "
+            f"pivots {s['pivots']}  theta = 0: {s['pivots_theta_zero']}"
+        )
+
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument(
+        "--operators",
+        metavar="SELECTED_JSON",
+        help="second measurement: unchanged plans under swap_scaled and the cycle mutation with the chosen k",
+    )
+    arguments = parser.parse_args()
+    if arguments.operators:
+        operators(Path(arguments.operators))
+    else:
+        main()

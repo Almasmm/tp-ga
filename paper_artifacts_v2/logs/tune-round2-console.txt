@@ -1,0 +1,123 @@
+Running HiGHS 1.16.0 (git hash: f3f113d): Copyright (c) 2026 under MIT licence terms
+Includes third-party software components, see THIRD_PARTY_NOTICES.md for full details
+workers: 24 of 24; runs start only while their memory is free (worst case 1.04 GB per run, 17.2 GB usable now)
+[I 2026-11-17 21:28:56,151] Using an existing study with `study_name='GA-rand'` instead of creating a new one.
+GA-cost: resumed; 0 trials finished, 5 asked again
+GA-cost: 20/100 trials, best mean gap 8.979 %, 4.5 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 2 times
+GA-cost: 25/100 trials, best mean gap 8.979 %, 10.0 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 82 times
+GA-cost: 30/100 trials, best mean gap 8.979 %, 15.5 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 62 times
+GA-cost: 35/100 trials, best mean gap 8.979 %, 20.0 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 35 times
+GA-cost: 40/100 trials, best mean gap 8.979 %, 24.4 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 47 times
+GA-cost: 45/100 trials, best mean gap 8.979 %, 29.0 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 76 times
+GA-cost: 50/100 trials, best mean gap 8.979 %, 33.3 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 44 times
+GA-cost: 55/100 trials, best mean gap 8.979 %, 37.8 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 63 times
+GA-cost: 60/100 trials, best mean gap 8.979 %, 42.1 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 99 times
+GA-cost: 65/100 trials, best mean gap 8.979 %, 47.6 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 68 times
+GA-cost: 70/100 trials, best mean gap 8.979 %, 52.0 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 55 times
+GA-cost: 75/100 trials, best mean gap 8.979 %, 57.6 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 64 times
+GA-cost: 80/100 trials, best mean gap 8.979 %, 62.2 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 43 times
+GA-cost: 85/100 trials, best mean gap 8.979 %, 66.6 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 36 times
+GA-cost: 90/100 trials, best mean gap 8.979 %, 71.2 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 39 times
+GA-cost: 95/100 trials, best mean gap 8.653 %, 75.7 min
+  memory: up to 24 of 24 runs at once, a run waited for memory 39 times
+GA-cost: 100/100 trials, best mean gap 8.653 %, 80.1 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 5/100 trials, best mean gap 89.583 %, 81.3 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 10/100 trials, best mean gap 89.583 %, 82.5 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 15/100 trials, best mean gap 89.583 %, 83.8 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 20/100 trials, best mean gap 89.583 %, 85.0 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 25/100 trials, best mean gap 89.583 %, 86.2 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 30/100 trials, best mean gap 89.583 %, 87.5 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 35/100 trials, best mean gap 89.583 %, 88.7 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 40/100 trials, best mean gap 89.577 %, 89.9 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 45/100 trials, best mean gap 89.577 %, 91.1 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 50/100 trials, best mean gap 89.577 %, 92.4 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 55/100 trials, best mean gap 89.577 %, 93.6 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 60/100 trials, best mean gap 89.577 %, 94.8 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 65/100 trials, best mean gap 89.055 %, 96.0 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 70/100 trials, best mean gap 89.055 %, 97.2 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 75/100 trials, best mean gap 89.055 %, 98.5 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 80/100 trials, best mean gap 89.016 %, 99.7 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 85/100 trials, best mean gap 89.016 %, 100.9 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 90/100 trials, best mean gap 82.465 %, 102.2 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 95/100 trials, best mean gap 82.465 %, 103.4 min
+  memory: up to 24 of 24 runs at once
+SA-rand: 100/100 trials, best mean gap 82.465 %, 104.6 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 5/100 trials, best mean gap 20.703 %, 105.9 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 10/100 trials, best mean gap 15.379 %, 107.1 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 15/100 trials, best mean gap 15.379 %, 108.3 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 20/100 trials, best mean gap 14.458 %, 109.6 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 25/100 trials, best mean gap 14.458 %, 110.8 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 30/100 trials, best mean gap 14.458 %, 112.0 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 35/100 trials, best mean gap 14.458 %, 113.3 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 40/100 trials, best mean gap 13.556 %, 114.5 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 45/100 trials, best mean gap 13.556 %, 115.7 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 50/100 trials, best mean gap 13.556 %, 116.8 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 55/100 trials, best mean gap 13.556 %, 118.0 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 60/100 trials, best mean gap 13.556 %, 119.2 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 65/100 trials, best mean gap 13.556 %, 120.4 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 70/100 trials, best mean gap 13.556 %, 121.6 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 75/100 trials, best mean gap 13.507 %, 122.8 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 80/100 trials, best mean gap 13.507 %, 123.9 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 85/100 trials, best mean gap 13.507 %, 125.1 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 90/100 trials, best mean gap 13.507 %, 126.3 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 95/100 trials, best mean gap 13.507 %, 127.5 min
+  memory: up to 24 of 24 runs at once
+SA-cost: 100/100 trials, best mean gap 13.507 %, 128.7 min
+  memory: up to 24 of 24 runs at once
+GA-rand: mean gap 56.475 %  {'population': 141, 'crossover_rate': 0.914934971218091, 'tournament': 6, 'elite': 2, 'mutation_mode': 'swap_count', 'mutation_strength': 11}
+GA-cost: mean gap 8.653 %  {'population': 2700, 'crossover_rate': 0.9655685541088251, 'tournament': 8, 'elite': 5, 'mutation_mode': 'swap_count', 'mutation_strength': 7}
+SA-rand: mean gap 82.465 %  {'insertion_probability': 0.44395015040174424, 'initial_acceptance': 0.1643423910600663, 'final_ratio': 0.004404303461377754}
+SA-cost: mean gap 13.507 %  {'insertion_probability': 0.25603748368640916, 'initial_acceptance': 0.00015706121564795986, 'final_ratio': 1.2355955108968477e-06}
