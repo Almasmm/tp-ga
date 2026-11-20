@@ -18,6 +18,7 @@ exactly (same random numbers, same result); the existing GA is not changed.
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -257,12 +258,18 @@ def run_ga_x(
     engine: str = "numba",
     *,
     fill_budget: bool = False,
+    reencode: Literal["after_swap", "only"] | None = None,
+    generation_hook: Callable[[int, np.ndarray, np.ndarray, np.ndarray], None] | None = None,
+    population_hook: Callable[[int, np.ndarray, bool], None] | None = None,
 ) -> GAXResult:
     """GA with the cycle mutation (or swaps), minimising ``sum c x + sum fixed [x > 0]``.
 
     ``fixed`` is the matrix of fixed charges (None: the classical linear cost). ``start_problem`` is the
     problem whose costs build the cost-aware start (default: ``problem``); for the fixed-charge problem it is
     the linearised problem. ``evaluations`` counts decoder calls and local-search neighbours.
+
+    Read-only hooks receive the input to selection or a completed population, without consuming GA
+    random draws. The population hook's final flag is true on the last notification.
     """
     cfg = config
     t0 = time.perf_counter()
@@ -292,6 +299,8 @@ def run_ga_x(
     best_evaluation, best_generation = winner + 1, 0
     history = [best_cost]
     improvements = [(best_evaluation, best_cost)]
+    if population_hook is not None:
+        population_hook(evaluations, pop, False)
 
     new_pop = np.empty_like(pop)
     new_fit = np.empty_like(fit)
@@ -301,10 +310,14 @@ def run_ga_x(
     width = uniforms_per_child(cfg.tournament)
     cycle = 1 if cfg.mutation_mode in ("cycle", "cycle_scaled") else 0
     mode = 2 if cycle and cfg.entering == "nondegenerate" else cycle
+    if reencode is not None:
+        if cycle:
+            raise ValueError("re-encoding controls require a swap configuration")
+        mode = 3
     trace: list[tuple[int, int]] = []
     moves = cfg.moves(m, n)
     per_move = 1 if cycle else 2
-    counts = np.full(max(offspring, 1), moves, dtype=np.int64)
+    counts = np.full(max(offspring, 1), 0 if reencode == "only" else moves, dtype=np.int64)
     offsets = (per_move * moves * np.arange(max(offspring, 1))).astype(np.int64)
     stats = np.zeros(4, dtype=np.int64)
     ls_calls = ls_evals = ls_improved = 0
@@ -320,6 +333,8 @@ def run_ga_x(
             order = np.argsort(fit, kind="stable").astype(np.int64)
             uniforms = rng.random((count, width))
             extra_u = rng.random(per_move * moves * count)
+            if generation_hook is not None:
+                generation_hook(evaluations, pop, fit, uniforms)
             k["_next_generation_x"](
                 pop,
                 fit,
@@ -377,10 +392,14 @@ def run_ga_x(
                             best_generation = generation
                             improvements.append((best_evaluation, best_cost))
             history.append(best_cost)
+            if population_hook is not None:
+                population_hook(evaluations, pop[: cfg.elite + count], False)
             if callback is not None and callback(generation, evaluations, best_cost):
                 stop_reason = "cancelled"
                 break
 
+    if population_hook is not None:
+        population_hook(evaluations, pop[: cfg.elite + count] if generation else pop, True)
     flat = np.zeros(length)
     a, b, flows, iw, _ = work
     count = k["_decode_arcs"](best, supply, demand, n_cols, eps, a, b, iw[0], flows)

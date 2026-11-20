@@ -492,7 +492,13 @@ def _next_generation_x_py(
                     tmp = child[i]
                     child[i] = child[j]
                     child[j] = tmp
-            new_fit[elite + c] = _decode_cost_fc(child, supply, demand, cost, fixed, n, eps)
+            if cycle == 3:
+                total, _, _ = _cycle_mutation(
+                    child, supply, demand, cost, fixed, n, eps, 0, extra_u, 0, a, b, flows, iw, in_basis
+                )
+                new_fit[elite + c] = total
+            else:
+                new_fit[elite + c] = _decode_cost_fc(child, supply, demand, cost, fixed, n, eps)
     return uniforms.shape[0]
 
 
