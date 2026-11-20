@@ -69,7 +69,7 @@ def signature(arcs, flows, count):
 def equal_plan(index, count, counts, arcs, flows, dense):
     if counts[index] != count:
         return False
-    for pos in range(count):
+    for pos in range(count):  # noqa: SIM110 - keep the loop compilable by Numba
         if dense[arcs[index, pos]] != flows[index, pos]:
             return False
     return True
