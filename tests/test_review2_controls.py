@@ -80,3 +80,29 @@ def test_analysis_uses_matched_seeds_and_preserves_zeroes(tmp_path, monkeypatch)
     assert loaded["first_median"] == "0.0"
     assert loaded["hl_ci_low"] == ""
     assert (tmp_path / "tables/paired.md").is_file()
+
+
+def test_published_controls_can_rebuild_tables(tmp_path, monkeypatch):
+    import shutil
+    from pathlib import Path
+
+    source = Path("paper_artifacts_v3/review2")
+    if not (source / "raw/K3.jsonl").is_file():
+        pytest.skip("requires the published amendment 11 raw records")
+    shutil.copytree(source / "raw", tmp_path / "raw")
+    monkeypatch.setattr(review2_report, "ROOT", tmp_path)
+    refs = review2_report.fctp_report()
+    _, linear = review2_report.linear_report()
+    ox = review2_report.diagnostics()
+    review2_report.provenance()
+    review2_report.mip_report(refs)
+    review2_report.figures(ox, linear)
+    assert len(refs) == 60
+    assert len(linear) == 56
+    pooled = review2_report.read_csv(tmp_path / "tables/K1_pairs_pooled.csv")
+    assert len(pooled) == 10 and {r["instances_used"] for r in pooled} == {"40"}
+    (pivots,) = review2_report.read_csv(tmp_path / "tables/K11_summary.csv")
+    assert pivots["runs"] == pivots["zero_pivot_runs"] == "100"
+    assert pivots["total_pivots"] == "0"
+    assert (tmp_path / "figures/K3_ox_novelty.pdf").stat().st_size > 1000
+    assert (tmp_path / "figures/K6_linear_medians.jpg").stat().st_size > 1000
